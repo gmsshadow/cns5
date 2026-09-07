@@ -344,7 +344,9 @@ function toSpell(row, byName, name = row.name) {
   if (parent) references.push(`variant of ${row.parent}`);
 
   return document("spell", name, "icons/svg/daze.svg", {
-    mode: "",
+    // Recorded where the group implies one. The seven groups it does not cover
+    // fall back at runtime to whatever Mode the caster works in.
+    mode: CNS5.spellGroupModes[row.section] ?? "",
     group: row.section ?? "",
     mr: numeric(row.mr ?? parent?.mr),
     mrNote: note(row.mr ?? parent?.mr),

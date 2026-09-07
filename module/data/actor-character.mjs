@@ -201,7 +201,12 @@ export class CnS5Character extends CnS5ActorBase {
 
     for (const item of this.parent.items) {
       if (item.type === "spell") {
-        item.system.prepareForActor(this, skills.get(item.system.mode.toLowerCase()) ?? null);
+        // A spell with no Mode named on it falls back to the one its group
+        // implies, and failing that to whatever Mode the caster works in — so a
+        // spell dragged in from the compendium is castable straight away.
+        const wanted = CNS5.spellMode(item.system, this.magick.mode);
+        item.system.resolvedMode = wanted;
+        item.system.prepareForActor(this, skills.get(wanted.toLowerCase()) ?? null);
       } else if (item.type === "actOfFaith" || item.type === "religion") {
         item.system.prepareForActor(this);
       }

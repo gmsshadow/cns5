@@ -1,4 +1,7 @@
-<form class="cns5-skill-sheet">
+<!-- DocumentSheetV2 renders the application element as a form already. A
+     nested form is invalid HTML and stops ApplicationV2 collecting the
+     fields, so edits made here were silently discarded. -->
+<div class="cns5-skill-sheet">
 
     <header class="cns5-header">
         <img class="cns5-header__portrait cns5-header__portrait--small" src="{{document.img}}"
@@ -146,4 +149,4 @@
                     toggled=true disabled=(not editable)}}
     </fieldset>
 
-</form>
+</div>

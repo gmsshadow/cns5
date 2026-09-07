@@ -824,3 +824,49 @@ CNS5.weaponSkill = function (weapon) {
   if (weapon.role === "launcher" || weapon.role === "ammunition") return "Archery";
   return "";
 };
+
+/* -------------------------------------------- */
+/*  Spells to Modes of Magick                   */
+/* -------------------------------------------- */
+
+/**
+ * The Mode of Magick skill each spell group is cast with.
+ *
+ * Most groups have a skill of nearly the same name; the differences are small
+ * but exact matching matters, since the skill is found by name. Note the en
+ * dashes in the four elemental skills, which the spell tables write as spaces.
+ *
+ * Seven groups are deliberately absent. Common Method Spells and Common
+ * Elemental Control Spells are cast with whatever Mode the caster has, and
+ * Healing, the two Eldritch groups, Portals to the Shadow World and Shadow
+ * Monsters have no skill in the list that plainly corresponds. All of them fall
+ * back to the caster's own Mode of Magick, which is the right answer for the
+ * common spells and a serviceable guess for the rest.
+ */
+CNS5.spellGroupModes = {
+  "Arcane Magick": "Arcane Magick",
+  "Basic Magick Air": "Basic Magick – Air",
+  "Basic Magick Earth": "Basic Magick – Earth",
+  "Basic Magick Fire": "Basic Magick – Fire",
+  "Basic Magick Water": "Basic Magick – Water",
+  "Command Magick": "Command Magick",
+  "Divination Spells": "Divination Magick",
+  "Illusions Spells": "Illusion Magick",
+  "Magickal Wards": "Wards Magick",
+  "Plant Magick": "Plant Magick",
+  Summoning: "Summoning Magick",
+  "Transcendental Magick": "Transcendental Magick",
+  "Transmutation Magick": "Transmutation Magick"
+};
+
+/**
+ * The Mode of Magick skill a spell is cast with.
+ *
+ * @param {object} spell       a spell's system data
+ * @param {string} [casterMode] the caster's own Mode of Magick, used where the
+ *                              spell's group implies none
+ * @returns {string}
+ */
+CNS5.spellMode = function (spell, casterMode = "") {
+  return spell.mode || CNS5.spellGroupModes[spell.group] || casterMode || "";
+};

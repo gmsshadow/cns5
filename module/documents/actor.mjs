@@ -247,8 +247,11 @@ export class CnS5Actor extends Actor {
 
     const mode = spell.system.modeItem;
     if (!mode) {
+      const wanted = spell.system.resolvedMode || spell.system.mode;
       ui.notifications.warn(
-        game.i18n.format("CNS5.Spell.noMode", { spell: spell.name, mode: spell.system.mode })
+        wanted
+          ? game.i18n.format("CNS5.Spell.noMode", { spell: spell.name, mode: wanted })
+          : game.i18n.format("CNS5.Spell.noModeSet", { spell: spell.name })
       );
       return null;
     }
@@ -317,6 +320,16 @@ export class CnS5Actor extends Actor {
           act: act.name,
           minimum: act.system.pffMinimum
         })
+      );
+      return null;
+    }
+
+    // The Acts of Faith tables print no success chance, so compendium entries
+    // ship with none. Rolling anyway would clamp to 1% and look like a working
+    // roll that always fails.
+    if (!act.system.successChance) {
+      ui.notifications.warn(
+        game.i18n.format("CNS5.Faith.noChanceSet", { act: act.name })
       );
       return null;
     }

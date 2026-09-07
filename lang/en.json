@@ -528,5 +528,7 @@
   "CNS5.Spell.fatigueNote": "Fatigue is",
   "CNS5.Spell.variableHint": "The rulebook prints a word rather than a number here: the cost varies with how hard the caster pushes, or follows the spell's own rules.",
   "CNS5.Spell.rangeHint": "Short range is taken from the spell table. Long and maximum are yours to set; they cost -10% and -30% to target.",
-  "CNS5.Weapon.noSkillSet": "{weapon} has no combat skill set. Open it and name the skill it is used with."
+  "CNS5.Weapon.noSkillSet": "{weapon} has no combat skill set. Open it and name the skill it is used with.",
+  "CNS5.Spell.noModeSet": "{spell} has no Mode of Magick set, and this character has none recorded on the Magick tab.",
+  "CNS5.Faith.noChanceSet": "{act} has no success chance. The Acts of Faith tables do not print one — take it from the Act's description and enter it here."
 }

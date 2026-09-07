@@ -389,6 +389,27 @@ book against itself had turned up.
   heading above. Headings are now read from the whole row and recognised by
   being centred over the type and name columns without reaching the dated ones.
 
+- **Item sheet edits were silently discarded.** The item templates opened their
+  own `<form>`, but DocumentSheetV2 already renders the application element as
+  one. A form nested inside a form is invalid HTML, and ApplicationV2 stops
+  collecting the fields, so anything typed on a weapon, spell or skill sheet was
+  accepted by the browser and then thrown away on close. The templates are plain
+  `div`s now, and `test/lang.test.mjs` fails the build if any template opens a
+  form again.
+- **Compendium spells could not be cast**, for the same reason weapons could not
+  be rolled: every spell shipped with an empty `mode`. Thirteen of the twenty
+  spell groups have a Mode of Magick skill of nearly the same name — note the en
+  dashes in the four elemental ones, which the spell tables write as spaces — and
+  those 279 spells now name it. The other 34 fall back to whatever Mode the
+  caster works in, which is the right answer for the Common Method and Common
+  Elemental groups and a serviceable one for Healing, the two Eldritch groups,
+  Portals to the Shadow World and Shadow Monsters, none of which has a skill
+  that plainly corresponds.
+- **Acts of Faith rolled at 1%.** The tables print no success chance, so
+  compendium entries ship with none, and rolling clamped to the 1% floor —
+  a roll that looked as though it worked and always failed. Attempting an Act
+  with no chance set now says so instead.
+
 ## Errata found while implementing
 
 The rulebook contradicts itself in three places. Where it does, the tables are

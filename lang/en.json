@@ -519,5 +519,13 @@
   "CNS5.Creation.reviewHint": "These follow from what you have chosen and are recalculated on the sheet, so nothing here needs entering by hand.",
   "CNS5.Creation.addCoreSkills": "Add the core skills",
   "CNS5.Creation.addCoreSkillsHint": "The nine every character has, plus Accurate Counting for Intellect 12 or better.",
-  "CNS5.Creation.nextSteps": "Vocational, background and tertiary skills are chosen on the Skills tab, where the compendium can be dragged in."
+  "CNS5.Creation.nextSteps": "Vocational, background and tertiary skills are chosen on the Skills tab, where the compendium can be dragged in.",
+  "CNS5.Spell.group": "Group",
+  "CNS5.Spell.castingTime": "Casting time",
+  "CNS5.Spell.duration": "Duration",
+  "CNS5.Spell.prerequisite": "Prerequisite",
+  "CNS5.Spell.mrNote": "MR is",
+  "CNS5.Spell.fatigueNote": "Fatigue is",
+  "CNS5.Spell.variableHint": "The rulebook prints a word rather than a number here: the cost varies with how hard the caster pushes, or follows the spell's own rules.",
+  "CNS5.Spell.rangeHint": "Short range is taken from the spell table. Long and maximum are yours to set; they cost -10% and -30% to target."
 }

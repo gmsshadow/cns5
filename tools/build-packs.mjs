@@ -310,7 +310,56 @@ function toActOfFaith(row) {
 
 /* -------------------------------------------- */
 
+/**
+ * Convert one spell row into a spell Item document.
+ *
+ * Magick Resistance and Fatigue are numbers for most spells, but several print
+ * "Var" or "Spec" instead — the cost depends on how hard the caster pushes, or
+ * on the spell's own rules. Those keep the printed word in a note field and a
+ * numeric zero, rather than being given a made-up figure.
+ *
+ * A variant such as Acrid Smoke inherits its parent's casting time and range,
+ * because the table prints only what differs.
+ *
+ * @param {object} row
+ * @param {Map<string, object>} byName
+ * @returns {object}
+ */
+function toSpell(row, byName, name = row.name) {
+  const parent = row.parent ? byName.get(row.parent) : null;
+  const numeric = (value) => {
+    const m = /^(\d+)/.exec(value ?? "");
+    return m ? Number(m[1]) : 0;
+  };
+  const note = (value) => (/^\d+$/.test(value ?? "") ? "" : (value ?? ""));
+  const plain = (value) => (value && value !== "-" ? value : "");
+
+  const references = [`p${row.reference}`];
+  if (parent) references.push(`variant of ${row.parent}`);
+
+  return document("spell", name, "icons/svg/daze.svg", {
+    mode: "",
+    group: row.section ?? "",
+    mr: numeric(row.mr ?? parent?.mr),
+    mrNote: note(row.mr ?? parent?.mr),
+    fpToCast: numeric(row.fatigue),
+    fatigueNote: note(row.fatigue),
+    apToCast: 0,
+    castingTime: plain(row.casting ?? parent?.casting),
+    duration: plain(row.duration),
+    prerequisite: plain(row.prerequisite ?? parent?.prerequisite),
+    ranges: { short: plain(row.range ?? parent?.range), long: "", max: "" },
+    otherModifier: 0,
+    learnt: true,
+    reference: references.join(" — "),
+    description: ""
+  });
+}
+
+/* -------------------------------------------- */
+
 const skills = JSON.parse(await readFile(path.join(DATA, "skills.json"), "utf8"));
+const spellData = JSON.parse(await readFile(path.join(DATA, "spells.json"), "utf8"));
 const faith = JSON.parse(await readFile(path.join(DATA, "acts-of-faith.json"), "utf8"));
 const gear = JSON.parse(await readFile(path.join(DATA, "gear.json"), "utf8"));
 
@@ -374,3 +423,28 @@ function buildArmour() {
 
 await build("armour", buildArmour());
 await build("acts-of-faith", faith.acts.map(toActOfFaith));
+
+/**
+ * Three spells are listed twice, under two elemental sections apiece — Mist &
+ * Fog and Clouds & Rain belong to both Air and Water, and Detect Illusions to
+ * both Divination and Illusions with a different Magick Resistance in each.
+ * They are genuinely separate entries, so the section goes in the name.
+ */
+const spellsByName = new Map(spellData.spells.map((s) => [s.name, s]));
+const spellCounts = spellData.spells.reduce((acc, row) => {
+  acc[row.name] = (acc[row.name] ?? 0) + 1;
+  return acc;
+}, {});
+
+// The name has to be settled before the document is built: ids are hashed from
+// it, so renaming afterwards would leave the two entries sharing an id.
+await build(
+  "spells",
+  spellData.spells.map((row) =>
+    toSpell(
+      row,
+      spellsByName,
+      spellCounts[row.name] === 1 ? row.name : `${row.name} (${row.section})`
+    )
+  )
+);

@@ -7,7 +7,7 @@ This system ships no rules text, tables, or artwork from the published book.
 
 ## Build state
 
-Phase 5 of 5: the character creation wizard.
+Phase 5 of 5: the creation wizard, plus the spell compendium.
 
 | Phase | Scope | State |
 | --- | --- | --- |
@@ -18,6 +18,7 @@ Phase 5 of 5: the character creation wizard.
 | 4b | Weapon and armour compendia | Done |
 | 4c | Action Points, aimed shots, Acts of Faith | Done |
 | 5 | Character creation wizard following the 19-step worksheet | Partly done |
+| 5b | Spell compendium | Done |
 
 ## What phase 1 gives you
 
@@ -100,7 +101,8 @@ npm install
 npm run extract:skills    # regenerate data/skills.json from the PDF
 npm run extract:gear      # regenerate data/gear.json from the PDF
 npm run extract:faith     # regenerate data/acts-of-faith.json from the PDF
-npm run build:packs       # compile all three into packs/
+npm run extract:spells    # regenerate data/spells.json from the PDF
+npm run build:packs       # compile all four into packs/
 ```
 
 `data/skills.json` and `data/gear.json` are the single sources of truth. The
@@ -229,6 +231,16 @@ description.
   header layout rather than the rotated one the other tables share. This is why
   Dart, Hunting Javelin and Thrown Axe appear in the ranges table with no
   weapon entry.
+- **Shadow Missiles has no figures.** The spell table on p313 prints its name
+  and a page reference and nothing else — no Magick Resistance, Fatigue,
+  casting time, range or duration. It ships flagged rather than filled in.
+- **Two spell prerequisites name no spell.** Dispel Illusions gives a condition
+  where a spell name belongs, and Dispel Phantasmals asks for "Dispel Illusion"
+  where the spell is called Dispel Illusions.
+- **Three spells are listed twice.** Mist & Fog and Clouds & Rain appear under
+  both Air and Water, and Detect Illusions under both Divination and Illusions
+  with a different Magick Resistance in each. The group goes in the name to keep
+  them apart.
 - **One Act of Faith has no name.** The last row of the Sacraments table prints
   a minimum of PFF 15 and a full set of marks with no name beside it. It is
   skipped rather than guessed at.
@@ -283,6 +295,29 @@ Vocational, background and tertiary skill selection also stays on the sheet for
 now. The skill limits — ten vocational of which no more than four secondary,
 five mastered, tertiary by Intellect plus Discipline — are documented in the
 rules but not yet enforced.
+
+## The spell compendium
+
+**C&S Spells — 313 entries** from the consolidated spell tables on pp.309-314,
+across twenty groups. Each carries its Magick Resistance cost, Fatigue cost,
+casting time, range, duration, prerequisite and description page.
+
+The `mode` field is deliberately left blank. The tables group spells by element
+and school — Basic Magick Air, Command Magick, Transmutation Magick — and those
+cut across the Mode of Magick skills rather than matching them, so linking a
+spell to a caster's Mode is left to the player. The rulebook's own grouping is
+kept in `group`.
+
+Several spells print `Var` or `Spec` where a number belongs: the cost depends on
+how hard the caster pushes, or on the spell's own rules. Those keep the printed
+word in a note field beside a numeric zero, and the item sheet shows the word
+rather than the zero.
+
+Four entries are variants that print only what differs from the spell above
+them — Acrid Smoke, Sulphurous Fumes, Deadly Vapours and Sulphur & Brimstone all
+belong to Create Noxious Fumes. Each ships as a spell in its own right, since
+that is how it is cast, inheriting its parent's casting time, range and
+prerequisite.
 
 ## Errata found while implementing
 
@@ -363,6 +398,13 @@ that never shrink as they lengthen.
 
 The armour weight rule is checked against the Sir Miles example on p261 — both
 his maille and his arming doublet — and at every boundary of the reference band.
+
+The spell data was reconciled page by page against an independent pass over the
+flat text layer: all eighteen table pages matched exactly.
+`test/spells-data.test.mjs` then checks it structurally — every entry in a
+group, every page reference inside the magick chapter, every cost either a
+number or one of the rulebook's own words, and every variant naming a parent
+that exists.
 
 `test/creation.test.mjs` anchors on the four figures the worksheet states
 outright — 99, 117 and 153 PC Points for an average character of each type, and

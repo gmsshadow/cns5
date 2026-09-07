@@ -22,8 +22,39 @@
     </label>
 </div>
 
+<div class="cns5-grid cns5-grid--three">
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Spell.group"}}</span>
+        <input type="text" name="system.group" value="{{system.group}}"
+               {{#unless editable}}disabled{{/unless}}>
+    </label>
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Spell.castingTime"}}</span>
+        <input type="text" name="system.castingTime" value="{{system.castingTime}}"
+               {{#unless editable}}disabled{{/unless}}>
+    </label>
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Spell.duration"}}</span>
+        <input type="text" name="system.duration" value="{{system.duration}}"
+               {{#unless editable}}disabled{{/unless}}>
+    </label>
+</div>
+
+<label class="cns5-field">
+    <span>{{localize "CNS5.Spell.prerequisite"}}</span>
+    <input type="text" name="system.prerequisite" value="{{system.prerequisite}}"
+           {{#unless editable}}disabled{{/unless}}>
+</label>
+
+{{#if system.mrNote}}
+<p class="cns5-hint">{{localize "CNS5.Spell.mrNote"}} <strong>{{system.mrNote}}</strong>. {{localize "CNS5.Spell.variableHint"}}</p>
+{{else if system.fatigueNote}}
+<p class="cns5-hint">{{localize "CNS5.Spell.fatigueNote"}} <strong>{{system.fatigueNote}}</strong>. {{localize "CNS5.Spell.variableHint"}}</p>
+{{/if}}
+
 <fieldset class="cns5-fieldset">
     <legend>{{localize "CNS5.Spell.ranges"}}</legend>
+    <p class="cns5-hint">{{localize "CNS5.Spell.rangeHint"}}</p>
     <div class="cns5-grid cns5-grid--three">
         {{#each system.ranges as |value key|}}
         <label class="cns5-field">

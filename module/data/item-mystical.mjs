@@ -16,9 +16,24 @@ export class CnS5Spell extends foundry.abstract.TypeDataModel {
       // The Mode of Magick this spell belongs to, matched by skill name.
       mode: new fields.StringField({ required: true, blank: true, initial: "" }),
 
+      // The rulebook's own grouping — Basic Magick Air, Command Magick,
+      // Transmutation Magick. Not the same thing as the Mode: the tables group
+      // by element and school, which cuts across the Mode skills.
+      group: new fields.StringField({ required: true, blank: true, initial: "" }),
+
       mr: new fields.NumberField({ required: true, integer: true, initial: 0, min: 0 }),
       fpToCast: new fields.NumberField({ required: true, integer: true, initial: 0, min: 0 }),
       apToCast: new fields.NumberField({ required: true, integer: true, initial: 0, min: 0 }),
+
+      // Several spells print "Var" or "Spec" rather than a number: the cost
+      // depends on how hard the caster pushes, or on the spell's own rules.
+      // The printed text is kept so the sheet can show it instead of a zero.
+      mrNote: new fields.StringField({ required: true, blank: true, initial: "" }),
+      fatigueNote: new fields.StringField({ required: true, blank: true, initial: "" }),
+
+      castingTime: new fields.StringField({ required: true, blank: true, initial: "" }),
+      duration: new fields.StringField({ required: true, blank: true, initial: "" }),
+      prerequisite: new fields.StringField({ required: true, blank: true, initial: "" }),
 
       ranges: new fields.SchemaField({
         short: new fields.StringField({ required: true, blank: true, initial: "" }),

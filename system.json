@@ -86,8 +86,8 @@
   "primaryTokenAttribute": "body",
   "secondaryTokenAttribute": "fatigue",
   "url": "https://github.com/GMsShadow/cns5",
-  "manifest": "https://github.com/GMsShadow/cns5/releases/latest/download/system.json",
-  "download": "https://github.com/GMsShadow/cns5/releases/latest/download/system.zip",
+  "manifest": "https://raw.githubusercontent.com/gmsshadow/cns5/refs/heads/main/system.json",
+  "download": "https://github.com/gmsshadow/cns5/archive/refs/heads/main.zip",
   "readme": "README.md",
   "packs": [
     {

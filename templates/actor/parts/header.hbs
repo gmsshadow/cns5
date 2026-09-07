@@ -1,0 +1,45 @@
+<header class="cns5-header">
+    <img class="cns5-header__portrait" src="{{document.img}}" data-edit="img"
+         alt="{{document.name}}" data-action="editImage" data-tooltip="{{localize 'CNS5.Sheet.changePortrait'}}">
+
+    <div class="cns5-header__fields">
+        <input class="cns5-header__name" type="text" name="name" value="{{document.name}}"
+               placeholder="{{localize 'CNS5.Sheet.namePlaceholder'}}" {{#unless editable}}disabled{{/unless}}>
+
+        <div class="cns5-header__row">
+            <label class="cns5-field">
+                <span>{{localize "CNS5.Details.vocation"}}</span>
+                <input type="text" name="system.details.vocation" value="{{system.details.vocation}}"
+                       {{#unless editable}}disabled{{/unless}}>
+            </label>
+            <label class="cns5-field cns5-field--narrow">
+                <span>{{localize "CNS5.Details.age"}}</span>
+                <input type="number" name="system.details.age" value="{{system.details.age}}"
+                       {{#unless editable}}disabled{{/unless}}>
+            </label>
+            <label class="cns5-field cns5-field--narrow">
+                <span>{{localize "CNS5.Details.race"}}</span>
+                <input type="text" name="system.details.race" value="{{system.details.race}}"
+                       {{#unless editable}}disabled{{/unless}}>
+            </label>
+        </div>
+
+        <div class="cns5-header__row">
+            <label class="cns5-field">
+                <span>{{localize "CNS5.Details.socialClass"}}</span>
+                <input type="text" name="system.details.socialClass" value="{{system.details.socialClass}}"
+                       {{#unless editable}}disabled{{/unless}}>
+            </label>
+            <label class="cns5-field">
+                <span>{{localize "CNS5.Details.fathersVocation"}}</span>
+                <input type="text" name="system.details.fathersVocation" value="{{system.details.fathersVocation}}"
+                       {{#unless editable}}disabled{{/unless}}>
+            </label>
+            <label class="cns5-field">
+                <span>{{localize "CNS5.Details.socialStatus"}}</span>
+                <input type="text" name="system.details.socialStatus" value="{{system.details.socialStatus}}"
+                       {{#unless editable}}disabled{{/unless}}>
+            </label>
+        </div>
+    </div>
+</header>

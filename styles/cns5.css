@@ -1,0 +1,721 @@
+/* ==========================================================================
+   Chivalry & Sorcery 5th Edition — sheet styling
+
+   The palette is drawn from medieval manuscript pigments rather than a generic
+   "fantasy parchment" scheme: ultramarine and verdigris carry the structure,
+   oxblood marks failure and danger, and gilt is reserved for a critical result.
+   Rubrication is the organising idea — headings are red small caps, the way a
+   scribe would mark a new section, and everything else stays quiet.
+   ========================================================================== */
+
+.application.cns5 {
+    --cns-vellum: #e7e1d2;
+    --cns-vellum-light: #f2eee3;
+    --cns-ink: #2b2620;
+    --cns-ink-soft: #6c6355;
+    --cns-rule: #c4baa4;
+    --cns-lapis: #2a4b7c;
+    --cns-oxblood: #7a2e2a;
+    --cns-verdigris: #4a6f63;
+    --cns-gilt: #a8842c;
+
+    --cns-serif: "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+
+    color: var(--cns-ink);
+    font-family: var(--cns-serif);
+}
+
+.application.cns5 .window-content {
+    background: var(--cns-vellum);
+    padding: 0.75rem;
+    gap: 0.75rem;
+}
+
+.application.cns5 input,
+.application.cns5 select {
+    background: var(--cns-vellum-light);
+    border: 1px solid var(--cns-rule);
+    border-radius: 2px;
+    color: var(--cns-ink);
+    font-family: var(--cns-serif);
+    font-variant-numeric: tabular-nums;
+}
+
+.application.cns5 input:focus-visible,
+.application.cns5 button:focus-visible {
+    outline: 2px solid var(--cns-lapis);
+    outline-offset: 1px;
+}
+
+/* --------------------------------------------------------------------------
+   Header
+   -------------------------------------------------------------------------- */
+
+.cns5-header {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+}
+
+.cns5-header__portrait {
+    width: 84px;
+    height: 84px;
+    object-fit: cover;
+    border: 1px solid var(--cns-rule);
+    border-radius: 2px;
+    cursor: pointer;
+    flex: 0 0 auto;
+}
+
+.cns5-header__fields {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    min-width: 0;
+}
+
+.cns5-header__name {
+    font-size: 1.4rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid var(--cns-oxblood);
+    border-radius: 0;
+    padding: 0 0 0.15rem;
+}
+
+.cns5-header__row {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.cns5-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    flex: 1;
+    min-width: 0;
+}
+
+.cns5-field--narrow {
+    flex: 0 0 6.5rem;
+}
+
+.cns5-field > span {
+    font-size: 0.72rem;
+    font-variant: small-caps;
+    letter-spacing: 0.04em;
+    color: var(--cns-ink-soft);
+}
+
+/* --------------------------------------------------------------------------
+   Tab navigation
+   -------------------------------------------------------------------------- */
+
+.application.cns5 nav.tabs {
+    display: flex;
+    gap: 0.15rem;
+    border-bottom: 1px solid var(--cns-rule);
+    padding-bottom: 0.3rem;
+}
+
+.application.cns5 nav.tabs .item {
+    padding: 0.25rem 0.6rem;
+    font-variant: small-caps;
+    letter-spacing: 0.03em;
+    color: var(--cns-ink-soft);
+    border-bottom: 2px solid transparent;
+    text-decoration: none;
+}
+
+.application.cns5 nav.tabs .item.active {
+    color: var(--cns-oxblood);
+    border-bottom-color: var(--cns-oxblood);
+}
+
+/* --------------------------------------------------------------------------
+   Attributes
+   -------------------------------------------------------------------------- */
+
+.cns5-attributes {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.6rem;
+}
+
+.cns5-attributes__group {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.cns5-attributes__group caption {
+    text-align: left;
+    font-variant: small-caps;
+    letter-spacing: 0.05em;
+    color: var(--cns-oxblood);
+    padding-bottom: 0.2rem;
+    border-bottom: 1px solid var(--cns-oxblood);
+    margin-bottom: 0.25rem;
+}
+
+.cns5-attributes__group th,
+.cns5-attributes__group td {
+    padding: 0.12rem 0.2rem;
+    text-align: right;
+    font-size: 0.82rem;
+}
+
+.cns5-attributes__group thead th {
+    font-size: 0.68rem;
+    font-weight: 400;
+    font-variant: small-caps;
+    color: var(--cns-ink-soft);
+    border-bottom: 1px solid var(--cns-rule);
+}
+
+.cns5-attributes__name,
+.cns5-attributes__group tbody th {
+    text-align: left;
+}
+
+.cns5-attributes__roll {
+    background: none;
+    border: none;
+    padding: 0;
+    width: auto;
+    font: inherit;
+    color: var(--cns-lapis);
+    text-align: left;
+    cursor: pointer;
+    line-height: 1.3;
+}
+
+.cns5-attributes__roll:hover {
+    color: var(--cns-oxblood);
+    text-decoration: underline;
+}
+
+.cns5-attributes__value {
+    width: 2.8rem;
+    text-align: center;
+    padding: 0.05rem;
+}
+
+.cns5-attributes__total {
+    display: inline-block;
+    min-width: 1.6rem;
+    text-align: center;
+    color: var(--cns-verdigris);
+    font-weight: 600;
+}
+
+.cns5-attributes__readout {
+    font-variant-numeric: tabular-nums;
+    color: var(--cns-ink-soft);
+}
+
+/* The derived attributes take an innate aptitude modifier as their input, so
+   the row is marked to show its number means something different. */
+.cns5-attributes__group tr.is-derived th {
+    font-style: italic;
+}
+
+/* --------------------------------------------------------------------------
+   Vitals and derived values
+   -------------------------------------------------------------------------- */
+
+.cns5-vitals {
+    display: flex;
+    gap: 1rem;
+    padding: 0.5rem 0.6rem;
+    background: var(--cns-vellum-light);
+    border-left: 3px solid var(--cns-lapis);
+}
+
+.cns5-vitals__pair {
+    display: flex;
+    align-items: baseline;
+    gap: 0.3rem;
+}
+
+.cns5-vitals__label {
+    font-variant: small-caps;
+    letter-spacing: 0.04em;
+    color: var(--cns-ink-soft);
+}
+
+.cns5-vitals__pair input {
+    width: 3.2rem;
+    text-align: center;
+}
+
+.cns5-vitals__max {
+    color: var(--cns-ink-soft);
+    font-variant-numeric: tabular-nums;
+}
+
+.cns5-derived {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.3rem 0.8rem;
+    margin: 0;
+}
+
+.cns5-derived > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.4rem;
+    border-bottom: 1px dotted var(--cns-rule);
+    padding-bottom: 0.1rem;
+}
+
+.cns5-derived dt {
+    font-size: 0.75rem;
+    font-variant: small-caps;
+    letter-spacing: 0.03em;
+    color: var(--cns-ink-soft);
+}
+
+.cns5-derived dd {
+    margin: 0;
+    font-variant-numeric: tabular-nums;
+}
+
+.cns5-size {
+    display: flex;
+    gap: 0.5rem;
+    align-items: flex-end;
+}
+
+.cns5-size__note {
+    margin: 0 0 0.15rem;
+    font-size: 0.75rem;
+    color: var(--cns-ink-soft);
+}
+
+/* --------------------------------------------------------------------------
+   Empty states
+   -------------------------------------------------------------------------- */
+
+.cns5-panel {
+    border: 1px solid var(--cns-rule);
+    border-radius: 2px;
+    padding: 0.5rem 0.6rem;
+}
+
+.cns5-panel h3 {
+    margin: 0 0 0.2rem;
+    font-size: 0.85rem;
+    font-variant: small-caps;
+    letter-spacing: 0.05em;
+    color: var(--cns-oxblood);
+    border: none;
+}
+
+.cns5-panel--empty p,
+.cns5-stub p {
+    margin: 0;
+    color: var(--cns-ink-soft);
+    font-size: 0.85rem;
+    max-width: 60ch;
+}
+
+.cns5-stub {
+    padding: 1.5rem 0.5rem;
+}
+
+.cns5-stub h2 {
+    font-variant: small-caps;
+    letter-spacing: 0.05em;
+    color: var(--cns-oxblood);
+    border: none;
+    margin: 0 0 0.3rem;
+}
+
+/* --------------------------------------------------------------------------
+   Chat cards
+   -------------------------------------------------------------------------- */
+
+.cns5-check {
+    font-family: var(--cns-serif, Georgia, serif);
+    --cns-check-accent: #7a2e2a;
+}
+
+.cns5-check.is-success {
+    --cns-check-accent: #4a6f63;
+}
+
+.cns5-check.is-critical {
+    --cns-check-accent: #a8842c;
+}
+
+.cns5-check__title {
+    margin: 0;
+    font-variant: small-caps;
+    letter-spacing: 0.04em;
+    border-bottom: 1px solid var(--cns-check-accent);
+    padding-bottom: 0.15rem;
+}
+
+.cns5-check__subtitle {
+    margin: 0.2rem 0 0.4rem;
+    font-size: 0.8rem;
+    opacity: 0.75;
+}
+
+.cns5-check__dice {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.cns5-check__die {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    padding: 0.25rem;
+    border: 1px solid var(--cns-check-accent);
+    border-radius: 2px;
+}
+
+.cns5-check__die-value {
+    font-size: 1.5rem;
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+}
+
+.cns5-check__die-label {
+    font-size: 0.68rem;
+    font-variant: small-caps;
+    letter-spacing: 0.04em;
+    opacity: 0.75;
+}
+
+.cns5-check__result {
+    margin: 0.4rem 0 0;
+    color: var(--cns-check-accent);
+    font-weight: 600;
+}
+
+/* --------------------------------------------------------------------------
+   Narrow windows
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 700px) {
+    .cns5-attributes,
+    .cns5-derived {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .cns5-vitals,
+    .cns5-header__row {
+        flex-wrap: wrap;
+    }
+}
+
+/* --------------------------------------------------------------------------
+   Skills & Experience
+   -------------------------------------------------------------------------- */
+
+.cns5-experience {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.6rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--cns-rule);
+}
+
+.cns5-experience__available {
+    display: block;
+    padding: 0.2rem 0.4rem;
+    border-bottom: 1px solid var(--cns-rule);
+    font-variant-numeric: tabular-nums;
+    color: var(--cns-verdigris);
+    font-weight: 600;
+}
+
+.cns5-experience__controls {
+    margin-left: auto;
+    display: flex;
+    gap: 0.35rem;
+}
+
+.application.cns5 .cns5-experience__controls button {
+    width: auto;
+    padding: 0.2rem 0.6rem;
+    background: var(--cns-vellum-light);
+    border: 1px solid var(--cns-rule);
+    border-radius: 2px;
+    font-family: var(--cns-serif);
+    font-variant: small-caps;
+    letter-spacing: 0.03em;
+    color: var(--cns-ink);
+    cursor: pointer;
+}
+
+.application.cns5 .cns5-experience__controls button:hover {
+    border-color: var(--cns-lapis);
+    color: var(--cns-lapis);
+}
+
+.cns5-skills {
+    margin-top: 0.6rem;
+}
+
+.cns5-skills__heading {
+    margin: 0 0 0.2rem;
+    font-size: 0.85rem;
+    font-variant: small-caps;
+    letter-spacing: 0.05em;
+    color: var(--cns-oxblood);
+    border-bottom: 1px solid var(--cns-oxblood);
+    padding-bottom: 0.1rem;
+}
+
+.cns5-skills__table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+}
+
+.cns5-skills__table th,
+.cns5-skills__table td {
+    padding: 0.1rem 0.25rem;
+    text-align: right;
+    white-space: nowrap;
+}
+
+.cns5-skills__table thead th {
+    font-size: 0.68rem;
+    font-weight: 400;
+    font-variant: small-caps;
+    color: var(--cns-ink-soft);
+    border-bottom: 1px solid var(--cns-rule);
+}
+
+.cns5-skills__name,
+.cns5-skills__table tbody th {
+    text-align: left;
+    white-space: normal;
+    width: 40%;
+}
+
+.cns5-skills__table tbody tr:nth-child(even) {
+    background: rgba(255, 255, 255, 0.35);
+}
+
+/* An unskilled attempt is legal but penalised, so the row is dimmed rather
+   than hidden — the player can still roll it. */
+.cns5-skills__table tbody tr.is-unskilled th,
+.cns5-skills__table tbody tr.is-unskilled td {
+    opacity: 0.6;
+    font-style: italic;
+}
+
+.cns5-skills__roll {
+    background: none;
+    border: none;
+    padding: 0;
+    width: auto;
+    font: inherit;
+    color: var(--cns-lapis);
+    text-align: left;
+    cursor: pointer;
+}
+
+.cns5-skills__roll:hover {
+    color: var(--cns-oxblood);
+    text-decoration: underline;
+}
+
+.cns5-skills__att {
+    font-size: 0.72rem;
+    color: var(--cns-ink-soft);
+    text-align: center;
+}
+
+.cns5-skills__level {
+    width: 2.6rem;
+    text-align: center;
+    padding: 0.05rem;
+}
+
+.cns5-skills__readout {
+    font-variant-numeric: tabular-nums;
+    color: var(--cns-ink-soft);
+}
+
+.cns5-skills__readout--total {
+    color: var(--cns-ink);
+    font-weight: 600;
+}
+
+.cns5-skills__crit {
+    font-size: 0.7rem;
+    font-weight: 400;
+    vertical-align: super;
+}
+
+.cns5-skills__crit.is-good { color: var(--cns-verdigris); }
+.cns5-skills__crit.is-bad { color: var(--cns-oxblood); }
+
+.cns5-tag {
+    display: inline-block;
+    margin-left: 0.25rem;
+    padding: 0 0.2rem;
+    font-size: 0.62rem;
+    border: 1px solid var(--cns-gilt);
+    border-radius: 2px;
+    color: var(--cns-gilt);
+    vertical-align: middle;
+}
+
+.cns5-skills__controls {
+    text-align: right;
+}
+
+.application.cns5 .cns5-skills__controls button {
+    width: auto;
+    padding: 0 0.2rem;
+    background: none;
+    border: none;
+    color: var(--cns-ink-soft);
+    cursor: pointer;
+}
+
+.application.cns5 .cns5-skills__controls button:hover {
+    color: var(--cns-oxblood);
+}
+
+.cns5-visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+
+/* --------------------------------------------------------------------------
+   Skill item sheet
+   -------------------------------------------------------------------------- */
+
+.cns5-skill-sheet {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.cns5-header__portrait--small {
+    width: 48px;
+    height: 48px;
+}
+
+.cns5-grid {
+    display: grid;
+    gap: 0.5rem;
+}
+
+.cns5-grid--two { grid-template-columns: repeat(2, 1fr); }
+.cns5-grid--three { grid-template-columns: repeat(3, 1fr); }
+
+.cns5-fieldset {
+    border: 1px solid var(--cns-rule);
+    border-radius: 2px;
+    padding: 0.4rem 0.6rem 0.6rem;
+    margin: 0;
+}
+
+.cns5-fieldset legend {
+    font-size: 0.72rem;
+    font-variant: small-caps;
+    letter-spacing: 0.05em;
+    color: var(--cns-oxblood);
+    padding: 0 0.3rem;
+}
+
+.cns5-checks {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.2rem 0.6rem;
+}
+
+.cns5-check {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.85rem;
+}
+
+.cns5-hint {
+    margin: 0.3rem 0 0;
+    font-size: 0.75rem;
+    color: var(--cns-ink-soft);
+}
+
+.cns5-hint--good { color: var(--cns-verdigris); }
+.cns5-hint--bad { color: var(--cns-oxblood); }
+
+.cns5-readout {
+    background: var(--cns-vellum-light);
+    border-left: 3px solid var(--cns-lapis);
+    padding: 0.5rem 0.6rem;
+}
+
+.cns5-readout h3 {
+    margin: 0 0 0.35rem;
+    font-size: 0.8rem;
+    font-variant: small-caps;
+    letter-spacing: 0.05em;
+    color: var(--cns-oxblood);
+    border: none;
+}
+
+.cns5-readout .cns5-derived {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+/* --------------------------------------------------------------------------
+   Roll prompt and chat breakdown
+   -------------------------------------------------------------------------- */
+
+.cns5-prompt {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.cns5-check__breakdown {
+    margin-top: 0.4rem;
+    font-size: 0.78rem;
+}
+
+.cns5-check__breakdown summary {
+    cursor: pointer;
+    font-variant: small-caps;
+    letter-spacing: 0.04em;
+    opacity: 0.8;
+}
+
+.cns5-check__breakdown ul {
+    list-style: none;
+    margin: 0.25rem 0 0;
+    padding: 0;
+}
+
+.cns5-check__breakdown li {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    font-variant-numeric: tabular-nums;
+}
+
+.cns5-check__breakdown li.is-total {
+    border-top: 1px solid currentColor;
+    margin-top: 0.15rem;
+    padding-top: 0.15rem;
+    font-weight: 600;
+}

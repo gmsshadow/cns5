@@ -1,0 +1,287 @@
+/**
+ * Static rules data for Chivalry & Sorcery 5th Edition.
+ *
+ * Everything in this file is a lookup table or a pure function over one. Keeping
+ * them here rather than inline in the data models means the character creation
+ * wizard (a later phase) can reuse the same tables without importing sheet code.
+ */
+
+export const CNS5 = {};
+
+/* -------------------------------------------- */
+/*  Attributes                                  */
+/* -------------------------------------------- */
+
+/**
+ * The nine rolled attributes, keyed by group as they appear on the printed sheet.
+ * AGL, FER and CHA are omitted here because they are averages of other attributes.
+ */
+CNS5.primaryAttributes = {
+  physical: ["str", "con", "dex"],
+  mental: ["int", "wis", "dis"],
+  social: ["app", "bv", "spr"]
+};
+
+/**
+ * Derived attributes and the three attributes each averages.
+ * Worksheet steps 11: AGL = (STR+CON+DEX)/3, FER = (STR+WIS+DIS)/3, CHA = (WIS+APP+BV)/3.
+ */
+CNS5.derivedAttributes = {
+  agl: { group: "physical", from: ["str", "con", "dex"] },
+  fer: { group: "mental", from: ["str", "wis", "dis"] },
+  cha: { group: "social", from: ["wis", "app", "bv"] }
+};
+
+/** Display order per column on the Core & Combat tab. */
+CNS5.attributeGroups = {
+  physical: ["str", "con", "dex", "agl"],
+  mental: ["int", "wis", "dis", "fer"],
+  social: ["app", "bv", "spr", "cha"]
+};
+
+/** Maximum attribute level by character type (p103). Minimum is 2 for humans. */
+CNS5.attributeMaximum = {
+  historical: 20,
+  heroic: 22,
+  mythic: 25
+};
+
+/**
+ * Table - Attribute Bonus or Penalty (p33). Returns the PSF% modifier.
+ * Below 3 is -10%; above 22 gains a further +1% per point.
+ * @param {number} value
+ * @returns {number}
+ */
+CNS5.attributeBonus = function (value) {
+  const v = Math.round(Number(value) || 0);
+  if (v < 3) return -10;
+  if (v > 22) return 12 + (v - 22);
+  return [
+    /* 3 */ -9, -7, -5, -4, -3, -2, -1, 0, 0, 0,
+    /* 13 */ 1, 2, 3, 4, 5, 6, 8, 10, 11, 12
+  ][v - 3];
+};
+
+/**
+ * Table - Attribute Rolls & Success Chance (p103). Returns the AR% for a level.
+ * @param {number} value
+ * @returns {number}
+ */
+CNS5.attributeRoll = function (value) {
+  const v = Math.round(Number(value) || 0);
+  if (v <= 2) return 20;
+  if (v >= 25) return 99;
+  return {
+    3: 25, 4: 30, 5: 35, 6: 40, 7: 45, 8: 50, 9: 54, 10: 58, 11: 62, 12: 66,
+    13: 70, 14: 73, 15: 76, 16: 79, 17: 82, 18: 85, 19: 88, 20: 90, 21: 92,
+    22: 94, 23: 96, 24: 98
+  }[v];
+};
+
+/* -------------------------------------------- */
+/*  Skillskape                                  */
+/* -------------------------------------------- */
+
+/**
+ * Table - Difficulty Factors (p33). Not consumed by the Core & Combat tab, but
+ * the skill item in the next phase reads straight from here.
+ */
+CNS5.difficultyFactors = {
+  1: { label: "Very simple", unskilled: 50, skilled: 60, min: 8, max: 99, exp: 300 },
+  2: { label: "Simple", unskilled: 40, skilled: 50, min: 6, max: 98, exp: 400 },
+  3: { label: "Average", unskilled: 30, skilled: 40, min: 5, max: 97, exp: 500 },
+  4: { label: "Challenging", unskilled: 20, skilled: 30, min: 4, max: 95, exp: 600 },
+  5: { label: "Demanding", unskilled: 10, skilled: 20, min: 3, max: 92, exp: 700 },
+  6: { label: "Difficult", unskilled: 5, skilled: 10, min: 2, max: 90, exp: 800 },
+  7: { label: "Very Difficult", unskilled: 3, skilled: 7, min: 1, max: 85, exp: 1000 },
+  8: { label: "Extremely Difficult", unskilled: 2, skilled: 3, min: 1, max: 75, exp: 1200 },
+  9: { label: "Nearly Impossible", unskilled: 1, skilled: 2, min: 1, max: 65, exp: 1500 },
+  10: { label: "Impossible", unskilled: 0, skilled: 1, min: 1, max: 50, exp: 2000 }
+};
+
+/**
+ * Skill categories and their PSF% adjustment (p32, p119-120).
+ *
+ * Mastery and Sunsign are not categories: each adds its own separate +10% and
+ * both can apply to a skill of any category, so they are flags on the item.
+ *
+ * `limit` is the number of skills a character may hold in that category at
+ * creation. It is advisory here; the creation wizard will enforce it.
+ */
+CNS5.skillCategories = {
+  core: { psf: 0, label: "CNS5.SkillCategory.core", limit: null },
+  background: { psf: 0, label: "CNS5.SkillCategory.background", limit: 15 },
+  primary: { psf: 10, label: "CNS5.SkillCategory.primary", limit: 10 },
+  secondary: { psf: 0, label: "CNS5.SkillCategory.secondary", limit: 4 },
+  tertiary: { psf: -10, label: "CNS5.SkillCategory.tertiary", limit: 6 }
+};
+
+/** Display order for the skills tab. */
+CNS5.skillCategoryOrder = ["core", "primary", "secondary", "background", "tertiary"];
+
+/**
+ * The nine skills every character possesses (printed character sheet, p597).
+ *
+ * Difficulty Factors and attribute pairs are taken from the skills list on
+ * p147-148, not from the character sheet itself: the sheet prints an experience
+ * cost of 900 for the two Alertness skills, where the Difficulty Factor table
+ * gives 1,000 for DF 7. The DF table is treated as authoritative throughout.
+ *
+ * This seed exists to make the skill engine testable before the generated
+ * compendium lands in phase 3, which will supersede it.
+ */
+CNS5.coreSkills = [
+  { name: "Language (Own) — Spoken", df: 1, attributes: ["int", "bv"] },
+  { name: "Alertness: Sight", df: 7, attributes: [] },
+  { name: "Alertness: Sound", df: 7, attributes: [] },
+  { name: "Local Geography & History", df: 1, attributes: ["int", "int"] },
+  { name: "Dodge", df: 3, attributes: ["agl", "wis"] },
+  { name: "Brawling", df: 3, attributes: ["str", "agl"] },
+  { name: "Stamina", df: 3, attributes: ["str", "con"] },
+  { name: "Willpower", df: 3, attributes: ["dis", "wis"] },
+  { name: "Faith", df: 5, attributes: ["spr", "spr"] }
+];
+
+/* -------------------------------------------- */
+/*  Body, Fatigue and Encumbrance               */
+/* -------------------------------------------- */
+
+/**
+ * Table - Weight Factor (p106). Upper bound of each band, in pounds, mapped to
+ * the primary Body contribution.
+ */
+CNS5.weightFactorBands = [
+  [44, 10], [53, 11], [64, 12], [75, 13], [87, 14], [100, 15], [113, 16],
+  [128, 17], [144, 18], [160, 19], [177, 20], [196, 21], [215, 22], [235, 23],
+  [256, 24], [278, 25], [300, 26], [324, 27], [348, 28], [373, 29], [400, 30],
+  [427, 31], [455, 32], [484, 33]
+];
+
+/**
+ * Primary Body from body weight in pounds.
+ * Weights beyond the printed table extrapolate at roughly +1 per 7% of weight.
+ * @param {number} weight
+ * @returns {number}
+ */
+CNS5.weightFactor = function (weight) {
+  const w = Number(weight) || 0;
+  for (const [upper, body] of CNS5.weightFactorBands) {
+    if (w <= upper) return body;
+  }
+  return 33 + Math.floor(Math.log(w / 484) / Math.log(1.07));
+};
+
+/**
+ * Table - Strength/Body Ratio (p111). LCAP = 5 lbs + N% of body weight.
+ * @param {number} str
+ * @returns {number} the percentage of body weight
+ */
+CNS5.liftingPercent = function (str) {
+  const s = Math.round(Number(str) || 0);
+  if (s <= 2) return 25;
+  if (s >= 31) return 500;
+  return {
+    3: 30, 4: 35, 5: 35, 6: 40, 7: 50, 8: 60, 9: 70, 10: 80, 11: 90, 12: 100,
+    13: 105, 14: 110, 15: 120, 16: 130, 17: 140, 18: 150, 19: 160, 20: 170,
+    21: 180, 22: 190, 23: 200, 24: 210, 25: 225, 26: 250, 27: 300, 28: 350,
+    29: 400, 30: 450
+  }[s];
+};
+
+/**
+ * Table - Body Recovery Rates (p108). Percentage of maximum Body per day.
+ * @param {number} con
+ */
+CNS5.bodyRecovery = function (con) {
+  const c = Math.round(Number(con) || 0);
+  const table = {
+    2: [1, 0, 0, 30], 3: [2, 1, 0, 40], 4: [2, 1, 1, 50], 5: [2, 1, 1, 55],
+    6: [3, 1, 1, 60], 7: [4, 2, 1, 65], 8: [5, 3, 1, 70], 9: [5, 3, 1, 75],
+    10: [6, 3, 1, 80], 11: [6, 3, 1, 82], 12: [6, 3, 1, 84], 13: [7, 3, 1, 86],
+    14: [7, 4, 2, 88], 15: [7, 4, 2, 90], 16: [8, 4, 2, 92], 17: [8, 5, 3, 94],
+    18: [8, 5, 3, 96], 19: [8, 5, 3, 97], 20: [9, 6, 3, 98]
+  };
+  const row = c <= 2 ? table[2] : c >= 21 ? [10, 6, 4, 99] : table[c];
+  return { rest: row[0], light: row[1], active: row[2], resistDisease: row[3] };
+};
+
+/**
+ * Table - Fatigue Recovery Rates (p110). FP regained by sleeping an hour, and
+ * by the first ten minutes of rest.
+ * @param {number} con
+ */
+CNS5.fatigueRecovery = function (con) {
+  const c = Math.round(Number(con) || 0);
+  if (c <= 6) return { sleep: 5, rest: 2 };
+  if (c <= 10) return { sleep: 6, rest: 3 };
+  if (c <= 13) return { sleep: 7, rest: 4 };
+  if (c <= 15) return { sleep: 8, rest: 5 };
+  if (c <= 17) return { sleep: 9, rest: 6 };
+  if (c === 18) return { sleep: 10, rest: 7 };
+  if (c === 19) return { sleep: 12, rest: 8 };
+  if (c === 20) return { sleep: 13, rest: 9 };
+  return { sleep: 15, rest: 10 };
+};
+
+/* -------------------------------------------- */
+/*  Crit Die                                    */
+/* -------------------------------------------- */
+
+/** Table - Critical Outcomes - General (p37). */
+CNS5.criticalOutcomes = {
+  success: [
+    { max: 1, key: "mediocre" },
+    { max: 5, key: "middling" },
+    { max: 9, key: "competent" },
+    { max: Infinity, key: "critical" }
+  ],
+  failure: [
+    { max: 1, key: "heartbreaking" },
+    { max: 5, key: "disappointing" },
+    { max: 9, key: "botched" },
+    { max: Infinity, key: "abysmal" }
+  ]
+};
+
+/**
+ * Resolve a Crit Die total against the general outcome table.
+ * A result of 10 or more is always critical, in either direction.
+ * @param {number} total  the Crit Die result after modifiers
+ * @param {boolean} success
+ * @returns {string} outcome key
+ */
+CNS5.critOutcome = function (total, success) {
+  const band = success ? CNS5.criticalOutcomes.success : CNS5.criticalOutcomes.failure;
+  const clamped = Math.max(1, total);
+  return band.find((b) => clamped <= b.max).key;
+};
+
+/* -------------------------------------------- */
+/*  Character creation vocabulary                */
+/* -------------------------------------------- */
+
+CNS5.characterTypes = {
+  historical: "CNS5.CharacterType.historical",
+  heroic: "CNS5.CharacterType.heroic",
+  mythic: "CNS5.CharacterType.mythic"
+};
+
+CNS5.periods = {
+  ef: "CNS5.Period.ef",
+  hc: "CNS5.Period.hc",
+  lf: "CNS5.Period.lf",
+  wf: "CNS5.Period.wf"
+};
+
+CNS5.birthOmens = {
+  well: "CNS5.Omens.well",
+  neutral: "CNS5.Omens.neutral",
+  poor: "CNS5.Omens.poor"
+};
+
+/** Magick Resistance is 10% for Neutral omens, 0% otherwise (worksheet, p288). */
+CNS5.magickResistance = {
+  well: 0,
+  neutral: 10,
+  poor: 0
+};

@@ -1,0 +1,103 @@
+<section class="tab {{tab.cssClass}}" data-tab="{{tab.id}}" data-group="{{tab.group}}">
+
+    <div class="cns5-experience">
+        <label class="cns5-field cns5-field--narrow">
+            <span>{{localize "CNS5.Experience.earned"}}</span>
+            <input type="number" name="system.experience.earned" value="{{system.experience.earned}}"
+                   {{#unless editable}}disabled{{/unless}}>
+        </label>
+        <label class="cns5-field cns5-field--narrow">
+            <span>{{localize "CNS5.Experience.spent"}}</span>
+            <input type="number" name="system.experience.spent" value="{{system.experience.spent}}"
+                   {{#unless editable}}disabled{{/unless}}>
+        </label>
+        <div class="cns5-field cns5-field--narrow">
+            <span>{{localize "CNS5.Experience.available"}}</span>
+            <output class="cns5-experience__available">{{system.experience.available}}</output>
+        </div>
+
+        <div class="cns5-experience__controls">
+            <button type="button" data-action="createSkill" data-kind="skill">
+                {{localize "CNS5.Skill.add"}}
+            </button>
+            <button type="button" data-action="addCoreSkills">
+                {{localize "CNS5.Skill.addCore"}}
+            </button>
+        </div>
+    </div>
+
+    {{#each skillGroups as |group|}}
+    <section class="cns5-skills">
+        <h3 class="cns5-skills__heading">{{localize group.label}}</h3>
+        <table class="cns5-skills__table">
+            <thead>
+            <tr>
+                <th scope="col" class="cns5-skills__name">{{localize "CNS5.Skill.skill"}}</th>
+                <th scope="col">{{localize "CNS5.Skill.dfShort"}}</th>
+                <th scope="col">{{localize "CNS5.Skill.att"}}</th>
+                <th scope="col">{{localize "CNS5.Skill.lvlShort"}}</th>
+                <th scope="col">{{localize "CNS5.Roll.bcs"}}</th>
+                <th scope="col">{{localize "CNS5.PsfShort"}}</th>
+                <th scope="col">{{localize "CNS5.Skill.tscShort"}}</th>
+                <th scope="col">{{localize "CNS5.Skill.minShort"}}</th>
+                <th scope="col">{{localize "CNS5.Skill.maxShort"}}</th>
+                <th scope="col"><span class="cns5-visually-hidden">{{localize "CNS5.Skill.controls"}}</span></th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#each group.skills as |skill|}}
+            <tr class="{{#unless skill.system.known}}is-unskilled{{/unless}}"
+                data-item-id="{{skill.id}}">
+                <th scope="row">
+                    <button type="button" class="cns5-skills__roll" data-action="rollSkill"
+                            data-item-id="{{skill.id}}"
+                            data-tooltip="{{localize 'CNS5.Roll.skillTooltip'}}">
+                        {{skill.name}}
+                    </button>
+                    {{#if skill.system.mastered}}<span class="cns5-tag" data-tooltip="{{localize 'CNS5.Skill.mastered'}}">M</span>{{/if}}
+                    {{#if skill.system.sunsign}}<span class="cns5-tag" data-tooltip="{{localize 'CNS5.Skill.sunsign'}}">☉</span>{{/if}}
+                    {{#if skill.system.trainingRequired}}<span class="cns5-tag" data-tooltip="{{localize 'CNS5.Skill.trainingRequired'}}">TR</span>{{/if}}
+                </th>
+                <td>{{skill.system.df}}</td>
+                <td class="cns5-skills__att">{{skill.system.attributeLabel}}</td>
+                <td>
+                    <input type="number" class="cns5-skills__level" min="0"
+                           name="system.level" value="{{skill.system.level}}"
+                           data-item-id="{{skill.id}}" data-action="editLevel"
+                           {{#unless @root.editable}}disabled{{/unless}}>
+                </td>
+                <td class="cns5-skills__readout">{{cns5Percent skill.system.bcs}}</td>
+                <td class="cns5-skills__readout">{{cns5Signed skill.system.psf}}</td>
+                <td class="cns5-skills__readout cns5-skills__readout--total">
+                    {{cns5Percent skill.system.target}}
+                    {{#if skill.system.critMod}}
+                    <span class="cns5-skills__crit {{#if skill.system.overflow}}is-good{{else}}is-bad{{/if}}"
+                          data-tooltip="{{localize 'CNS5.Roll.critModTooltip'}}">
+                        {{cns5Signed skill.system.critMod}}
+                    </span>
+                    {{/if}}
+                </td>
+                <td class="cns5-skills__readout">{{cns5Percent skill.system.min}}</td>
+                <td class="cns5-skills__readout">{{cns5Percent skill.system.max}}</td>
+                <td class="cns5-skills__controls">
+                    <button type="button" data-action="editSkill" data-item-id="{{skill.id}}"
+                            data-tooltip="{{localize 'CNS5.Skill.edit'}}">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                    </button>
+                    <button type="button" data-action="deleteSkill" data-item-id="{{skill.id}}"
+                            data-tooltip="{{localize 'CNS5.Skill.delete'}}">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+            {{/each}}
+            </tbody>
+        </table>
+    </section>
+    {{else}}
+    <div class="cns5-stub">
+        <p>{{localize "CNS5.Skill.empty"}}</p>
+    </div>
+    {{/each}}
+
+</section>

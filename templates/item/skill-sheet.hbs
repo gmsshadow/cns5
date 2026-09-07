@@ -1,0 +1,144 @@
+<form class="cns5-skill-sheet">
+
+    <header class="cns5-header">
+        <img class="cns5-header__portrait cns5-header__portrait--small" src="{{document.img}}"
+             data-edit="img" data-action="editImage" alt="{{document.name}}">
+        <div class="cns5-header__fields">
+            <input class="cns5-header__name" type="text" name="name" value="{{document.name}}"
+                   placeholder="{{localize 'CNS5.Skill.namePlaceholder'}}"
+                   {{#unless editable}}disabled{{/unless}}>
+        </div>
+    </header>
+
+    <div class="cns5-grid cns5-grid--two">
+        <label class="cns5-field">
+            <span>{{localize "CNS5.Skill.difficulty"}}</span>
+            <select name="system.df" {{#unless editable}}disabled{{/unless}}>
+                {{#each difficulties}}
+                <option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>
+                {{/each}}
+            </select>
+        </label>
+
+        <label class="cns5-field">
+            <span>{{localize "CNS5.Skill.category"}}</span>
+            <select name="system.category" {{#unless editable}}disabled{{/unless}}>
+                {{#each categories}}
+                <option value="{{value}}" {{#if selected}}selected{{/if}}>{{localize label}}</option>
+                {{/each}}
+            </select>
+        </label>
+
+        <label class="cns5-field">
+            <span>{{localize "CNS5.Skill.kind"}}</span>
+            <select name="system.kind" {{#unless editable}}disabled{{/unless}}>
+                <option value="skill" {{#if (eq system.kind "skill")}}selected{{/if}}>
+                    {{localize "CNS5.Skill.kindSkill"}}
+                </option>
+                <option value="competency" {{#if (eq system.kind "competency")}}selected{{/if}}>
+                    {{localize "CNS5.Skill.kindCompetency"}}
+                </option>
+            </select>
+        </label>
+
+        <label class="cns5-field">
+            <span>{{localize "CNS5.Skill.level"}}</span>
+            <input type="number" name="system.level" value="{{system.level}}" min="0"
+                   {{#unless editable}}disabled{{/unless}}>
+        </label>
+    </div>
+
+    <fieldset class="cns5-fieldset">
+        <legend>{{localize "CNS5.Skill.attributes"}}</legend>
+        <p class="cns5-hint">{{localize "CNS5.Skill.attributesHint"}}</p>
+        <div class="cns5-grid cns5-grid--two">
+            {{#each attributeSlots}}
+            <select data-action="setAttribute" data-index="{{index}}"
+                    {{#unless @root.editable}}disabled{{/unless}}>
+                {{#each options}}
+                <option value="{{value}}" {{#if selected}}selected{{/if}}>{{localize label}}</option>
+                {{/each}}
+            </select>
+            {{/each}}
+        </div>
+    </fieldset>
+
+    <fieldset class="cns5-fieldset">
+        <legend>{{localize "CNS5.Skill.status"}}</legend>
+        <div class="cns5-checks">
+            <label class="cns5-check">
+                <input type="checkbox" name="system.known" {{checked system.known}}
+                       {{#unless editable}}disabled{{/unless}}>
+                <span>{{localize "CNS5.Skill.known"}}</span>
+            </label>
+            <label class="cns5-check">
+                <input type="checkbox" name="system.mastered" {{checked system.mastered}}
+                       {{#unless editable}}disabled{{/unless}}>
+                <span>{{localize "CNS5.Skill.mastered"}}</span>
+            </label>
+            <label class="cns5-check">
+                <input type="checkbox" name="system.sunsign" {{checked system.sunsign}}
+                       {{#unless editable}}disabled{{/unless}}>
+                <span>{{localize "CNS5.Skill.sunsign"}}</span>
+            </label>
+            <label class="cns5-check">
+                <input type="checkbox" name="system.trainingRequired"
+                       {{checked system.trainingRequired}} {{#unless editable}}disabled{{/unless}}>
+                <span>{{localize "CNS5.Skill.trainingRequired"}}</span>
+            </label>
+        </div>
+    </fieldset>
+
+    <div class="cns5-grid cns5-grid--three">
+        <label class="cns5-field">
+            <span>{{localize "CNS5.Skill.otherMod"}}</span>
+            <input type="number" name="system.otherMod" value="{{system.otherMod}}"
+                   {{#unless editable}}disabled{{/unless}}>
+        </label>
+        <label class="cns5-field">
+            <span>{{localize "CNS5.Skill.resistedBy"}}</span>
+            <input type="text" name="system.resistedBy" value="{{system.resistedBy}}"
+                   {{#unless editable}}disabled{{/unless}}>
+        </label>
+        <label class="cns5-field">
+            <span>{{localize "CNS5.Skill.reference"}}</span>
+            <input type="text" name="system.reference" value="{{system.reference}}"
+                   placeholder="p149" {{#unless editable}}disabled{{/unless}}>
+        </label>
+    </div>
+
+    {{#if onActor}}
+    <section class="cns5-readout">
+        <h3>{{localize "CNS5.Skill.readout"}}</h3>
+        <dl class="cns5-derived">
+            <div><dt>{{localize "CNS5.Roll.bcs"}}</dt><dd>{{cns5Percent system.bcs}}</dd></div>
+            <div><dt>{{localize "CNS5.Roll.attributeBonus"}}</dt><dd>{{cns5Signed system.attributeBonus}}</dd></div>
+            <div><dt>{{localize "CNS5.Roll.levelBonus"}}</dt><dd>{{cns5Signed system.levelBonus}}</dd></div>
+            <div><dt>{{localize "CNS5.Roll.categoryBonus"}}</dt><dd>{{cns5Signed system.categoryBonus}}</dd></div>
+            <div><dt>{{localize "CNS5.Roll.masteryBonus"}}</dt><dd>{{cns5Signed system.masteryBonus}}</dd></div>
+            <div><dt>{{localize "CNS5.Roll.psf"}}</dt><dd>{{cns5Signed system.psf}}</dd></div>
+            <div><dt>{{localize "CNS5.Roll.tsc"}}</dt><dd>{{cns5Percent system.tsc}}</dd></div>
+            <div><dt>{{localize "CNS5.Roll.band"}}</dt><dd>{{system.min}}–{{system.max}}%</dd></div>
+        </dl>
+        {{#if system.overflow}}
+        <p class="cns5-hint cns5-hint--good">
+            {{localize "CNS5.Roll.overflowNote"}} {{cns5Signed system.critMod}}
+        </p>
+        {{/if}}
+        {{#if system.shortfall}}
+        <p class="cns5-hint cns5-hint--bad">
+            {{localize "CNS5.Roll.shortfallNote"}} {{cns5Signed system.critMod}}
+        </p>
+        {{/if}}
+    </section>
+    {{else}}
+    <p class="cns5-hint">{{localize "CNS5.Skill.notOnActor"}}</p>
+    {{/if}}
+
+    <fieldset class="cns5-fieldset">
+        <legend>{{localize "CNS5.Skill.description"}}</legend>
+        {{formInput fields.description value=system.description enriched=descriptionHTML
+                    toggled=true disabled=(not editable)}}
+    </fieldset>
+
+</form>

@@ -1,0 +1,61 @@
+{
+  "id": "cns5",
+  "title": "Chivalry & Sorcery 5th Edition",
+  "description": "An unofficial system implementation of Chivalry & Sorcery 5th Edition for Foundry Virtual Tabletop.",
+  "version": "0.2.0",
+  "compatibility": {
+    "minimum": "14",
+    "verified": "14.365"
+  },
+  "authors": [
+    {
+      "name": "GMsShadow",
+      "url": "https://github.com/GMsShadow"
+    }
+  ],
+  "esmodules": [
+    "module/cns5.mjs"
+  ],
+  "styles": [
+    "styles/cns5.css"
+  ],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    }
+  ],
+  "documentTypes": {
+    "Actor": {
+      "character": {
+        "htmlFields": [
+          "biography",
+          "familyNotes"
+        ]
+      },
+      "npc": {
+        "htmlFields": [
+          "biography"
+        ]
+      }
+    },
+    "Item": {
+      "skill": {
+        "htmlFields": [
+          "description"
+        ]
+      }
+    }
+  },
+  "grid": {
+    "distance": 1,
+    "units": "ft"
+  },
+  "primaryTokenAttribute": "body",
+  "secondaryTokenAttribute": "fatigue",
+  "url": "https://github.com/GMsShadow/cns5",
+  "manifest": "https://github.com/GMsShadow/cns5/releases/latest/download/system.json",
+  "download": "https://github.com/GMsShadow/cns5/releases/latest/download/system.zip",
+  "readme": "README.md"
+}

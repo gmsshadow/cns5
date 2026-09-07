@@ -1,0 +1,101 @@
+<section class="tab {{tab.cssClass}}" data-tab="{{tab.id}}" data-group="{{tab.group}}">
+
+    <div class="cns5-attributes">
+        {{#each groups as |group|}}
+        <table class="cns5-attributes__group">
+            <caption>{{localize group.label}}</caption>
+            <thead>
+            <tr>
+                <th scope="col" class="cns5-attributes__name">{{localize "CNS5.Attributes"}}</th>
+                <th scope="col">{{localize "CNS5.Att"}}</th>
+                <th scope="col">{{localize "CNS5.ArShort"}}</th>
+                <th scope="col">{{localize "CNS5.PsfShort"}}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#each group.attributes as |attr|}}
+            <tr class="{{#if attr.derived}}is-derived{{/if}}">
+                <th scope="row">
+                    <button type="button" class="cns5-attributes__roll" data-action="rollAttribute"
+                            data-attribute="{{attr.key}}"
+                            data-tooltip="{{localize 'CNS5.Roll.attributeTooltip'}}">
+                        {{localize attr.label}}
+                    </button>
+                </th>
+                <td>
+                    <input type="number" class="cns5-attributes__value" name="{{attr.path}}"
+                           value="{{attr.editValue}}" {{#unless @root.editable}}disabled{{/unless}}
+                           {{#if attr.derived}}data-tooltip="{{localize 'CNS5.Attribute.innateHint'}}"{{/if}}>
+                    {{#if attr.derived}}<span class="cns5-attributes__total">{{attr.value}}</span>{{/if}}
+                </td>
+                <td class="cns5-attributes__readout">{{cns5Percent attr.ar}}</td>
+                <td class="cns5-attributes__readout">{{cns5Signed attr.bonus}}</td>
+            </tr>
+            {{/each}}
+            </tbody>
+        </table>
+        {{/each}}
+    </div>
+
+    <div class="cns5-vitals">
+        <div class="cns5-vitals__pair">
+            <span class="cns5-vitals__label">{{localize "CNS5.Vitals.body"}}</span>
+            <input type="number" name="system.body.value" value="{{system.body.value}}"
+                   {{#unless editable}}disabled{{/unless}}>
+            <span class="cns5-vitals__max">/ {{system.body.max}}</span>
+        </div>
+        <div class="cns5-vitals__pair">
+            <span class="cns5-vitals__label">{{localize "CNS5.Vitals.fatigue"}}</span>
+            <input type="number" name="system.fatigue.value" value="{{system.fatigue.value}}"
+                   {{#unless editable}}disabled{{/unless}}>
+            <span class="cns5-vitals__max">/ {{system.fatigue.max}}</span>
+        </div>
+        <div class="cns5-vitals__pair">
+            <span class="cns5-vitals__label">{{localize "CNS5.Vitals.spirit"}}</span>
+            <input type="number" name="system.spirit.value" value="{{system.spirit.value}}"
+                   {{#unless editable}}disabled{{/unless}}>
+            <span class="cns5-vitals__max">/ {{system.attr.spr.value}}</span>
+        </div>
+    </div>
+
+    <dl class="cns5-derived">
+        <div><dt>{{localize "CNS5.Derived.bap"}}</dt><dd>{{system.bap}}</dd></div>
+        <div><dt>{{localize "CNS5.Derived.jump"}}</dt><dd>{{system.jump}} ft</dd></div>
+        <div><dt>{{localize "CNS5.Derived.lcap"}}</dt><dd>{{system.lcap}} lb</dd></div>
+        <div><dt>{{localize "CNS5.Derived.ccap"}}</dt><dd>{{system.ccap}} lb</dd></div>
+        <div><dt>{{localize "CNS5.Derived.asr"}}</dt><dd>{{system.asr}}</dd></div>
+        <div><dt>{{localize "CNS5.Derived.faithFactor"}}</dt><dd>{{system.faith.pff}}</dd></div>
+        <div><dt>{{localize "CNS5.Derived.magickResistance"}}</dt><dd>{{cns5Percent system.magick.resistance}}</dd></div>
+        <div><dt>{{localize "CNS5.Derived.magickLevel"}}</dt><dd>{{system.magick.level}}</dd></div>
+    </dl>
+
+    <div class="cns5-size">
+        <label class="cns5-field cns5-field--narrow">
+            <span>{{localize "CNS5.Size.height"}}</span>
+            <input type="number" name="system.size.height" value="{{system.size.height}}"
+                   {{#unless editable}}disabled{{/unless}}>
+        </label>
+        <label class="cns5-field cns5-field--narrow">
+            <span>{{localize "CNS5.Size.build"}}</span>
+            <input type="number" name="system.size.build" value="{{system.size.build}}"
+                   {{#unless editable}}disabled{{/unless}}>
+        </label>
+        <label class="cns5-field cns5-field--narrow">
+            <span>{{localize "CNS5.Size.weight"}}</span>
+            <input type="number" name="system.size.weight" value="{{system.size.weight}}"
+                   {{#unless editable}}disabled{{/unless}}>
+        </label>
+        <p class="cns5-size__note">{{localize "CNS5.Size.weightNote"}} {{system.body.weightFactor}}</p>
+    </div>
+
+    <section class="cns5-panel cns5-panel--empty">
+        <h3>{{localize "CNS5.Combat.weapons"}}</h3>
+        <p>{{localize "CNS5.Planned.weapons"}}</p>
+    </section>
+
+    <section class="cns5-panel cns5-panel--empty">
+        <h3>{{localize "CNS5.Combat.armour"}}</h3>
+        <p>{{localize "CNS5.Planned.armour"}}</p>
+    </section>
+
+</section>

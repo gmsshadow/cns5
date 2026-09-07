@@ -1,0 +1,46 @@
+<div class="cns5-check {{#if success}}is-success{{else}}is-failure{{/if}} {{#if critical}}is-critical{{/if}}">
+    <h4 class="cns5-check__title">{{title}}</h4>
+    <p class="cns5-check__subtitle">{{subtitle}}</p>
+
+    <div class="cns5-check__dice">
+        <div class="cns5-check__die">
+            <span class="cns5-check__die-value">{{roll}}</span>
+            <span class="cns5-check__die-label">{{localize "CNS5.Roll.percentilePair"}}</span>
+        </div>
+        <div class="cns5-check__die">
+            <span class="cns5-check__die-value">{{critTotal}}</span>
+            <span class="cns5-check__die-label">
+                {{localize "CNS5.Roll.critDie"}}{{#if critMod}} ({{cns5Signed critMod}}){{/if}}
+            </span>
+        </div>
+    </div>
+
+    <p class="cns5-check__result">{{resultLabel}} &mdash; {{outcomeLabel}}</p>
+
+    {{#if breakdown}}
+    <details class="cns5-check__breakdown" data-sync>
+        <summary>{{localize "CNS5.Roll.breakdown"}}</summary>
+        <ul>
+            {{#each breakdown}}
+            <li><span>{{label}}</span><span>{{value}}</span></li>
+            {{/each}}
+            {{#if unclamped}}
+            <li class="is-total"><span>{{localize "CNS5.Roll.tsc"}}</span><span>{{unclamped}}%</span></li>
+            {{/if}}
+        </ul>
+        {{#if overflow}}
+        <p class="cns5-hint cns5-hint--good">
+            {{localize "CNS5.Roll.overflowChat"}} {{overflow}}% &rarr; {{cns5Signed critMod}}
+        </p>
+        {{/if}}
+        {{#if shortfall}}
+        <p class="cns5-hint cns5-hint--bad">
+            {{localize "CNS5.Roll.shortfallChat"}} {{shortfall}}% &rarr; {{cns5Signed critMod}}
+        </p>
+        {{/if}}
+        {{#if unskilled}}
+        <p class="cns5-hint cns5-hint--bad">{{localize "CNS5.Roll.unskilledNote"}}</p>
+        {{/if}}
+    </details>
+    {{/if}}
+</div>

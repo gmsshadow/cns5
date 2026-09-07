@@ -1,8 +1,9 @@
 {
-  "source": "Chivalry & Sorcery 5th Edition core rules: melee weapons pp.255-256, missile weapons p257, missile ranges p258, armour absorption p260",
-  "note": "Mechanical data only; no description text is reproduced. Group headings are those printed in the tables — the bows and arrows block carries none. Armour weight, cost and Fatigue to wear come from the detail tables on pp.261-263, which list armour at a finer granularity than the absorption table and are not extracted here. The Misc. Weapons table on p164 uses a different layout and is also not extracted, which is why Dart, Hunting Javelin and Thrown Axe appear in the ranges table with no weapon entry.",
+  "source": "Chivalry & Sorcery 5th Edition core rules: melee weapons pp.255-256, missile weapons p257, missile ranges p258, armour absorption p260, armour pieces pp.261-263",
+  "note": "Mechanical data only; no description text is reproduced. Group headings are those printed in the tables — the bows and arrows block carries none. The Misc. Weapons table on p164 uses a different layout and is not extracted, which is why Dart, Hunting Javelin and Thrown Axe appear in the ranges table with no weapon entry.",
   "weaponCount": 71,
   "armourCount": 27,
+  "armourPieceCount": 29,
   "weapons": [
     {
       "name": "Kontos",
@@ -1853,6 +1854,327 @@
         "energy": 10
       },
       "page": 260
+    }
+  ],
+  "armourPieces": [
+    {
+      "name": "Quilted Hood",
+      "location": "head",
+      "fpToWear": 0,
+      "weight": 1.0,
+      "cost": 4,
+      "costAtLeast": false,
+      "weightModifier": 0,
+      "dates": "",
+      "page": 261
+    },
+    {
+      "name": "Leather Hood",
+      "location": "head",
+      "fpToWear": 0,
+      "weight": 1.0,
+      "cost": 16,
+      "costAtLeast": false,
+      "weightModifier": 0,
+      "dates": "",
+      "page": 261
+    },
+    {
+      "name": "Maille Coif",
+      "location": "head",
+      "fpToWear": 0,
+      "weight": 3.0,
+      "cost": 43,
+      "costAtLeast": false,
+      "weightModifier": 0,
+      "dates": "1000-1500AD",
+      "page": 261
+    },
+    {
+      "name": "Cuirbolli Helm",
+      "location": "head",
+      "fpToWear": 0,
+      "weight": 2.0,
+      "cost": 35,
+      "costAtLeast": false,
+      "weightModifier": 0,
+      "dates": "",
+      "page": 261
+    },
+    {
+      "name": "Composite Helm",
+      "location": "head",
+      "fpToWear": 0,
+      "weight": 3.0,
+      "cost": 55,
+      "costAtLeast": false,
+      "weightModifier": 0,
+      "dates": "",
+      "page": 261
+    },
+    {
+      "name": "Conical Helm",
+      "location": "head",
+      "fpToWear": 0,
+      "weight": 4.0,
+      "cost": 72,
+      "costAtLeast": false,
+      "weightModifier": 0,
+      "dates": "1000-1275AD",
+      "page": 261
+    },
+    {
+      "name": "Open Bascinet",
+      "location": "head",
+      "fpToWear": 0,
+      "weight": 7.0,
+      "cost": 120,
+      "costAtLeast": false,
+      "weightModifier": 0,
+      "dates": "1300-1430AD",
+      "page": 261
+    },
+    {
+      "name": "Pot Helm",
+      "location": "head",
+      "fpToWear": 1,
+      "weight": 3.5,
+      "cost": 144,
+      "costAtLeast": false,
+      "weightModifier": 0,
+      "dates": "1180-1270AD",
+      "page": 261
+    },
+    {
+      "name": "Great Helm",
+      "location": "head",
+      "fpToWear": 1,
+      "weight": 5.5,
+      "cost": 165,
+      "costAtLeast": false,
+      "weightModifier": 0,
+      "dates": "1250-1450AD",
+      "page": 261
+    },
+    {
+      "name": "Visored Helm",
+      "location": "head",
+      "fpToWear": 1,
+      "weight": 5.5,
+      "cost": 192,
+      "costAtLeast": false,
+      "weightModifier": 0,
+      "dates": "1330-1430AD",
+      "page": 261
+    },
+    {
+      "name": "Jousting Helm",
+      "location": "head",
+      "fpToWear": 2,
+      "weight": 11.5,
+      "cost": 240,
+      "costAtLeast": false,
+      "weightModifier": 0,
+      "dates": "1415-1500AD",
+      "page": 261
+    },
+    {
+      "name": "Quilt Surcoat",
+      "location": "body",
+      "fpToWear": 0,
+      "weight": 5.0,
+      "cost": 48,
+      "costAtLeast": true,
+      "weightModifier": 1.0,
+      "dates": "",
+      "page": 261
+    },
+    {
+      "name": "Leather/Fur Tunic",
+      "location": "body",
+      "fpToWear": 0,
+      "weight": 3.5,
+      "cost": 36,
+      "costAtLeast": true,
+      "weightModifier": 1.0,
+      "dates": "",
+      "page": 261
+    },
+    {
+      "name": "Arming Doublet",
+      "location": "body",
+      "fpToWear": 0,
+      "weight": 8.5,
+      "cost": 48,
+      "costAtLeast": true,
+      "weightModifier": 1.0,
+      "dates": "",
+      "page": 261
+    },
+    {
+      "name": "Cuirbolli Cuirass",
+      "location": "body",
+      "fpToWear": 1,
+      "weight": 9.0,
+      "cost": 144,
+      "costAtLeast": false,
+      "weightModifier": 2.0,
+      "dates": "",
+      "page": 261
+    },
+    {
+      "name": "Reinf. Cuirbolli",
+      "location": "body",
+      "fpToWear": 2,
+      "weight": 19.0,
+      "cost": 360,
+      "costAtLeast": false,
+      "weightModifier": 3.0,
+      "dates": "",
+      "page": 262
+    },
+    {
+      "name": "Scalemail",
+      "location": "body",
+      "fpToWear": 2,
+      "weight": 21.0,
+      "cost": 480,
+      "costAtLeast": false,
+      "weightModifier": 3.0,
+      "dates": "",
+      "page": 262
+    },
+    {
+      "name": "Brigandine",
+      "location": "body",
+      "fpToWear": 2,
+      "weight": 13.0,
+      "cost": 240,
+      "costAtLeast": false,
+      "weightModifier": 4.0,
+      "dates": "",
+      "page": 262
+    },
+    {
+      "name": "Maille Cuirass",
+      "location": "body",
+      "fpToWear": 2,
+      "weight": 23.0,
+      "cost": 960,
+      "costAtLeast": false,
+      "weightModifier": 4.0,
+      "dates": "",
+      "page": 262
+    },
+    {
+      "name": "Platemail Cuirass",
+      "location": "body",
+      "fpToWear": 2,
+      "weight": 24.0,
+      "cost": 1200,
+      "costAtLeast": false,
+      "weightModifier": 4.0,
+      "dates": "",
+      "page": 262
+    },
+    {
+      "name": "Plate Cuirass",
+      "location": "body",
+      "fpToWear": 2,
+      "weight": 20.0,
+      "cost": 1800,
+      "costAtLeast": false,
+      "weightModifier": 4.0,
+      "dates": "",
+      "page": 262
+    },
+    {
+      "name": "Maille",
+      "location": "body",
+      "fpToWear": 3,
+      "weight": 36.0,
+      "cost": 1536,
+      "costAtLeast": false,
+      "weightModifier": 6.0,
+      "dates": "",
+      "page": 263
+    },
+    {
+      "name": "Platemail",
+      "location": "body",
+      "fpToWear": 4,
+      "weight": 45.0,
+      "cost": 2400,
+      "costAtLeast": true,
+      "weightModifier": 6.0,
+      "dates": "",
+      "page": 263
+    },
+    {
+      "name": "Late Cav. Plate",
+      "location": "body",
+      "fpToWear": 5,
+      "weight": 66.0,
+      "cost": 3600,
+      "costAtLeast": true,
+      "weightModifier": 5.0,
+      "dates": "",
+      "page": 263
+    },
+    {
+      "name": "Jousting Armour",
+      "location": "body",
+      "fpToWear": 5,
+      "weight": 97.0,
+      "cost": 4800,
+      "costAtLeast": true,
+      "weightModifier": 6.0,
+      "dates": "",
+      "page": 263
+    },
+    {
+      "name": "Scalemail Hauberk",
+      "location": "body",
+      "fpToWear": 3,
+      "weight": 45.0,
+      "cost": 1440,
+      "costAtLeast": false,
+      "weightModifier": 5.0,
+      "dates": "",
+      "page": 263
+    },
+    {
+      "name": "Maille Hauberk",
+      "location": "body",
+      "fpToWear": 3,
+      "weight": 49.0,
+      "cost": 1584,
+      "costAtLeast": false,
+      "weightModifier": 5.0,
+      "dates": "",
+      "page": 263
+    },
+    {
+      "name": "Field Plate",
+      "location": "body",
+      "fpToWear": 4,
+      "weight": 40.0,
+      "cost": 2400,
+      "costAtLeast": false,
+      "weightModifier": 5.0,
+      "dates": "",
+      "page": 263
+    },
+    {
+      "name": "Cavalry Plate",
+      "location": "body",
+      "fpToWear": 5,
+      "weight": 55.0,
+      "cost": 3000,
+      "costAtLeast": true,
+      "weightModifier": 6.0,
+      "dates": "",
+      "page": 263
     }
   ]
 }

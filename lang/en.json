@@ -379,5 +379,11 @@
   "CNS5.Settings.strengthDamageSource.name": "Strength damage bonus",
   "CNS5.Settings.strengthDamageSource.hint": "The rules give this two ways. p106 derives it from the Absolute Strength Rating; p281 gives it as the Strength attribute halved, or quartered for light weapons. The results are close but not identical.",
   "CNS5.Settings.strengthDamageSource.asr": "From Absolute Strength Rating (p106)",
-  "CNS5.Settings.strengthDamageSource.attribute": "From the Strength attribute (p281)"
+  "CNS5.Settings.strengthDamageSource.attribute": "From the Strength attribute (p281)",
+  "CNS5.Armour.armourType": "Armour type",
+  "CNS5.Armour.weightModifier": "Weight modifier",
+  "CNS5.Armour.weightModifierHint": "Printed weights assume a wearer of 150-174 lb. This modifier is applied once for every 25 lb the wearer is above that band, and subtracted below it.",
+  "CNS5.Armour.wornWeight": "Weight as worn",
+  "CNS5.Armour.baseWeight": "Printed weight",
+  "CNS5.Item.wornWeight": "Worn (lb)"
 }

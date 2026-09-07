@@ -136,7 +136,12 @@ export class CnS5ActorBase extends foundry.abstract.TypeDataModel {
         item.system.prepareForActor(this, skills.get(item.system.skill.toLowerCase()) ?? null);
         continue;
       }
-      if (item.type !== "armour" || !item.system.equipped) continue;
+      if (item.type !== "armour") continue;
+
+      // Every piece is sized to its wearer, worn or not: an unworn hauberk in
+      // the baggage still weighs what it weighs for this character.
+      item.system.prepareForActor(this);
+      if (!item.system.equipped) continue;
 
       const target = item.system.location === "shield" ? this.shieldProtection : this.protection;
       for (const key of Object.keys(CNS5.damageTypes)) {

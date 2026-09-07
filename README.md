@@ -7,7 +7,7 @@ This system ships no rules text, tables, or artwork from the published book.
 
 ## Build state
 
-Phase 4b of 5: the weapon and armour compendia.
+Phase 4b of 5: the weapon and armour compendia, armour modelled as pieces.
 
 | Phase | Scope | State |
 | --- | --- | --- |
@@ -161,8 +161,11 @@ Two more compendia, built by the same pipeline as the skills pack.
 - **C&S Weapons** — 71 entries from the melee tables on pp.255-256 and the
   missile table on p257, with missile ranges and their per-band TSC% modifiers
   joined from p258.
-- **C&S Armour** — 27 entries from the absorption table on p260, each carrying
-  its five absorption values, weight class and location.
+- **C&S Armour** — 32 entries. Armour is modelled as *pieces* rather than
+  types: a Maille Coif, a Maille Cuirass and a Maille Hauberk are three items
+  that share Maille's absorption and differ in weight, cost and Fatigue to wear.
+  Pieces come from the detail tables on pp.261-263 and take their absorption
+  from the type table on p260.
 
 Drag either onto a character to add it. Unlike skills, gear stacks: three
 daggers is a normal thing to carry, so duplicates are allowed.
@@ -174,14 +177,21 @@ gets no Strength bonus, because the arm does not add to a crossbow bolt the way
 it adds to a sword blow. Thrown weapons stay melee and gain ranges, since a
 javelin does both.
 
+### Armour weight scales with the wearer
+
+Printed weights assume a wearer of 150 to 174 lbs, and each piece carries a
+weight modifier applied in steps from that band (p261). A character's armour is
+sized automatically: the sheet and the encumbrance total both use the worn
+weight, not the printed one. Sir Miles at 210 lbs carries 48 lbs of maille where
+the table prints 36.
+
+Above the band the rule is explicit — add the modifier once for every 25 lbs
+over 174, rounded up. Below it the book names only two cases, 100 to 124 lbs
+subtracting once and under 100 subtracting twice, and says nothing about 125 to
+149. That gap is filled with a single subtraction.
+
 ### Known gaps in the gear data
 
-- **Armour weight, cost and Fatigue to wear are zero.** Those live on the detail
-  tables on pp.261-263, which list armour at a finer granularity than the
-  absorption table — a Maille Cuirass and a full suit of Maille are separate
-  rows there but one row here. Joining them properly means modelling armour
-  pieces rather than armour types, which is a design decision rather than an
-  extraction problem. Weapon weights and costs are extracted and complete.
 - **Weapon Action Point costs are zero.** The melee and missile tables do not
   print them; they come from the combat chapter's attack rate rules.
 - **The Misc. Weapons table on p164 is not extracted.** It uses a horizontal
@@ -190,6 +200,12 @@ javelin does both.
   weapon entry.
 - **The bows and arrows block has no group.** The book prints no heading over
   it, and inventing one would be putting words in the rulebook's mouth.
+- **Two helmets have no absorption.** The Composite Helm and the Great Helm
+  appear in the detail tables on p261 but have no row in the absorption table on
+  p260. They ship with zero absorption and say so in their reference line rather
+  than carrying invented numbers.
+- **Two armour types have no piece.** Cloth Headgear and the Scalemail Coif have
+  absorption but no weight or cost. They ship as absorption-only entries.
 
 ## Errata found while implementing
 
@@ -211,6 +227,11 @@ treated as authoritative over the worked examples and the character sheet.
   the description on p217 spells it correctly. The list is preserved as printed.
 - **p148, skills list.** Debate cites p232, which is the first page of The
   Marketplace. Its description ends on p231.
+- **pp.261-263, Fatigue cost to wear.** The column is printed as a negative for
+  heavier armour but the Cuirbolli Cuirass carries a bare `1`. Every value is a
+  cost either way, so the magnitude is stored and the sign discarded.
+- **p261, armour weight below the reference band.** The rule covers 100-124 lbs
+  and under 100 lbs but leaves 125-149 unstated. See above.
 - **p106 against p281, Strength damage bonus.** p106 derives it from the
   Absolute Strength Rating — half, rounded up, for medium and heavier weapons;
   a quarter, rounded down, for light. p281 gives it as the Strength attribute
@@ -255,3 +276,6 @@ armour entry's five absorption values appear consecutively on one line of p260.
 class known to the Attacker's Bonus table, every damage type matching an armour
 absorption column, launchers dealing no damage of their own, and range bands
 that never shrink as they lengthen.
+
+The armour weight rule is checked against the Sir Miles example on p261 — both
+his maille and his arming doublet — and at every boundary of the reference band.

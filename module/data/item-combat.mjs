@@ -166,7 +166,19 @@ export class CnS5Armour extends CnS5PhysicalItem {
       )
     );
 
-    schema.fpToWear = new fields.NumberField({ required: true, integer: true, initial: 0 });
+    // A cost in Fatigue Points, always positive. The tables print these as
+    // negatives for heavier armour and as a bare 1 for the Cuirbolli Cuirass;
+    // the magnitude is what matters, so the sign is normalised away.
+    schema.fpToWear = new fields.NumberField({ required: true, integer: true, initial: 0, min: 0 });
+
+    // Printed weights assume a 150-174 lb wearer. A bigger frame needs more
+    // metal, so each piece carries a modifier applied in steps from that band.
+    schema.weightModifier = new fields.NumberField({ required: true, initial: 0, min: 0 });
+
+    // The armour type this piece is made of, which is what the absorption table
+    // is keyed by. A Maille Coif and a Maille Hauberk share a type and differ
+    // in everything else.
+    schema.armourType = new fields.StringField({ required: true, blank: true, initial: "" });
 
     // Armour degrades as it absorbs blows, so damage taken is tracked per piece.
     schema.damageTaken = new fields.NumberField({ required: true, integer: true, initial: 0, min: 0 });
@@ -180,5 +192,27 @@ export class CnS5Armour extends CnS5PhysicalItem {
     super.prepareDerivedData();
     this.thiefPenalty = CNS5.armourWeights[this.weightClass]?.thiefPenalty ?? 0;
     this.dodgePenalty = CNS5.dodgePenalty[this.weightClass] ?? 0;
+
+    // Off an actor there is no wearer to size against, so the printed weight
+    // stands. `prepareForActor` overwrites this once there is one.
+    this.wornWeight = this.weight;
+  }
+
+  /* -------------------------------------------- */
+
+  /**
+   * Size this piece to its wearer and recompute what it contributes to the
+   * load. Called from the actor once its own weight is known.
+   *
+   * @param {object} actorSystem
+   */
+  prepareForActor(actorSystem) {
+    this.wornWeight = CNS5.armourWeightFor(
+      this.weight,
+      this.weightModifier,
+      actorSystem.size.weight
+    );
+    this.weightAdjustment = Math.round((this.wornWeight - this.weight) * 100) / 100;
+    this.totalWeight = Math.round(this.wornWeight * this.quantity * 100) / 100;
   }
 }

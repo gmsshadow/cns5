@@ -140,23 +140,102 @@ function toWeapon(row, name = row.name) {
 /* -------------------------------------------- */
 
 /**
- * Convert one extracted armour row into an armour Item document.
+ * How each armour piece maps onto the absorption table's armour types.
+ *
+ * The two sets of tables name things differently, and no amount of fuzzy
+ * matching makes "Reinf. Cuirbolli" and "Reinforced Cuirboll" the same string,
+ * so the correspondence is written out. A piece with no entry here shares a
+ * name with its type.
+ */
+const PIECE_TYPES = {
+  "Leather/Fur Tunic": "Leather/Fur",
+  "Arming Doublet": "Cloth",
+  "Cuirbolli Cuirass": "Cuirbolli",
+  "Reinf. Cuirbolli": "Reinforced Cuirboll",
+  "Maille Cuirass": "Maille",
+  "Maille Hauberk": "Maille",
+  "Platemail Cuirass": "Platemail",
+  "Plate Cuirass": "Fieldplate",
+  "Field Plate": "Fieldplate",
+  "Scalemail Hauberk": "Scalemail",
+  "Late Cav. Plate": "Late Cavalry Plate"
+};
+
+/**
+ * Two helmets in the detail tables — the Composite Helm and the Great Helm —
+ * have no row in the absorption table, and two absorption entries have no
+ * detail piece. Rather than invent numbers for either, a piece without a type
+ * ships with no absorption and says so in its reference.
+ */
+function absorptionFor(row, byType) {
+  const typeName = PIECE_TYPES[row.name] ?? row.name;
+  const type = byType.get(`${typeName}|${row.location}`) ?? byType.get(`${typeName}|body`);
+  return { typeName, type };
+}
+
+/* -------------------------------------------- */
+
+/**
+ * Convert an armour piece into an armour Item document, taking its absorption
+ * from the type it is made of.
+ *
+ * @param {object} row
+ * @param {Map<string, object>} byType
+ * @param {string} [name]
+ * @returns {object}
+ */
+function toArmourPiece(row, byType, name = row.name) {
+  const { typeName, type } = absorptionFor(row, byType);
+  const blank = { slash: 0, crush: 0, pierce: 0, missile: 0, energy: 0 };
+
+  const references = [`p${row.page}`];
+  if (type) references.push(`absorption p${type.page}`);
+  else references.push("no absorption row in the rulebook");
+  if (row.costAtLeast) references.push("cost is a minimum");
+
+  return document("armour", name, "icons/svg/shield.svg", {
+    location: row.location,
+    weightClass: type?.weightClass ?? "light",
+    armourType: typeName,
+    absorption: type ? type.absorption : blank,
+    fpToWear: row.fpToWear,
+    weightModifier: row.weightModifier,
+    damageTaken: 0,
+    quantity: 1,
+    weight: row.weight,
+    cost: row.cost,
+    carried: true,
+    equipped: false,
+    reference: references.join(" — "),
+    description: ""
+  });
+}
+
+/* -------------------------------------------- */
+
+/**
+ * An armour type with no piece in the detail tables — Cloth Headgear and the
+ * Scalemail Coif — still ships, so its absorption is available. It carries no
+ * weight or cost, because the rulebook gives it none.
+ *
  * @param {object} row
  * @returns {object}
  */
-function toArmour(row, name = row.name) {
-  return document("armour", name, "icons/svg/shield.svg", {
+function toArmourType(row) {
+  return document("armour", row.name, "icons/svg/shield.svg", {
     location: row.location,
     weightClass: row.weightClass,
+    armourType: row.name,
     absorption: row.absorption,
     fpToWear: 0,
+    weightModifier: 0,
     damageTaken: 0,
     quantity: 1,
     weight: 0,
     cost: 0,
     carried: true,
     equipped: false,
-    reference: `p${row.page}`,
+    reference: `p${row.page} — absorption only; the rulebook lists no weight or cost`,
     description: ""
   });
 }
@@ -227,22 +306,37 @@ function disambiguate(rows) {
 await build("skills", skills.skills.map(toSkill));
 await build("weapons", disambiguate(gear.weapons));
 /**
- * The absorption table lists Flesh twice, once under body armour and once under
- * head armour, since an unhelmeted head absorbs as little as a bare chest. The
- * location goes in the name to keep the two entries apart.
+ * Build the armour pack from the pieces, falling back to bare types for the two
+ * absorption rows that no piece covers.
  *
- * @param {Array<object>} rows
+ * Flesh is dropped: it is the zero row the absorption table opens each section
+ * with, a baseline rather than something anyone owns.
+ *
  * @returns {Array<object>}
  */
-function disambiguateArmour(rows) {
-  const counts = rows.reduce((acc, row) => {
-    acc[row.name] = (acc[row.name] ?? 0) + 1;
+function buildArmour() {
+  const byType = new Map(gear.armour.map((a) => [`${a.name}|${a.location}`, a]));
+
+  const pieces = gear.armourPieces.map((row) => toArmourPiece(row, byType));
+  const covered = new Set(
+    gear.armourPieces.map((row) => absorptionFor(row, byType).typeName)
+  );
+
+  const orphanTypes = gear.armour
+    .filter((a) => a.name !== "Flesh" && !covered.has(a.name))
+    .map(toArmourType);
+
+  const all = [...pieces, ...orphanTypes];
+  const counts = all.reduce((acc, doc) => {
+    acc[doc.name] = (acc[doc.name] ?? 0) + 1;
     return acc;
   }, {});
 
-  return rows.map((row) =>
-    counts[row.name] === 1 ? toArmour(row) : toArmour(row, `${row.name} (${row.location})`)
+  return all.map((doc) =>
+    counts[doc.name] === 1
+      ? doc
+      : { ...doc, name: `${doc.name} (${doc.system.location})` }
   );
 }
 
-await build("armour", disambiguateArmour(gear.armour));
+await build("armour", buildArmour());

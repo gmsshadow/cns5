@@ -1,7 +1,8 @@
 """Positional parser for the weapon and armour tables of Chivalry & Sorcery 5e.
 
 Weapons: pp.164 (miscellaneous), 255-256 (melee), 257 (missile), 258 (ranges).
-Armour:  p.260 (absorption), pp.261-263 (weight, cost and Fatigue to wear).
+Armour:  p.260 (absorption by type), pp.261-263 (pieces, with weight, cost and
+         Fatigue cost to wear).
 """
 
 import collections
@@ -253,11 +254,169 @@ def extract_armour(pdf):
     return armour
 
 
+
+
+# page index, vertical band, horizontal band, column header positions, whether a
+# Fatigue-to-wear and a weight-modifier column are present, and where it is worn.
+PIECE_TABLES = [
+    dict(page=260, top=280, bottom=470, left=70, right=385,
+         cols=[78, 132, 216, 258, 288, 330, 354],
+         fields=["type", "name", "dates", "fp", "production", "weight", "cost"],
+         location="head"),
+    dict(page=260, top=586, bottom=720, left=320, right=575,
+         cols=[354, 414, 450, 486, 504, 546],
+         fields=["name", "fp", "production", "weight", "cost", "weightMod"],
+         location="body"),
+    dict(page=261, top=262, bottom=400, left=300, right=560,
+         cols=[336, 390, 432, 468, 486, 522],
+         fields=["name", "fp", "production", "weight", "cost", "weightMod"],
+         location="body"),
+    dict(page=262, top=108, bottom=200, left=320, right=575,
+         cols=[354, 408, 444, 474, 504, 540],
+         fields=["name", "fp", "production", "weight", "cost", "weightMod"],
+         location="body"),
+    dict(page=262, top=218, bottom=400, left=70, right=320,
+         cols=[96, 162, 204, 240, 258, 294],
+         fields=["name", "fp", "production", "weight", "cost", "weightMod"],
+         location="body"),
+    dict(page=262, top=485, bottom=580, left=70, right=320,
+         cols=[84, 156, 186, 222, 252, 288],
+         fields=["name", "fp", "production", "weight", "cost", "weightMod"],
+         location="body"),
+]
+
+FRACTIONS = {"½": 0.5, "¼": 0.25, "¾": 0.75, "⅓": 1 / 3, "⅔": 2 / 3}
+
+
+def words_in(page, spec):
+    return [
+        w for w in page.extract_words(extra_attrs=["upright"])
+        if w["upright"]
+        and spec["top"] <= w["top"] <= spec["bottom"]
+        and spec["left"] <= w["x0"] <= spec["right"]
+    ]
+
+
+def find_fatigue(words, spec, row_top):
+    """Find the Fatigue-to-wear cell for a row.
+
+    Its baseline is raised where a superscript footnote follows it, so it can
+    fall a few points above the rest of the row and miss the row bucket. Search
+    a small window around the row instead of relying on exact alignment.
+    """
+    if "fp" not in spec["fields"]:
+        return None
+    index = spec["fields"].index("fp")
+    cols = spec["cols"]
+    low = (cols[index - 1] + cols[index]) / 2 if index else spec["left"]
+    high = (cols[index] + cols[index + 1]) / 2 if index + 1 < len(cols) else spec["right"]
+
+    for w in words:
+        if low <= w["x0"] < high and abs(w["top"] - row_top) <= 9:
+            value = fatigue(w["text"])
+            if value is not None:
+                return value
+    return None
+
+
+def piece_rows(page, spec):
+    rows = collections.defaultdict(list)
+    for w in page.extract_words(extra_attrs=["upright"]):
+        if not w["upright"]:
+            continue
+        if not (spec["top"] <= w["top"] <= spec["bottom"]):
+            continue
+        if not (spec["left"] <= w["x0"] <= spec["right"]):
+            continue
+        rows[round(w["top"] / 3)].append(w)
+    return [sorted(v, key=lambda w: w["x0"]) for _, v in sorted(rows.items())]
+
+
+def split_piece_row(row, cols):
+    bounds = [(cols[i] + cols[i + 1]) / 2 for i in range(len(cols) - 1)]
+    cells = [[] for _ in cols]
+    for w in row:
+        index = 0
+        while index < len(bounds) and w["x0"] >= bounds[index]:
+            index += 1
+        cells[index].append(w["text"])
+    return [" ".join(c) for c in cells]
+
+
+def quantity(text):
+    """Parse '5', '5½', '3 ½' and '1,536' into a number."""
+    text = text.replace(",", "").strip()
+    if not text:
+        return None
+    total = 0.0
+    found = False
+    for m in re.finditer(r"\d+(?:\.\d+)?", text):
+        total += float(m.group())
+        found = True
+    for glyph, value in FRACTIONS.items():
+        if glyph in text:
+            total += value
+            found = True
+    return round(total, 2) if found else None
+
+
+def fatigue(text):
+    """Fatigue to wear runs 0 to -5; a trailing digit is a footnote marker."""
+    m = re.match(r"\s*(-?\d)", text.strip())
+    return int(m.group(1)) if m else None
+
+
+def weight_modifier(text):
+    m = re.search(r"(\d+(?:\.\d+)?)", text.replace(",", ""))
+    return float(m.group(1)) if m else None
+
+
+def extract_armour_pieces(pdf):
+    pieces = []
+    for spec in PIECE_TABLES:
+        page = pdf.pages[spec["page"]]
+        words = words_in(page, spec)
+        for row in piece_rows(page, spec):
+            cells = dict(zip(spec["fields"], split_piece_row(row, spec["cols"])))
+            name = re.sub(r"\s+", " ", cells.get("name", "")).strip()
+            name = re.sub(r"(?<=[a-z\)])\d+$", "", name).strip()
+
+            weight = quantity(cells.get("weight", ""))
+            cost = quantity(cells.get("cost", ""))
+            if not name or weight is None or cost is None:
+                continue
+            if not name[0].isupper():
+                continue
+
+            # The book prints these as negatives for heavier armour but gives
+            # the Cuirbolli Cuirass a bare "1". Every value is a cost either
+            # way, so the magnitude is stored and the sign discarded.
+            fp = find_fatigue(words, spec, row[0]["top"])
+            if fp is None:
+                fp = fatigue(cells.get("fp", ""))
+
+            pieces.append({
+                "name": name,
+                "location": spec["location"],
+                "fpToWear": abs(fp) if fp is not None else 0,
+                "weight": weight,
+                "cost": int(cost),
+                # A cost printed with a trailing '+' means "at least this".
+                "costAtLeast": "+" in cells.get("cost", ""),
+                "weightModifier": weight_modifier(cells.get("weightMod", "")) or 0,
+                "dates": cells.get("dates", "").strip(),
+                "page": spec["page"] + 1,
+            })
+    return pieces
+
+
+
 if __name__ == "__main__":
     with pdfplumber.open(PDF) as pdf:
         weapons = extract_weapons(pdf)
         ranges = extract_ranges(pdf)
         armour = extract_armour(pdf)
+        pieces = extract_armour_pieces(pdf)
 
     # The ranges table abbreviates: 'mdm. crossbow', 'ap arrow', 'composite.
     # bow'. Normalise both sides and expand the abbreviations rather than
@@ -298,4 +457,6 @@ if __name__ == "__main__":
     if leftover:
         print(f"range rows with no weapon: {leftover}", file=sys.stderr)
     print(f"weapons {len(weapons)}  ranges {len(ranges)}  armour {len(armour)}", file=sys.stderr)
-    json.dump({"weapons": weapons, "armour": armour}, sys.stdout, indent=2, ensure_ascii=False)
+    print(f"armour pieces {len(pieces)}", file=sys.stderr)
+    json.dump({"weapons": weapons, "armour": armour, "armourPieces": pieces},
+              sys.stdout, indent=2, ensure_ascii=False)

@@ -51,7 +51,9 @@
                             data-item-id="{{item.id}}">{{item.name}}</button>
                 </th>
                 <td class="cns5-skills__readout">{{item.system.quantity}}</td>
-                <td class="cns5-skills__readout">{{item.system.weight}}</td>
+                <td class="cns5-skills__readout">
+                    {{#if item.system.wornWeight}}{{item.system.wornWeight}}{{else}}{{item.system.weight}}{{/if}}
+                </td>
                 <td class="cns5-skills__readout cns5-skills__readout--total">{{item.system.totalWeight}}</td>
                 <td class="cns5-skills__att">{{item.system.location}}</td>
                 <td class="cns5-skills__readout">

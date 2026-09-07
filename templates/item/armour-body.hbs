@@ -37,6 +37,26 @@
 
 <div class="cns5-grid cns5-grid--three">
     <label class="cns5-field">
+        <span>{{localize "CNS5.Armour.armourType"}}</span>
+        <input type="text" name="system.armourType" value="{{system.armourType}}"
+               {{#unless editable}}disabled{{/unless}}>
+    </label>
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Armour.weightModifier"}}</span>
+        <input type="number" step="0.5" min="0" name="system.weightModifier"
+               value="{{system.weightModifier}}" {{#unless editable}}disabled{{/unless}}>
+    </label>
+    {{#if onActor}}
+    <div class="cns5-field">
+        <span>{{localize "CNS5.Armour.wornWeight"}}</span>
+        <output>{{system.wornWeight}} lb</output>
+    </div>
+    {{/if}}
+</div>
+<p class="cns5-hint">{{localize "CNS5.Armour.weightModifierHint"}}</p>
+
+<div class="cns5-grid cns5-grid--three">
+    <label class="cns5-field">
         <span>{{localize "CNS5.Armour.damageTaken"}}</span>
         <input type="number" name="system.damageTaken" value="{{system.damageTaken}}" min="0"
                {{#unless editable}}disabled{{/unless}}>

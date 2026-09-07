@@ -433,3 +433,49 @@ CNS5.spellRanges = {
   long: { label: "CNS5.SpellRange.long", modifier: -10 },
   max: { label: "CNS5.SpellRange.max", modifier: -30 }
 };
+
+/* -------------------------------------------- */
+/*  Armour weight                               */
+/* -------------------------------------------- */
+
+/**
+ * Printed armour weights assume a wearer of 150 to 174 lbs (p261). A larger or
+ * smaller frame needs more or less metal, so each piece carries a weight
+ * modifier applied in steps from that band.
+ */
+CNS5.armourReferenceWeight = { low: 150, high: 174, step: 25 };
+
+/**
+ * The multiplier applied to a piece's weight modifier for a given wearer.
+ *
+ * Above the band the rules are explicit: add the modifier once for every 25 lbs
+ * over 174, rounded up. Below it they are not. The book names two cases — 100
+ * to 124 lbs subtracts the modifier once, under 100 lbs subtracts it twice —
+ * and says nothing about 125 to 149. That gap is filled with a single
+ * subtraction, which is what both the neighbouring band and the 25 lb ladder
+ * above the band imply.
+ *
+ * @param {number} bodyWeight  the wearer's weight in pounds
+ * @returns {number} signed multiplier
+ */
+CNS5.armourWeightMultiplier = function (bodyWeight) {
+  const w = Number(bodyWeight) || 0;
+  const { low, high, step } = CNS5.armourReferenceWeight;
+
+  if (w > high) return Math.ceil((w - high) / step);
+  if (w >= low) return 0;
+  if (w >= 100) return -1;
+  return -2;
+};
+
+/**
+ * A piece's weight as worn by a particular character.
+ * @param {number} baseWeight
+ * @param {number} modifier
+ * @param {number} bodyWeight
+ * @returns {number}
+ */
+CNS5.armourWeightFor = function (baseWeight, modifier, bodyWeight) {
+  const adjusted = baseWeight + modifier * CNS5.armourWeightMultiplier(bodyWeight);
+  return Math.max(0, Math.round(adjusted * 100) / 100);
+};

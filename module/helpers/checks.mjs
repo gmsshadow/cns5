@@ -122,13 +122,30 @@ export async function checkToMessage(actor, data) {
  * Prompt for a situational modifier before rolling.
  *
  * @param {string} title
- * @returns {Promise<number|null>} the modifier, or null if cancelled
+ * @param {object} [options]
+ * @param {boolean} [options.aimedShot]  offer the aimed shot target areas too
+ * @returns {Promise<{modifier: number, area: string}|null>} null if cancelled
  */
-export async function promptModifier(title) {
+export async function promptModifier(title, { aimedShot = false } = {}) {
+  let areas = "";
+  if (aimedShot) {
+    const options = Object.entries(CNS5.aimedShotModifiers)
+      .map(([key, area]) => {
+        const label = game.i18n.localize(area.label);
+        const suffix = area.modifier ? ` (${area.modifier}%)` : "";
+        return `<option value="${key}">${label}${suffix}</option>`;
+      })
+      .join("");
+    areas = `
+      <label for="cns5-area">${game.i18n.localize("CNS5.Roll.targetArea")}</label>
+      <select id="cns5-area" name="area">${options}</select>`;
+  }
+
   const content = `
     <div class="cns5-prompt">
       <label for="cns5-modifier">${game.i18n.localize("CNS5.Roll.situationalModifier")}</label>
       <input id="cns5-modifier" type="number" name="modifier" value="0" step="1" autofocus>
+      ${areas}
       <p class="hint">${game.i18n.localize("CNS5.Roll.modifierHint")}</p>
     </div>`;
 
@@ -137,7 +154,10 @@ export async function promptModifier(title) {
     content,
     ok: {
       label: game.i18n.localize("CNS5.Roll.rollButton"),
-      callback: (event, button) => Number(button.form.elements.modifier.value) || 0
+      callback: (event, button) => ({
+        modifier: Number(button.form.elements.modifier.value) || 0,
+        area: button.form.elements.area?.value ?? "none"
+      })
     },
     rejectClose: false
   });

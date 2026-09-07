@@ -2,7 +2,7 @@
   "id": "cns5",
   "title": "Chivalry & Sorcery 5th Edition",
   "description": "An unofficial system implementation of Chivalry & Sorcery 5th Edition for Foundry Virtual Tabletop.",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "compatibility": {
     "minimum": "14",
     "verified": "14.365"
@@ -122,6 +122,17 @@
         "PLAYER": "OBSERVER",
         "ASSISTANT": "OWNER"
       }
+    },
+    {
+      "name": "acts-of-faith",
+      "label": "C&S Acts of Faith",
+      "path": "packs/acts-of-faith",
+      "type": "Item",
+      "system": "cns5",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
     }
   ],
   "packFolders": [
@@ -132,7 +143,8 @@
       "packs": [
         "skills",
         "weapons",
-        "armour"
+        "armour",
+        "acts-of-faith"
       ]
     }
   ]

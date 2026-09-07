@@ -29,7 +29,7 @@
                {{#unless editable}}disabled{{/unless}}>
     </label>
     <label class="cns5-field">
-        <span>{{localize "CNS5.Weapon.apCost"}}</span>
+        <span>{{localize "CNS5.Weapon.apOverride"}}</span>
         <input type="number" name="system.apCost" value="{{system.apCost}}" min="0"
                {{#unless editable}}disabled{{/unless}}>
     </label>
@@ -44,6 +44,16 @@
                {{#unless editable}}disabled{{/unless}}>
     </label>
 </div>
+
+<label class="cns5-field">
+    <span>{{localize "CNS5.Weapon.apAction"}}</span>
+    <select name="system.apAction" {{#unless editable}}disabled{{/unless}}>
+        {{#each combatActions}}
+        <option value="{{value}}" {{#if selected}}selected{{/if}}>{{localize label}}</option>
+        {{/each}}
+    </select>
+</label>
+<p class="cns5-hint">{{localize "CNS5.Weapon.apActionHint"}} {{localize "CNS5.Weapon.apOverrideHint"}}</p>
 
 <label class="cns5-field">
     <span>{{localize "CNS5.Weapon.skill"}}</span>
@@ -86,6 +96,7 @@
         <div><dt>{{localize "CNS5.Weapon.strengthBonus"}}</dt><dd>{{cns5Signed system.strengthBonus}}</dd></div>
         <div><dt>{{localize "CNS5.Weapon.attackerBonus"}}</dt><dd>{{cns5Signed system.attackerBonus}}</dd></div>
         <div><dt>{{localize "CNS5.Weapon.damage"}}</dt><dd>{{system.damage}} + {{localize "CNS5.Roll.critDie"}}</dd></div>
+        <div><dt>{{localize "CNS5.Weapon.apCost"}}</dt><dd>{{system.ap}}{{#if system.apOverridden}} ({{localize "CNS5.Weapon.apDerived"}} {{system.derivedAp}}){{/if}}</dd></div>
     </dl>
 </section>
 {{/if}}

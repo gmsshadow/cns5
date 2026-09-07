@@ -47,7 +47,14 @@ export class CnS5Weapon extends CnS5PhysicalItem {
 
     schema.baseDamage = new fields.NumberField({ required: true, integer: true, initial: 0, min: 0 });
     schema.critDieModifier = new fields.NumberField({ required: true, integer: true, initial: 0 });
+    // Action Point cost is derived from the wielder's PSF% rather than stored,
+    // because the tables key it off skill rather than off the weapon. This is
+    // an override for house rules and oddities; zero means derive.
     schema.apCost = new fields.NumberField({ required: true, integer: true, initial: 0, min: 0 });
+
+    // Which row of Table - Combat Actions this weapon attacks with. Blank picks
+    // one from the weapon's role, group and weight.
+    schema.apAction = new fields.StringField({ required: true, blank: true, initial: "" });
     schema.bash = new fields.NumberField({ required: true, integer: true, initial: 0, min: 0 });
     schema.length = new fields.StringField({ required: true, blank: true, initial: "" });
 
@@ -107,6 +114,21 @@ export class CnS5Weapon extends CnS5PhysicalItem {
         : 0;
 
     this.attackerBonus = CNS5.attackerBonus(this.level, this.weightClass);
+
+    // Action Points. The derived figure is always computed so the sheet can show
+    // what the tables would give even when an override is set.
+    this.attackAction =
+      this.apAction ||
+      CNS5.weaponAttackAction({
+        role: this.role,
+        missile: this.missile,
+        group: this.group,
+        weightClass: this.weightClass,
+        name: this.parent?.name ?? ""
+      });
+    this.derivedAp = CNS5.actionPointCost(this.attackAction, this.psf) ?? 0;
+    this.ap = this.apCost > 0 ? this.apCost : this.derivedAp;
+    this.apOverridden = this.apCost > 0;
     this.damage =
       this.role === "launcher"
         ? this.damageBonus

@@ -49,7 +49,7 @@ export class CnS5Actor extends Actor {
     if (!skipDialog) {
       const prompted = await promptModifier(title);
       if (prompted === null) return null;
-      situational += prompted;
+      situational += prompted.modifier;
     }
 
     const target = Math.clamp(attr.ar + situational, 1, 100);
@@ -103,7 +103,7 @@ export class CnS5Actor extends Actor {
     if (!skipDialog) {
       const prompted = await promptModifier(title);
       if (prompted === null) return null;
-      situational += prompted;
+      situational += prompted.modifier;
     }
 
     // The unclamped chance carries the situational modifier before the band is
@@ -172,11 +172,18 @@ export class CnS5Actor extends Actor {
     const title = game.i18n.format("CNS5.Roll.weaponTitle", { weapon: weapon.name });
 
     let situational = modifier;
+    let area = "none";
     if (!skipDialog) {
-      const prompted = await promptModifier(title);
+      const prompted = await promptModifier(title, { aimedShot: true });
       if (prompted === null) return null;
-      situational += prompted;
+      situational += prompted.modifier;
+      area = prompted.area;
     }
+
+    // An aimed shot is an optional rule (p272), so it only applies when the
+    // player picks a target area.
+    const aimed = CNS5.aimedShotModifiers[area] ?? CNS5.aimedShotModifiers.none;
+    situational += aimed.modifier;
 
     const unclamped = skill.system.tsc + situational;
     const { target, critMod, overflow, shortfall } = clampSuccessChance(unclamped, skill.system.df);
@@ -204,10 +211,13 @@ export class CnS5Actor extends Actor {
       unskilled: !skill.system.known,
       damage: result.success ? damage : null,
       damageType: game.i18n.localize(`CNS5.DamageType.${weapon.system.damageType}`),
+      targetArea: area === "none" ? null : game.i18n.localize(aimed.label),
+      cost: game.i18n.format("CNS5.Roll.weaponCost", { ap: weapon.system.ap }),
       breakdown: this.#breakdown([
         { label: "CNS5.Roll.bcsSkilled", value: skill.system.bcs },
         { label: "CNS5.Roll.psf", value: skill.system.psf, signed: true },
-        { label: "CNS5.Roll.situational", value: situational, signed: true },
+        { label: "CNS5.Roll.aimedShot", value: aimed.modifier, signed: true },
+        { label: "CNS5.Roll.situational", value: situational - aimed.modifier, signed: true },
         { label: "CNS5.Weapon.baseDamage", value: weapon.system.baseDamage },
         { label: "CNS5.Weapon.strengthBonus", value: weapon.system.strengthBonus, signed: true },
         { label: "CNS5.Weapon.attackerBonus", value: weapon.system.attackerBonus, signed: true }
@@ -245,7 +255,7 @@ export class CnS5Actor extends Actor {
     if (!skipDialog) {
       const prompted = await promptModifier(title);
       if (prompted === null) return null;
-      situational += prompted;
+      situational += prompted.modifier;
     }
 
     const unclamped =
@@ -312,7 +322,7 @@ export class CnS5Actor extends Actor {
     if (!skipDialog) {
       const prompted = await promptModifier(title);
       if (prompted === null) return null;
-      situational += prompted;
+      situational += prompted.modifier;
     }
 
     const target = Math.clamp(act.system.successChance + situational, 1, 100);

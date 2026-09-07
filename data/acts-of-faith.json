@@ -1,0 +1,648 @@
+{
+  "source": "Chivalry & Sorcery 5th Edition core rules, Acts of Faith tables pp.145-146",
+  "note": "Mechanical data only; no description text is reproduced. Success chance, Fatigue cost and Action Points to pray are not printed in these tables and are left at zero. Three entries print no minimum of their own and inherit it from the row above; those are flagged with pffInherited.",
+  "count": 47,
+  "acts": [
+    {
+      "name": "Blessing",
+      "section": "Core Acts of Faith: Prayers",
+      "pffMinimum": 5,
+      "pffInherited": false,
+      "vocations": [
+        "Druid",
+        "Shaman",
+        "Witch",
+        "Friar",
+        "Monk",
+        "Ordained"
+      ],
+      "marksFound": 6,
+      "page": 145
+    },
+    {
+      "name": "Common Prayer",
+      "section": "Core Acts of Faith: Prayers",
+      "pffMinimum": 5,
+      "pffInherited": false,
+      "vocations": [
+        "Druid",
+        "Shaman",
+        "Witch",
+        "Friar",
+        "Monk",
+        "Ordained"
+      ],
+      "marksFound": 6,
+      "page": 145
+    },
+    {
+      "name": "Prayer for Forgiveness",
+      "section": "Core Acts of Faith: Prayers",
+      "pffMinimum": 5,
+      "pffInherited": false,
+      "vocations": [
+        "Druid",
+        "Shaman",
+        "Witch",
+        "Friar",
+        "Monk",
+        "Ordained"
+      ],
+      "marksFound": 6,
+      "page": 145
+    },
+    {
+      "name": "Prayer for Guidance",
+      "section": "Core Acts of Faith: Prayers",
+      "pffMinimum": 5,
+      "pffInherited": false,
+      "vocations": [
+        "Druid",
+        "Shaman",
+        "Witch",
+        "Friar",
+        "Monk",
+        "Ordained"
+      ],
+      "marksFound": 6,
+      "page": 145
+    },
+    {
+      "name": "Prayer for Insight",
+      "section": "Core Acts of Faith: Prayers",
+      "pffMinimum": 5,
+      "pffInherited": false,
+      "vocations": [
+        "Druid",
+        "Shaman",
+        "Witch",
+        "Friar",
+        "Monk",
+        "Ordained"
+      ],
+      "marksFound": 6,
+      "page": 145
+    },
+    {
+      "name": "Prayer for Luck",
+      "section": "Core Acts of Faith: Prayers",
+      "pffMinimum": 5,
+      "pffInherited": false,
+      "vocations": [
+        "Druid",
+        "Shaman",
+        "Witch",
+        "Friar",
+        "Monk",
+        "Ordained"
+      ],
+      "marksFound": 6,
+      "page": 145
+    },
+    {
+      "name": "Prayer for Protection",
+      "section": "Core Acts of Faith: Prayers",
+      "pffMinimum": 5,
+      "pffInherited": false,
+      "vocations": [
+        "Druid",
+        "Shaman",
+        "Witch",
+        "Friar",
+        "Monk",
+        "Ordained"
+      ],
+      "marksFound": 6,
+      "page": 145
+    },
+    {
+      "name": "Prayer for Skill or Craft",
+      "section": "Core Acts of Faith: Prayers",
+      "pffMinimum": 5,
+      "pffInherited": false,
+      "vocations": [
+        "Druid",
+        "Shaman",
+        "Witch",
+        "Friar",
+        "Monk",
+        "Ordained"
+      ],
+      "marksFound": 6,
+      "page": 145
+    },
+    {
+      "name": "Prayer for Strength",
+      "section": "Core Acts of Faith: Prayers",
+      "pffMinimum": 5,
+      "pffInherited": false,
+      "vocations": [
+        "Druid",
+        "Shaman",
+        "Witch",
+        "Friar",
+        "Monk",
+        "Ordained"
+      ],
+      "marksFound": 6,
+      "page": 145
+    },
+    {
+      "name": "Courage of the Righteous",
+      "section": "Core Acts of Faith: Prayers",
+      "pffMinimum": 10,
+      "pffInherited": false,
+      "vocations": [
+        "Druid",
+        "Shaman",
+        "Witch",
+        "Friar",
+        "Monk",
+        "Ordained"
+      ],
+      "marksFound": 6,
+      "page": 145
+    },
+    {
+      "name": "Bless Item",
+      "section": "Clerical Acts of Faith",
+      "pffMinimum": 10,
+      "pffInherited": false,
+      "vocations": [
+        "Druid",
+        "Ordained"
+      ],
+      "marksFound": 6,
+      "page": 145
+    },
+    {
+      "name": "Bury the Dead",
+      "section": "Clerical Acts of Faith",
+      "pffMinimum": 10,
+      "pffInherited": false,
+      "vocations": [
+        "Shaman",
+        "Ordained"
+      ],
+      "marksFound": 6,
+      "page": 145
+    },
+    {
+      "name": "Sanctification",
+      "section": "Clerical Acts of Faith",
+      "pffMinimum": 20,
+      "pffInherited": false,
+      "vocations": [
+        "Druid",
+        "Shaman",
+        "Witch",
+        "Ordained"
+      ],
+      "marksFound": 6,
+      "page": 145
+    },
+    {
+      "name": "Holy Barrier of Guard",
+      "section": "Clerical Acts of Faith",
+      "pffMinimum": 20,
+      "pffInherited": false,
+      "vocations": [
+        "Druid",
+        "Shaman",
+        "Witch",
+        "Friar",
+        "Monk",
+        "Ordained"
+      ],
+      "marksFound": 6,
+      "page": 145
+    },
+    {
+      "name": "Prayer to Smite the Godless",
+      "section": "Clerical Acts of Faith",
+      "pffMinimum": 25,
+      "pffInherited": false,
+      "vocations": [
+        "Friar",
+        "Ordained"
+      ],
+      "marksFound": 6,
+      "page": 145
+    },
+    {
+      "name": "Prayer for Strength of the Righteous",
+      "section": "Clerical Acts of Faith",
+      "pffMinimum": 25,
+      "pffInherited": false,
+      "vocations": [
+        "Friar",
+        "Monk",
+        "Ordained"
+      ],
+      "marksFound": 6,
+      "page": 145
+    },
+    {
+      "name": "Prayer to Detect Magickal Forces",
+      "section": "Clerical Acts of Faith",
+      "pffMinimum": 25,
+      "pffInherited": false,
+      "vocations": [
+        "Witch",
+        "Ordained"
+      ],
+      "marksFound": 6,
+      "page": 145
+    },
+    {
+      "name": "Prayer to Find the Open Way",
+      "section": "Clerical Acts of Faith",
+      "pffMinimum": 30,
+      "pffInherited": false,
+      "vocations": [
+        "Druid",
+        "Shaman",
+        "Witch",
+        "Friar",
+        "Monk",
+        "Ordained"
+      ],
+      "marksFound": 6,
+      "page": 145
+    },
+    {
+      "name": "Prayer to Recognise Evil",
+      "section": "Clerical Acts of Faith",
+      "pffMinimum": 30,
+      "pffInherited": false,
+      "vocations": [
+        "Druid",
+        "Shaman",
+        "Witch",
+        "Friar",
+        "Monk",
+        "Ordained"
+      ],
+      "marksFound": 6,
+      "page": 145
+    },
+    {
+      "name": "Ritual: Remove Curse",
+      "section": "Clerical Acts of Faith",
+      "pffMinimum": 35,
+      "pffInherited": false,
+      "vocations": [
+        "Druid",
+        "Shaman",
+        "Witch",
+        "Ordained"
+      ],
+      "marksFound": 6,
+      "page": 145
+    },
+    {
+      "name": "Prayer to Smite the Godless II",
+      "section": "Clerical Acts of Faith",
+      "pffMinimum": 40,
+      "pffInherited": false,
+      "vocations": [
+        "Friar",
+        "Monk",
+        "Ordained"
+      ],
+      "marksFound": 6,
+      "page": 145
+    },
+    {
+      "name": "Prayer for Strength of the Holy",
+      "section": "Clerical Acts of Faith",
+      "pffMinimum": 45,
+      "pffInherited": false,
+      "vocations": [
+        "Friar",
+        "Monk",
+        "Ordained"
+      ],
+      "marksFound": 6,
+      "page": 145
+    },
+    {
+      "name": "Ritual: Exorcise Demons",
+      "section": "Clerical Acts of Faith",
+      "pffMinimum": 45,
+      "pffInherited": false,
+      "vocations": [
+        "Druid",
+        "Shaman",
+        "Witch",
+        "Ordained"
+      ],
+      "marksFound": 6,
+      "page": 145
+    },
+    {
+      "name": "Visions",
+      "section": "Clerical Acts of Faith",
+      "pffMinimum": 50,
+      "pffInherited": false,
+      "vocations": [
+        "Druid",
+        "Shaman",
+        "Ordained"
+      ],
+      "marksFound": 6,
+      "page": 145
+    },
+    {
+      "name": "Minor Miracle",
+      "section": "Miracles",
+      "pffMinimum": 10,
+      "pffInherited": false,
+      "vocations": [
+        "Friar",
+        "Monk",
+        "Ordained"
+      ],
+      "marksFound": 6,
+      "page": 145
+    },
+    {
+      "name": "Miracle",
+      "section": "Miracles",
+      "pffMinimum": 25,
+      "pffInherited": false,
+      "vocations": [
+        "Friar",
+        "Monk",
+        "Ordained"
+      ],
+      "marksFound": 6,
+      "page": 145
+    },
+    {
+      "name": "Greater Miracle",
+      "section": "Miracles",
+      "pffMinimum": 50,
+      "pffInherited": false,
+      "vocations": [
+        "Friar",
+        "Monk",
+        "Ordained"
+      ],
+      "marksFound": 6,
+      "page": 145
+    },
+    {
+      "name": "Purify Food and Water",
+      "section": "Priestly Magicks: Specialised Miracles",
+      "pffMinimum": 35,
+      "pffInherited": false,
+      "vocations": [
+        "Druid",
+        "Shaman",
+        "Witch",
+        "Monk",
+        "Ordained"
+      ],
+      "marksFound": 6,
+      "page": 145
+    },
+    {
+      "name": "Restore the Faithful",
+      "section": "Priestly Magicks: Specialised Miracles",
+      "pffMinimum": 40,
+      "pffInherited": false,
+      "vocations": [
+        "Druid",
+        "Friar",
+        "Monk",
+        "Ordained"
+      ],
+      "marksFound": 6,
+      "page": 145
+    },
+    {
+      "name": "Cure the Wounded",
+      "section": "Priestly Magicks: Specialised Miracles",
+      "pffMinimum": 50,
+      "pffInherited": false,
+      "vocations": [
+        "Druid",
+        "Shaman",
+        "Witch",
+        "Ordained"
+      ],
+      "marksFound": 6,
+      "page": 145
+    },
+    {
+      "name": "Neutralise Toxins",
+      "section": "Priestly Magicks: Specialised Miracles",
+      "pffMinimum": 60,
+      "pffInherited": false,
+      "vocations": [
+        "Druid",
+        "Shaman",
+        "Witch",
+        "Ordained"
+      ],
+      "marksFound": 6,
+      "page": 145
+    },
+    {
+      "name": "Restoration",
+      "section": "Priestly Magicks: Specialised Miracles",
+      "pffMinimum": 60,
+      "pffInherited": false,
+      "vocations": [
+        "Ordained"
+      ],
+      "marksFound": 6,
+      "page": 145
+    },
+    {
+      "name": "Cure Disease",
+      "section": "Priestly Magicks: Specialised Miracles",
+      "pffMinimum": 65,
+      "pffInherited": false,
+      "vocations": [
+        "Druid",
+        "Shaman",
+        "Witch",
+        "Ordained"
+      ],
+      "marksFound": 6,
+      "page": 145
+    },
+    {
+      "name": "Heal Grievous Wounds",
+      "section": "Priestly Magicks: Specialised Miracles",
+      "pffMinimum": 65,
+      "pffInherited": false,
+      "vocations": [
+        "Druid",
+        "Shaman",
+        "Witch",
+        "Ordained"
+      ],
+      "marksFound": 6,
+      "page": 145
+    },
+    {
+      "name": "Cure Blindness",
+      "section": "Priestly Magicks: Specialised Miracles",
+      "pffMinimum": 90,
+      "pffInherited": false,
+      "vocations": [
+        "Druid",
+        "Shaman",
+        "Witch",
+        "Ordained"
+      ],
+      "marksFound": 6,
+      "page": 145
+    },
+    {
+      "name": "Cure Deafness",
+      "section": "Priestly Magicks: Specialised Miracles",
+      "pffMinimum": 90,
+      "pffInherited": false,
+      "vocations": [
+        "Druid",
+        "Shaman",
+        "Witch",
+        "Ordained"
+      ],
+      "marksFound": 6,
+      "page": 145
+    },
+    {
+      "name": "Restore Use of Limb",
+      "section": "Priestly Magicks: Specialised Miracles",
+      "pffMinimum": 90,
+      "pffInherited": false,
+      "vocations": [
+        "Ordained"
+      ],
+      "marksFound": 6,
+      "page": 145
+    },
+    {
+      "name": "Call Back the Dying",
+      "section": "Priestly Magicks: Specialised Miracles",
+      "pffMinimum": 101,
+      "pffInherited": false,
+      "vocations": [
+        "Druid",
+        "Shaman",
+        "Ordained"
+      ],
+      "marksFound": 6,
+      "page": 145
+    },
+    {
+      "name": "Baptism",
+      "section": "Formal Sacred Rituals: The Sacraments",
+      "pffMinimum": 20,
+      "pffInherited": false,
+      "vocations": [
+        "Druid",
+        "Ordained"
+      ],
+      "marksFound": 6,
+      "page": 146
+    },
+    {
+      "name": "Confirmation",
+      "section": "Formal Sacred Rituals: The Sacraments",
+      "pffMinimum": 40,
+      "pffInherited": false,
+      "vocations": [
+        "Ordained"
+      ],
+      "marksFound": 6,
+      "page": 146
+    },
+    {
+      "name": "Extreme Unction",
+      "section": "Formal Sacred Rituals: The Sacraments",
+      "pffMinimum": 20,
+      "pffInherited": false,
+      "vocations": [
+        "Ordained"
+      ],
+      "marksFound": 6,
+      "page": 146
+    },
+    {
+      "name": "Last Rites",
+      "section": "Formal Sacred Rituals: The Sacraments",
+      "pffMinimum": 20,
+      "pffInherited": true,
+      "vocations": [
+        "Ordained"
+      ],
+      "marksFound": 6,
+      "page": 146
+    },
+    {
+      "name": "Anointing the Sick",
+      "section": "Formal Sacred Rituals: The Sacraments",
+      "pffMinimum": 20,
+      "pffInherited": true,
+      "vocations": [
+        "Ordained"
+      ],
+      "marksFound": 6,
+      "page": 146
+    },
+    {
+      "name": "Anointing the Wounded",
+      "section": "Formal Sacred Rituals: The Sacraments",
+      "pffMinimum": 20,
+      "pffInherited": true,
+      "vocations": [
+        "Ordained"
+      ],
+      "marksFound": 6,
+      "page": 146
+    },
+    {
+      "name": "Holy Eucharist (Mass)",
+      "section": "Formal Sacred Rituals: The Sacraments",
+      "pffMinimum": 20,
+      "pffInherited": false,
+      "vocations": [
+        "Druid",
+        "Ordained"
+      ],
+      "marksFound": 6,
+      "page": 146
+    },
+    {
+      "name": "Matrimony",
+      "section": "Formal Sacred Rituals: The Sacraments",
+      "pffMinimum": 15,
+      "pffInherited": false,
+      "vocations": [
+        "Druid",
+        "Shaman",
+        "Witch",
+        "Ordained"
+      ],
+      "marksFound": 6,
+      "page": 146
+    },
+    {
+      "name": "Ordination",
+      "section": "Formal Sacred Rituals: The Sacraments",
+      "pffMinimum": 45,
+      "pffInherited": false,
+      "vocations": [
+        "Ordained"
+      ],
+      "marksFound": 6,
+      "page": 146
+    }
+  ]
+}

@@ -1,14 +1,15 @@
 {
   "name": "cns5",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "private": true,
   "description": "Build tooling for the Chivalry & Sorcery 5th Edition system for Foundry VTT",
   "type": "module",
   "scripts": {
     "build:packs": "node tools/build-packs.mjs",
     "extract:skills": "python tools/extract-skills.py > data/skills.json",
-    "test": "node test/derived-stats.test.mjs && node test/skillskape.test.mjs && node test/skills-data.test.mjs && node test/phase4.test.mjs && node test/gear-data.test.mjs",
-    "extract:gear": "python tools/extract-gear.py > data/gear.json"
+    "test": "node test/derived-stats.test.mjs && node test/skillskape.test.mjs && node test/skills-data.test.mjs && node test/phase4.test.mjs && node test/gear-data.test.mjs && node test/combat-tables.test.mjs",
+    "extract:gear": "python tools/extract-gear.py > data/gear.json",
+    "extract:faith": "python tools/extract-faith.py > data/acts-of-faith.json"
   },
   "devDependencies": {
     "@foundryvtt/foundryvtt-cli": "^1.0.3"

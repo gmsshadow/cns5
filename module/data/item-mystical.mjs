@@ -69,6 +69,17 @@ export class CnS5ActOfFaith extends foundry.abstract.TypeDataModel {
   static defineSchema() {
     return {
       religion: new fields.StringField({ required: true, blank: true, initial: "" }),
+
+      // Which vocations may invoke this Act (pp.145-146). Empty means the
+      // rulebook places no restriction, or none has been recorded.
+      vocations: new fields.ArrayField(
+        new fields.StringField({ required: true, blank: false }),
+        { required: true, initial: [] }
+      ),
+
+      // The rulebook's own grouping — Clerical Acts of Faith, the Sacraments.
+      section: new fields.StringField({ required: true, blank: true, initial: "" }),
+
       pffMinimum: new fields.NumberField({ required: true, integer: true, initial: 0 }),
       successChance: new fields.NumberField({ required: true, integer: true, initial: 0, min: 0 }),
       fpCost: new fields.NumberField({ required: true, integer: true, initial: 0, min: 0 }),

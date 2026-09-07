@@ -7,7 +7,7 @@ This system ships no rules text, tables, or artwork from the published book.
 
 ## Build state
 
-Phase 4b of 5: the weapon and armour compendia, armour modelled as pieces.
+Phase 4c of 5: Action Points, aimed shots, and the Acts of Faith compendium.
 
 | Phase | Scope | State |
 | --- | --- | --- |
@@ -16,6 +16,7 @@ Phase 4b of 5: the weapon and armour compendia, armour modelled as pieces.
 | 3 | Skill compendium generated from the rulebook tables | Done |
 | 4 | Remaining tabs: combat, chattel, magick, faith | Done |
 | 4b | Weapon and armour compendia | Done |
+| 4c | Action Points, aimed shots, Acts of Faith | Done |
 | 5 | Character creation wizard following the 19-step worksheet | Next |
 
 ## What phase 1 gives you
@@ -98,7 +99,8 @@ from anywhere but its own signature.
 npm install
 npm run extract:skills    # regenerate data/skills.json from the PDF
 npm run extract:gear      # regenerate data/gear.json from the PDF
-npm run build:packs       # compile both into packs/
+npm run extract:faith     # regenerate data/acts-of-faith.json from the PDF
+npm run build:packs       # compile all three into packs/
 ```
 
 `data/skills.json` and `data/gear.json` are the single sources of truth. The
@@ -190,14 +192,46 @@ over 174, rounded up. Below it the book names only two cases, 100 to 124 lbs
 subtracting once and under 100 subtracting twice, and says nothing about 125 to
 149. That gap is filled with a single subtraction.
 
-### Known gaps in the gear data
+## What phase 4c adds
 
-- **Weapon Action Point costs are zero.** The melee and missile tables do not
+**Action Points.** Table - Combat Actions (p271) keys the cost of every action
+off the character's PSF% in the relevant skill rather than off the weapon —
+knowing a weapon well is what makes you quick with it. A weapon's Action Point
+cost is now derived: it picks its row from its role, group and weight, reads the
+band from the wielder's PSF, and shows the result on the sheet and the chat
+card. The row can be chosen by hand and the cost overridden where a house rule
+needs it.
+
+**Aimed shots.** The optional rule on p272. Attacking now offers a target area
+in the roll prompt, from the chest at no penalty down to the eyes at -60%. The
+modifier is reported separately from the situational one in the chat card
+breakdown, so it is clear where the penalty came from.
+
+**C&S Acts of Faith.** 47 entries from pp.145-146, each with its minimum
+Personal Faith Factor and the vocations that may invoke it. The availability
+marks turned out to be Wingdings characters rather than drawn glyphs, so they
+read straight out of the text layer — and because the tables print both a tick
+and a cross for every vocation on every row, a row that does not carry exactly
+six marks was read wrongly. All 47 carry six.
+
+Three entries — Last Rites and the two Anointings — print no minimum of their
+own and sit under Extreme Unction's PFF 20. They inherit it and are flagged
+`pffInherited` rather than being silently given a number.
+
+Success chance, Fatigue cost and the Action Points to pray are not printed in
+these tables, so they ship at zero for a GM to fill in from each Act's own
+description.
+
+### Known gaps in the gear data
+ The melee and missile tables do not
   print them; they come from the combat chapter's attack rate rules.
 - **The Misc. Weapons table on p164 is not extracted.** It uses a horizontal
   header layout rather than the rotated one the other tables share. This is why
   Dart, Hunting Javelin and Thrown Axe appear in the ranges table with no
   weapon entry.
+- **One Act of Faith has no name.** The last row of the Sacraments table prints
+  a minimum of PFF 15 and a full set of marks with no name beside it. It is
+  skipped rather than guessed at.
 - **The bows and arrows block has no group.** The book prints no heading over
   it, and inventing one would be putting words in the rulebook's mouth.
 - **Two helmets have no absorption.** The Composite Helm and the Great Helm
@@ -227,6 +261,13 @@ treated as authoritative over the worked examples and the character sheet.
   the description on p217 spells it correctly. The list is preserved as printed.
 - **p148, skills list.** Debate cites p232, which is the first page of The
   Marketplace. Its description ends on p231.
+- **p271, Action Point bands.** The fourth band ends at 70% and the fifth begins
+  at 75%, leaving 71-74% unstated. Read as the top band starting at 71%, which
+  is the only reading that leaves no hole.
+- **p271, loading a medium crossbow.** The fourth figure is printed as 12, lower
+  than the band above it and out of step with every other row in the table.
+  Preserved as printed; the test names it explicitly so it is not mistaken for
+  a transcription slip.
 - **pp.261-263, Fatigue cost to wear.** The column is printed as a negative for
   heavier armour but the Cuirbolli Cuirass carries a bare `1`. Every value is a
   cost either way, so the magnitude is stored and the sign discarded.
@@ -279,3 +320,8 @@ that never shrink as they lengthen.
 
 The armour weight rule is checked against the Sir Miles example on p261 — both
 his maille and his arming doublet — and at every boundary of the reference band.
+
+`test/combat-tables.test.mjs` checks the Action Point bands at each boundary,
+that every row but the medium crossbow gets cheaper as skill rises, that each
+weapon shape picks the right row of the table, and that every Act of Faith
+carries a complete set of six availability marks.

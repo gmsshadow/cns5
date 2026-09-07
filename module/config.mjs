@@ -479,3 +479,134 @@ CNS5.armourWeightFor = function (baseWeight, modifier, bodyWeight) {
   const adjusted = baseWeight + modifier * CNS5.armourWeightMultiplier(bodyWeight);
   return Math.max(0, Math.round(adjusted * 100) / 100);
 };
+
+/* -------------------------------------------- */
+/*  Action Points                               */
+/* -------------------------------------------- */
+
+/**
+ * Table - Combat Actions (p271).
+ *
+ * Action Point costs are keyed off the character's PSF% in the relevant skill,
+ * not off the weapon: knowing a weapon well is what makes you quick with it.
+ *
+ * The band boundaries are as printed. Note the gap: the fourth band ends at 70%
+ * and the fifth begins at 75%, leaving 71-74% unstated. It is read here as the
+ * top band starting at 71%, which is the only reading that leaves no hole.
+ */
+CNS5.actionPointBands = [
+  { max: 25, label: "CNS5.ApBand.1" },
+  { max: 45, label: "CNS5.ApBand.2" },
+  { max: 60, label: "CNS5.ApBand.3" },
+  { max: 70, label: "CNS5.ApBand.4" },
+  { max: Infinity, label: "CNS5.ApBand.5" }
+];
+
+/**
+ * Costs run in band order. Transcribed from the printed table rather than
+ * parsed: several rows wrap across three lines with their figures on the middle
+ * one, and the text layer interleaves them with their neighbours.
+ */
+CNS5.combatActions = {
+  mountWarhorse: { costs: [4, 4, 3, 3, 2], skill: "Riding Horse" },
+  attackNaturalLight: { costs: [5, 5, 4, 4, 3], skill: null },
+  attackNaturalMedium: { costs: [7, 6, 6, 5, 4], skill: null },
+  attackNaturalHeavy: { costs: [9, 8, 7, 6, 5], skill: null },
+  attackLight: { costs: [7, 6, 6, 5, 4], skill: null },
+  attackMedium: { costs: [9, 8, 7, 6, 5], skill: null },
+  attackHeavy: { costs: [11, 10, 9, 8, 7], skill: null },
+  attackPolearm: { costs: [12, 11, 9, 8, 7], skill: null },
+  dropWeapon: { costs: [0, 0, 0, 0, 0], skill: null },
+  drawWeapon: { costs: [1, 1, 1, 1, 1], skill: null },
+  unslingWeapon: { costs: [3, 3, 2, 2, 2], skill: null },
+  sheatheWeapon: { costs: [4, 4, 3, 3, 2], skill: null },
+  fireSling: { costs: [10, 9, 8, 7, 6], skill: "Slings" },
+  fireBow: { costs: [9, 8, 7, 6, 5], skill: "Archery" },
+  fireBowFast: { costs: [6, 5, 5, 4, 4], skill: "Archery" },
+  loadLightCrossbow: { costs: [15, 14, 12, 11, 9], skill: "Archery" },
+  // The fourth figure is printed as 12, which is lower than the band above it
+  // and out of step with every other row. Preserved as printed.
+  loadMediumCrossbow: { costs: [30, 27, 24, 12, 18], skill: "Archery" },
+  loadHeavyCrossbow: { costs: [60, 54, 48, 42, 36], skill: "Archery" },
+  fireCrossbow: { costs: [1, 1, 1, 1, 1], skill: "Archery" },
+  throwWeapon: { costs: [7, 6, 6, 5, 4], skill: null },
+  setPolearm: { costs: [3, 3, 2, 2, 2], skill: "Pole Arms" },
+  setLance: { costs: [3, 3, 2, 2, 2], skill: "Cavalry Lance" },
+  dodge: { costs: [1, 1, 1, 1, 1], skill: "Dodge" },
+  parryLight: { costs: [1, 1, 1, 1, 1], skill: null },
+  parryMedium: { costs: [2, 2, 2, 1, 1], skill: null },
+  parryHeavy: { costs: [3, 3, 2, 2, 2], skill: null },
+  parryPolearm: { costs: [4, 4, 3, 3, 2], skill: null },
+  blockBuckler: { costs: [1, 1, 1, 1, 1], skill: "Shield Play: Light" },
+  bashBuckler: { costs: [2, 2, 2, 1, 1], skill: "Shield Play: Light" },
+  blockHeater: { costs: [2, 2, 2, 1, 1], skill: "Shield Play: Heavy" },
+  bashHeater: { costs: [4, 4, 3, 3, 2], skill: "Shield Play: Heavy" },
+  blockLargeShield: { costs: [3, 3, 2, 2, 2], skill: "Shield Play: Heavy" },
+  bashLargeShield: { costs: [7, 6, 6, 5, 4], skill: "Shield Play: Heavy" },
+  castCantrip: { costs: [9, 8, 7, 6, 5], skill: null },
+  castHex: { costs: [19, 17, 15, 13, 11], skill: null },
+  castSorcery: { costs: [29, 26, 23, 20, 17], skill: null },
+  wordOfGuard: { costs: [3, 3, 2, 2, 2], skill: null }
+};
+
+/**
+ * The Action Point cost of an action for a character with a given PSF%.
+ * @param {string} action  a key of CNS5.combatActions
+ * @param {number} psf
+ * @returns {number|null}
+ */
+CNS5.actionPointCost = function (action, psf) {
+  const entry = CNS5.combatActions[action];
+  if (!entry) return null;
+  const index = CNS5.actionPointBands.findIndex((b) => (Number(psf) || 0) <= b.max);
+  return entry.costs[index];
+};
+
+/**
+ * The attack action a weapon uses, from its role and weight.
+ *
+ * Polearms cost a point more than other heavy arms, and the tables identify
+ * them by their group rather than by a weight class of their own.
+ *
+ * @param {object} weapon  a weapon's system data
+ * @returns {string}
+ */
+CNS5.weaponAttackAction = function (weapon) {
+  if (weapon.role === "launcher") {
+    if (/sling/i.test(weapon.group ?? "")) return "fireSling";
+    if (/crossbow/i.test(weapon.group ?? "") || /crossbow/i.test(weapon.name ?? "")) {
+      return "fireCrossbow";
+    }
+    return "fireBow";
+  }
+  if (weapon.missile && weapon.role === "melee") return "throwWeapon";
+  if (/polearm/i.test(weapon.group ?? "")) return "attackPolearm";
+
+  return {
+    naturalLight: "attackNaturalLight",
+    light: "attackLight",
+    medium: "attackMedium",
+    heavy: "attackHeavy",
+    twoHanded: "attackHeavy"
+  }[weapon.weightClass] ?? "attackMedium";
+};
+
+/* -------------------------------------------- */
+/*  Aimed shots                                 */
+/* -------------------------------------------- */
+
+/** Table - Aimed Shot Modifiers (p272). Optional rule. */
+CNS5.aimedShotModifiers = {
+  none: { label: "CNS5.TargetArea.none", modifier: 0 },
+  chest: { label: "CNS5.TargetArea.chest", modifier: 0 },
+  abdomen: { label: "CNS5.TargetArea.abdomen", modifier: -5 },
+  arm: { label: "CNS5.TargetArea.arm", modifier: -10 },
+  upperLeg: { label: "CNS5.TargetArea.upperLeg", modifier: -15 },
+  hand: { label: "CNS5.TargetArea.hand", modifier: -25 },
+  lowerLeg: { label: "CNS5.TargetArea.lowerLeg", modifier: -25 },
+  groin: { label: "CNS5.TargetArea.groin", modifier: -30 },
+  head: { label: "CNS5.TargetArea.head", modifier: -40 },
+  foot: { label: "CNS5.TargetArea.foot", modifier: -40 },
+  neck: { label: "CNS5.TargetArea.neck", modifier: -50 },
+  eyes: { label: "CNS5.TargetArea.eyes", modifier: -60 }
+};

@@ -53,6 +53,15 @@ export class CnS5ItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     context.damageTypes = this.#choices(CNS5.damageTypes, this.item.system.damageType);
     context.armourLocations = this.#choices(CNS5.armourLocations, this.item.system.location);
 
+    context.combatActions = [
+      { value: "", label: "CNS5.Weapon.apAuto", selected: !this.item.system.apAction },
+      ...Object.keys(CNS5.combatActions).map((key) => ({
+        value: key,
+        label: `CNS5.CombatAction.${key}`,
+        selected: this.item.system.apAction === key
+      }))
+    ];
+
     context.descriptionHTML = await foundry.applications.ux.TextEditor.implementation.enrichHTML(
       this.item.system.description ?? "",
       { relativeTo: this.item, secrets: this.item.isOwner }

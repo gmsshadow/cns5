@@ -278,7 +278,40 @@ async function build(name, documents) {
   console.log(`Built ${documents.length} entries into packs/${name}`);
 }
 
+/**
+ * Convert one Act of Faith row into an item document.
+ *
+ * The tables give a minimum Personal Faith Factor and who may invoke the Act,
+ * and nothing else. Success chance, Fatigue cost and the Action Points to pray
+ * are not printed there, so they stay at zero for a GM to fill from the Act's
+ * own description.
+ *
+ * @param {object} row
+ * @returns {object}
+ */
+function toActOfFaith(row) {
+  const notes = [];
+  if (row.vocations.length) notes.push(row.vocations.join(", "));
+  if (row.pffInherited) notes.push("minimum PFF shared with the entry above it");
+
+  return document("actOfFaith", row.name, "icons/svg/holy-shield.svg", {
+    religion: "",
+    vocations: row.vocations,
+    section: row.section ?? "",
+    pffMinimum: row.pffMinimum,
+    successChance: 0,
+    fpCost: 0,
+    apToPray: 0,
+    notes: notes.join(" — "),
+    reference: `p${row.page}`,
+    description: ""
+  });
+}
+
+/* -------------------------------------------- */
+
 const skills = JSON.parse(await readFile(path.join(DATA, "skills.json"), "utf8"));
+const faith = JSON.parse(await readFile(path.join(DATA, "acts-of-faith.json"), "utf8"));
 const gear = JSON.parse(await readFile(path.join(DATA, "gear.json"), "utf8"));
 
 /**
@@ -340,3 +373,4 @@ function buildArmour() {
 }
 
 await build("armour", buildArmour());
+await build("acts-of-faith", faith.acts.map(toActOfFaith));

@@ -35,6 +35,12 @@
 </div>
 
 <label class="cns5-field">
+    <span>{{localize "CNS5.Faith.section"}}</span>
+    <input type="text" name="system.section" value="{{system.section}}"
+           {{#unless editable}}disabled{{/unless}}>
+</label>
+
+<label class="cns5-field">
     <span>{{localize "CNS5.Faith.notes"}}</span>
     <input type="text" name="system.notes" value="{{system.notes}}"
            {{#unless editable}}disabled{{/unless}}>

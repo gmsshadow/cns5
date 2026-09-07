@@ -307,7 +307,19 @@ export class CnS5CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2)
     if (data?.type !== "Item") return;
 
     const item = await fromUuid(data.uuid);
-    if (!item || item.type !== "skill") return;
+    if (!item) return;
+
+    // Skills are refused as duplicates by name because two copies of one skill
+    // would mean two levels for the same ability. Everything else can be owned
+    // more than once — three daggers is a normal thing to carry.
+    const stackable = ["weapon", "armour", "equipment", "spell", "actOfFaith", "religion"];
+    if (stackable.includes(item.type)) {
+      await this.actor.createEmbeddedDocuments("Item", [item.toObject()]);
+      ui.notifications.info(game.i18n.format("CNS5.Skill.added", { name: item.name }));
+      return;
+    }
+
+    if (item.type !== "skill") return;
 
     // A drop from within this same actor is a reorder, not a new skill.
     if (item.parent?.id === this.actor.id) return;

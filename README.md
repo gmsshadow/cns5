@@ -7,7 +7,7 @@ This system ships no rules text, tables, or artwork from the published book.
 
 ## Build state
 
-Phase 4 of 5: the combat, chattel, magick and faith tabs.
+Phase 4b of 5: the weapon and armour compendia.
 
 | Phase | Scope | State |
 | --- | --- | --- |
@@ -15,6 +15,7 @@ Phase 4 of 5: the combat, chattel, magick and faith tabs.
 | 2 | Skill item and the TSC%/Crit Die engine | Done |
 | 3 | Skill compendium generated from the rulebook tables | Done |
 | 4 | Remaining tabs: combat, chattel, magick, faith | Done |
+| 4b | Weapon and armour compendia | Done |
 | 5 | Character creation wizard following the 19-step worksheet | Next |
 
 ## What phase 1 gives you
@@ -96,12 +97,19 @@ from anywhere but its own signature.
 ```
 npm install
 npm run extract:skills    # regenerate data/skills.json from the PDF
-npm run build:packs       # compile data/skills.json into packs/skills
+npm run extract:gear      # regenerate data/gear.json from the PDF
+npm run build:packs       # compile both into packs/
 ```
 
-`data/skills.json` is the single source of truth. `tools/extract-skills.py`
-needs `pdfplumber` and a copy of the core rules PDF; `tools/build-packs.mjs`
-needs the Foundry CLI, pulled in by `npm install`.
+`data/skills.json` and `data/gear.json` are the single sources of truth. The
+extractors need `pdfplumber` and a copy of the core rules PDF;
+`tools/build-packs.mjs` needs the Foundry CLI, pulled in by `npm install`.
+
+Three weapons appear twice in the tables, once for one-handed use and once for
+two — a Greatsword, a Dwarven Hammer and an Infantry Spear each hit harder in
+two hands. The grip goes in the compendium name to keep them apart. Flesh
+appears twice in the absorption table, once per section, and takes its location
+the same way.
 
 Document ids are derived from a hash of the skill name, so rebuilding produces
 identical ids and existing world references survive.
@@ -109,7 +117,8 @@ identical ids and existing world references survive.
 **What is and is not shipped.** The compendium carries mechanical data only:
 name, Difficulty Factor, attribute pair, rulebook group and page reference.
 No description text is reproduced — the `description` field on every compendium
-entry is empty, and the page reference points the reader at the book.
+entry is empty, and the page reference points the reader at the book. The same
+holds for the weapon and armour packs.
 
 ## What phase 4 adds
 
@@ -145,12 +154,42 @@ rather than a Difficulty Factor, so there is no band to clamp against.
 **Background & Social.** Character type, period, birth omens, nationality, star
 sign, liege and Influence Factor, plus biography and family notes.
 
-### Not yet included
+## What phase 4b adds
 
-Weapon, armour and equipment catalogues are not shipped. The item types and the
-derivations are complete, but the tables on pp.256-263 have not been extracted
-the way the skills list was. That is the natural next content pass, and it uses
-the same tooling.
+Two more compendia, built by the same pipeline as the skills pack.
+
+- **C&S Weapons** — 71 entries from the melee tables on pp.255-256 and the
+  missile table on p257, with missile ranges and their per-band TSC% modifiers
+  joined from p258.
+- **C&S Armour** — 27 entries from the absorption table on p260, each carrying
+  its five absorption values, weight class and location.
+
+Drag either onto a character to add it. Unlike skills, gear stacks: three
+daggers is a normal thing to carry, so duplicates are allowed.
+
+A weapon now records a `role`. A melee weapon deals its own damage and takes
+the wielder's Strength bonus. A launcher deals none — its Base Damage column
+holds a bonus added to whatever it looses. Ammunition carries the damage and
+gets no Strength bonus, because the arm does not add to a crossbow bolt the way
+it adds to a sword blow. Thrown weapons stay melee and gain ranges, since a
+javelin does both.
+
+### Known gaps in the gear data
+
+- **Armour weight, cost and Fatigue to wear are zero.** Those live on the detail
+  tables on pp.261-263, which list armour at a finer granularity than the
+  absorption table — a Maille Cuirass and a full suit of Maille are separate
+  rows there but one row here. Joining them properly means modelling armour
+  pieces rather than armour types, which is a design decision rather than an
+  extraction problem. Weapon weights and costs are extracted and complete.
+- **Weapon Action Point costs are zero.** The melee and missile tables do not
+  print them; they come from the combat chapter's attack rate rules.
+- **The Misc. Weapons table on p164 is not extracted.** It uses a horizontal
+  header layout rather than the rotated one the other tables share. This is why
+  Dart, Hunting Javelin and Thrown Axe appear in the ranges table with no
+  weapon entry.
+- **The bows and arrows block has no group.** The book prints no heading over
+  it, and inventing one would be putting words in the rulebook's mouth.
 
 ## Errata found while implementing
 
@@ -208,3 +247,11 @@ p289 including the +7-per-level note above PMF 149, the Attacker's Bonus table
 including its banded rows and the 20+ row, the aspect bonus in both traditions,
 the encumbrance step at and either side of each 20% boundary, and the currency
 ratios.
+
+The gear data was cross-checked against the flat text layer the same way: every
+weapon name and its printed damage code appear on its cited page, and every
+armour entry's five absorption values appear consecutively on one line of p260.
+`test/gear-data.test.mjs` then checks the result structurally — every weight
+class known to the Attacker's Bonus table, every damage type matching an armour
+absorption column, launchers dealing no damage of their own, and range bands
+that never shrink as they lengthen.

@@ -15,6 +15,24 @@ export class CnS5Weapon extends CnS5PhysicalItem {
   static defineSchema() {
     const schema = super.defineSchema();
 
+    // A launcher deals no damage itself but adds a bonus to what it looses;
+    // ammunition carries the damage. Keeping them apart means a bow and its
+    // arrows can each be their own item, as the tables list them.
+    schema.role = new fields.StringField({
+      required: true,
+      initial: "melee",
+      choices: ["melee", "launcher", "ammunition"]
+    });
+
+    schema.damageBonus = new fields.NumberField({ required: true, integer: true, initial: 0 });
+
+    // The rulebook's own grouping — Knives, Polearms, War Spears.
+    schema.group = new fields.StringField({ required: true, blank: true, initial: "" });
+    schema.dates = new fields.StringField({ required: true, blank: true, initial: "" });
+    schema.productionDays = new fields.NumberField({
+      required: false, nullable: true, integer: true, initial: null
+    });
+
     schema.weightClass = new fields.StringField({
       required: true,
       initial: "medium",
@@ -46,6 +64,15 @@ export class CnS5Weapon extends CnS5PhysicalItem {
       max: new fields.NumberField({ required: true, integer: true, initial: 0, min: 0 })
     });
 
+    // Each band carries its own TSC% modifier on top of the flat band penalty.
+    schema.rangeModifiers = new fields.SchemaField({
+      short: new fields.NumberField({ required: true, integer: true, initial: 0 }),
+      medium: new fields.NumberField({ required: true, integer: true, initial: 0 }),
+      long: new fields.NumberField({ required: true, integer: true, initial: 0 }),
+      extreme: new fields.NumberField({ required: true, integer: true, initial: 0 }),
+      max: new fields.NumberField({ required: true, integer: true, initial: 0 })
+    });
+
     return schema;
   }
 
@@ -70,9 +97,20 @@ export class CnS5Weapon extends CnS5PhysicalItem {
     this.level = skillItem?.system.level ?? 0;
     this.skillMissing = !skillItem;
 
-    this.strengthBonus = isLight ? actorSystem.damageBonus.light : actorSystem.damageBonus.medium;
+    // A launcher contributes only its bonus; the strength of the arm does not
+    // add to a crossbow bolt the way it adds to a sword blow.
+    this.strengthBonus =
+      this.role === "melee"
+        ? isLight
+          ? actorSystem.damageBonus.light
+          : actorSystem.damageBonus.medium
+        : 0;
+
     this.attackerBonus = CNS5.attackerBonus(this.level, this.weightClass);
-    this.damage = this.baseDamage + this.strengthBonus + this.attackerBonus;
+    this.damage =
+      this.role === "launcher"
+        ? this.damageBonus
+        : this.baseDamage + this.strengthBonus + this.attackerBonus;
   }
 }
 
@@ -93,6 +131,24 @@ export class CnS5Armour extends CnS5PhysicalItem {
       required: true,
       initial: "body",
       choices: Object.keys(CNS5.armourLocations)
+    });
+
+    // A launcher deals no damage itself but adds a bonus to what it looses;
+    // ammunition carries the damage. Keeping them apart means a bow and its
+    // arrows can each be their own item, as the tables list them.
+    schema.role = new fields.StringField({
+      required: true,
+      initial: "melee",
+      choices: ["melee", "launcher", "ammunition"]
+    });
+
+    schema.damageBonus = new fields.NumberField({ required: true, integer: true, initial: 0 });
+
+    // The rulebook's own grouping — Knives, Polearms, War Spears.
+    schema.group = new fields.StringField({ required: true, blank: true, initial: "" });
+    schema.dates = new fields.StringField({ required: true, blank: true, initial: "" });
+    schema.productionDays = new fields.NumberField({
+      required: false, nullable: true, integer: true, initial: null
     });
 
     schema.weightClass = new fields.StringField({

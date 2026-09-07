@@ -610,3 +610,156 @@ CNS5.aimedShotModifiers = {
   neck: { label: "CNS5.TargetArea.neck", modifier: -50 },
   eyes: { label: "CNS5.TargetArea.eyes", modifier: -60 }
 };
+
+/* -------------------------------------------- */
+/*  Character creation                          */
+/* -------------------------------------------- */
+
+/**
+ * The three ways to generate a character (p52, p103).
+ *
+ * Random and Lion Heart both roll; they differ in how forgiving the dice are.
+ * Design spends a budget of PC Points instead, which is why only that method
+ * carries one.
+ */
+CNS5.creationMethods = {
+  random: { label: "CNS5.Creation.method.random", rolls: true, budget: false },
+  lionHeart: { label: "CNS5.Creation.method.lionHeart", rolls: true, budget: false },
+  design: { label: "CNS5.Creation.method.design", rolls: false, budget: true }
+};
+
+/** PC Point budgets for the design method, by character type (p52). */
+CNS5.pcBudget = { historical: 125, heroic: 150, mythic: 180 };
+
+/** Attribute bonuses added to every roll for the tougher character types. */
+CNS5.typeRollBonus = { historical: 0, heroic: 2, mythic: 5 };
+
+/**
+ * The PC Point cost of buying an attribute to a given level (p103).
+ * One point per level up to and including 15, two per level after that.
+ *
+ * The worksheet's own figures follow from this: nine attributes at 11 costs 99
+ * points, at 13 costs 117, and at 16 costs 153.
+ *
+ * @param {number} level
+ * @returns {number}
+ */
+CNS5.attributeCost = function (level) {
+  const v = Math.max(0, Math.round(Number(level) || 0));
+  return Math.min(v, 15) + Math.max(0, v - 15) * 2;
+};
+
+/** Humans must buy at least two levels in every attribute (p103). */
+CNS5.attributeMinimum = 2;
+
+/**
+ * Innate ability modifiers for the three derived attributes (p103). The roll
+ * gives a magnitude; its direction is the player's to choose.
+ */
+CNS5.innateModifiers = [
+  { roll: 2, magnitude: 0, cost: 0 },
+  { roll: 4, magnitude: 1, cost: 1 },
+  { roll: 6, magnitude: 2, cost: 3 },
+  { roll: 8, magnitude: 3, cost: 5 },
+  { roll: 10, magnitude: 4, cost: 8 }
+];
+
+/**
+ * Table - Height & Build Determination (p104), for humans.
+ *
+ * Height is rolled on 2d10 plus a modifier and read directly as inches. Build
+ * is rolled on 1d10 plus a modifier and then adjusted by Agility and
+ * Constitution before it is looked up for weight.
+ */
+CNS5.heightAndBuild = {
+  historical: {
+    male: { heightMod: 57, defaultHeight: 68, buildMod: 1, defaultBuild: 6 },
+    female: { heightMod: 54, defaultHeight: 65, buildMod: -1, defaultBuild: 4 }
+  },
+  heroic: {
+    male: { heightMod: 62, defaultHeight: 73, buildMod: 2, defaultBuild: 7 },
+    female: { heightMod: 59, defaultHeight: 70, buildMod: -1, defaultBuild: 4 }
+  },
+  mythic: {
+    male: { heightMod: 67, defaultHeight: 78, buildMod: 3, defaultBuild: 6 },
+    female: { heightMod: 64, defaultHeight: 75, buildMod: 1, defaultBuild: 6 }
+  }
+};
+
+/** Buying a change to height or build costs 5 PC Points a step (p104-105). */
+CNS5.heightPurchase = { cost: 5, inches: 6 };
+CNS5.buildPurchase = { cost: 5, maxLevels: 3 };
+
+/**
+ * Build Factor adjustments from Agility and Constitution (p105).
+ * @param {number} agl
+ * @param {number} con
+ * @returns {number}
+ */
+CNS5.buildAdjustment = function (agl, con) {
+  let total = 0;
+  if (agl >= 20) total -= 2;
+  else if (agl >= 15) total -= 1;
+  if (con >= 20) total += 2;
+  else if (con >= 15) total += 1;
+  return total;
+};
+
+/** Table - Weight Modifiers (p106). Percentage change by Build Factor. */
+CNS5.weightModifiers = [
+  { max: 0, percent: -30, label: "CNS5.Build.veryLight" },
+  { max: 1, percent: -25, label: "CNS5.Build.veryLight" },
+  { max: 2, percent: -20, label: "CNS5.Build.light" },
+  { max: 3, percent: -15, label: "CNS5.Build.light" },
+  { max: 4, percent: -5, label: "CNS5.Build.average" },
+  { max: 5, percent: 0, label: "CNS5.Build.average" },
+  { max: 6, percent: 5, label: "CNS5.Build.average" },
+  { max: 7, percent: 10, label: "CNS5.Build.heavy" },
+  { max: 8, percent: 15, label: "CNS5.Build.heavy" },
+  { max: 9, percent: 20, label: "CNS5.Build.heavy" },
+  { max: 10, percent: 25, label: "CNS5.Build.massive" },
+  { max: 11, percent: 30, label: "CNS5.Build.massive" },
+  { max: 12, percent: 35, label: "CNS5.Build.massive" },
+  { max: Infinity, percent: 40, label: "CNS5.Build.massive" }
+];
+
+/**
+ * Weight from height and build (p105-106). Ten pounds plus five for every inch
+ * over forty, adjusted by the Build Factor's percentage, rounding up.
+ *
+ * The worked example: 69 inches gives 155 lbs, and a Build Factor of 6 raises
+ * it by 5% to 163.
+ *
+ * @param {number} height  in inches
+ * @param {number} build   the Build Factor
+ * @returns {number}
+ */
+CNS5.weightFor = function (height, build) {
+  const basic = 10 + Math.max(0, (Number(height) || 0) - 40) * 5;
+  const band = CNS5.weightModifiers.find((b) => (Number(build) || 0) <= b.max);
+  return Math.ceil(basic * (1 + band.percent / 100));
+};
+
+/**
+ * Table - Basic Starting Age (p114). Rolled on 1d100.
+ * `cost` is in PC Points: a younger character with less experience is cheaper,
+ * and being older costs points.
+ */
+CNS5.startingAge = [
+  { max: 5, human: 13, dwarf: 14, elf: 15, exp: 2500, cost: 10 },
+  { max: 10, human: 14, dwarf: 16, elf: 17, exp: 3000, cost: 8 },
+  { max: 20, human: 15, dwarf: 18, elf: 19, exp: 3500, cost: 6 },
+  { max: 30, human: 16, dwarf: 20, elf: 25, exp: 4000, cost: 4 },
+  { max: 40, human: 17, dwarf: 25, elf: 35, exp: 4500, cost: 2 },
+  { max: 60, human: 18, dwarf: 30, elf: 50, exp: 5000, cost: 0 },
+  { max: 65, human: 19, dwarf: 33, elf: 55, exp: 5500, cost: -2 },
+  { max: 70, human: 20, dwarf: 36, elf: 60, exp: 6000, cost: -4 },
+  { max: 75, human: 21, dwarf: 36, elf: 65, exp: 6500, cost: -6 },
+  { max: 80, human: 22, dwarf: 39, elf: 70, exp: 7000, cost: -8 },
+  { max: 85, human: 23, dwarf: 42, elf: 75, exp: 7500, cost: -10 },
+  { max: 90, human: 24, dwarf: 45, elf: 80, exp: 8000, cost: -12 },
+  { max: 100, human: 25, dwarf: 48, elf: 85, exp: 8500, cost: -14 }
+];
+
+/** The default starting age band: eighteen years old with 5,000 experience. */
+CNS5.defaultAgeBand = CNS5.startingAge.find((b) => b.max === 60);

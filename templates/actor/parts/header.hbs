@@ -3,8 +3,16 @@
          alt="{{document.name}}" data-action="editImage" data-tooltip="{{localize 'CNS5.Sheet.changePortrait'}}">
 
     <div class="cns5-header__fields">
-        <input class="cns5-header__name" type="text" name="name" value="{{document.name}}"
-               placeholder="{{localize 'CNS5.Sheet.namePlaceholder'}}" {{#unless editable}}disabled{{/unless}}>
+        <div class="cns5-header__title">
+            <input class="cns5-header__name" type="text" name="name" value="{{document.name}}"
+                   placeholder="{{localize 'CNS5.Sheet.namePlaceholder'}}" {{#unless editable}}disabled{{/unless}}>
+            {{#if editable}}
+            <button type="button" class="cns5-add" data-action="openWizard"
+                    data-tooltip="{{localize 'CNS5.Creation.tooltip'}}">
+                {{localize "CNS5.Creation.open"}}
+            </button>
+            {{/if}}
+        </div>
 
         <div class="cns5-header__row">
             <label class="cns5-field">

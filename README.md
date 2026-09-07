@@ -7,7 +7,7 @@ This system ships no rules text, tables, or artwork from the published book.
 
 ## Build state
 
-Phase 4c of 5: Action Points, aimed shots, and the Acts of Faith compendium.
+Phase 5 of 5: the character creation wizard.
 
 | Phase | Scope | State |
 | --- | --- | --- |
@@ -17,7 +17,7 @@ Phase 4c of 5: Action Points, aimed shots, and the Acts of Faith compendium.
 | 4 | Remaining tabs: combat, chattel, magick, faith | Done |
 | 4b | Weapon and armour compendia | Done |
 | 4c | Action Points, aimed shots, Acts of Faith | Done |
-| 5 | Character creation wizard following the 19-step worksheet | Next |
+| 5 | Character creation wizard following the 19-step worksheet | Partly done |
 
 ## What phase 1 gives you
 
@@ -241,6 +241,49 @@ description.
 - **Two armour types have no piece.** Cloth Headgear and the Scalemail Coif have
   absorption but no weight or cost. They ship as absorption-only entries.
 
+## What phase 5 adds
+
+A creation wizard, opened from the button beside the character's name. It
+follows the published worksheet and keeps the worksheet's own step numbers in
+its headings, so a player working from the printed sheet can see where they
+are. Nothing is written to the actor until the last step, so backing up and
+changing an early answer cannot leave a half-built character behind.
+
+**Built in:**
+
+- **Step 1** — method, period and type. Design carries a PC Point budget of
+  125, 150 or 180; the two rolled methods do not, though the spend is still
+  shown.
+- **Step 3** — birth omens, with their consequences named: Magick Resistance,
+  the aspect bonus to a mage's or priest-mage's PMF, and the Well Aspected
+  experience bonus.
+- **Step 4** — name, gender, race and nationality.
+- **Step 11** — attributes by all three methods. Random rolls 3d10 and drops
+  the lowest, Lion Heart rolls 2d10, both adding the type's bonus. Design costs
+  a point a level to 15 and two a level after. Innate ability modifiers for the
+  three derived attributes roll a magnitude; the sign stays the player's, which
+  is why the wizard rolls the size and lets you set the direction.
+- **Step 12** — height, build and weight, rolled or defaulted. Build is
+  adjusted by Agility and Constitution before it decides weight.
+- **Steps 13-17** — shown on the review step, all derived.
+- **Step 18** — age and experience, rolled or defaulted, with the Well Aspected
+  bonus applied.
+- **Step 19** — name, and the core skills seeded on finish: the nine every
+  character has, plus Accurate Counting for Intellect 12 or better.
+
+**Not built in.** Steps 2 and 5 to 10 — the horoscope, social class, father's
+vocation, sibling rank, family status, the curse, talents and flaws — are
+collected as free text. Those steps are driven by roughly forty tables spread
+across pp.53-101, none of which have been extracted. A roll button that
+produced nothing would be worse than an honest text field, so the wizard says
+plainly what it cannot do and writes what you enter to the Background & Social
+tab.
+
+Vocational, background and tertiary skill selection also stays on the sheet for
+now. The skill limits — ten vocational of which no more than four secondary,
+five mastered, tertiary by Intellect plus Discipline — are documented in the
+rules but not yet enforced.
+
 ## Errata found while implementing
 
 The rulebook contradicts itself in three places. Where it does, the tables are
@@ -320,6 +363,12 @@ that never shrink as they lengthen.
 
 The armour weight rule is checked against the Sir Miles example on p261 — both
 his maille and his arming doublet — and at every boundary of the reference band.
+
+`test/creation.test.mjs` anchors on the four figures the worksheet states
+outright — 99, 117 and 153 PC Points for an average character of each type, and
+the 163 lb weight of the worked example — then checks the band edges of the
+starting age table, the build adjustments, and that experience only rises as
+the point cost falls.
 
 `test/combat-tables.test.mjs` checks the Action Point bands at each boundary,
 that every row but the medium crossbow gets cheaper as skill rises, that each

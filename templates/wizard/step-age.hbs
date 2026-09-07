@@ -1,0 +1,24 @@
+<h2>{{localize "CNS5.Creation.step.age"}}</h2>
+<p class="cns5-hint">{{localize "CNS5.Creation.ageHint"}}</p>
+
+<div class="cns5-wizard__buttons">
+    <button type="button" data-action="rollAge">{{localize "CNS5.Creation.rollAge"}}</button>
+    <button type="button" data-action="defaultAge">{{localize "CNS5.Creation.defaultAge"}}</button>
+</div>
+
+<div class="cns5-grid cns5-grid--two">
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Details.age"}}</span>
+        <input type="number" data-draft="age" value="{{draft.age}}" min="0">
+    </label>
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Experience.earned"}}</span>
+        <input type="number" data-draft="experience" value="{{draft.experience}}" min="0">
+    </label>
+</div>
+
+{{#if draft.wellAspectedBonus}}
+<p class="cns5-hint cns5-hint--good">
+    {{localize "CNS5.Creation.wellAspected"}} +{{draft.wellAspectedBonus}}%
+</p>
+{{/if}}

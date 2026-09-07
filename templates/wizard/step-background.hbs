@@ -1,0 +1,27 @@
+<h2>{{localize "CNS5.Creation.step.background"}}</h2>
+<p class="cns5-hint cns5-hint--bad">{{localize "CNS5.Creation.backgroundNotice"}}</p>
+
+<div class="cns5-grid cns5-grid--two">
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Details.socialClass"}}</span>
+        <input type="text" data-draft="socialClass" value="{{draft.socialClass}}">
+    </label>
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Details.fathersVocation"}}</span>
+        <input type="text" data-draft="fathersVocation" value="{{draft.fathersVocation}}">
+    </label>
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Details.familyStatus"}}</span>
+        <input type="text" data-draft="familyStatus" value="{{draft.familyStatus}}">
+    </label>
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Details.vocation"}}</span>
+        <input type="text" data-draft="vocation" value="{{draft.vocation}}">
+    </label>
+</div>
+
+<label class="cns5-field">
+    <span>{{localize "CNS5.Creation.notes"}}</span>
+    <textarea data-draft="notes" rows="4">{{draft.notes}}</textarea>
+</label>
+<p class="cns5-hint">{{localize "CNS5.Creation.notesHint"}}</p>

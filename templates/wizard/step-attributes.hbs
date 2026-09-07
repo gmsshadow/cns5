@@ -1,0 +1,64 @@
+<h2>{{localize "CNS5.Creation.step.attributes"}}</h2>
+
+{{#if method.rolls}}
+<button type="button" class="cns5-wizard__roll" data-action="rollAttributes">
+    {{localize "CNS5.Creation.rollAll"}}
+</button>
+<p class="cns5-hint">{{localize "CNS5.Creation.rollAllHint"}}</p>
+{{else}}
+<p class="cns5-hint">{{localize "CNS5.Creation.buyHint"}}</p>
+{{/if}}
+
+<table class="cns5-wizard__table">
+    <thead>
+    <tr>
+        <th scope="col">{{localize "CNS5.Attributes"}}</th>
+        <th scope="col">{{localize "CNS5.Att"}}</th>
+        <th scope="col">{{localize "CNS5.PsfShort"}}</th>
+        {{#if method.budget}}<th scope="col">{{localize "CNS5.Creation.cost"}}</th>{{/if}}
+    </tr>
+    </thead>
+    <tbody>
+    {{#each attributeRows}}
+    <tr>
+        <th scope="row">{{localize label}}</th>
+        <td><input type="number" data-draft="attributes.{{key}}" value="{{value}}"
+                   min="{{@root.config.attributeMinimum}}" max="{{@root.attributeMax}}"></td>
+        <td class="cns5-skills__readout">{{cns5Signed bonus}}</td>
+        {{#if @root.method.budget}}<td class="cns5-skills__readout">{{cost}}</td>{{/if}}
+    </tr>
+    {{/each}}
+    </tbody>
+</table>
+
+<h3>{{localize "CNS5.Creation.innate"}}</h3>
+<p class="cns5-hint">{{localize "CNS5.Creation.innateHint"}}</p>
+
+<table class="cns5-wizard__table">
+    <thead>
+    <tr>
+        <th scope="col">{{localize "CNS5.Attributes"}}</th>
+        <th scope="col">{{localize "CNS5.Creation.base"}}</th>
+        <th scope="col">{{localize "CNS5.Creation.modifier"}}</th>
+        <th scope="col">{{localize "CNS5.Creation.total"}}</th>
+        <th scope="col"></th>
+    </tr>
+    </thead>
+    <tbody>
+    {{#each innateRows}}
+    <tr>
+        <th scope="row">{{localize label}}</th>
+        <td class="cns5-skills__readout">{{base}}</td>
+        <td><input type="number" data-draft="innate.{{key}}" value="{{value}}" min="-4" max="4"></td>
+        <td class="cns5-skills__readout cns5-skills__readout--total">{{total}}</td>
+        <td>
+            {{#if @root.method.rolls}}
+            <button type="button" data-action="rollInnate" data-attribute="{{key}}">
+                {{localize "CNS5.Creation.roll"}}
+            </button>
+            {{/if}}
+        </td>
+    </tr>
+    {{/each}}
+    </tbody>
+</table>

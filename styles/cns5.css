@@ -808,3 +808,206 @@
     font-size: 0.78rem;
     opacity: 0.75;
 }
+
+/* --------------------------------------------------------------------------
+   Creation wizard
+   -------------------------------------------------------------------------- */
+
+.cns5-wizard .window-content {
+    background: var(--cns-vellum);
+}
+
+.cns5-wizard__shell {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    height: 100%;
+}
+
+/* The rail keeps the worksheet's own step numbers, so a player working from
+   the printed sheet can see where they are. */
+.cns5-wizard__rail {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.15rem 0.5rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 1px solid var(--cns-rule);
+    font-size: 0.72rem;
+}
+
+.cns5-wizard__pip {
+    color: var(--cns-ink-soft);
+    font-variant: small-caps;
+    letter-spacing: 0.03em;
+}
+
+.cns5-wizard__pip em {
+    font-style: normal;
+    font-variant-numeric: tabular-nums;
+    opacity: 0.6;
+}
+
+.cns5-wizard__pip.is-done {
+    color: var(--cns-verdigris);
+}
+
+.cns5-wizard__pip.is-active {
+    color: var(--cns-oxblood);
+    font-weight: 600;
+}
+
+.cns5-wizard__budget {
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+    padding: 0.3rem 0.6rem;
+    background: var(--cns-vellum-light);
+    border-left: 3px solid var(--cns-lapis);
+    font-variant: small-caps;
+    letter-spacing: 0.03em;
+}
+
+.cns5-wizard__budget strong {
+    font-size: 1.15rem;
+    font-variant-numeric: tabular-nums;
+    font-variant-caps: normal;
+}
+
+/* Going over budget is allowed — the wizard asks rather than blocks — so the
+   marker is a warning rather than an error state. */
+.cns5-wizard__budget.is-over {
+    border-left-color: var(--cns-oxblood);
+    color: var(--cns-oxblood);
+}
+
+.cns5-wizard__budget-of {
+    opacity: 0.7;
+}
+
+.cns5-wizard__step {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding-right: 0.3rem;
+}
+
+.cns5-wizard__step h2 {
+    margin: 0;
+    font-variant: small-caps;
+    letter-spacing: 0.05em;
+    color: var(--cns-oxblood);
+    border-bottom: 1px solid var(--cns-oxblood);
+    padding-bottom: 0.15rem;
+}
+
+.cns5-wizard__step h3 {
+    margin: 0.4rem 0 0;
+    font-size: 0.85rem;
+    font-variant: small-caps;
+    letter-spacing: 0.04em;
+    color: var(--cns-verdigris);
+    border: none;
+}
+
+.cns5-wizard__table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+}
+
+.cns5-wizard__table th,
+.cns5-wizard__table td {
+    padding: 0.1rem 0.3rem;
+    text-align: right;
+}
+
+.cns5-wizard__table tbody th {
+    text-align: left;
+    font-weight: 400;
+}
+
+.cns5-wizard__table thead th {
+    font-size: 0.68rem;
+    font-variant: small-caps;
+    font-weight: 400;
+    color: var(--cns-ink-soft);
+    border-bottom: 1px solid var(--cns-rule);
+}
+
+.cns5-wizard__table input[type="number"] {
+    width: 3.4rem;
+    text-align: center;
+}
+
+.cns5-wizard__buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+}
+
+.cns5-wizard button {
+    width: auto;
+    padding: 0.25rem 0.7rem;
+    background: var(--cns-vellum-light);
+    border: 1px solid var(--cns-rule);
+    border-radius: 2px;
+    font-family: var(--cns-serif);
+    font-variant: small-caps;
+    letter-spacing: 0.03em;
+    color: var(--cns-ink);
+    cursor: pointer;
+}
+
+.cns5-wizard button:hover:not(:disabled) {
+    border-color: var(--cns-lapis);
+    color: var(--cns-lapis);
+}
+
+.cns5-wizard button:disabled {
+    opacity: 0.4;
+    cursor: default;
+}
+
+.cns5-wizard__roll {
+    align-self: flex-start;
+}
+
+.cns5-wizard__nav {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--cns-rule);
+}
+
+.cns5-wizard .cns5-wizard__finish {
+    border-color: var(--cns-oxblood);
+    color: var(--cns-oxblood);
+    font-weight: 600;
+}
+
+.cns5-wizard__summary {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.cns5-wizard textarea {
+    background: var(--cns-vellum-light);
+    border: 1px solid var(--cns-rule);
+    border-radius: 2px;
+    font-family: var(--cns-serif);
+    color: var(--cns-ink);
+    resize: vertical;
+}
+
+.cns5-header__title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.cns5-header__title .cns5-header__name {
+    flex: 1;
+    min-width: 0;
+}

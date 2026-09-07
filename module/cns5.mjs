@@ -9,12 +9,14 @@ import { CnS5Spell, CnS5ActOfFaith, CnS5Religion } from "./data/item-mystical.mj
 import { CnS5CharacterSheet } from "./sheets/character-sheet.mjs";
 import { CnS5SkillSheet } from "./sheets/skill-sheet.mjs";
 import { CnS5ItemSheet } from "./sheets/item-sheet.mjs";
+import { CnS5CreationWizard } from "./apps/creation-wizard.mjs";
 import { registerHandlebarsHelpers } from "./helpers/handlebars.mjs";
 
 Hooks.once("init", () => {
   console.log("CnS5 | Initialising Chivalry & Sorcery 5th Edition");
 
   CONFIG.CNS5 = CNS5;
+  game.cns5 = { CreationWizard: CnS5CreationWizard };
   CONFIG.Actor.documentClass = CnS5Actor;
   CONFIG.Actor.dataModels = {
     character: CnS5Character,
@@ -79,6 +81,15 @@ Hooks.once("init", () => {
     "systems/cns5/templates/item/spell-body.hbs",
     "systems/cns5/templates/item/act-of-faith-body.hbs",
     "systems/cns5/templates/item/religion-body.hbs",
+    "systems/cns5/templates/wizard/wizard.hbs",
+    "systems/cns5/templates/wizard/step-method.hbs",
+    "systems/cns5/templates/wizard/step-omens.hbs",
+    "systems/cns5/templates/wizard/step-identity.hbs",
+    "systems/cns5/templates/wizard/step-background.hbs",
+    "systems/cns5/templates/wizard/step-attributes.hbs",
+    "systems/cns5/templates/wizard/step-size.hbs",
+    "systems/cns5/templates/wizard/step-age.hbs",
+    "systems/cns5/templates/wizard/step-review.hbs",
     "systems/cns5/templates/chat/check.hbs"
   ]);
 });

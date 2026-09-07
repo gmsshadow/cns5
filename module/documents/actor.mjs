@@ -382,6 +382,29 @@ export class CnS5Actor extends Actor {
   /* -------------------------------------------- */
 
   /**
+   * Add the Accurate Counting competency, which every character of Intellect
+   * 12 or better possesses (creation worksheet, Vocation and Skills).
+   *
+   * @returns {Promise<Item[]>}
+   */
+  async addAccurateCounting() {
+    const has = this.items.some(
+      (i) => i.type === "skill" && i.name.toLowerCase() === "accurate counting"
+    );
+    if (has) return [];
+
+    return this.createEmbeddedDocuments("Item", [
+      {
+        name: "Accurate Counting",
+        type: "skill",
+        system: { df: 1, attributes: [], kind: "competency", category: "core", known: true, level: 1 }
+      }
+    ]);
+  }
+
+  /* -------------------------------------------- */
+
+  /**
    * Drop zero-valued lines so the chat card shows only what actually applied.
    * The base chance always shows, even at 0%, because a DF 10 skill genuinely
    * has an unskilled BCS of zero and hiding it would look like an error.

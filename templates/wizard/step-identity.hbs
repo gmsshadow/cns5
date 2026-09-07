@@ -1,0 +1,25 @@
+<h2>{{localize "CNS5.Creation.step.identity"}}</h2>
+
+<div class="cns5-grid cns5-grid--two">
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Sheet.namePlaceholder"}}</span>
+        <input type="text" data-draft="name" value="{{draft.name}}">
+    </label>
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Details.nationality"}}</span>
+        <input type="text" data-draft="nationality" value="{{draft.nationality}}">
+    </label>
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Details.gender"}}</span>
+        <select data-draft="gender">
+            <option value="male" {{#if (eq draft.gender "male")}}selected{{/if}}>{{localize "CNS5.Gender.male"}}</option>
+            <option value="female" {{#if (eq draft.gender "female")}}selected{{/if}}>{{localize "CNS5.Gender.female"}}</option>
+        </select>
+    </label>
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Details.race"}}</span>
+        <input type="text" data-draft="race" value="{{draft.race}}">
+    </label>
+</div>
+
+<p class="cns5-hint">{{localize "CNS5.Creation.identityHint"}}</p>

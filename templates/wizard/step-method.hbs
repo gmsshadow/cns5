@@ -1,0 +1,34 @@
+<h2>{{localize "CNS5.Creation.step.method"}}</h2>
+<p class="cns5-hint">{{localize "CNS5.Creation.methodHint"}}</p>
+
+<div class="cns5-grid cns5-grid--three">
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Creation.method"}}</span>
+        <select data-draft="method">
+            {{#each methods}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{localize label}}</option>{{/each}}
+        </select>
+    </label>
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Details.period"}}</span>
+        <select data-draft="period">
+            {{#each periods}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{localize label}}</option>{{/each}}
+        </select>
+    </label>
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Details.characterType"}}</span>
+        <select data-draft="characterType">
+            {{#each types}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{localize label}}</option>{{/each}}
+        </select>
+    </label>
+</div>
+
+<dl class="cns5-derived">
+    <div><dt>{{localize "CNS5.Details.attributeMax"}}</dt><dd>{{attributeMax}}</dd></div>
+    <div><dt>{{localize "CNS5.Creation.rollBonus"}}</dt><dd>{{cns5Signed (lookup config.typeRollBonus draft.characterType)}}</dd></div>
+</dl>
+
+{{#if method.budget}}
+<p class="cns5-hint">{{localize "CNS5.Creation.designHint"}}</p>
+{{else}}
+<p class="cns5-hint">{{localize "CNS5.Creation.rollHint"}}</p>
+{{/if}}

@@ -1,0 +1,22 @@
+<h2>{{localize "CNS5.Creation.step.review"}}</h2>
+<p class="cns5-hint">{{localize "CNS5.Creation.reviewHint"}}</p>
+
+<dl class="cns5-derived cns5-wizard__summary">
+    {{#each summary}}
+    <div><dt>{{localize label}}</dt><dd>{{value}}</dd></div>
+    {{/each}}
+</dl>
+
+<label class="cns5-check">
+    <input type="checkbox" data-draft="addCoreSkills" {{checked draft.addCoreSkills}}>
+    <span>{{localize "CNS5.Creation.addCoreSkills"}}</span>
+</label>
+<p class="cns5-hint">{{localize "CNS5.Creation.addCoreSkillsHint"}}</p>
+
+{{#if points.applies}}
+<p class="cns5-hint {{#if (lt points.left 0)}}cns5-hint--bad{{/if}}">
+    {{localize "CNS5.Creation.spent"}} {{points.spent}} / {{points.budget}}
+</p>
+{{/if}}
+
+<p class="cns5-hint">{{localize "CNS5.Creation.nextSteps"}}</p>

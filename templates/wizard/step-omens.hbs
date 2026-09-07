@@ -1,0 +1,15 @@
+<h2>{{localize "CNS5.Creation.step.omens"}}</h2>
+<p class="cns5-hint">{{localize "CNS5.Creation.omensHint"}}</p>
+
+<label class="cns5-field">
+    <span>{{localize "CNS5.Details.birthOmens"}}</span>
+    <select data-draft="birthOmens">
+        {{#each omens}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{localize label}}</option>{{/each}}
+    </select>
+</label>
+
+<dl class="cns5-derived">
+    <div><dt>{{localize "CNS5.Derived.magickResistance"}}</dt>
+        <dd>{{cns5Percent (lookup config.magickResistance draft.birthOmens)}}</dd></div>
+</dl>
+<p class="cns5-hint">{{localize "CNS5.Creation.omensConsequence"}}</p>

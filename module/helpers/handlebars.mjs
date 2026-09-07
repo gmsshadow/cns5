@@ -40,6 +40,7 @@ export function registerHandlebarsHelpers() {
   const fallbacks = {
     concat: (...args) => args.slice(0, -1).join(""),
     eq: (a, b) => a === b,
+    lt: (a, b) => a < b,
     not: (value) => !value
   };
 

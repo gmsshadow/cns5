@@ -1,4 +1,5 @@
 import { CNS5 } from "../config.mjs";
+import { CnS5CreationWizard } from "../apps/creation-wizard.mjs";
 
 const { HandlebarsApplicationMixin, DialogV2 } = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
@@ -34,7 +35,8 @@ export class CnS5CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2)
       editItem: CnS5CharacterSheet.#onEditItem,
       deleteItem: CnS5CharacterSheet.#onDeleteItem,
       toggleEquipped: CnS5CharacterSheet.#onToggleEquipped,
-      toggleCarried: CnS5CharacterSheet.#onToggleCarried
+      toggleCarried: CnS5CharacterSheet.#onToggleCarried,
+      openWizard: CnS5CharacterSheet.#onOpenWizard
     }
   };
 
@@ -447,6 +449,13 @@ export class CnS5CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2)
   static async #onToggleCarried(event, target) {
     const item = this.actor.items.get(target.dataset.itemId);
     if (item) await item.update({ "system.carried": !item.system.carried });
+  }
+
+  /* -------------------------------------------- */
+
+  /** @this {CnS5CharacterSheet} */
+  static #onOpenWizard() {
+    new CnS5CreationWizard(this.actor).render({ force: true });
   }
 
   /* -------------------------------------------- */

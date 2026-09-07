@@ -1,0 +1,31 @@
+<h2>{{localize "CNS5.Creation.step.size"}}</h2>
+<p class="cns5-hint">{{localize "CNS5.Creation.sizeHint"}}</p>
+
+<div class="cns5-wizard__buttons">
+    <button type="button" data-action="rollHeight">{{localize "CNS5.Creation.rollHeight"}}</button>
+    <button type="button" data-action="rollBuild">{{localize "CNS5.Creation.rollBuild"}}</button>
+    <button type="button" data-action="defaultSize">{{localize "CNS5.Creation.defaultSize"}}</button>
+</div>
+
+<div class="cns5-grid cns5-grid--three">
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Size.height"}}</span>
+        <input type="number" data-draft="height" value="{{draft.height}}" min="1">
+    </label>
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Size.build"}}</span>
+        <input type="number" data-draft="build" value="{{draft.build}}">
+    </label>
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Size.weight"}}</span>
+        <input type="number" data-draft="weight" value="{{draft.weight}}" min="1">
+    </label>
+</div>
+
+<dl class="cns5-derived">
+    <div><dt>{{localize "CNS5.Creation.heightDice"}}</dt><dd>2d10 + {{sizeTable.heightMod}}</dd></div>
+    <div><dt>{{localize "CNS5.Creation.buildDice"}}</dt><dd>1d10 {{cns5Signed sizeTable.buildMod}}</dd></div>
+    <div><dt>{{localize "CNS5.Creation.defaultHeight"}}</dt><dd>{{sizeTable.defaultHeight}}"</dd></div>
+    <div><dt>{{localize "CNS5.Creation.buildBand"}}</dt><dd>{{localize buildBand.label}} ({{cns5Signed buildBand.percent}}%)</dd></div>
+</dl>
+<p class="cns5-hint">{{localize "CNS5.Creation.weightHint"}}</p>

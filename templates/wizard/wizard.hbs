@@ -1,0 +1,36 @@
+<div class="cns5-wizard__shell">
+
+    <nav class="cns5-wizard__rail">
+        {{#each steps}}
+        <span class="cns5-wizard__pip {{#if active}}is-active{{/if}} {{#if done}}is-done{{/if}}">
+            <em>{{number}}</em> {{localize label}}
+        </span>
+        {{/each}}
+    </nav>
+
+    {{#if points.applies}}
+    <div class="cns5-wizard__budget {{#if (lt points.left 0)}}is-over{{/if}}">
+        <span>{{localize "CNS5.Creation.budget"}}</span>
+        <strong>{{points.left}}</strong>
+        <span class="cns5-wizard__budget-of">{{localize "CNS5.Creation.of"}} {{points.budget}}</span>
+    </div>
+    {{/if}}
+
+    <section class="cns5-wizard__step">
+        {{> (lookup . 'stepTemplate')}}
+    </section>
+
+    <footer class="cns5-wizard__nav">
+        <button type="button" data-action="back" {{#if isFirst}}disabled{{/if}}>
+            {{localize "CNS5.Creation.back"}}
+        </button>
+        {{#if isLast}}
+        <button type="button" class="cns5-wizard__finish" data-action="finish">
+            {{localize "CNS5.Creation.finish"}}
+        </button>
+        {{else}}
+        <button type="button" data-action="next">{{localize "CNS5.Creation.next"}}</button>
+        {{/if}}
+    </footer>
+
+</div>

@@ -424,6 +424,18 @@ book against itself had turned up.
   only. Resetting colour or border there would out-specify the rules further
   down that set them deliberately, because a two-class selector beats a
   one-class one however far below it appears.
+- **The chat card laid itself out sideways.** `.cns5-check` was doing double
+  duty as both the chat card and the label around a checkbox. The checkbox rule
+  comes later in the file and set `display: flex` with the default row
+  direction, so the card's own column direction was overridden and every part of
+  it — heading, dice, verdict — was squeezed into a narrow column of its own.
+  The checkbox is `.cns5-checkbox` now, and `test/styles.test.mjs` checks that
+  every class a template uses is actually styled.
+- **The tabs stayed pale.** Foundry drives tab colour from theme variables and
+  from selectors reaching the anchor directly, so a rule on a plain `.item`
+  never took effect. The variables are redefined in this scope and the colour is
+  forced on the anchor. The `important` there is deliberate and commented: it is
+  the only reliable way to win against a theme whose rules we cannot reorder.
 
 ## Errata found while implementing
 

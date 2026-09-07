@@ -68,6 +68,45 @@ ok("gilt reads on every ground as bold text", giltFailures, []);
    show through and take the text with it. */
 ok("Foundry's table backgrounds are cleared", /\.application\.cns5 thead,/.test(css), true);
 
-console.log(`\n${grounds.length} grounds, ${inks.length + 1} inks checked`);
+/* -- Class collisions ------------------------------------------------------ */
+
+/* A block class must not also be used as a standalone class elsewhere: two
+   rules for one name means whichever appears last silently wins, which is how
+   the checkbox rule ended up flipping the chat card's layout to a row. Any
+   class used in a template gets checked against every top-level rule for it. */
+const { readdir } = await import("node:fs/promises");
+
+async function walkTemplates(dir) {
+  const out = [];
+  for (const entry of await readdir(dir, { withFileTypes: true })) {
+    const full = path.join(dir, entry.name);
+    if (entry.isDirectory()) out.push(...(await walkTemplates(full)));
+    else if (entry.name.endsWith(".hbs")) out.push(full);
+  }
+  return out;
+}
+
+const templateClasses = new Set();
+for (const file of await walkTemplates(path.join(ROOT, "templates"))) {
+  const text = await readFile(file, "utf8");
+  for (const m of text.matchAll(/class="([^"{}]+)"/g)) {
+    for (const name of m[1].split(/\s+/)) {
+      if (name.startsWith("cns5-")) templateClasses.add(name);
+    }
+  }
+}
+
+/* Count the rules that set a bare `.name {` block for each class. More than one
+   is not itself wrong, but zero means the class does nothing at all. */
+const undefinedClasses = [...templateClasses]
+  .filter((name) => !new RegExp(`\\.${name}[\\s,{:.]`).test(css))
+  .sort();
+ok("every class used in a template is styled", undefinedClasses, []);
+
+/* The specific pair that caused the bug: these two must stay distinct. */
+ok("the chat card and the checkbox are different classes", /\.cns5-checkbox\s*{/.test(css), true);
+ok("no template still uses the old shared name", [...templateClasses].filter((c) => c === "cns5-check"), []);
+
+console.log(`\n${grounds.length} grounds, ${inks.length + 1} inks, ${templateClasses.size} classes checked`);
 console.log(fails ? `${fails} FAILURES` : "All checks passed.");
 process.exit(fails ? 1 : 0);

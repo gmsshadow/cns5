@@ -175,12 +175,26 @@
     padding-bottom: 0.3rem;
 }
 
+/* Foundry drives its tab colours from theme variables and from selectors that
+   reach the anchor directly, so setting a colour on a plain `.item` rule was
+   being overridden and the tabs stayed a pale tan. The variables are redefined
+   in this scope, and the colour is forced on the anchor itself. The `important`
+   here is deliberate: it is the only reliable way to win against a third-party
+   theme whose rules we cannot see or reorder. */
+.application.cns5 {
+    --color-text-primary: var(--cns-ink);
+    --color-text-secondary: var(--cns-ink-soft);
+    --color-text-subtle: var(--cns-ink-soft);
+    --color-text-emphatic: var(--cns-ink);
+}
+
+.application.cns5 .window-content nav.tabs a.item,
 .application.cns5 nav.tabs .item {
-    padding: 0.3rem 0.65rem;
-    font-size: 0.95rem;
+    padding: 0.35rem 0.7rem;
+    font-size: 1rem;
     font-variant: small-caps;
     letter-spacing: 0.03em;
-    color: var(--cns-ink);
+    color: var(--cns-ink) !important;
     border-bottom: 2px solid transparent;
     border-radius: 2px 2px 0 0;
     text-decoration: none;
@@ -188,20 +202,32 @@
     opacity: 1;
 }
 
+.application.cns5 .window-content nav.tabs a.item i,
+.application.cns5 nav.tabs .item i {
+    color: var(--cns-ink-soft) !important;
+}
+
+.application.cns5 .window-content nav.tabs a.item:hover,
 .application.cns5 nav.tabs .item:hover {
     background: var(--cns-vellum-band);
-    color: var(--cns-lapis);
+    color: var(--cns-lapis) !important;
     text-shadow: none;
 }
 
 /* The active tab is marked three ways — colour, weight and a filled ground —
    so it reads at a glance without relying on the accent colour alone. */
+.application.cns5 .window-content nav.tabs a.item.active,
 .application.cns5 nav.tabs .item.active {
-    color: var(--cns-oxblood);
+    color: var(--cns-oxblood) !important;
     background: var(--cns-vellum-light);
-    font-weight: 600;
+    font-weight: 700;
     border-bottom-color: var(--cns-oxblood);
     text-shadow: none;
+}
+
+.application.cns5 .window-content nav.tabs a.item.active i,
+.application.cns5 nav.tabs .item.active i {
+    color: var(--cns-oxblood) !important;
 }
 
 /* --------------------------------------------------------------------------
@@ -423,65 +449,85 @@
    Chat cards
    -------------------------------------------------------------------------- */
 
+/* The chat message container lays its children out in a row, which squeezed the
+   card into narrow columns and broke the die labels one letter to a line. The
+   card states its own direction so it stacks whatever it is dropped into. */
 .cns5-check {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.35rem;
+    width: 100%;
     font-family: var(--cns-serif, Georgia, serif);
-    --cns-check-accent: #7a2e2a;
+    --cns-check-accent: #6d2723;
 }
 
 .cns5-check.is-success {
-    --cns-check-accent: #4a6f63;
+    --cns-check-accent: #33564c;
 }
 
 .cns5-check.is-critical {
-    --cns-check-accent: #a8842c;
+    --cns-check-accent: #7d611b;
 }
 
 .cns5-check__title {
     margin: 0;
+    font-size: 1.05rem;
+    font-weight: 600;
     font-variant: small-caps;
     letter-spacing: 0.04em;
     border-bottom: 1px solid var(--cns-check-accent);
     padding-bottom: 0.15rem;
+    white-space: normal;
 }
 
 .cns5-check__subtitle {
-    margin: 0.2rem 0 0.4rem;
-    font-size: 0.8rem;
-    opacity: 0.75;
+    margin: 0;
+    font-size: 0.85rem;
+    opacity: 0.85;
 }
 
+/* Two dice side by side, but each keeps enough width for its label to sit on
+   one line; below that they stack rather than squeeze. */
 .cns5-check__dice {
     display: flex;
-    gap: 0.75rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
 }
 
 .cns5-check__die {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    flex: 1;
-    padding: 0.25rem;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem;
+    flex: 1 1 9rem;
+    min-width: 9rem;
+    padding: 0.25rem 0.5rem;
     border: 1px solid var(--cns-check-accent);
     border-radius: 2px;
 }
 
 .cns5-check__die-value {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     line-height: 1.1;
+    font-weight: 700;
     font-variant-numeric: tabular-nums;
 }
 
 .cns5-check__die-label {
-    font-size: 0.68rem;
+    font-size: 0.78rem;
     font-variant: small-caps;
     letter-spacing: 0.04em;
-    opacity: 0.75;
+    opacity: 0.85;
+    text-align: right;
+    white-space: nowrap;
 }
 
 .cns5-check__result {
-    margin: 0.4rem 0 0;
+    margin: 0;
+    font-size: 1rem;
     color: var(--cns-check-accent);
-    font-weight: 600;
+    font-weight: 700;
 }
 
 /* --------------------------------------------------------------------------
@@ -732,11 +778,14 @@
     gap: 0.2rem 0.6rem;
 }
 
-.cns5-check {
+/* Named apart from .cns5-check, which is the chat card. The two shared a class
+   and the checkbox rule, coming later in the file, was flipping the card's
+   layout back to a row — which is what squeezed it into narrow columns. */
+.cns5-checkbox {
     display: flex;
     align-items: center;
-    gap: 0.35rem;
-    font-size: 0.85rem;
+    gap: 0.4rem;
+    font-size: 0.9rem;
 }
 
 .cns5-hint {
@@ -778,8 +827,8 @@
 }
 
 .cns5-check__breakdown {
-    margin-top: 0.4rem;
-    font-size: 0.78rem;
+    margin: 0;
+    font-size: 0.85rem;
 }
 
 .cns5-check__breakdown summary {
@@ -891,14 +940,15 @@
 }
 
 .cns5-check__damage {
-    margin: 0.35rem 0 0;
-    font-size: 0.95rem;
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
 }
 
 .cns5-check__cost {
-    margin: 0.15rem 0 0;
-    font-size: 0.78rem;
-    opacity: 0.75;
+    margin: 0;
+    font-size: 0.85rem;
+    opacity: 0.85;
 }
 
 /* --------------------------------------------------------------------------

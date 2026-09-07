@@ -285,64 +285,12 @@ export class CnS5CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2)
     for (const input of this.element.querySelectorAll("[data-cns5-level]")) {
       input.addEventListener("change", this.#onEditLevel.bind(this));
     }
-
-    // Accept skills dragged in from the compendium.
-    new foundry.applications.ux.DragDrop.implementation({
-      dropSelector: ".window-content",
-      callbacks: { drop: this.#onDrop.bind(this) }
-    }).bind(this.element);
   }
 
   /* -------------------------------------------- */
 
   /**
-   * Handle a document dropped onto the sheet.
-   *
-   * Only skills are accepted for now. Dropping one the character already has
-   * would silently create a second copy with its own level, which is never what
-   * anyone means, so a duplicate name is refused rather than merged.
-   *
-   * @param {DragEvent} event
-   */
-  async #onDrop(event) {
-    const data = foundry.applications.ux.TextEditor.implementation.getDragEventData(event);
-    if (data?.type !== "Item") return;
-
-    const item = await fromUuid(data.uuid);
-    if (!item) return;
-
-    // Skills are refused as duplicates by name because two copies of one skill
-    // would mean two levels for the same ability. Everything else can be owned
-    // more than once — three daggers is a normal thing to carry.
-    const stackable = ["weapon", "armour", "equipment", "spell", "actOfFaith", "religion"];
-    if (stackable.includes(item.type)) {
-      await this.actor.createEmbeddedDocuments("Item", [item.toObject()]);
-      ui.notifications.info(game.i18n.format("CNS5.Skill.added", { name: item.name }));
-      return;
-    }
-
-    if (item.type !== "skill") return;
-
-    // A drop from within this same actor is a reorder, not a new skill.
-    if (item.parent?.id === this.actor.id) return;
-
-    const duplicate = this.actor.items.find(
-      (i) => i.type === "skill" && i.name.toLowerCase() === item.name.toLowerCase()
-    );
-    if (duplicate) {
-      ui.notifications.warn(
-        game.i18n.format("CNS5.Skill.duplicate", { name: item.name })
-      );
-      return;
-    }
-
-    await this.actor.createEmbeddedDocuments("Item", [item.toObject()]);
-    ui.notifications.info(game.i18n.format("CNS5.Skill.added", { name: item.name }));
-  }
-
-  /* -------------------------------------------- */
-
-  /**
+   * Write a skill level edited in the table back to its item.
    * @param {Event} event
    */
   async #onEditLevel(event) {
@@ -350,6 +298,13 @@ export class CnS5CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2)
     const item = this.actor.items.get(input.dataset.itemId);
     if (!item) return;
     await item.update({ "system.level": Math.max(0, Number(input.value) || 0) });
+  }
+
+  /* -------------------------------------------- */
+
+  /** @this {CnS5CharacterSheet} */
+  static #onOpenWizard() {
+    new CnS5CreationWizard(this.actor).render({ force: true });
   }
 
   /* -------------------------------------------- */
@@ -379,6 +334,29 @@ export class CnS5CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2)
   /* -------------------------------------------- */
 
   /** @this {CnS5CharacterSheet} */
+  static async #onRollWeapon(event, target) {
+    await this.actor.rollWeapon(target.dataset.itemId, { skipDialog: event.shiftKey });
+  }
+
+  /* -------------------------------------------- */
+
+  /** @this {CnS5CharacterSheet} */
+  static async #onRollSpell(event, target) {
+    await this.actor.rollSpell(target.dataset.itemId, target.dataset.range ?? "short", {
+      skipDialog: event.shiftKey
+    });
+  }
+
+  /* -------------------------------------------- */
+
+  /** @this {CnS5CharacterSheet} */
+  static async #onRollActOfFaith(event, target) {
+    await this.actor.rollActOfFaith(target.dataset.itemId, { skipDialog: event.shiftKey });
+  }
+
+  /* -------------------------------------------- */
+
+  /** @this {CnS5CharacterSheet} */
   static async #onCreateSkill(event, target) {
     const [item] = await this.actor.createEmbeddedDocuments("Item", [
       {
@@ -386,6 +364,22 @@ export class CnS5CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2)
         type: "skill",
         system: { kind: target.dataset.kind ?? "skill" }
       }
+    ]);
+    item?.sheet.render({ force: true });
+  }
+
+  /* -------------------------------------------- */
+
+  /**
+   * Create a blank item of the type named on the button and open it.
+   * @this {CnS5CharacterSheet}
+   */
+  static async #onCreateItem(event, target) {
+    const type = target.dataset.type;
+    if (!type) return;
+
+    const [item] = await this.actor.createEmbeddedDocuments("Item", [
+      { name: game.i18n.localize(`CNS5.Item.new.${type}`), type }
     ]);
     item?.sheet.render({ force: true });
   }
@@ -421,22 +415,6 @@ export class CnS5CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2)
 
   /* -------------------------------------------- */
 
-  /**
-   * Create a blank item of the type named on the button and open it.
-   * @this {CnS5CharacterSheet}
-   */
-  static async #onCreateItem(event, target) {
-    const type = target.dataset.type;
-    if (!type) return;
-
-    const [item] = await this.actor.createEmbeddedDocuments("Item", [
-      { name: game.i18n.localize(`CNS5.Item.new.${type}`), type }
-    ]);
-    item?.sheet.render({ force: true });
-  }
-
-  /* -------------------------------------------- */
-
   /** @this {CnS5CharacterSheet} */
   static async #onToggleEquipped(event, target) {
     const item = this.actor.items.get(target.dataset.itemId);
@@ -449,35 +427,5 @@ export class CnS5CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2)
   static async #onToggleCarried(event, target) {
     const item = this.actor.items.get(target.dataset.itemId);
     if (item) await item.update({ "system.carried": !item.system.carried });
-  }
-
-  /* -------------------------------------------- */
-
-  /** @this {CnS5CharacterSheet} */
-  static #onOpenWizard() {
-    new CnS5CreationWizard(this.actor).render({ force: true });
-  }
-
-  /* -------------------------------------------- */
-
-  /** @this {CnS5CharacterSheet} */
-  static async #onRollWeapon(event, target) {
-    await this.actor.rollWeapon(target.dataset.itemId, { skipDialog: event.shiftKey });
-  }
-
-  /* -------------------------------------------- */
-
-  /** @this {CnS5CharacterSheet} */
-  static async #onRollSpell(event, target) {
-    await this.actor.rollSpell(target.dataset.itemId, target.dataset.range ?? "short", {
-      skipDialog: event.shiftKey
-    });
-  }
-
-  /* -------------------------------------------- */
-
-  /** @this {CnS5CharacterSheet} */
-  static async #onRollActOfFaith(event, target) {
-    await this.actor.rollActOfFaith(target.dataset.itemId, { skipDialog: event.shiftKey });
   }
 }

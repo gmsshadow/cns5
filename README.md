@@ -1,6 +1,7 @@
 # Chivalry & Sorcery 5th Edition for Foundry VTT
 
-An unofficial system implementation targeting Foundry VTT v14.
+An unofficial system implementation targeting Foundry VTT v14, verified
+against 14.367.
 
 Chivalry & Sorcery and C&S are registered trademarks of Britannia Game Designs Ltd.
 This system ships no rules text, tables, or artwork from the published book.
@@ -355,6 +356,24 @@ now fixed:
 This is what the aids were worth: the skill and spell extractions came through
 untouched, and the weapons had two real faults that no amount of checking the
 book against itself had turned up.
+
+## Fixed after first run in Foundry
+
+- **The whole language file failed to load.** `CNS5.Creation.method` held a
+  string while `CNS5.Creation.method.random` needed it to be an object. Foundry
+  expands dotted keys into a nested tree before use, so the collision aborted
+  the load and every label on every sheet fell back to its raw key. The field
+  label is now `CNS5.Creation.methodLabel`, and `test/lang.test.mjs` fails the
+  build if any key is ever the prefix of another again.
+- **Dropping an item added it twice.** ActorSheetV2 already handles document
+  drops; the sheet had bound a second handler of its own. That binding is gone.
+  The rule that a character cannot hold the same skill twice moved to the Item
+  document's `_preCreate`, where it holds however the item arrives — by drag, by
+  macro, by import — rather than only through the sheet.
+- **The sheet would not scroll.** The window content is now a flex column with
+  the active tab as the scrolling region. The `min-height: 0` matters: without
+  it a flex child will not shrink below its content, so the tab grew past the
+  window instead of scrolling inside it.
 
 ## Errata found while implementing
 

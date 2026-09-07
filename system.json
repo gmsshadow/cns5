@@ -2,10 +2,10 @@
   "id": "cns5",
   "title": "Chivalry & Sorcery 5th Edition",
   "description": "An unofficial system implementation of Chivalry & Sorcery 5th Edition for Foundry Virtual Tabletop.",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "compatibility": {
     "minimum": "14",
-    "verified": "14.365"
+    "verified": "14.367"
   },
   "authors": [
     {

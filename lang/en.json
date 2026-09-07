@@ -478,7 +478,7 @@
   "CNS5.Creation.step.size": "Size",
   "CNS5.Creation.step.age": "Age & Experience",
   "CNS5.Creation.step.review": "Review",
-  "CNS5.Creation.method": "Method",
+  "CNS5.Creation.methodLabel": "Method",
   "CNS5.Creation.method.random": "Random",
   "CNS5.Creation.method.lionHeart": "Lion Heart",
   "CNS5.Creation.method.design": "Design",

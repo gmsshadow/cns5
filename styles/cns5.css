@@ -11,13 +11,18 @@
 .application.cns5 {
     --cns-vellum: #e7e1d2;
     --cns-vellum-light: #f2eee3;
-    --cns-ink: #2b2620;
-    --cns-ink-soft: #6c6355;
-    --cns-rule: #c4baa4;
-    --cns-lapis: #2a4b7c;
-    --cns-oxblood: #7a2e2a;
-    --cns-verdigris: #4a6f63;
-    --cns-gilt: #a8842c;
+    /* A warm tint for alternate rows, dark enough to read as banding and light
+       enough to keep text on it at full contrast. */
+    --cns-vellum-band: #dcd4c0;
+    --cns-ink: #241f19;
+    /* Secondary text still has to be readable at 11px on vellum, which the
+       older, lighter value was not. */
+    --cns-ink-soft: #554d3f;
+    --cns-rule: #b3a68c;
+    --cns-lapis: #21406e;
+    --cns-oxblood: #6d2723;
+    --cns-verdigris: #33564c;
+    --cns-gilt: #7d611b;
 
     --cns-serif: "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
 
@@ -73,6 +78,21 @@
     color: var(--cns-ink);
     font-family: var(--cns-serif);
     font-variant-numeric: tabular-nums;
+}
+
+/* Foundry styles tables with a dark head and dark banding of its own, which
+   turned this sheet's text to low-contrast grey-on-grey. Only the backgrounds
+   are cleared: resetting colour or border here would out-specify the rules
+   further down that set them deliberately, since a two-class selector beats a
+   one-class one however far below it appears. */
+.application.cns5 table,
+.application.cns5 thead,
+.application.cns5 tbody,
+.application.cns5 tfoot,
+.application.cns5 tr,
+.application.cns5 th,
+.application.cns5 td {
+    background: none;
 }
 
 .application.cns5 input:focus-visible,
@@ -138,7 +158,7 @@
 }
 
 .cns5-field > span {
-    font-size: 0.72rem;
+    font-size: 0.8rem;
     font-variant: small-caps;
     letter-spacing: 0.04em;
     color: var(--cns-ink-soft);
@@ -156,17 +176,32 @@
 }
 
 .application.cns5 nav.tabs .item {
-    padding: 0.25rem 0.6rem;
+    padding: 0.3rem 0.65rem;
+    font-size: 0.95rem;
     font-variant: small-caps;
     letter-spacing: 0.03em;
-    color: var(--cns-ink-soft);
+    color: var(--cns-ink);
     border-bottom: 2px solid transparent;
+    border-radius: 2px 2px 0 0;
     text-decoration: none;
+    text-shadow: none;
+    opacity: 1;
 }
 
+.application.cns5 nav.tabs .item:hover {
+    background: var(--cns-vellum-band);
+    color: var(--cns-lapis);
+    text-shadow: none;
+}
+
+/* The active tab is marked three ways — colour, weight and a filled ground —
+   so it reads at a glance without relying on the accent colour alone. */
 .application.cns5 nav.tabs .item.active {
     color: var(--cns-oxblood);
+    background: var(--cns-vellum-light);
+    font-weight: 600;
     border-bottom-color: var(--cns-oxblood);
+    text-shadow: none;
 }
 
 /* --------------------------------------------------------------------------
@@ -186,6 +221,8 @@
 
 .cns5-attributes__group caption {
     text-align: left;
+    font-size: 1rem;
+    font-weight: 600;
     font-variant: small-caps;
     letter-spacing: 0.05em;
     color: var(--cns-oxblood);
@@ -196,17 +233,21 @@
 
 .cns5-attributes__group th,
 .cns5-attributes__group td {
-    padding: 0.12rem 0.2rem;
+    padding: 0.18rem 0.25rem;
     text-align: right;
-    font-size: 0.82rem;
+    font-size: 0.9rem;
 }
 
 .cns5-attributes__group thead th {
-    font-size: 0.68rem;
-    font-weight: 400;
+    font-size: 0.75rem;
+    font-weight: 600;
     font-variant: small-caps;
     color: var(--cns-ink-soft);
     border-bottom: 1px solid var(--cns-rule);
+}
+
+.cns5-attributes__group tbody tr:nth-child(even) {
+    background: var(--cns-vellum-band);
 }
 
 .cns5-attributes__name,
@@ -242,12 +283,15 @@
     min-width: 1.6rem;
     text-align: center;
     color: var(--cns-verdigris);
-    font-weight: 600;
+    font-weight: 700;
+    font-size: 0.95rem;
 }
 
+/* AR% and PSF% are what the row is for, so they carry full ink rather than the
+   secondary tone used for labels. */
 .cns5-attributes__readout {
     font-variant-numeric: tabular-nums;
-    color: var(--cns-ink-soft);
+    color: var(--cns-ink);
 }
 
 /* The derived attributes take an innate aptitude modifier as their input, so
@@ -277,7 +321,8 @@
 .cns5-vitals__label {
     font-variant: small-caps;
     letter-spacing: 0.04em;
-    color: var(--cns-ink-soft);
+    font-size: 0.95rem;
+    color: var(--cns-ink);
 }
 
 .cns5-vitals__pair input {
@@ -286,7 +331,9 @@
 }
 
 .cns5-vitals__max {
-    color: var(--cns-ink-soft);
+    color: var(--cns-ink);
+    font-size: 0.95rem;
+    font-weight: 600;
     font-variant-numeric: tabular-nums;
 }
 
@@ -307,7 +354,7 @@
 }
 
 .cns5-derived dt {
-    font-size: 0.75rem;
+    font-size: 0.82rem;
     font-variant: small-caps;
     letter-spacing: 0.03em;
     color: var(--cns-ink-soft);
@@ -315,7 +362,10 @@
 
 .cns5-derived dd {
     margin: 0;
+    font-size: 0.95rem;
+    font-weight: 600;
     font-variant-numeric: tabular-nums;
+    color: var(--cns-ink);
 }
 
 .cns5-size {
@@ -326,7 +376,7 @@
 
 .cns5-size__note {
     margin: 0 0 0.15rem;
-    font-size: 0.75rem;
+    font-size: 0.85rem;
     color: var(--cns-ink-soft);
 }
 
@@ -353,7 +403,7 @@
 .cns5-stub p {
     margin: 0;
     color: var(--cns-ink-soft);
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     max-width: 60ch;
 }
 
@@ -500,8 +550,8 @@
 }
 
 .cns5-skills__heading {
-    margin: 0 0 0.2rem;
-    font-size: 0.85rem;
+    margin: 0 0 0.25rem;
+    font-size: 0.95rem;
     font-variant: small-caps;
     letter-spacing: 0.05em;
     color: var(--cns-oxblood);
@@ -512,19 +562,19 @@
 .cns5-skills__table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 0.82rem;
+    font-size: 0.9rem;
 }
 
 .cns5-skills__table th,
 .cns5-skills__table td {
-    padding: 0.1rem 0.25rem;
+    padding: 0.2rem 0.3rem;
     text-align: right;
     white-space: nowrap;
 }
 
 .cns5-skills__table thead th {
-    font-size: 0.68rem;
-    font-weight: 400;
+    font-size: 0.75rem;
+    font-weight: 600;
     font-variant: small-caps;
     color: var(--cns-ink-soft);
     border-bottom: 1px solid var(--cns-rule);
@@ -538,15 +588,16 @@
 }
 
 .cns5-skills__table tbody tr:nth-child(even) {
-    background: rgba(255, 255, 255, 0.35);
+    background: var(--cns-vellum-band);
 }
 
-/* An unskilled attempt is legal but penalised, so the row is dimmed rather
-   than hidden — the player can still roll it. */
+/* An unskilled attempt is legal but penalised, so the row is marked rather
+   than hidden — the player can still roll it. Italics carry that on their own;
+   dimming it as well pushed the text below a readable contrast. */
 .cns5-skills__table tbody tr.is-unskilled th,
 .cns5-skills__table tbody tr.is-unskilled td {
-    opacity: 0.6;
     font-style: italic;
+    color: var(--cns-ink-soft);
 }
 
 .cns5-skills__roll {
@@ -566,7 +617,7 @@
 }
 
 .cns5-skills__att {
-    font-size: 0.72rem;
+    font-size: 0.82rem;
     color: var(--cns-ink-soft);
     text-align: center;
 }
@@ -579,17 +630,17 @@
 
 .cns5-skills__readout {
     font-variant-numeric: tabular-nums;
-    color: var(--cns-ink-soft);
+    color: var(--cns-ink);
 }
 
 .cns5-skills__readout--total {
     color: var(--cns-ink);
-    font-weight: 600;
+    font-weight: 700;
 }
 
 .cns5-skills__crit {
-    font-size: 0.7rem;
-    font-weight: 400;
+    font-size: 0.78rem;
+    font-weight: 600;
     vertical-align: super;
 }
 
@@ -599,11 +650,13 @@
 .cns5-tag {
     display: inline-block;
     margin-left: 0.25rem;
-    padding: 0 0.2rem;
-    font-size: 0.62rem;
+    padding: 0 0.25rem;
+    font-size: 0.72rem;
+    font-weight: 600;
     border: 1px solid var(--cns-gilt);
     border-radius: 2px;
     color: var(--cns-gilt);
+    background: var(--cns-vellum-light);
     vertical-align: middle;
 }
 
@@ -613,10 +666,11 @@
 
 .application.cns5 .cns5-skills__controls button {
     width: auto;
-    padding: 0 0.2rem;
+    padding: 0 0.25rem;
     background: none;
     border: none;
     color: var(--cns-ink-soft);
+    font-size: 0.95rem;
     cursor: pointer;
 }
 
@@ -687,7 +741,7 @@
 
 .cns5-hint {
     margin: 0.3rem 0 0;
-    font-size: 0.75rem;
+    font-size: 0.85rem;
     color: var(--cns-ink-soft);
 }
 
@@ -799,16 +853,20 @@
 
 .cns5-skills__table tbody tr.cns5-total-row {
     background: none;
-    border-top: 1px solid var(--cns-rule);
+    border-top: 2px solid var(--cns-verdigris);
 }
 
+/* These are the figures a player reads mid-fight, so they are the largest and
+   heaviest thing in the table rather than the faintest. */
 .cns5-skills__table tbody tr.cns5-total-row th,
 .cns5-skills__table tbody tr.cns5-total-row td {
     font-variant: small-caps;
     letter-spacing: 0.03em;
-    font-weight: 600;
+    font-weight: 700;
+    font-size: 1rem;
     color: var(--cns-verdigris);
     font-variant-numeric: tabular-nums;
+    padding-top: 0.3rem;
 }
 
 .cns5-tag--warn {

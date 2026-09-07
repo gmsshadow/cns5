@@ -410,6 +410,21 @@ book against itself had turned up.
   a roll that looked as though it worked and always failed. Attempting an Act
   with no chance set now says so instead.
 
+- **The sheet was hard to read.** Foundry styles tables with a dark head and
+  dark banding of its own, which showed through and left several columns as grey
+  on grey. Those backgrounds are now cleared and the banding reapplied in the
+  sheet's own colours. The palette was darkened so that every ink clears 4.5:1
+  against all three grounds, secondary text was sized up from 11px, and the
+  figures a player actually reads mid-roll — attribute rolls, weapon totals,
+  armour absorption totals — are now the largest and heaviest thing in their
+  table rather than the faintest. `test/styles.test.mjs` holds the contrast
+  ratios so a later tweak to a colour cannot quietly undo it.
+
+  Worth noting for anyone editing the stylesheet: the reset clears backgrounds
+  only. Resetting colour or border there would out-specify the rules further
+  down that set them deliberately, because a two-class selector beats a
+  one-class one however far below it appears.
+
 ## Errata found while implementing
 
 The rulebook contradicts itself in three places. Where it does, the tables are

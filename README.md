@@ -7,7 +7,8 @@ This system ships no rules text, tables, or artwork from the published book.
 
 ## Build state
 
-Phase 5 of 5: the creation wizard, plus the spell compendium.
+Phase 5 of 5: the creation wizard, the spell compendium, and a cross-check
+of every dataset against the published player aids.
 
 | Phase | Scope | State |
 | --- | --- | --- |
@@ -236,7 +237,10 @@ description.
   casting time, range or duration. It ships flagged rather than filled in.
 - **Two spell prerequisites name no spell.** Dispel Illusions gives a condition
   where a spell name belongs, and Dispel Phantasmals asks for "Dispel Illusion"
-  where the spell is called Dispel Illusions.
+  where the spell is called Dispel Illusions. Player Aid 2 prints both exactly
+  the same way, so this is the rulebook's, not a misreading.
+- **Player Aid 1 drops a plus sign.** Short Swords is printed as `STR AGL`
+  where the book has `STR + AGL`. The book's reading is used.
 - **Three spells are listed twice.** Mist & Fog and Clouds & Rain appear under
   both Air and Water, and Detect Illusions under both Divination and Illusions
   with a different Magick Resistance in each. The group goes in the name to keep
@@ -318,6 +322,39 @@ them — Acrid Smoke, Sulphurous Fumes, Deadly Vapours and Sulphur & Brimstone a
 belong to Create Noxious Fumes. Each ships as a spell in its own right, since
 that is how it is cast, inheriting its parent's casting time, range and
 prerequisite.
+
+## Cross-checked against the player aids
+
+Player Aids 1, 2 and 3 reprint the skill, spell and weapon tables. Because they
+are typeset separately from the book, they make a genuinely independent source,
+and every dataset was diffed against them.
+
+- **Skills** — 248 rows in the aid, 248 extracted, no differences.
+- **Spells** — 313 in each. All 309 entries whose names could be compared match
+  field for field on Magick Resistance, Fatigue, casting time, range, duration
+  and prerequisite. The four that could not are names the aid's own font
+  encoding mangles.
+- **Weapons** — every row in the aid is now present, and the numeric fields
+  agree.
+
+The weapon comparison found two entries the extractor had been dropping, both
+now fixed:
+
+- **Knights Broadsword** was being read as a weapon type of "M Knights" and a
+  name of "Broadsword", because a long name right-aligns into its column and
+  began left of the boundary with the type column. The type column only ever
+  holds a code of three characters or fewer, so that boundary is now set from
+  the code's width rather than from the midpoint. There is no separate
+  "Broadsword" in the tables; the entry the extraction used to show under that
+  name was this one, misread.
+- **War Darts** print a dash where their damage belongs and were being rejected
+  for having no figure. Ammunition without its own damage now takes it from the
+  ranges table where that table lists it — which it does not for War Darts, so
+  this one entry ships with a damage of zero and the test names it.
+
+This is what the aids were worth: the skill and spell extractions came through
+untouched, and the weapons had two real faults that no amount of checking the
+book against itself had turned up.
 
 ## Errata found while implementing
 

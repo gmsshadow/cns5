@@ -58,9 +58,18 @@ def rows_of(page, upright_only=True):
 
 
 def boundaries(header_x):
-    """Midpoints between adjacent column header positions."""
+    """Midpoints between adjacent column header positions.
+
+    The first boundary is an exception. Weapon names are right-aligned into a
+    wide column, so a long one such as "Knights Broadsword" begins left of the
+    midpoint and its first word would be read as part of the type code. The type
+    column only ever holds a code of three characters or fewer, so the boundary
+    sits just right of it instead.
+    """
     xs = sorted(header_x)
-    return [(xs[i] + xs[i + 1]) / 2 for i in range(len(xs) - 1)]
+    bounds = [min(xs[0] + 16, (xs[0] + xs[1]) / 2)]
+    bounds += [(xs[i] + xs[i + 1]) / 2 for i in range(1, len(xs) - 1)]
+    return bounds
 
 
 def split_row(row, bounds):
@@ -129,9 +138,12 @@ def extract_weapons(pdf):
                 if name and not any(cells[i].strip() for i in (0, 3, 4)):
                     group = name
                 continue
-            # Footnote text sits below the table in the same columns; a real
-            # weapon name always begins with a capital.
+            # Footnote text sits below the table in the same columns and can
+            # look like a row. A real entry begins with a capital and carries
+            # either a date range or a dash in the Date in Use column.
             if not name or not name[0].isupper():
+                continue
+            if not re.search(r"\d{3}", cells[2]) and cells[2].strip() != "-":
                 continue
 
             entry = {
@@ -156,11 +168,14 @@ def extract_weapons(pdf):
             elif code in WEIGHT_CLASS:
                 # Ammunition. The missile table prints damage as a bare number,
                 # because a missile is always resisted by the Missile column of
-                # the armour table whatever its head is shaped like.
-                value = number(cells[6])
-                if value is None:
-                    continue
-                entry.update({"role": "ammunition", "baseDamage": value, "damageType": "missile"})
+                # the armour table whatever its head is shaped like. A few
+                # entries print a dash instead and give their damage only in the
+                # ranges table, which is joined on below.
+                entry.update({
+                    "role": "ammunition",
+                    "baseDamage": number(cells[6], 0),
+                    "damageType": "missile",
+                })
             else:
                 # A launcher. Its Base Damage column holds a bonus added to the
                 # missile it looses, not damage the bow itself deals.
@@ -449,6 +464,12 @@ if __name__ == "__main__":
         w["missile"] = True
         w["ranges"] = band["ranges"]
         w["rangeModifiers"] = band["rangeModifiers"]
+        # War Darts print a dash for damage in the weapon table and give the
+        # figure only here. This applies to ammunition alone: the Base Dmg
+        # column beside a bow is the arrow's damage, not the bow's.
+        if w["role"] == "ammunition" and not w["baseDamage"] and band["baseDamage"]:
+            w["baseDamage"] = band["baseDamage"]
+            w["damageFromRangeTable"] = True
 
     unmatched = sorted(set(ranges) - {normalise(m) for m in matched} -
                        {k for k in lookup if k in {normalise(m) for m in matched}})

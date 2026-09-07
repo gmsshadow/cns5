@@ -1,7 +1,7 @@
 {
   "source": "Chivalry & Sorcery 5th Edition core rules: melee weapons pp.255-256, missile weapons p257, missile ranges p258, armour absorption p260, armour pieces pp.261-263",
-  "note": "Mechanical data only; no description text is reproduced. Group headings are those printed in the tables — the bows and arrows block carries none. The Misc. Weapons table on p164 uses a different layout and is not extracted, which is why Dart, Hunting Javelin and Thrown Axe appear in the ranges table with no weapon entry.",
-  "weaponCount": 71,
+  "note": "Mechanical data only; no description text is reproduced. Cross-checked against Player Aid 3 (Weapons), which carries the same tables. Group headings are those printed in the tables — the bows and arrows block carries none. The Misc. Weapons table on p164 uses a different layout and is not extracted, which is why Dart, Hunting Javelin and Thrown Axe appear in the ranges table with no weapon entry.",
+  "weaponCount": 72,
   "armourCount": 27,
   "armourPieceCount": 29,
   "weapons": [
@@ -309,9 +309,9 @@
       "damageType": "slash"
     },
     {
-      "name": "Broadsword",
+      "name": "Knights Broadsword",
       "group": "Slashing Swords",
-      "typeCode": "",
+      "typeCode": "M",
       "weightClass": "medium",
       "dates": "1100-1500AD",
       "productionDays": 14,
@@ -1501,6 +1501,24 @@
         "extreme": -8,
         "max": -9
       }
+    },
+    {
+      "name": "War Darts",
+      "group": "Sling",
+      "typeCode": "L",
+      "weightClass": "light",
+      "dates": "350-625AD",
+      "productionDays": null,
+      "weight": 0,
+      "length": "18”",
+      "critDieModifier": 1,
+      "bash": 10,
+      "cost": 1,
+      "costNote": "",
+      "page": 257,
+      "role": "ammunition",
+      "baseDamage": 0,
+      "damageType": "missile"
     }
   ],
   "armour": [

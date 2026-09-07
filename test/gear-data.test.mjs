@@ -28,7 +28,7 @@ const ok = (label, got, want) => {
 /* -- Weapons --------------------------------------------------------------- */
 
 ok("weapon count matches header", weapons.length, raw.weaponCount);
-ok("weapon count", weapons.length, 71);
+ok("weapon count", weapons.length, 72);
 
 ok("every weapon has a name", weapons.filter((w) => !w.name?.trim()).length, 0);
 
@@ -56,6 +56,14 @@ ok(
   "melee weapons deal damage",
   weapons.filter((w) => w.role === "melee" && !(w.baseDamage > 0)).map((w) => w.name),
   []
+);
+
+/* War Darts print a dash where their damage belongs and are not listed in the
+   ranges table under that name, so the figure is nowhere to be had. */
+ok(
+  "ammunition without a damage figure",
+  weapons.filter((w) => w.role === "ammunition" && !(w.baseDamage > 0)).map((w) => w.name),
+  ["War Darts"]
 );
 ok(
   "launchers deal none themselves",

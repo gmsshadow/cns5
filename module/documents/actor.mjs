@@ -163,8 +163,13 @@ export class CnS5Actor extends Actor {
 
     const skill = weapon.system.skillItem;
     if (!skill) {
+      // Name the skill that is missing, or say plainly that none is set. The
+      // old message quoted an empty string, which read as nonsense.
+      const wanted = weapon.system.resolvedSkill || weapon.system.skill;
       ui.notifications.warn(
-        game.i18n.format("CNS5.Weapon.noSkill", { weapon: weapon.name, skill: weapon.system.skill })
+        wanted
+          ? game.i18n.format("CNS5.Weapon.noSkill", { weapon: weapon.name, skill: wanted })
+          : game.i18n.format("CNS5.Weapon.noSkillSet", { weapon: weapon.name })
       );
       return null;
     }

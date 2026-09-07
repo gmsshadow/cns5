@@ -134,9 +134,29 @@ def extract_weapons(pdf):
             has_data = bool(cells[2].strip() and cells[4].strip())
 
             if damage is None and not has_data:
-                # A centred name-only row is a group heading.
-                if name and not any(cells[i].strip() for i in (0, 3, 4)):
-                    group = name
+                # A group heading is a centred line with no figures on it. It is
+                # read from the whole row rather than from the name column,
+                # because a wide heading such as "Flails, Maces & Hammers"
+                # begins left of the name column and would otherwise be taken
+                # for a weapon type code.
+                heading = re.sub(r"\s+", " ", " ".join(w["text"] for w in row)).strip()
+                heading = re.sub(r"(?<=[a-z\)])[\d,]+$", "", heading).strip()
+                # A heading is centred over the type and name columns and never
+                # reaches the dated columns to their right, which is what tells
+                # it apart from a stray line of legend or footnote text.
+                centred = all(w["x0"] < bounds[1] for w in row)
+                if (
+                    heading
+                    and centred
+                    # Stray words from the legend running down the left margin
+                    # of p255 land in this column; a heading is a word, not an
+                    # abbreviation like "AP" broken off a sentence.
+                    and len(heading) >= 4
+                    and heading[0].isupper()
+                    and len(heading.split()) <= 6
+                    and not heading.startswith("Table")
+                ):
+                    group = heading
                 continue
             # Footnote text sits below the table in the same columns and can
             # look like a row. A real entry begins with a capital and carries

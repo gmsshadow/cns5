@@ -527,5 +527,6 @@
   "CNS5.Spell.mrNote": "MR is",
   "CNS5.Spell.fatigueNote": "Fatigue is",
   "CNS5.Spell.variableHint": "The rulebook prints a word rather than a number here: the cost varies with how hard the caster pushes, or follows the spell's own rules.",
-  "CNS5.Spell.rangeHint": "Short range is taken from the spell table. Long and maximum are yours to set; they cost -10% and -30% to target."
+  "CNS5.Spell.rangeHint": "Short range is taken from the spell table. Long and maximum are yours to set; they cost -10% and -30% to target.",
+  "CNS5.Weapon.noSkillSet": "{weapon} has no combat skill set. Open it and name the skill it is used with."
 }

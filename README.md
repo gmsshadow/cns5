@@ -375,6 +375,20 @@ book against itself had turned up.
   it a flex child will not shrink below its content, so the tab grew past the
   window instead of scrolling inside it.
 
+- **Compendium weapons could not be rolled.** Every weapon shipped with an
+  empty `skill` field, so attacking one reported that it needed a skill named
+  `""`. Weapons now resolve their combat skill from their group, with per-weapon
+  overrides where a group heading covers more than one skill: a Cavalry Flail
+  sits under "Flails, Maces & Hammers" but uses Flails, and a Throwing Knife
+  sits under Knives but uses Throwing Knives & Daggers. The mapping lives in the
+  system's config, so it also applies at runtime to weapons already dragged onto
+  a character before this fix.
+- **Two weapon group headings were being lost.** "Flails, Maces & Hammers" is
+  wide enough to begin left of the weapon type column and was read as a type
+  code rather than a heading, so seven weapons inherited "War Axes" from the
+  heading above. Headings are now read from the whole row and recognised by
+  being centred over the type and name columns without reaching the dated ones.
+
 ## Errata found while implementing
 
 The rulebook contradicts itself in three places. Where it does, the tables are

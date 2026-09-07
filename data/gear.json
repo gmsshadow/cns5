@@ -490,7 +490,7 @@
     },
     {
       "name": "Cavalry Flail",
-      "group": "War Axes",
+      "group": "Flails, Maces & Hammers",
       "typeCode": "M",
       "weightClass": "medium",
       "dates": "1230-1300AD",
@@ -508,7 +508,7 @@
     },
     {
       "name": "Military Flail",
-      "group": "War Axes",
+      "group": "Flails, Maces & Hammers",
       "typeCode": "2H",
       "weightClass": "twoHanded",
       "dates": "1375-1500AD",
@@ -526,7 +526,7 @@
     },
     {
       "name": "Dwarven Hammer",
-      "group": "War Axes",
+      "group": "Flails, Maces & Hammers",
       "typeCode": "M",
       "weightClass": "medium",
       "dates": "-",
@@ -544,7 +544,7 @@
     },
     {
       "name": "Dwarven Hammer",
-      "group": "War Axes",
+      "group": "Flails, Maces & Hammers",
       "typeCode": "2H",
       "weightClass": "twoHanded",
       "dates": "-",
@@ -562,7 +562,7 @@
     },
     {
       "name": "Warhammer",
-      "group": "War Axes",
+      "group": "Flails, Maces & Hammers",
       "typeCode": "M",
       "weightClass": "medium",
       "dates": "1000-1500AD",
@@ -580,7 +580,7 @@
     },
     {
       "name": "Mace",
-      "group": "War Axes",
+      "group": "Flails, Maces & Hammers",
       "typeCode": "M",
       "weightClass": "medium",
       "dates": "1000-1500AD",
@@ -598,7 +598,7 @@
     },
     {
       "name": "Maul, Sledge",
-      "group": "War Axes",
+      "group": "Flails, Maces & Hammers",
       "typeCode": "2H",
       "weightClass": "twoHanded",
       "dates": "-1500AD",

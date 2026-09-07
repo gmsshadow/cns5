@@ -763,3 +763,64 @@ CNS5.startingAge = [
 
 /** The default starting age band: eighteen years old with 5,000 experience. */
 CNS5.defaultAgeBand = CNS5.startingAge.find((b) => b.max === 60);
+
+/* -------------------------------------------- */
+/*  Weapons to combat skills                    */
+/* -------------------------------------------- */
+
+/**
+ * The combat skill each weapon group is used with.
+ *
+ * The weapon tables and the skill list group things differently, so the
+ * correspondence is written out rather than guessed at. Two groups need more
+ * than a group rule: "Flails, Maces & Hammers" is one heading covering two
+ * skills, and the Knives group holds both fighting knives and throwing ones.
+ */
+CNS5.weaponGroupSkills = {
+  "Cavalry Lances": "Cavalry Lances",
+  "Civilian Spears": "Spears",
+  "War Spears": "Spears",
+  Clubs: "Maces, Hammers & Clubs",
+  "Fighting Staves": "Fighting Staves",
+  "Flails, Maces & Hammers": "Maces, Hammers & Clubs",
+  "Great Swords": "Great Swords",
+  Knives: "Knife & Dagger Fighting",
+  Polearms: "Polearms",
+  Quiver: "Archery",
+  "Short Swords": "Short Swords",
+  "Slashing Swords": "Slashing Swords",
+  Sling: "Slings",
+  "War Axes": "Axes"
+};
+
+/** Weapons whose own name overrides their group's skill. */
+CNS5.weaponNameSkills = [
+  { pattern: /flail/i, skill: "Flails" },
+  { pattern: /throwing knives|throwing daggers/i, skill: "Throwing Knives & Daggers" },
+  { pattern: /javelin|pilum/i, skill: "Hurling Javelins" },
+  { pattern: /bow$|bow\b/i, skill: "Archery" },
+  { pattern: /crossbow/i, skill: "Archery" },
+  { pattern: /arrow|bolt/i, skill: "Archery" }
+];
+
+/**
+ * The combat skill a weapon is used with.
+ *
+ * Checked by name first, because a Cavalry Flail sits under a heading shared
+ * with maces and a Throwing Knife under one shared with fighting knives. Then
+ * by group, then by role, so a bow with no group at all still finds Archery.
+ *
+ * @param {object} weapon  a weapon's system data, plus its name
+ * @returns {string}
+ */
+CNS5.weaponSkill = function (weapon) {
+  const name = weapon.name ?? "";
+  const match = CNS5.weaponNameSkills.find((entry) => entry.pattern.test(name));
+  if (match) return match.skill;
+
+  const byGroup = CNS5.weaponGroupSkills[weapon.group];
+  if (byGroup) return byGroup;
+
+  if (weapon.role === "launcher" || weapon.role === "ammunition") return "Archery";
+  return "";
+};

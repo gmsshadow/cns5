@@ -28,6 +28,11 @@ const OUTPUT = path.join(ROOT, "packs");
 
 const ID_ALPHABET = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
+// The weapon-to-skill correspondence lives in the system's config so that the
+// same rule applies at runtime to a weapon that has no skill recorded.
+const { CNS5 } = await import(path.join(ROOT, "module", "config.mjs"));
+const weaponSkill = (weapon) => CNS5.weaponSkill(weapon);
+
 /**
  * A stable 16-character document id derived from a string.
  * @param {string} value
@@ -108,6 +113,7 @@ function toSkill(row) {
  */
 function toWeapon(row, name = row.name) {
   const blank = { short: 0, medium: 0, long: 0, extreme: 0, max: 0 };
+  const skill = weaponSkill({ name: row.name, group: row.group, role: row.role });
 
   return document("weapon", name, "icons/svg/sword.svg", {
     role: row.role,
@@ -122,7 +128,7 @@ function toWeapon(row, name = row.name) {
     group: row.group ?? "",
     dates: row.dates ?? "",
     productionDays: row.productionDays ?? null,
-    skill: "",
+    skill,
     missile: Boolean(row.missile),
     ranges: { ...blank, ...(row.ranges ?? {}) },
     rangeModifiers: { ...blank, ...(row.rangeModifiers ?? {}) },

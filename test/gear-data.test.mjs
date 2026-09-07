@@ -209,6 +209,49 @@ ok("140 lbs subtracts once", CNS5.armourWeightMultiplier(140), -1);
 ok("weight never goes negative", CNS5.armourWeightFor(1, 6, 80), 0);
 
 /* No description text is carried. */
+/* -- Weapons to combat skills ---------------------------------------------- */
+
+/* A weapon takes its success chance from a combat skill, so every one must
+   resolve to a skill that actually exists in the skill list. A typo here is
+   invisible until someone tries to attack with the thing. */
+const skills = JSON.parse(await readFile(path.join(ROOT, "data", "skills.json"), "utf8")).skills;
+const skillNames = new Set(skills.map((s) => s.name));
+
+const resolved = weapons.map((w) => ({
+  name: w.name,
+  skill: CNS5.weaponSkill({ name: w.name, group: w.group, role: w.role })
+}));
+
+ok("every weapon resolves to a skill", resolved.filter((r) => !r.skill).map((r) => r.name), []);
+ok(
+  "and every one of those skills exists",
+  resolved.filter((r) => !skillNames.has(r.skill)).map((r) => `${r.name} -> ${r.skill}`),
+  []
+);
+
+/* Spot checks on the cases the group rule alone gets wrong. */
+const skillOf = (name) => resolved.find((r) => r.name === name)?.skill;
+ok("a sword", skillOf("Knights Broadsword"), "Slashing Swords");
+ok("a flail is not a mace", skillOf("Military Flail"), "Flails");
+ok("but a warhammer is", skillOf("Warhammer"), "Maces, Hammers & Clubs");
+ok("a thrown knife is not a fighting knife", skillOf("Throwing Knives"), "Throwing Knives & Daggers");
+ok("but a dagger is", skillOf("Dagger"), "Knife & Dagger Fighting");
+ok("a javelin is hurled", skillOf("War Javelin"), "Hurling Javelins");
+ok("a bow", skillOf("Longbow"), "Archery");
+ok("its arrows too", skillOf("War Arrows"), "Archery");
+ok("a sling", skillOf("Shepherds"), "Slings");
+
+/* The group headings should match the ones printed in the tables. */
+ok(
+  "the weapon groups found",
+  [...new Set(weapons.map((w) => w.group).filter(Boolean))].sort(),
+  [
+    "Cavalry Lances", "Civilian Spears", "Clubs", "Fighting Staves",
+    "Flails, Maces & Hammers", "Great Swords", "Knives", "Polearms", "Quiver",
+    "Short Swords", "Slashing Swords", "Sling", "War Axes", "War Spears"
+  ]
+);
+
 ok("no description text is shipped", "description" in weapons[0], false);
 
 console.log(

@@ -133,7 +133,18 @@ export class CnS5ActorBase extends foundry.abstract.TypeDataModel {
 
     for (const item of this.parent.items) {
       if (item.type === "weapon") {
-        item.system.prepareForActor(this, skills.get(item.system.skill.toLowerCase()) ?? null);
+        // A weapon with no skill named on it falls back to the one its group
+        // implies, so a bow dragged in from the compendium is rollable without
+        // anyone having to type "Archery" into it first.
+        const wanted =
+          item.system.skill ||
+          CNS5.weaponSkill({
+            name: item.name,
+            group: item.system.group,
+            role: item.system.role
+          });
+        item.system.resolvedSkill = wanted;
+        item.system.prepareForActor(this, skills.get(wanted.toLowerCase()) ?? null);
         continue;
       }
       if (item.type !== "armour") continue;

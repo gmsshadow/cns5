@@ -58,7 +58,7 @@
 <label class="cns5-field">
     <span>{{localize "CNS5.Weapon.skill"}}</span>
     <input type="text" name="system.skill" value="{{system.skill}}"
-           placeholder="{{localize 'CNS5.Weapon.skillPlaceholder'}}"
+           placeholder="{{#if system.resolvedSkill}}{{system.resolvedSkill}}{{else}}{{localize 'CNS5.Weapon.skillPlaceholder'}}{{/if}}"
            {{#unless editable}}disabled{{/unless}}>
 </label>
 <p class="cns5-hint">{{localize "CNS5.Weapon.skillHint"}}</p>

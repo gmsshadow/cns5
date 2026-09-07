@@ -59,8 +59,20 @@ export class CnS5Character extends CnS5ActorBase {
     // Magick and Faith are entered by hand for now. Phase 4 derives PMF from the
     // Mode of Magick skill and PFF from the Faith skill, once skills exist.
     schema.magick = new fields.SchemaField({
-      pmf: new fields.NumberField({ required: true, integer: true, initial: 0, min: 0 }),
-      level: new fields.NumberField({ required: true, integer: true, initial: 0, min: 0 }),
+      tradition: new fields.StringField({
+        required: true,
+        initial: "none",
+        choices: Object.keys(CNS5.magickTraditions)
+      }),
+      // The name of the character's Mode of Magick skill. PMF derives from its
+      // PSF, so naming the skill is enough — the number follows.
+      mode: new fields.StringField({ required: true, blank: true, initial: "" }),
+      pmfOverride: new fields.NumberField({
+        required: false,
+        nullable: true,
+        integer: true,
+        initial: null
+      }),
       resistanceOverride: new fields.NumberField({
         required: false,
         nullable: true,
@@ -69,9 +81,29 @@ export class CnS5Character extends CnS5ActorBase {
       })
     });
 
+    // Coin is held as counts of each denomination rather than a single total,
+    // because a purse of 240 pennies and a purse of one pound weigh and spend
+    // differently at the table.
+    schema.currency = new fields.SchemaField(
+      Object.fromEntries(
+        Object.keys(CNS5.currency).map((key) => [
+          key,
+          new fields.NumberField({ required: true, integer: true, initial: 0, min: 0 })
+        ])
+      )
+    );
+
     schema.faith = new fields.SchemaField({
-      pff: new fields.NumberField({ required: true, integer: true, initial: 0 }),
-      religion: new fields.StringField({ required: true, blank: true, initial: "" })
+      // The Faith skill is one of the nine every character has, so PFF derives
+      // for everyone, cleric or not.
+      skill: new fields.StringField({ required: true, initial: "Faith" }),
+      baseSpirit: new fields.NumberField({ required: true, integer: true, initial: 0 }),
+      pffOverride: new fields.NumberField({
+        required: false,
+        nullable: true,
+        integer: true,
+        initial: null
+      })
     });
 
     return schema;
@@ -87,9 +119,92 @@ export class CnS5Character extends CnS5ActorBase {
 
     this.experience.available = this.experience.earned - this.experience.spent;
 
+    // A single farthing total makes comparisons and change trivial; the sheet
+    // still shows and edits the four denominations separately.
+    this.currency.totalFarthings = Object.entries(CNS5.currency).reduce(
+      (total, [key, coin]) => total + this.currency[key] * coin.inFarthings,
+      0
+    );
+
     this.magick.resistance =
       this.magick.resistanceOverride ?? CNS5.magickResistance[this.details.birthOmens] ?? 0;
 
     this.attributeMax = CNS5.attributeMaximum[this.details.characterType] ?? 20;
+
+    this.#prepareMagick();
+    this.#prepareFaith();
+    this.#prepareMystical();
+  }
+
+  /* -------------------------------------------- */
+
+  /**
+   * Personal Magick Factor and Magick Level.
+   *
+   * PMF is the PSF% in the character's Mode of Magick plus an aspect bonus that
+   * runs opposite ways for the two traditions: a mage benefits from being Well
+   * or Poorly Aspected, a priest-mage from being Neutral (p288).
+   */
+  #prepareMagick() {
+    const mode = this.parent.items.find(
+      (i) => i.type === "skill" && i.name.toLowerCase() === this.magick.mode.toLowerCase()
+    );
+
+    this.magick.modeItem = mode ?? null;
+    this.magick.modeMissing = Boolean(this.magick.mode) && !mode;
+    this.magick.aspectBonus = CNS5.magickAspectBonus(
+      this.details.birthOmens,
+      this.magick.tradition
+    );
+
+    const derived = mode ? mode.system.psf + this.magick.aspectBonus : 0;
+    this.magick.pmf = this.magick.pmfOverride ?? derived;
+    this.magick.level = this.magick.pmf > 0 ? CNS5.magickLevel(this.magick.pmf) : 0;
+
+    // Starting spell allowance: total levels in Modes of Magick times ML (p295).
+    const modeLevels = this.parent.items
+      .filter((i) => i.type === "skill" && /mode|magick/i.test(i.name))
+      .reduce((total, i) => total + i.system.level, 0);
+    this.magick.startingMR = modeLevels * this.magick.level;
+  }
+
+  /* -------------------------------------------- */
+
+  /**
+   * Personal Faith Factor: half the character's PSF% in Faith, plus base Spirit
+   * (worksheet, p145).
+   */
+  #prepareFaith() {
+    const skill = this.parent.items.find(
+      (i) => i.type === "skill" && i.name.toLowerCase() === this.faith.skill.toLowerCase()
+    );
+
+    this.faith.skillItem = skill ?? null;
+    this.faith.skillMissing = !skill;
+
+    const derived = skill ? Math.floor(skill.system.psf / 2) + this.faith.baseSpirit : 0;
+    this.faith.pff = this.faith.pffOverride ?? derived;
+  }
+
+  /* -------------------------------------------- */
+
+  /**
+   * Spells, Acts of Faith and religions all depend on figures computed above,
+   * so they are resolved last.
+   */
+  #prepareMystical() {
+    const skills = new Map(
+      this.parent.items
+        .filter((i) => i.type === "skill")
+        .map((i) => [i.name.toLowerCase(), i])
+    );
+
+    for (const item of this.parent.items) {
+      if (item.type === "spell") {
+        item.system.prepareForActor(this, skills.get(item.system.mode.toLowerCase()) ?? null);
+      } else if (item.type === "actOfFaith" || item.type === "religion") {
+        item.system.prepareForActor(this);
+      }
+    }
   }
 }

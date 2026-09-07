@@ -7,15 +7,15 @@ This system ships no rules text, tables, or artwork from the published book.
 
 ## Build state
 
-Phase 3 of 5: the generated skills compendium.
+Phase 4 of 5: the combat, chattel, magick and faith tabs.
 
 | Phase | Scope | State |
 | --- | --- | --- |
 | 1 | System skeleton, data models, attributes and derived stats | Done |
 | 2 | Skill item and the TSC%/Crit Die engine | Done |
 | 3 | Skill compendium generated from the rulebook tables | Done |
-| 4 | Remaining tabs: combat, chattel, magick, faith | Next |
-| 5 | Character creation wizard following the 19-step worksheet | |
+| 4 | Remaining tabs: combat, chattel, magick, faith | Done |
+| 5 | Character creation wizard following the 19-step worksheet | Next |
 
 ## What phase 1 gives you
 
@@ -111,6 +111,47 @@ name, Difficulty Factor, attribute pair, rulebook group and page reference.
 No description text is reproduced — the `description` field on every compendium
 entry is empty, and the page reference points the reader at the book.
 
+## What phase 4 adds
+
+All six tabs are now built. Six new item types back them.
+
+**Combat.** Weapons and armour on the Core & Combat tab. A weapon holds no
+success chance of its own: it names a combat skill and reads TSC% from it, so
+raising Slashing Swords by a level improves every slashing sword the character
+owns without touching any of them. Damage is base plus Strength bonus plus the
+Attacker's Bonus for the wielder's level, with the adjusted Crit Die added on a
+hit. Armour records absorption per damage type as the table prints it; worn
+protection and shield protection are totalled separately, because a shield only
+absorbs when its bearer wins an active defence.
+
+**Personal Chattel.** Coin in pounds, shillings, pence and farthings, and a
+live encumbrance readout. Anything carried counts against Carrying Capacity;
+going over costs a Fatigue Point per hour for every 20% over, and shortens the
+character's jump. Weapons and armour appear here as well as on the combat tab,
+because leaving a suit of maille out of the load total would make the figure
+meaningless.
+
+**Magick Grimoire.** Personal Magick Factor derives from the PSF% in the
+character's Mode of Magick plus an aspect bonus that runs opposite ways for the
+two traditions: a mage benefits from being Well or Poorly Aspected, a
+priest-mage from being Neutral. Magick Level follows from PMF. Each spell shows
+its targeting chance at short, long and maximum range, and each is clickable.
+
+**Faith.** Personal Faith Factor derives as half the PSF% in Faith plus base
+Spirit. Religions are items, so a character can hold more than one with its own
+standing. Acts of Faith are gated on PFF and roll against a flat success chance
+rather than a Difficulty Factor, so there is no band to clamp against.
+
+**Background & Social.** Character type, period, birth omens, nationality, star
+sign, liege and Influence Factor, plus biography and family notes.
+
+### Not yet included
+
+Weapon, armour and equipment catalogues are not shipped. The item types and the
+derivations are complete, but the tables on pp.256-263 have not been extracted
+the way the skills list was. That is the natural next content pass, and it uses
+the same tooling.
+
 ## Errata found while implementing
 
 The rulebook contradicts itself in three places. Where it does, the tables are
@@ -131,6 +172,12 @@ treated as authoritative over the worked examples and the character sheet.
   the description on p217 spells it correctly. The list is preserved as printed.
 - **p148, skills list.** Debate cites p232, which is the first page of The
   Marketplace. Its description ends on p231.
+- **p106 against p281, Strength damage bonus.** p106 derives it from the
+  Absolute Strength Rating — half, rounded up, for medium and heavier weapons;
+  a quarter, rounded down, for light. p281 gives it as the Strength attribute
+  divided by 2, or by 4 for light weapons. The two give close but different
+  numbers. A world setting picks between them, defaulting to the ASR reading,
+  since that is what the rating exists for.
 
 ## Verification
 
@@ -155,3 +202,9 @@ Both produced 248 entries with identical page and Difficulty Factor pairs.
 `test/skills-data.test.mjs` then checks the result structurally — every
 Difficulty Factor in the table, every attribute key real, every skill carrying
 either two attributes or an explanation for having none.
+
+Phase 4's derivations are checked against the Magick Levels worked example on
+p289 including the +7-per-level note above PMF 149, the Attacker's Bonus table
+including its banded rows and the 20+ row, the aspect bonus in both traditions,
+the encumbrance step at and either side of each 20% boundary, and the currency
+ratios.

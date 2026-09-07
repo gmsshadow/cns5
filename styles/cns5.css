@@ -720,3 +720,91 @@
     padding-top: 0.15rem;
     font-weight: 600;
 }
+
+/* --------------------------------------------------------------------------
+   Combat, chattel, magick and faith tabs
+   -------------------------------------------------------------------------- */
+
+.cns5-grid--five { grid-template-columns: repeat(5, 1fr); }
+
+.cns5-skills__heading {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+.application.cns5 button.cns5-add {
+    width: auto;
+    padding: 0 0.45rem;
+    background: none;
+    border: 1px solid var(--cns-rule);
+    border-radius: 2px;
+    font-family: var(--cns-serif);
+    font-size: 0.68rem;
+    font-variant: small-caps;
+    letter-spacing: 0.04em;
+    color: var(--cns-ink-soft);
+    cursor: pointer;
+}
+
+.application.cns5 button.cns5-add:hover {
+    border-color: var(--cns-lapis);
+    color: var(--cns-lapis);
+}
+
+/* A continuation row carrying detail for the row above it — missile ranges
+   under a bow, for instance. Indented and quiet so it reads as a footnote. */
+.cns5-skills__table tbody tr.cns5-subrow td {
+    padding-left: 1.2rem;
+    font-size: 0.72rem;
+    color: var(--cns-ink-soft);
+    text-align: left;
+    background: none;
+}
+
+.cns5-skills__table tbody tr.cns5-total-row {
+    background: none;
+    border-top: 1px solid var(--cns-rule);
+}
+
+.cns5-skills__table tbody tr.cns5-total-row th,
+.cns5-skills__table tbody tr.cns5-total-row td {
+    font-variant: small-caps;
+    letter-spacing: 0.03em;
+    font-weight: 600;
+    color: var(--cns-verdigris);
+    font-variant-numeric: tabular-nums;
+}
+
+.cns5-tag--warn {
+    border-color: var(--cns-oxblood);
+    color: var(--cns-oxblood);
+}
+
+.cns5-encumbrance {
+    padding: 0.5rem 0.6rem;
+    background: var(--cns-vellum-light);
+    border-left: 3px solid var(--cns-verdigris);
+}
+
+/* Overloading is a live penalty rather than a warning to dismiss, so the
+   marker stays on the panel for as long as the load does. */
+.cns5-encumbrance.is-overloaded {
+    border-left-color: var(--cns-oxblood);
+}
+
+.application.cns5 .cns5-skills__table button {
+    width: auto;
+}
+
+.cns5-check__damage {
+    margin: 0.35rem 0 0;
+    font-size: 0.95rem;
+}
+
+.cns5-check__cost {
+    margin: 0.15rem 0 0;
+    font-size: 0.78rem;
+    opacity: 0.75;
+}

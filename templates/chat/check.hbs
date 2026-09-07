@@ -17,6 +17,15 @@
 
     <p class="cns5-check__result">{{resultLabel}} &mdash; {{outcomeLabel}}</p>
 
+    {{#if damage}}
+    <p class="cns5-check__damage">
+        {{localize "CNS5.Roll.damage"}}: <strong>{{damage}}</strong> {{damageType}}
+    </p>
+    {{/if}}
+    {{#if cost}}
+    <p class="cns5-check__cost">{{cost}}</p>
+    {{/if}}
+
     {{#if breakdown}}
     <details class="cns5-check__breakdown" data-sync>
         <summary>{{localize "CNS5.Roll.breakdown"}}</summary>

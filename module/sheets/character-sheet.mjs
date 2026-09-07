@@ -25,8 +25,16 @@ export class CnS5CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2)
       rollSkill: CnS5CharacterSheet.#onRollSkill,
       createSkill: CnS5CharacterSheet.#onCreateSkill,
       addCoreSkills: CnS5CharacterSheet.#onAddCoreSkills,
-      editSkill: CnS5CharacterSheet.#onEditSkill,
-      deleteSkill: CnS5CharacterSheet.#onDeleteSkill
+      editSkill: CnS5CharacterSheet.#onEditItem,
+      deleteSkill: CnS5CharacterSheet.#onDeleteItem,
+      rollWeapon: CnS5CharacterSheet.#onRollWeapon,
+      rollSpell: CnS5CharacterSheet.#onRollSpell,
+      rollActOfFaith: CnS5CharacterSheet.#onRollActOfFaith,
+      createItem: CnS5CharacterSheet.#onCreateItem,
+      editItem: CnS5CharacterSheet.#onEditItem,
+      deleteItem: CnS5CharacterSheet.#onDeleteItem,
+      toggleEquipped: CnS5CharacterSheet.#onToggleEquipped,
+      toggleCarried: CnS5CharacterSheet.#onToggleCarried
     }
   };
 
@@ -40,26 +48,38 @@ export class CnS5CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2)
       template: "systems/cns5/templates/actor/parts/core-combat.hbs",
       scrollable: [""]
     },
-    background: { template: "systems/cns5/templates/actor/parts/stub.hbs" },
+    background: {
+      template: "systems/cns5/templates/actor/parts/background.hbs",
+      scrollable: [""]
+    },
     skills: {
       template: "systems/cns5/templates/actor/parts/skills.hbs",
       scrollable: [""]
     },
-    chattel: { template: "systems/cns5/templates/actor/parts/stub.hbs" },
-    magick: { template: "systems/cns5/templates/actor/parts/stub.hbs" },
-    faith: { template: "systems/cns5/templates/actor/parts/stub.hbs" }
+    chattel: {
+      template: "systems/cns5/templates/actor/parts/chattel.hbs",
+      scrollable: [""]
+    },
+    magick: {
+      template: "systems/cns5/templates/actor/parts/magick.hbs",
+      scrollable: [""]
+    },
+    faith: {
+      template: "systems/cns5/templates/actor/parts/faith.hbs",
+      scrollable: [""]
+    }
   };
 
   /* -------------------------------------------- */
 
   /** Tab definitions, in printed-sheet page order. */
   static TAB_DEFINITIONS = [
-    { id: "core", icon: "fa-solid fa-shield-halved", planned: null },
-    { id: "background", icon: "fa-solid fa-scroll", planned: "background" },
-    { id: "skills", icon: "fa-solid fa-list-check", planned: null },
-    { id: "chattel", icon: "fa-solid fa-sack-dollar", planned: "chattel" },
-    { id: "magick", icon: "fa-solid fa-hat-wizard", planned: "magick" },
-    { id: "faith", icon: "fa-solid fa-cross", planned: "faith" }
+    { id: "core", icon: "fa-solid fa-shield-halved" },
+    { id: "background", icon: "fa-solid fa-scroll" },
+    { id: "skills", icon: "fa-solid fa-list-check" },
+    { id: "chattel", icon: "fa-solid fa-sack-dollar" },
+    { id: "magick", icon: "fa-solid fa-hat-wizard" },
+    { id: "faith", icon: "fa-solid fa-cross" }
   ];
 
   /* -------------------------------------------- */
@@ -96,8 +116,83 @@ export class CnS5CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2)
     }));
 
     context.skillGroups = this.#getSkillGroups();
+    context.chattelGroups = this.#getChattelGroups();
+
+    const byName = (a, b) => a.name.localeCompare(b.name);
+    context.weapons = this.actor.items.filter((i) => i.type === "weapon").sort(byName);
+    context.armour = this.actor.items.filter((i) => i.type === "armour").sort(byName);
+    context.spells = this.actor.items.filter((i) => i.type === "spell").sort(byName);
+    context.acts = this.actor.items.filter((i) => i.type === "actOfFaith").sort(byName);
+
+    // Primary religion first, then the rest alphabetically.
+    context.religions = this.actor.items
+      .filter((i) => i.type === "religion")
+      .sort((a, b) => Number(b.system.primary) - Number(a.system.primary) || byName(a, b));
+
+    context.rangeKeys = Object.keys(CNS5.spellRanges);
+    context.spentMR = context.spells.reduce((total, s) => total + s.system.mr, 0);
+
+    context.currency = Object.entries(CNS5.currency).map(([key, coin]) => ({
+      key,
+      label: coin.label,
+      abbr: coin.abbr,
+      value: system.currency[key]
+    }));
+
+    context.characterTypes = this.#choices(CNS5.characterTypes, system.details.characterType);
+    context.periods = this.#choices(CNS5.periods, system.details.period);
+    context.birthOmens = this.#choices(CNS5.birthOmens, system.details.birthOmens);
+    context.traditions = this.#choices(CNS5.magickTraditions, system.magick.tradition);
+
+    const enrich = foundry.applications.ux.TextEditor.implementation.enrichHTML;
+    const enrichOptions = { relativeTo: this.actor, secrets: this.actor.isOwner };
+    context.biographyHTML = await enrich(system.biography, enrichOptions);
+    context.familyNotesHTML = await enrich(system.details.familyNotes, enrichOptions);
+
     context.tabs = this.#getTabs();
     return context;
+  }
+
+  /* -------------------------------------------- */
+
+  /**
+   * Turn a config map into select options, marking the current value.
+   * @param {object} source
+   * @param {string} selected
+   * @returns {Array<object>}
+   */
+  #choices(source, selected) {
+    return Object.entries(source).map(([value, entry]) => ({
+      value,
+      label: typeof entry === "string" ? entry : entry.label,
+      selected: value === selected
+    }));
+  }
+
+  /* -------------------------------------------- */
+
+  /**
+   * Group everything carried for the Personal Chattel tab.
+   *
+   * Weapons and armour appear here as well as on the combat tab. They are the
+   * same items either way, and leaving them out would make the encumbrance
+   * total look wrong: a suit of maille is most of what a knight is carrying.
+   *
+   * @returns {Array<object>}
+   */
+  #getChattelGroups() {
+    const byName = (a, b) => a.name.localeCompare(b.name);
+    const groups = [
+      { id: "equipment", label: "CNS5.Item.equipment", types: ["equipment"] },
+      { id: "arms", label: "CNS5.Item.arms", types: ["weapon", "armour"] }
+    ];
+
+    return groups
+      .map((group) => ({
+        ...group,
+        items: this.actor.items.filter((i) => group.types.includes(i.type)).sort(byName)
+      }))
+      .filter((group) => group.items.length);
   }
 
   /* -------------------------------------------- */
@@ -143,11 +238,7 @@ export class CnS5CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2)
 
   /** @override */
   async _preparePartContext(partId, context) {
-    if (partId in context.tabs) {
-      context.tab = context.tabs[partId];
-      const def = CnS5CharacterSheet.TAB_DEFINITIONS.find((t) => t.id === partId);
-      if (def?.planned) context.planned = `CNS5.Planned.${def.planned}`;
-    }
+    if (partId in context.tabs) context.tab = context.tabs[partId];
     return context;
   }
 
@@ -189,7 +280,7 @@ export class CnS5CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2)
     // Skill levels are edited inline in the table, so the name attribute cannot
     // address the embedded item through the sheet's own form. Route each change
     // to its item explicitly.
-    for (const input of this.element.querySelectorAll('[data-action="editLevel"]')) {
+    for (const input of this.element.querySelectorAll("[data-cns5-level]")) {
       input.addEventListener("change", this.#onEditLevel.bind(this));
     }
 
@@ -295,22 +386,77 @@ export class CnS5CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2)
   /* -------------------------------------------- */
 
   /** @this {CnS5CharacterSheet} */
-  static async #onEditSkill(event, target) {
+  static async #onEditItem(event, target) {
     this.actor.items.get(target.dataset.itemId)?.sheet.render({ force: true });
   }
 
   /* -------------------------------------------- */
 
   /** @this {CnS5CharacterSheet} */
-  static async #onDeleteSkill(event, target) {
+  static async #onDeleteItem(event, target) {
     const item = this.actor.items.get(target.dataset.itemId);
     if (!item) return;
 
     const confirmed = await DialogV2.confirm({
-      window: { title: game.i18n.localize("CNS5.Skill.delete") },
+      window: { title: game.i18n.localize("CNS5.Item.delete") },
       content: `<p>${game.i18n.format("CNS5.Skill.deleteConfirm", { name: item.name })}</p>`
     });
 
     if (confirmed) await item.delete();
+  }
+
+  /* -------------------------------------------- */
+
+  /**
+   * Create a blank item of the type named on the button and open it.
+   * @this {CnS5CharacterSheet}
+   */
+  static async #onCreateItem(event, target) {
+    const type = target.dataset.type;
+    if (!type) return;
+
+    const [item] = await this.actor.createEmbeddedDocuments("Item", [
+      { name: game.i18n.localize(`CNS5.Item.new.${type}`), type }
+    ]);
+    item?.sheet.render({ force: true });
+  }
+
+  /* -------------------------------------------- */
+
+  /** @this {CnS5CharacterSheet} */
+  static async #onToggleEquipped(event, target) {
+    const item = this.actor.items.get(target.dataset.itemId);
+    if (item) await item.update({ "system.equipped": !item.system.equipped });
+  }
+
+  /* -------------------------------------------- */
+
+  /** @this {CnS5CharacterSheet} */
+  static async #onToggleCarried(event, target) {
+    const item = this.actor.items.get(target.dataset.itemId);
+    if (item) await item.update({ "system.carried": !item.system.carried });
+  }
+
+  /* -------------------------------------------- */
+
+  /** @this {CnS5CharacterSheet} */
+  static async #onRollWeapon(event, target) {
+    await this.actor.rollWeapon(target.dataset.itemId, { skipDialog: event.shiftKey });
+  }
+
+  /* -------------------------------------------- */
+
+  /** @this {CnS5CharacterSheet} */
+  static async #onRollSpell(event, target) {
+    await this.actor.rollSpell(target.dataset.itemId, target.dataset.range ?? "short", {
+      skipDialog: event.shiftKey
+    });
+  }
+
+  /* -------------------------------------------- */
+
+  /** @this {CnS5CharacterSheet} */
+  static async #onRollActOfFaith(event, target) {
+    await this.actor.rollActOfFaith(target.dataset.itemId, { skipDialog: event.shiftKey });
   }
 }

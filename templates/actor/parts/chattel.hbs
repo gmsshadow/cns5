@@ -1,0 +1,78 @@
+<section class="tab {{tab.cssClass}}" data-tab="{{tab.id}}" data-group="{{tab.group}}">
+
+    <div class="cns5-experience">
+        {{#each currency as |coin|}}
+        <label class="cns5-field cns5-field--narrow">
+            <span>{{localize coin.label}} ({{coin.abbr}})</span>
+            <input type="number" name="system.currency.{{coin.key}}" value="{{coin.value}}" min="0"
+                   {{#unless @root.editable}}disabled{{/unless}}>
+        </label>
+        {{/each}}
+        <div class="cns5-experience__controls">
+            <button type="button" data-action="createItem" data-type="equipment">
+                {{localize "CNS5.Item.addEquipment"}}
+            </button>
+        </div>
+    </div>
+
+    <section class="cns5-encumbrance {{#if system.encumbrance.fatiguePerHour}}is-overloaded{{/if}}">
+        <dl class="cns5-derived">
+            <div><dt>{{localize "CNS5.Encumbrance.load"}}</dt><dd>{{system.encumbrance.load}} lb</dd></div>
+            <div><dt>{{localize "CNS5.Derived.ccap"}}</dt><dd>{{system.encumbrance.capacity}} lb</dd></div>
+            <div><dt>{{localize "CNS5.Encumbrance.percent"}}</dt><dd>{{system.encumbrance.percent}}%</dd></div>
+            <div><dt>{{localize "CNS5.Encumbrance.fatiguePerHour"}}</dt><dd>{{system.encumbrance.fatiguePerHour}}</dd></div>
+        </dl>
+        {{#if system.encumbrance.fatiguePerHour}}
+        <p class="cns5-hint cns5-hint--bad">{{localize "CNS5.Encumbrance.overloaded"}}</p>
+        {{/if}}
+        <p class="cns5-hint">{{localize "CNS5.Encumbrance.jumpNote"}} {{system.jumpLoaded}} ft</p>
+    </section>
+
+    {{#each chattelGroups as |group|}}
+    <section class="cns5-skills">
+        <h3 class="cns5-skills__heading">{{localize group.label}}</h3>
+        <table class="cns5-skills__table">
+            <thead>
+            <tr>
+                <th scope="col" class="cns5-skills__name">{{localize "CNS5.Item.item"}}</th>
+                <th scope="col">{{localize "CNS5.Item.qtyShort"}}</th>
+                <th scope="col">{{localize "CNS5.Item.weight"}}</th>
+                <th scope="col">{{localize "CNS5.Item.totalWeight"}}</th>
+                <th scope="col">{{localize "CNS5.Item.location"}}</th>
+                <th scope="col">{{localize "CNS5.Item.carriedFlag"}}</th>
+                <th scope="col"><span class="cns5-visually-hidden">{{localize "CNS5.Skill.controls"}}</span></th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#each group.items as |item|}}
+            <tr class="{{#unless item.system.carried}}is-unskilled{{/unless}}">
+                <th scope="row">
+                    <button type="button" class="cns5-skills__roll" data-action="editItem"
+                            data-item-id="{{item.id}}">{{item.name}}</button>
+                </th>
+                <td class="cns5-skills__readout">{{item.system.quantity}}</td>
+                <td class="cns5-skills__readout">{{item.system.weight}}</td>
+                <td class="cns5-skills__readout cns5-skills__readout--total">{{item.system.totalWeight}}</td>
+                <td class="cns5-skills__att">{{item.system.location}}</td>
+                <td class="cns5-skills__readout">
+                    <button type="button" data-action="toggleCarried" data-item-id="{{item.id}}"
+                            data-tooltip="{{localize 'CNS5.Item.toggleCarried'}}">
+                        <i class="fa-solid {{#if item.system.carried}}fa-check{{else}}fa-xmark{{/if}}"></i>
+                    </button>
+                </td>
+                <td class="cns5-skills__controls">
+                    <button type="button" data-action="deleteItem" data-item-id="{{item.id}}"
+                            data-tooltip="{{localize 'CNS5.Item.delete'}}">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+            {{/each}}
+            </tbody>
+        </table>
+    </section>
+    {{else}}
+    <div class="cns5-stub"><p>{{localize "CNS5.Item.empty"}}</p></div>
+    {{/each}}
+
+</section>

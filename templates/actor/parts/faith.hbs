@@ -1,0 +1,128 @@
+<section class="tab {{tab.cssClass}}" data-tab="{{tab.id}}" data-group="{{tab.group}}">
+
+    <div class="cns5-grid cns5-grid--three">
+        <label class="cns5-field">
+            <span>{{localize "CNS5.Faith.skill"}}</span>
+            <input type="text" name="system.faith.skill" value="{{system.faith.skill}}"
+                   {{#unless editable}}disabled{{/unless}}>
+        </label>
+        <label class="cns5-field">
+            <span>{{localize "CNS5.Faith.baseSpirit"}}</span>
+            <input type="number" name="system.faith.baseSpirit" value="{{system.faith.baseSpirit}}"
+                   {{#unless editable}}disabled{{/unless}}>
+        </label>
+        <label class="cns5-field">
+            <span>{{localize "CNS5.Faith.pffOverride"}}</span>
+            <input type="number" name="system.faith.pffOverride" value="{{system.faith.pffOverride}}"
+                   {{#unless editable}}disabled{{/unless}}>
+        </label>
+    </div>
+
+    {{#if system.faith.skillMissing}}
+    <p class="cns5-hint cns5-hint--bad">{{localize "CNS5.Faith.skillMissing"}}</p>
+    {{/if}}
+
+    <dl class="cns5-derived">
+        <div><dt>{{localize "CNS5.Derived.faithFactor"}}</dt><dd>{{system.faith.pff}}</dd></div>
+        <div><dt>{{localize "CNS5.Vitals.spirit"}}</dt><dd>{{system.spirit.value}} / {{system.attr.spr.value}}</dd></div>
+    </dl>
+
+    <section class="cns5-skills">
+        <h3 class="cns5-skills__heading">
+            {{localize "CNS5.Faith.religions"}}
+            <button type="button" class="cns5-add" data-action="createItem" data-type="religion">
+                {{localize "CNS5.Item.addReligion"}}
+            </button>
+        </h3>
+        {{#if religions.length}}
+        <table class="cns5-skills__table">
+            <thead>
+            <tr>
+                <th scope="col" class="cns5-skills__name">{{localize "CNS5.Faith.religion"}}</th>
+                <th scope="col">{{localize "CNS5.Faith.beliefStatus"}}</th>
+                <th scope="col">{{localize "CNS5.Faith.pffShort"}}</th>
+                <th scope="col">{{localize "CNS5.Vitals.spirit"}}</th>
+                <th scope="col"><span class="cns5-visually-hidden">{{localize "CNS5.Skill.controls"}}</span></th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#each religions as |religion|}}
+            <tr>
+                <th scope="row">
+                    <button type="button" class="cns5-skills__roll" data-action="editItem"
+                            data-item-id="{{religion.id}}">{{religion.name}}</button>
+                    {{#if religion.system.primary}}
+                    <span class="cns5-tag" data-tooltip="{{localize 'CNS5.Faith.primary'}}">P</span>
+                    {{/if}}
+                </th>
+                <td class="cns5-skills__att">{{religion.system.beliefStatus}}</td>
+                <td class="cns5-skills__readout cns5-skills__readout--total">{{religion.system.pff}}</td>
+                <td class="cns5-skills__readout">{{religion.system.spirit}}</td>
+                <td class="cns5-skills__controls">
+                    <button type="button" data-action="deleteItem" data-item-id="{{religion.id}}"
+                            data-tooltip="{{localize 'CNS5.Item.delete'}}">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+            {{/each}}
+            </tbody>
+        </table>
+        {{else}}
+        <p class="cns5-hint">{{localize "CNS5.Faith.noReligions"}}</p>
+        {{/if}}
+    </section>
+
+    <section class="cns5-skills">
+        <h3 class="cns5-skills__heading">
+            {{localize "CNS5.Faith.acts"}}
+            <button type="button" class="cns5-add" data-action="createItem" data-type="actOfFaith">
+                {{localize "CNS5.Item.addAct"}}
+            </button>
+        </h3>
+        {{#if acts.length}}
+        <table class="cns5-skills__table">
+            <thead>
+            <tr>
+                <th scope="col" class="cns5-skills__name">{{localize "CNS5.Faith.act"}}</th>
+                <th scope="col">{{localize "CNS5.Faith.pffMinShort"}}</th>
+                <th scope="col">{{localize "CNS5.Faith.successShort"}}</th>
+                <th scope="col">{{localize "CNS5.Spell.fpShort"}}</th>
+                <th scope="col">{{localize "CNS5.Spell.apShort"}}</th>
+                <th scope="col"><span class="cns5-visually-hidden">{{localize "CNS5.Skill.controls"}}</span></th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#each acts as |act|}}
+            <tr class="{{#unless act.system.available}}is-unskilled{{/unless}}">
+                <th scope="row">
+                    <button type="button" class="cns5-skills__roll" data-action="rollActOfFaith"
+                            data-item-id="{{act.id}}"
+                            data-tooltip="{{localize 'CNS5.Roll.faithTooltip'}}">
+                        {{act.name}}
+                    </button>
+                </th>
+                <td class="cns5-skills__readout">{{act.system.pffMinimum}}</td>
+                <td class="cns5-skills__readout cns5-skills__readout--total">{{cns5Percent act.system.successChance}}</td>
+                <td class="cns5-skills__readout">{{act.system.fpCost}}</td>
+                <td class="cns5-skills__readout">{{act.system.apToPray}}</td>
+                <td class="cns5-skills__controls">
+                    <button type="button" data-action="editItem" data-item-id="{{act.id}}"
+                            data-tooltip="{{localize 'CNS5.Item.edit'}}">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                    </button>
+                    <button type="button" data-action="deleteItem" data-item-id="{{act.id}}"
+                            data-tooltip="{{localize 'CNS5.Item.delete'}}">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+            {{/each}}
+            </tbody>
+        </table>
+        {{else}}
+        <p class="cns5-hint">{{localize "CNS5.Faith.noActs"}}</p>
+        {{/if}}
+    </section>
+
+</section>

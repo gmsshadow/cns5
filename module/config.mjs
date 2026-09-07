@@ -285,3 +285,151 @@ CNS5.magickResistance = {
   neutral: 10,
   poor: 0
 };
+
+/* -------------------------------------------- */
+/*  Combat                                      */
+/* -------------------------------------------- */
+
+/**
+ * Weapon weight classes (p282). Weight sets the attack rate and the damage
+ * bonus; the damage type sets which armour absorption value applies.
+ */
+CNS5.weaponWeights = {
+  naturalLight: { label: "CNS5.WeaponWeight.naturalLight", column: 0, light: true },
+  light: { label: "CNS5.WeaponWeight.light", column: 1, light: true },
+  medium: { label: "CNS5.WeaponWeight.medium", column: 2, light: false },
+  heavy: { label: "CNS5.WeaponWeight.heavy", column: 3, light: false },
+  twoHanded: { label: "CNS5.WeaponWeight.twoHanded", column: 4, light: false }
+};
+
+/** Damage types, matching the armour absorption columns. */
+CNS5.damageTypes = {
+  slash: "CNS5.DamageType.slash",
+  crush: "CNS5.DamageType.crush",
+  pierce: "CNS5.DamageType.pierce",
+  missile: "CNS5.DamageType.missile",
+  energy: "CNS5.DamageType.energy"
+};
+
+/**
+ * Table - Attacker's Bonus (p282). Rows are skill level bands, columns are the
+ * five weapon weight classes in the order given by `weaponWeights`.
+ *
+ * The table starts at Level 1. A character with only basic knowledge (Level 0)
+ * gets no attacker's bonus.
+ */
+CNS5.attackerBonusTable = [
+  { max: 0, bonus: [0, 0, 0, 0, 0] },
+  { max: 1, bonus: [0, 1, 1, 2, 2] },
+  { max: 2, bonus: [0, 1, 2, 2, 2] },
+  { max: 4, bonus: [0, 1, 2, 3, 3] },
+  { max: 5, bonus: [0, 1, 2, 3, 3] },
+  { max: 6, bonus: [1, 1, 3, 3, 4] },
+  { max: 7, bonus: [1, 2, 3, 4, 4] },
+  { max: 9, bonus: [1, 2, 3, 4, 5] },
+  { max: 10, bonus: [1, 2, 3, 4, 5] },
+  { max: 11, bonus: [1, 2, 4, 5, 6] },
+  { max: 12, bonus: [2, 3, 4, 5, 6] },
+  { max: 14, bonus: [2, 3, 4, 5, 6] },
+  { max: 15, bonus: [2, 3, 5, 6, 7] },
+  { max: 16, bonus: [2, 3, 5, 6, 7] },
+  { max: 17, bonus: [2, 4, 6, 7, 7] },
+  { max: 19, bonus: [2, 4, 6, 7, 8] },
+  { max: Infinity, bonus: [3, 5, 7, 8, 8] }
+];
+
+/**
+ * The Attacker's Bonus for a skill level and weapon weight.
+ * @param {number} level
+ * @param {string} weight  a key of CNS5.weaponWeights
+ * @returns {number}
+ */
+CNS5.attackerBonus = function (level, weight) {
+  const column = CNS5.weaponWeights[weight]?.column ?? 2;
+  const row = CNS5.attackerBonusTable.find((r) => (Number(level) || 0) <= r.max);
+  return row.bonus[column];
+};
+
+/** Armour weight classes (p260). Heavy and Battle require their own skills. */
+CNS5.armourWeights = {
+  none: { label: "CNS5.ArmourWeight.none", thiefPenalty: 0 },
+  light: { label: "CNS5.ArmourWeight.light", thiefPenalty: 0 },
+  heavy: { label: "CNS5.ArmourWeight.heavy", thiefPenalty: -10 },
+  battle: { label: "CNS5.ArmourWeight.battle", thiefPenalty: -20 }
+};
+
+/** Where a piece of armour sits. Shields absorb separately from worn armour. */
+CNS5.armourLocations = {
+  body: "CNS5.ArmourLocation.body",
+  head: "CNS5.ArmourLocation.head",
+  limbs: "CNS5.ArmourLocation.limbs",
+  shield: "CNS5.ArmourLocation.shield"
+};
+
+/**
+ * Dodge is penalised by armour weight (p280).
+ */
+CNS5.dodgePenalty = { none: 0, light: 0, heavy: -10, battle: -20 };
+
+/* -------------------------------------------- */
+/*  Encumbrance                                 */
+/* -------------------------------------------- */
+
+/**
+ * Exceeding Carrying Capacity costs 1 Fatigue Point per hour for every 20% of
+ * CCAP the load is over (p111). The printed sheet stops at +100%; the rule is
+ * open-ended, so the derivation computes it rather than reading a table.
+ */
+CNS5.encumbranceStep = 0.2;
+
+/* -------------------------------------------- */
+/*  Currency                                    */
+/* -------------------------------------------- */
+
+/** Pounds, shillings, pence and farthings. 1£ = 20s = 240d, 1d = 4f. */
+CNS5.currency = {
+  pounds: { label: "CNS5.Currency.pounds", abbr: "£", inFarthings: 960 },
+  shillings: { label: "CNS5.Currency.shillings", abbr: "s", inFarthings: 48 },
+  pence: { label: "CNS5.Currency.pence", abbr: "d", inFarthings: 4 },
+  farthings: { label: "CNS5.Currency.farthings", abbr: "f", inFarthings: 1 }
+};
+
+/* -------------------------------------------- */
+/*  Magick                                      */
+/* -------------------------------------------- */
+
+/**
+ * Table - Magick Levels (p289). ML 1 up to PMF 51, then one level per 7 points.
+ * @param {number} pmf
+ * @returns {number}
+ */
+CNS5.magickLevel = function (pmf) {
+  const p = Number(pmf) || 0;
+  if (p <= 51) return 1;
+  return 1 + Math.ceil((p - 51) / 7);
+};
+
+/**
+ * The aspect bonus to Personal Magick Factor (worksheet, p288).
+ * A mage gains +10 when Well or Poorly Aspected; a priest-mage gains +10 when
+ * Neutral. The two are mirror images, which is the point: the same birth omens
+ * help one tradition and not the other.
+ */
+CNS5.magickAspectBonus = function (omens, tradition) {
+  if (tradition === "priestMage") return omens === "neutral" ? 10 : 0;
+  return omens === "neutral" ? 0 : 10;
+};
+
+CNS5.magickTraditions = {
+  none: "CNS5.Tradition.none",
+  mage: "CNS5.Tradition.mage",
+  priestMage: "CNS5.Tradition.priestMage",
+  cleric: "CNS5.Tradition.cleric"
+};
+
+/** Spell range bands and their targeting penalties (character sheet, p599). */
+CNS5.spellRanges = {
+  short: { label: "CNS5.SpellRange.short", modifier: 0 },
+  long: { label: "CNS5.SpellRange.long", modifier: -10 },
+  max: { label: "CNS5.SpellRange.max", modifier: -30 }
+};

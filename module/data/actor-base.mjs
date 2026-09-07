@@ -84,6 +84,8 @@ export class CnS5ActorBase extends foundry.abstract.TypeDataModel {
     this.#prepareVitals();
     this.#prepareCapacities();
     this.#prepareSkills();
+    this.#prepareCombat();
+    this.#prepareEncumbrance();
   }
 
   /* -------------------------------------------- */
@@ -100,6 +102,91 @@ export class CnS5ActorBase extends foundry.abstract.TypeDataModel {
     for (const item of this.parent.items) {
       if (item.type === "skill") item.system.prepareForActor(this);
     }
+  }
+
+  /* -------------------------------------------- */
+
+  /**
+   * Resolve weapons against their combat skills, and total the protection from
+   * everything currently worn.
+   *
+   * Shields are summed separately because they are interposed by an active
+   * defence rather than worn: a shield only absorbs when the defender succeeds
+   * at a shield block, so adding it to worn protection would overstate it.
+   */
+  #prepareCombat() {
+    const skills = new Map(
+      this.parent.items
+        .filter((i) => i.type === "skill")
+        .map((i) => [i.name.toLowerCase(), i])
+    );
+
+    const zero = () => Object.fromEntries(Object.keys(CNS5.damageTypes).map((k) => [k, 0]));
+    this.protection = zero();
+    this.shieldProtection = zero();
+    this.armourWeight = "none";
+    this.dodgePenalty = 0;
+    this.fatigueToWear = 0;
+
+    let heaviest = 0;
+    const order = ["none", "light", "heavy", "battle"];
+
+    for (const item of this.parent.items) {
+      if (item.type === "weapon") {
+        item.system.prepareForActor(this, skills.get(item.system.skill.toLowerCase()) ?? null);
+        continue;
+      }
+      if (item.type !== "armour" || !item.system.equipped) continue;
+
+      const target = item.system.location === "shield" ? this.shieldProtection : this.protection;
+      for (const key of Object.keys(CNS5.damageTypes)) {
+        target[key] += item.system.absorption[key];
+      }
+
+      if (item.system.location === "shield") continue;
+      this.fatigueToWear += item.system.fpToWear;
+      const rank = order.indexOf(item.system.weightClass);
+      if (rank > heaviest) {
+        heaviest = rank;
+        this.armourWeight = item.system.weightClass;
+      }
+    }
+
+    this.dodgePenalty = CNS5.dodgePenalty[this.armourWeight] ?? 0;
+    this.thiefPenalty = CNS5.armourWeights[this.armourWeight]?.thiefPenalty ?? 0;
+  }
+
+  /* -------------------------------------------- */
+
+  /**
+   * Total what is carried and work out the Fatigue cost of carrying it.
+   *
+   * Exceeding Carrying Capacity costs 1 Fatigue Point per hour for every 20% of
+   * CCAP the load is over, rounded up (p111). The printed sheet tabulates this
+   * to +100%; the rule itself has no ceiling, so this computes it.
+   */
+  #prepareEncumbrance() {
+    const carried = this.parent.items.filter(
+      (i) => i.system.carried && Number.isFinite(i.system.totalWeight)
+    );
+
+    const load = carried.reduce((total, i) => total + i.system.totalWeight, 0);
+    const over = Math.max(0, load - this.ccap);
+
+    this.encumbrance = {
+      load: Math.round(load * 100) / 100,
+      capacity: this.ccap,
+      over: Math.round(over * 100) / 100,
+      // Percentage of CCAP the load represents, for the sheet's load bar.
+      percent: this.ccap > 0 ? Math.round((load / this.ccap) * 100) : 0,
+      fatiguePerHour:
+        over > 0 && this.ccap > 0
+          ? Math.ceil(over / (CNS5.encumbranceStep * this.ccap))
+          : 0
+    };
+
+    // A load also shortens a jump: -1 foot per 10% of CCAP carried (p113).
+    this.jumpLoaded = Math.max(0, this.jump - Math.ceil(this.encumbrance.percent / 10));
   }
 
   /* -------------------------------------------- */
@@ -171,10 +258,13 @@ export class CnS5ActorBase extends foundry.abstract.TypeDataModel {
     this.lcap = 5 + Math.floor((CNS5.liftingPercent(str) / 100) * this.size.weight);
     this.ccap = Math.ceil(this.lcap / 2);
     this.asr = Math.floor(Math.sqrt(this.lcap));
-    this.damageBonus = {
-      medium: Math.ceil(this.asr / 2),
-      light: Math.floor(this.asr / 4)
-    };
+
+    // p106 derives the Strength damage bonus from the Absolute Strength Rating,
+    // p281 from the Strength attribute. See the strengthDamageSource setting.
+    this.damageBonus =
+      game.settings.get("cns5", "strengthDamageSource") === "attribute"
+        ? { medium: Math.floor(str / 2), light: Math.floor(str / 4) }
+        : { medium: Math.ceil(this.asr / 2), light: Math.floor(this.asr / 4) };
 
     this.jump = Math.ceil((str + agl) / 4) + (this.jumpModifier ?? 0);
 

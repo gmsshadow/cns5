@@ -1,0 +1,60 @@
+<form class="cns5-skill-sheet">
+
+    <header class="cns5-header">
+        <img class="cns5-header__portrait cns5-header__portrait--small" src="{{document.img}}"
+             data-edit="img" data-action="editImage" alt="{{document.name}}">
+        <div class="cns5-header__fields">
+            <input class="cns5-header__name" type="text" name="name" value="{{document.name}}"
+                   {{#unless editable}}disabled{{/unless}}>
+        </div>
+    </header>
+
+    {{#if bodyTemplate}}{{> (lookup . 'bodyTemplate')}}{{/if}}
+
+    {{#if isPhysical}}
+    <fieldset class="cns5-fieldset">
+        <legend>{{localize "CNS5.Item.carried"}}</legend>
+        <div class="cns5-grid cns5-grid--four">
+            <label class="cns5-field">
+                <span>{{localize "CNS5.Item.quantity"}}</span>
+                <input type="number" name="system.quantity" value="{{system.quantity}}" min="0"
+                       {{#unless editable}}disabled{{/unless}}>
+            </label>
+            <label class="cns5-field">
+                <span>{{localize "CNS5.Item.weight"}}</span>
+                <input type="number" step="0.1" name="system.weight" value="{{system.weight}}" min="0"
+                       {{#unless editable}}disabled{{/unless}}>
+            </label>
+            <label class="cns5-field">
+                <span>{{localize "CNS5.Item.cost"}}</span>
+                <input type="number" name="system.cost" value="{{system.cost}}" min="0"
+                       {{#unless editable}}disabled{{/unless}}>
+            </label>
+            <label class="cns5-field">
+                <span>{{localize "CNS5.Item.reference"}}</span>
+                <input type="text" name="system.reference" value="{{system.reference}}"
+                       {{#unless editable}}disabled{{/unless}}>
+            </label>
+        </div>
+        <div class="cns5-checks">
+            <label class="cns5-check">
+                <input type="checkbox" name="system.carried" {{checked system.carried}}
+                       {{#unless editable}}disabled{{/unless}}>
+                <span>{{localize "CNS5.Item.carriedFlag"}}</span>
+            </label>
+            <label class="cns5-check">
+                <input type="checkbox" name="system.equipped" {{checked system.equipped}}
+                       {{#unless editable}}disabled{{/unless}}>
+                <span>{{localize "CNS5.Item.equipped"}}</span>
+            </label>
+        </div>
+    </fieldset>
+    {{/if}}
+
+    <fieldset class="cns5-fieldset">
+        <legend>{{localize "CNS5.Skill.description"}}</legend>
+        {{formInput fields.description value=system.description enriched=descriptionHTML
+                    toggled=true disabled=(not editable)}}
+    </fieldset>
+
+</form>

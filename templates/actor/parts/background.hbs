@@ -1,0 +1,83 @@
+<section class="tab {{tab.cssClass}}" data-tab="{{tab.id}}" data-group="{{tab.group}}">
+
+    <div class="cns5-grid cns5-grid--three">
+        <label class="cns5-field">
+            <span>{{localize "CNS5.Details.characterType"}}</span>
+            <select name="system.details.characterType" {{#unless editable}}disabled{{/unless}}>
+                {{#each characterTypes}}
+                <option value="{{value}}" {{#if selected}}selected{{/if}}>{{localize label}}</option>
+                {{/each}}
+            </select>
+        </label>
+        <label class="cns5-field">
+            <span>{{localize "CNS5.Details.period"}}</span>
+            <select name="system.details.period" {{#unless editable}}disabled{{/unless}}>
+                {{#each periods}}
+                <option value="{{value}}" {{#if selected}}selected{{/if}}>{{localize label}}</option>
+                {{/each}}
+            </select>
+        </label>
+        <label class="cns5-field">
+            <span>{{localize "CNS5.Details.birthOmens"}}</span>
+            <select name="system.details.birthOmens" {{#unless editable}}disabled{{/unless}}>
+                {{#each birthOmens}}
+                <option value="{{value}}" {{#if selected}}selected{{/if}}>{{localize label}}</option>
+                {{/each}}
+            </select>
+        </label>
+    </div>
+
+    <div class="cns5-grid cns5-grid--three">
+        <label class="cns5-field">
+            <span>{{localize "CNS5.Details.gender"}}</span>
+            <input type="text" name="system.details.gender" value="{{system.details.gender}}"
+                   {{#unless editable}}disabled{{/unless}}>
+        </label>
+        <label class="cns5-field">
+            <span>{{localize "CNS5.Details.nationality"}}</span>
+            <input type="text" name="system.details.nationality" value="{{system.details.nationality}}"
+                   {{#unless editable}}disabled{{/unless}}>
+        </label>
+        <label class="cns5-field">
+            <span>{{localize "CNS5.Details.starSign"}}</span>
+            <input type="text" name="system.details.starSign" value="{{system.details.starSign}}"
+                   {{#unless editable}}disabled{{/unless}}>
+        </label>
+    </div>
+
+    <div class="cns5-grid cns5-grid--three">
+        <label class="cns5-field">
+            <span>{{localize "CNS5.Details.familyStatus"}}</span>
+            <input type="text" name="system.details.familyStatus" value="{{system.details.familyStatus}}"
+                   {{#unless editable}}disabled{{/unless}}>
+        </label>
+        <label class="cns5-field">
+            <span>{{localize "CNS5.Details.liege"}}</span>
+            <input type="text" name="system.details.liege" value="{{system.details.liege}}"
+                   {{#unless editable}}disabled{{/unless}}>
+        </label>
+        <label class="cns5-field">
+            <span>{{localize "CNS5.Details.influenceFactor"}}</span>
+            <input type="number" name="system.details.influenceFactor"
+                   value="{{system.details.influenceFactor}}" {{#unless editable}}disabled{{/unless}}>
+        </label>
+    </div>
+
+    <dl class="cns5-derived">
+        <div><dt>{{localize "CNS5.Derived.magickResistance"}}</dt><dd>{{cns5Percent system.magick.resistance}}</dd></div>
+        <div><dt>{{localize "CNS5.Details.attributeMax"}}</dt><dd>{{system.attributeMax}}</dd></div>
+    </dl>
+
+    <fieldset class="cns5-fieldset">
+        <legend>{{localize "CNS5.Details.biography"}}</legend>
+        {{formInput fields.biography value=system.biography enriched=biographyHTML
+                    toggled=true disabled=(not editable)}}
+    </fieldset>
+
+    <fieldset class="cns5-fieldset">
+        <legend>{{localize "CNS5.Details.familyNotes"}}</legend>
+        {{formInput fields.details.fields.familyNotes value=system.details.familyNotes
+                    enriched=familyNotesHTML toggled=true disabled=(not editable)}}
+    </fieldset>
+
+</section>

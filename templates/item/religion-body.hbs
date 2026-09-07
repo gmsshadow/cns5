@@ -1,0 +1,29 @@
+<div class="cns5-grid cns5-grid--three">
+    <label class="cns5-check">
+        <input type="checkbox" name="system.primary" {{checked system.primary}}
+               {{#unless editable}}disabled{{/unless}}>
+        <span>{{localize "CNS5.Faith.primary"}}</span>
+    </label>
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Faith.beliefStatus"}}</span>
+        <input type="text" name="system.beliefStatus" value="{{system.beliefStatus}}"
+               {{#unless editable}}disabled{{/unless}}>
+    </label>
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Faith.spirit"}}</span>
+        <input type="number" name="system.spirit" value="{{system.spirit}}"
+               {{#unless editable}}disabled{{/unless}}>
+    </label>
+</div>
+
+<label class="cns5-field">
+    <span>{{localize "CNS5.Faith.pffOverride"}}</span>
+    <input type="number" name="system.pffOverride" value="{{system.pffOverride}}"
+           {{#unless editable}}disabled{{/unless}}>
+</label>
+<p class="cns5-hint">{{localize "CNS5.Faith.pffOverrideHint"}}</p>
+
+<fieldset class="cns5-fieldset">
+    <legend>{{localize "CNS5.Faith.hindrances"}}</legend>
+    {{formInput fields.hindrances value=system.hindrances toggled=true disabled=(not editable)}}
+</fieldset>

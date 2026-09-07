@@ -1,0 +1,93 @@
+<section class="tab {{tab.cssClass}}" data-tab="{{tab.id}}" data-group="{{tab.group}}">
+
+    <div class="cns5-grid cns5-grid--three">
+        <label class="cns5-field">
+            <span>{{localize "CNS5.Magick.tradition"}}</span>
+            <select name="system.magick.tradition" {{#unless editable}}disabled{{/unless}}>
+                {{#each traditions}}
+                <option value="{{value}}" {{#if selected}}selected{{/if}}>{{localize label}}</option>
+                {{/each}}
+            </select>
+        </label>
+        <label class="cns5-field">
+            <span>{{localize "CNS5.Magick.mode"}}</span>
+            <input type="text" name="system.magick.mode" value="{{system.magick.mode}}"
+                   placeholder="{{localize 'CNS5.Magick.modePlaceholder'}}"
+                   {{#unless editable}}disabled{{/unless}}>
+        </label>
+        <label class="cns5-field">
+            <span>{{localize "CNS5.Magick.pmfOverride"}}</span>
+            <input type="number" name="system.magick.pmfOverride" value="{{system.magick.pmfOverride}}"
+                   {{#unless editable}}disabled{{/unless}}>
+        </label>
+    </div>
+
+    {{#if system.magick.modeMissing}}
+    <p class="cns5-hint cns5-hint--bad">{{localize "CNS5.Magick.modeMissing"}}</p>
+    {{/if}}
+
+    <dl class="cns5-derived">
+        <div><dt>{{localize "CNS5.Magick.pmf"}}</dt><dd>{{system.magick.pmf}}</dd></div>
+        <div><dt>{{localize "CNS5.Magick.aspectBonus"}}</dt><dd>{{cns5Signed system.magick.aspectBonus}}</dd></div>
+        <div><dt>{{localize "CNS5.Derived.magickLevel"}}</dt><dd>{{system.magick.level}}</dd></div>
+        <div><dt>{{localize "CNS5.Derived.magickResistance"}}</dt><dd>{{cns5Percent system.magick.resistance}}</dd></div>
+        <div><dt>{{localize "CNS5.Magick.startingMR"}}</dt><dd>{{system.magick.startingMR}}</dd></div>
+        <div><dt>{{localize "CNS5.Magick.spentMR"}}</dt><dd>{{spentMR}}</dd></div>
+    </dl>
+
+    <section class="cns5-skills">
+        <h3 class="cns5-skills__heading">
+            {{localize "CNS5.Magick.grimoire"}}
+            <button type="button" class="cns5-add" data-action="createItem" data-type="spell">
+                {{localize "CNS5.Item.addSpell"}}
+            </button>
+        </h3>
+        {{#if spells.length}}
+        <table class="cns5-skills__table">
+            <thead>
+            <tr>
+                <th scope="col" class="cns5-skills__name">{{localize "CNS5.Spell.spell"}}</th>
+                <th scope="col">{{localize "CNS5.Spell.mrShort"}}</th>
+                <th scope="col">{{localize "CNS5.Spell.fpShort"}}</th>
+                <th scope="col">{{localize "CNS5.Spell.apShort"}}</th>
+                <th scope="col">{{localize "CNS5.SpellRange.short"}}</th>
+                <th scope="col">{{localize "CNS5.SpellRange.long"}}</th>
+                <th scope="col">{{localize "CNS5.SpellRange.max"}}</th>
+                <th scope="col"><span class="cns5-visually-hidden">{{localize "CNS5.Skill.controls"}}</span></th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#each spells as |spell|}}
+            <tr class="{{#if spell.system.modeMissing}}is-unskilled{{/if}}">
+                <th scope="row">
+                    <button type="button" class="cns5-skills__roll" data-action="editItem"
+                            data-item-id="{{spell.id}}">{{spell.name}}</button>
+                </th>
+                <td class="cns5-skills__readout">{{spell.system.mr}}</td>
+                <td class="cns5-skills__readout">{{spell.system.fpToCast}}</td>
+                <td class="cns5-skills__readout">{{spell.system.apToCast}}</td>
+                {{#each ../rangeKeys as |range|}}
+                <td class="cns5-skills__readout">
+                    <button type="button" class="cns5-skills__roll" data-action="rollSpell"
+                            data-item-id="{{spell.id}}" data-range="{{range}}"
+                            data-tooltip="{{localize 'CNS5.Roll.spellTooltip'}}">
+                        {{cns5Percent (lookup spell.system.targets range)}}
+                    </button>
+                </td>
+                {{/each}}
+                <td class="cns5-skills__controls">
+                    <button type="button" data-action="deleteItem" data-item-id="{{spell.id}}"
+                            data-tooltip="{{localize 'CNS5.Item.delete'}}">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+            {{/each}}
+            </tbody>
+        </table>
+        {{else}}
+        <p class="cns5-hint">{{localize "CNS5.Magick.empty"}}</p>
+        {{/if}}
+    </section>
+
+</section>

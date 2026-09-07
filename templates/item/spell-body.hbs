@@ -1,0 +1,64 @@
+<div class="cns5-grid cns5-grid--four">
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Spell.mode"}}</span>
+        <input type="text" name="system.mode" value="{{system.mode}}"
+               placeholder="{{localize 'CNS5.Spell.modePlaceholder'}}"
+               {{#unless editable}}disabled{{/unless}}>
+    </label>
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Spell.mr"}}</span>
+        <input type="number" name="system.mr" value="{{system.mr}}" min="0"
+               {{#unless editable}}disabled{{/unless}}>
+    </label>
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Spell.fpToCast"}}</span>
+        <input type="number" name="system.fpToCast" value="{{system.fpToCast}}" min="0"
+               {{#unless editable}}disabled{{/unless}}>
+    </label>
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Spell.apToCast"}}</span>
+        <input type="number" name="system.apToCast" value="{{system.apToCast}}" min="0"
+               {{#unless editable}}disabled{{/unless}}>
+    </label>
+</div>
+
+<fieldset class="cns5-fieldset">
+    <legend>{{localize "CNS5.Spell.ranges"}}</legend>
+    <div class="cns5-grid cns5-grid--three">
+        {{#each system.ranges as |value key|}}
+        <label class="cns5-field">
+            <span>{{localize (concat "CNS5.SpellRange." key)}}</span>
+            <input type="text" name="system.ranges.{{key}}" value="{{value}}"
+                   {{#unless @root.editable}}disabled{{/unless}}>
+        </label>
+        {{/each}}
+    </div>
+</fieldset>
+
+<div class="cns5-grid cns5-grid--two">
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Spell.otherModifier"}}</span>
+        <input type="number" name="system.otherModifier" value="{{system.otherModifier}}"
+               {{#unless editable}}disabled{{/unless}}>
+    </label>
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Item.reference"}}</span>
+        <input type="text" name="system.reference" value="{{system.reference}}"
+               {{#unless editable}}disabled{{/unless}}>
+    </label>
+</div>
+
+{{#if onActor}}
+<section class="cns5-readout">
+    <h3>{{localize "CNS5.Spell.targeting"}}</h3>
+    {{#if system.modeMissing}}
+    <p class="cns5-hint cns5-hint--bad">{{localize "CNS5.Spell.modeMissing"}}</p>
+    {{else}}
+    <dl class="cns5-derived">
+        <div><dt>{{localize "CNS5.SpellRange.short"}}</dt><dd>{{cns5Percent system.targets.short}}</dd></div>
+        <div><dt>{{localize "CNS5.SpellRange.long"}}</dt><dd>{{cns5Percent system.targets.long}}</dd></div>
+        <div><dt>{{localize "CNS5.SpellRange.max"}}</dt><dd>{{cns5Percent system.targets.max}}</dd></div>
+    </dl>
+    {{/if}}
+</section>
+{{/if}}

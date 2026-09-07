@@ -1,0 +1,52 @@
+<div class="cns5-grid cns5-grid--three">
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Armour.location"}}</span>
+        <select name="system.location" {{#unless editable}}disabled{{/unless}}>
+            {{#each armourLocations}}
+            <option value="{{value}}" {{#if selected}}selected{{/if}}>{{localize label}}</option>
+            {{/each}}
+        </select>
+    </label>
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Armour.weightClass"}}</span>
+        <select name="system.weightClass" {{#unless editable}}disabled{{/unless}}>
+            {{#each armourWeights}}
+            <option value="{{value}}" {{#if selected}}selected{{/if}}>{{localize label}}</option>
+            {{/each}}
+        </select>
+    </label>
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Armour.fpToWear"}}</span>
+        <input type="number" name="system.fpToWear" value="{{system.fpToWear}}"
+               {{#unless editable}}disabled{{/unless}}>
+    </label>
+</div>
+
+<fieldset class="cns5-fieldset">
+    <legend>{{localize "CNS5.Armour.absorption"}}</legend>
+    <div class="cns5-grid cns5-grid--five">
+        {{#each system.absorption as |value key|}}
+        <label class="cns5-field">
+            <span>{{localize (concat "CNS5.DamageType." key)}}</span>
+            <input type="number" name="system.absorption.{{key}}" value="{{value}}" min="0"
+                   {{#unless @root.editable}}disabled{{/unless}}>
+        </label>
+        {{/each}}
+    </div>
+</fieldset>
+
+<div class="cns5-grid cns5-grid--three">
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Armour.damageTaken"}}</span>
+        <input type="number" name="system.damageTaken" value="{{system.damageTaken}}" min="0"
+               {{#unless editable}}disabled{{/unless}}>
+    </label>
+    <div class="cns5-field">
+        <span>{{localize "CNS5.Armour.dodgePenalty"}}</span>
+        <output>{{cns5Signed system.dodgePenalty}}</output>
+    </div>
+    <div class="cns5-field">
+        <span>{{localize "CNS5.Armour.thiefPenalty"}}</span>
+        <output>{{cns5Signed system.thiefPenalty}}</output>
+    </div>
+</div>

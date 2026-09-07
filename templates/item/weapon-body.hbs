@@ -1,0 +1,91 @@
+<div class="cns5-grid cns5-grid--three">
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Weapon.weightClass"}}</span>
+        <select name="system.weightClass" {{#unless editable}}disabled{{/unless}}>
+            {{#each weaponWeights}}
+            <option value="{{value}}" {{#if selected}}selected{{/if}}>{{localize label}}</option>
+            {{/each}}
+        </select>
+    </label>
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Weapon.damageType"}}</span>
+        <select name="system.damageType" {{#unless editable}}disabled{{/unless}}>
+            {{#each damageTypes}}
+            <option value="{{value}}" {{#if selected}}selected{{/if}}>{{localize label}}</option>
+            {{/each}}
+        </select>
+    </label>
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Weapon.baseDamage"}}</span>
+        <input type="number" name="system.baseDamage" value="{{system.baseDamage}}" min="0"
+               {{#unless editable}}disabled{{/unless}}>
+    </label>
+</div>
+
+<div class="cns5-grid cns5-grid--four">
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Weapon.critDieModifier"}}</span>
+        <input type="number" name="system.critDieModifier" value="{{system.critDieModifier}}"
+               {{#unless editable}}disabled{{/unless}}>
+    </label>
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Weapon.apCost"}}</span>
+        <input type="number" name="system.apCost" value="{{system.apCost}}" min="0"
+               {{#unless editable}}disabled{{/unless}}>
+    </label>
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Weapon.bash"}}</span>
+        <input type="number" name="system.bash" value="{{system.bash}}" min="0"
+               {{#unless editable}}disabled{{/unless}}>
+    </label>
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Weapon.length"}}</span>
+        <input type="text" name="system.length" value="{{system.length}}"
+               {{#unless editable}}disabled{{/unless}}>
+    </label>
+</div>
+
+<label class="cns5-field">
+    <span>{{localize "CNS5.Weapon.skill"}}</span>
+    <input type="text" name="system.skill" value="{{system.skill}}"
+           placeholder="{{localize 'CNS5.Weapon.skillPlaceholder'}}"
+           {{#unless editable}}disabled{{/unless}}>
+</label>
+<p class="cns5-hint">{{localize "CNS5.Weapon.skillHint"}}</p>
+{{#if system.skillMissing}}
+<p class="cns5-hint cns5-hint--bad">{{localize "CNS5.Weapon.skillMissing"}}</p>
+{{/if}}
+
+<fieldset class="cns5-fieldset">
+    <legend>{{localize "CNS5.Weapon.missile"}}</legend>
+    <label class="cns5-check">
+        <input type="checkbox" name="system.missile" {{checked system.missile}}
+               {{#unless editable}}disabled{{/unless}}>
+        <span>{{localize "CNS5.Weapon.isMissile"}}</span>
+    </label>
+    {{#if system.missile}}
+    <div class="cns5-grid cns5-grid--five">
+        {{#each system.ranges as |value key|}}
+        <label class="cns5-field">
+            <span>{{localize (concat "CNS5.Range." key)}}</span>
+            <input type="number" name="system.ranges.{{key}}" value="{{value}}" min="0"
+                   {{#unless @root.editable}}disabled{{/unless}}>
+        </label>
+        {{/each}}
+    </div>
+    <p class="cns5-hint">{{localize "CNS5.Weapon.rangeHint"}}</p>
+    {{/if}}
+</fieldset>
+
+{{#if onActor}}
+<section class="cns5-readout">
+    <h3>{{localize "CNS5.Weapon.readout"}}</h3>
+    <dl class="cns5-derived">
+        <div><dt>{{localize "CNS5.Skill.tscShort"}}</dt><dd>{{#if system.tsc}}{{cns5Percent system.tsc}}{{else}}—{{/if}}</dd></div>
+        <div><dt>{{localize "CNS5.Weapon.baseDamage"}}</dt><dd>{{system.baseDamage}}</dd></div>
+        <div><dt>{{localize "CNS5.Weapon.strengthBonus"}}</dt><dd>{{cns5Signed system.strengthBonus}}</dd></div>
+        <div><dt>{{localize "CNS5.Weapon.attackerBonus"}}</dt><dd>{{cns5Signed system.attackerBonus}}</dd></div>
+        <div><dt>{{localize "CNS5.Weapon.damage"}}</dt><dd>{{system.damage}} + {{localize "CNS5.Roll.critDie"}}</dd></div>
+    </dl>
+</section>
+{{/if}}

@@ -1,0 +1,47 @@
+<div class="cns5-grid cns5-grid--three">
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Faith.religion"}}</span>
+        <input type="text" name="system.religion" value="{{system.religion}}"
+               {{#unless editable}}disabled{{/unless}}>
+    </label>
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Faith.pffMinimum"}}</span>
+        <input type="number" name="system.pffMinimum" value="{{system.pffMinimum}}"
+               {{#unless editable}}disabled{{/unless}}>
+    </label>
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Faith.successChance"}}</span>
+        <input type="number" name="system.successChance" value="{{system.successChance}}" min="0"
+               {{#unless editable}}disabled{{/unless}}>
+    </label>
+</div>
+
+<div class="cns5-grid cns5-grid--three">
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Faith.fpCost"}}</span>
+        <input type="number" name="system.fpCost" value="{{system.fpCost}}" min="0"
+               {{#unless editable}}disabled{{/unless}}>
+    </label>
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Faith.apToPray"}}</span>
+        <input type="number" name="system.apToPray" value="{{system.apToPray}}" min="0"
+               {{#unless editable}}disabled{{/unless}}>
+    </label>
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Item.reference"}}</span>
+        <input type="text" name="system.reference" value="{{system.reference}}"
+               {{#unless editable}}disabled{{/unless}}>
+    </label>
+</div>
+
+<label class="cns5-field">
+    <span>{{localize "CNS5.Faith.notes"}}</span>
+    <input type="text" name="system.notes" value="{{system.notes}}"
+           {{#unless editable}}disabled{{/unless}}>
+</label>
+
+{{#if onActor}}
+{{#unless system.available}}
+<p class="cns5-hint cns5-hint--bad">{{localize "CNS5.Faith.belowMinimum"}}</p>
+{{/unless}}
+{{/if}}

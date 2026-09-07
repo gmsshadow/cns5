@@ -63,7 +63,7 @@
                 <td>
                     <input type="number" class="cns5-skills__level" min="0"
                            name="system.level" value="{{skill.system.level}}"
-                           data-item-id="{{skill.id}}" data-action="editLevel"
+                           data-item-id="{{skill.id}}" data-cns5-level
                            {{#unless @root.editable}}disabled{{/unless}}>
                 </td>
                 <td class="cns5-skills__readout">{{cns5Percent skill.system.bcs}}</td>

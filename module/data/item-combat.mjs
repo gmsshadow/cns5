@@ -1,0 +1,128 @@
+import { CNS5 } from "../config.mjs";
+import { CnS5PhysicalItem } from "./item-physical.mjs";
+
+const fields = foundry.data.fields;
+
+/**
+ * A weapon.
+ *
+ * A weapon has no success chance of its own. It names the combat skill it is
+ * used with, and the sheet reads TSC% from that skill on the character. That
+ * keeps one number in one place: raising Slashing Swords by a level improves
+ * every slashing sword the character owns, without touching any of them.
+ */
+export class CnS5Weapon extends CnS5PhysicalItem {
+  static defineSchema() {
+    const schema = super.defineSchema();
+
+    schema.weightClass = new fields.StringField({
+      required: true,
+      initial: "medium",
+      choices: Object.keys(CNS5.weaponWeights)
+    });
+
+    schema.damageType = new fields.StringField({
+      required: true,
+      initial: "slash",
+      choices: Object.keys(CNS5.damageTypes)
+    });
+
+    schema.baseDamage = new fields.NumberField({ required: true, integer: true, initial: 0, min: 0 });
+    schema.critDieModifier = new fields.NumberField({ required: true, integer: true, initial: 0 });
+    schema.apCost = new fields.NumberField({ required: true, integer: true, initial: 0, min: 0 });
+    schema.bash = new fields.NumberField({ required: true, integer: true, initial: 0, min: 0 });
+    schema.length = new fields.StringField({ required: true, blank: true, initial: "" });
+
+    // The name of the combat skill this weapon uses. Matched against the
+    // character's skills by name, so it survives the skill being replaced.
+    schema.skill = new fields.StringField({ required: true, blank: true, initial: "" });
+
+    schema.missile = new fields.BooleanField({ required: true, initial: false });
+    schema.ranges = new fields.SchemaField({
+      short: new fields.NumberField({ required: true, integer: true, initial: 0, min: 0 }),
+      medium: new fields.NumberField({ required: true, integer: true, initial: 0, min: 0 }),
+      long: new fields.NumberField({ required: true, integer: true, initial: 0, min: 0 }),
+      extreme: new fields.NumberField({ required: true, integer: true, initial: 0, min: 0 }),
+      max: new fields.NumberField({ required: true, integer: true, initial: 0, min: 0 })
+    });
+
+    return schema;
+  }
+
+  /* -------------------------------------------- */
+
+  /**
+   * Resolve this weapon's success chance and damage against its wielder.
+   *
+   * Damage is base damage plus a Strength bonus plus the Attacker's Bonus for
+   * the wielder's skill level, with the adjusted Crit Die added at the point of
+   * the roll (p281).
+   *
+   * @param {object} actorSystem  the parent actor's prepared system data
+   * @param {Item|null} skillItem the linked combat skill, if the character has it
+   */
+  prepareForActor(actorSystem, skillItem) {
+    const isLight = CNS5.weaponWeights[this.weightClass]?.light ?? false;
+
+    this.skillItem = skillItem ?? null;
+    this.psf = skillItem?.system.psf ?? 0;
+    this.tsc = skillItem?.system.target ?? null;
+    this.level = skillItem?.system.level ?? 0;
+    this.skillMissing = !skillItem;
+
+    this.strengthBonus = isLight ? actorSystem.damageBonus.light : actorSystem.damageBonus.medium;
+    this.attackerBonus = CNS5.attackerBonus(this.level, this.weightClass);
+    this.damage = this.baseDamage + this.strengthBonus + this.attackerBonus;
+  }
+}
+
+/* -------------------------------------------- */
+
+/**
+ * A piece of armour or a shield.
+ *
+ * Absorption is recorded per damage type, exactly as Table - Armour Absorption
+ * prints it, because the whole point of the table is that maille is good
+ * against a sword and poor against a spearpoint.
+ */
+export class CnS5Armour extends CnS5PhysicalItem {
+  static defineSchema() {
+    const schema = super.defineSchema();
+
+    schema.location = new fields.StringField({
+      required: true,
+      initial: "body",
+      choices: Object.keys(CNS5.armourLocations)
+    });
+
+    schema.weightClass = new fields.StringField({
+      required: true,
+      initial: "light",
+      choices: Object.keys(CNS5.armourWeights)
+    });
+
+    schema.absorption = new fields.SchemaField(
+      Object.fromEntries(
+        Object.keys(CNS5.damageTypes).map((key) => [
+          key,
+          new fields.NumberField({ required: true, integer: true, initial: 0, min: 0 })
+        ])
+      )
+    );
+
+    schema.fpToWear = new fields.NumberField({ required: true, integer: true, initial: 0 });
+
+    // Armour degrades as it absorbs blows, so damage taken is tracked per piece.
+    schema.damageTaken = new fields.NumberField({ required: true, integer: true, initial: 0, min: 0 });
+
+    return schema;
+  }
+
+  /* -------------------------------------------- */
+
+  prepareDerivedData() {
+    super.prepareDerivedData();
+    this.thiefPenalty = CNS5.armourWeights[this.weightClass]?.thiefPenalty ?? 0;
+    this.dodgePenalty = CNS5.dodgePenalty[this.weightClass] ?? 0;
+  }
+}

@@ -144,6 +144,198 @@ export class CnS5Actor extends Actor {
   /* -------------------------------------------- */
 
   /**
+   * Attack with a weapon.
+   *
+   * The success chance is the linked combat skill's, so this is a skill check
+   * with the weapon's own Crit Die modifier folded in. Damage is reported
+   * alongside: base plus Strength bonus plus Attacker's Bonus, with the
+   * adjusted Crit Die added on a hit (p281).
+   *
+   * @param {string} itemId
+   * @param {object} [options]
+   * @returns {Promise<ChatMessage|null>}
+   */
+  async rollWeapon(itemId, { modifier = 0, skipDialog = false } = {}) {
+    const weapon = this.items.get(itemId);
+    if (!weapon || weapon.type !== "weapon") {
+      throw new Error(`CnS5 | No weapon item ${itemId} on ${this.name}`);
+    }
+
+    const skill = weapon.system.skillItem;
+    if (!skill) {
+      ui.notifications.warn(
+        game.i18n.format("CNS5.Weapon.noSkill", { weapon: weapon.name, skill: weapon.system.skill })
+      );
+      return null;
+    }
+
+    const title = game.i18n.format("CNS5.Roll.weaponTitle", { weapon: weapon.name });
+
+    let situational = modifier;
+    if (!skipDialog) {
+      const prompted = await promptModifier(title);
+      if (prompted === null) return null;
+      situational += prompted;
+    }
+
+    const unclamped = skill.system.tsc + situational;
+    const { target, critMod, overflow, shortfall } = clampSuccessChance(unclamped, skill.system.df);
+
+    const result = await resolveCheck({
+      target,
+      // The weapon's own Crit Die modifier stacks with any from the band.
+      critMod: critMod + weapon.system.critDieModifier,
+      failureCritMod: skill.system.failureCritMod
+    });
+
+    // Only a hit deals damage, and the adjusted Crit Die is part of it.
+    const damage = result.success ? weapon.system.damage + result.critTotal : 0;
+
+    return checkToMessage(this, {
+      ...result,
+      title,
+      subtitle: game.i18n.format("CNS5.Roll.weaponSubtitle", {
+        skill: skill.name,
+        target
+      }),
+      unclamped,
+      overflow,
+      shortfall,
+      unskilled: !skill.system.known,
+      damage: result.success ? damage : null,
+      damageType: game.i18n.localize(`CNS5.DamageType.${weapon.system.damageType}`),
+      breakdown: this.#breakdown([
+        { label: "CNS5.Roll.bcsSkilled", value: skill.system.bcs },
+        { label: "CNS5.Roll.psf", value: skill.system.psf, signed: true },
+        { label: "CNS5.Roll.situational", value: situational, signed: true },
+        { label: "CNS5.Weapon.baseDamage", value: weapon.system.baseDamage },
+        { label: "CNS5.Weapon.strengthBonus", value: weapon.system.strengthBonus, signed: true },
+        { label: "CNS5.Weapon.attackerBonus", value: weapon.system.attackerBonus, signed: true }
+      ])
+    });
+  }
+
+  /* -------------------------------------------- */
+
+  /**
+   * Cast a spell at one of its three range bands.
+   *
+   * @param {string} itemId
+   * @param {string} [range]  short, long or max
+   * @returns {Promise<ChatMessage|null>}
+   */
+  async rollSpell(itemId, range = "short", { modifier = 0, skipDialog = false } = {}) {
+    const spell = this.items.get(itemId);
+    if (!spell || spell.type !== "spell") {
+      throw new Error(`CnS5 | No spell item ${itemId} on ${this.name}`);
+    }
+
+    const mode = spell.system.modeItem;
+    if (!mode) {
+      ui.notifications.warn(
+        game.i18n.format("CNS5.Spell.noMode", { spell: spell.name, mode: spell.system.mode })
+      );
+      return null;
+    }
+
+    const title = game.i18n.format("CNS5.Roll.spellTitle", { spell: spell.name });
+    const band = CNS5.spellRanges[range] ?? CNS5.spellRanges.short;
+
+    let situational = modifier;
+    if (!skipDialog) {
+      const prompted = await promptModifier(title);
+      if (prompted === null) return null;
+      situational += prompted;
+    }
+
+    const unclamped =
+      mode.system.tsc + band.modifier + spell.system.otherModifier + situational;
+    const { target, critMod, overflow, shortfall } = clampSuccessChance(unclamped, mode.system.df);
+
+    const result = await resolveCheck({ target, critMod });
+
+    return checkToMessage(this, {
+      ...result,
+      title,
+      subtitle: game.i18n.format("CNS5.Roll.spellSubtitle", {
+        range: game.i18n.localize(band.label),
+        target
+      }),
+      unclamped,
+      overflow,
+      shortfall,
+      cost: game.i18n.format("CNS5.Roll.spellCost", {
+        fp: spell.system.fpToCast,
+        ap: spell.system.apToCast
+      }),
+      breakdown: this.#breakdown([
+        { label: "CNS5.Roll.bcsSkilled", value: mode.system.bcs },
+        { label: "CNS5.Roll.psf", value: mode.system.psf, signed: true },
+        { label: "CNS5.Roll.rangeBand", value: band.modifier, signed: true },
+        { label: "CNS5.Spell.otherModifier", value: spell.system.otherModifier, signed: true },
+        { label: "CNS5.Roll.situational", value: situational, signed: true }
+      ])
+    });
+  }
+
+  /* -------------------------------------------- */
+
+  /**
+   * Attempt an Act of Faith.
+   *
+   * An Act of Faith has a flat success chance rather than a Difficulty Factor,
+   * so there is no Min%/Max% band to clamp against — only the Crit Die is read
+   * for magnitude.
+   *
+   * @param {string} itemId
+   * @returns {Promise<ChatMessage|null>}
+   */
+  async rollActOfFaith(itemId, { modifier = 0, skipDialog = false } = {}) {
+    const act = this.items.get(itemId);
+    if (!act || act.type !== "actOfFaith") {
+      throw new Error(`CnS5 | No Act of Faith item ${itemId} on ${this.name}`);
+    }
+
+    if (!act.system.available) {
+      ui.notifications.warn(
+        game.i18n.format("CNS5.Faith.tooLowPff", {
+          act: act.name,
+          minimum: act.system.pffMinimum
+        })
+      );
+      return null;
+    }
+
+    const title = game.i18n.format("CNS5.Roll.faithTitle", { act: act.name });
+
+    let situational = modifier;
+    if (!skipDialog) {
+      const prompted = await promptModifier(title);
+      if (prompted === null) return null;
+      situational += prompted;
+    }
+
+    const target = Math.clamp(act.system.successChance + situational, 1, 100);
+    const result = await resolveCheck({ target });
+
+    return checkToMessage(this, {
+      ...result,
+      title,
+      subtitle: game.i18n.format("CNS5.Roll.faithSubtitle", { target }),
+      cost: game.i18n.format("CNS5.Roll.faithCost", {
+        fp: act.system.fpCost,
+        ap: act.system.apToPray
+      }),
+      breakdown: this.#breakdown([
+        { label: "CNS5.Faith.successChance", value: act.system.successChance },
+        { label: "CNS5.Roll.situational", value: situational, signed: true }
+      ])
+    });
+  }
+
+  /* -------------------------------------------- */
+
+  /**
    * Add the nine skills every character has, skipping any already present.
    * A convenience for building characters by hand until the generated skill
    * compendium arrives.

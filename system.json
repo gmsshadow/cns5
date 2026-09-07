@@ -2,7 +2,7 @@
   "id": "cns5",
   "title": "Chivalry & Sorcery 5th Edition",
   "description": "An unofficial system implementation of Chivalry & Sorcery 5th Edition for Foundry Virtual Tabletop.",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "compatibility": {
     "minimum": "14",
     "verified": "14.365"
@@ -57,5 +57,19 @@
   "url": "https://github.com/GMsShadow/cns5",
   "manifest": "https://github.com/GMsShadow/cns5/releases/latest/download/system.json",
   "download": "https://github.com/GMsShadow/cns5/releases/latest/download/system.zip",
-  "readme": "README.md"
+  "readme": "README.md",
+  "packs": [
+    {
+      "name": "skills",
+      "label": "C&S Skills",
+      "banner": "",
+      "path": "packs/skills",
+      "type": "Item",
+      "system": "cns5",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
+    }
+  ]
 }

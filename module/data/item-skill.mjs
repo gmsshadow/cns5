@@ -42,6 +42,12 @@ export class CnS5Skill extends foundry.abstract.TypeDataModel {
         choices: ["skill", "competency"]
       }),
 
+      // The rulebook's own grouping — Agricultural, Combat, Thievish and so on.
+      // This is a different axis from `category` below, which is the mechanical
+      // standing of the skill for this character. A Sunsign grants favoured
+      // groups, so the creation wizard will read this.
+      group: new fields.StringField({ required: true, blank: true, initial: "" }),
+
       category: new fields.StringField({
         required: true,
         initial: "secondary",
@@ -62,6 +68,11 @@ export class CnS5Skill extends foundry.abstract.TypeDataModel {
       trainingRequired: new fields.BooleanField({ required: true, initial: false }),
 
       otherMod: new fields.NumberField({ required: true, integer: true, initial: 0 }),
+
+      // A few skills print something other than an attribute pair in the skills
+      // list: 'N/A' for the two Alertness skills, 'Various' for Druidic Priest
+      // Mode. Preserving the printed text explains the absent bonus.
+      attributeNote: new fields.StringField({ required: true, blank: true, initial: "" }),
       resistedBy: new fields.StringField({ required: true, blank: true, initial: "" }),
       reference: new fields.StringField({ required: true, blank: true, initial: "" }),
       description: new fields.HTMLField({ required: false, blank: true })
@@ -126,7 +137,9 @@ export class CnS5Skill extends foundry.abstract.TypeDataModel {
    * @returns {string}
    */
   #attributeLabel() {
-    if (!this.attributes.length) return game.i18n.localize("CNS5.Skill.noAttributes");
+    if (!this.attributes.length) {
+      return this.attributeNote || game.i18n.localize("CNS5.Skill.noAttributes");
+    }
 
     const abbr = (key) => game.i18n.localize(`CNS5.Attribute.${key}.abbr`);
     const [first, second] = this.attributes;

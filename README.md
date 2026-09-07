@@ -7,14 +7,14 @@ This system ships no rules text, tables, or artwork from the published book.
 
 ## Build state
 
-Phase 2 of 5: the skill item and the Skillskape resolution engine.
+Phase 3 of 5: the generated skills compendium.
 
 | Phase | Scope | State |
 | --- | --- | --- |
 | 1 | System skeleton, data models, attributes and derived stats | Done |
 | 2 | Skill item and the TSC%/Crit Die engine | Done |
-| 3 | Skill compendium generated from the rulebook tables | Next |
-| 4 | Remaining tabs: combat, chattel, magick, faith | |
+| 3 | Skill compendium generated from the rulebook tables | Done |
+| 4 | Remaining tabs: combat, chattel, magick, faith | Next |
 | 5 | Character creation wizard following the 19-step worksheet | |
 
 ## What phase 1 gives you
@@ -77,6 +77,40 @@ top. The clamp converts overflow into Crit Die modifiers at one per 20% or part
 thereof, which is why `#resolve` already takes a `critMod` it does not yet use
 from anywhere but its own signature.
 
+## What phase 3 adds
+
+- **248 skills and competencies** across 20 rulebook groups, extracted from the
+  skills list on pp.147-148, shipped as a compendium named `C&S Skills`.
+- Drag a skill from the compendium onto a character to add it. Dropping one the
+  character already has is refused rather than silently duplicated.
+- A `group` field on the skill item carrying the rulebook's own grouping
+  (Agricultural, Combat, Thievish and so on). This is a separate axis from
+  `category`, which is the skill's mechanical standing for that character. The
+  creation wizard will read `group` for the Sunsign favoured categories.
+- An `attributeNote` field preserving what the list prints where there is no
+  attribute pair: `N/A` for the two Alertness skills, `Various` for Druidic
+  Priest Mode.
+
+### Rebuilding the compendium
+
+```
+npm install
+npm run extract:skills    # regenerate data/skills.json from the PDF
+npm run build:packs       # compile data/skills.json into packs/skills
+```
+
+`data/skills.json` is the single source of truth. `tools/extract-skills.py`
+needs `pdfplumber` and a copy of the core rules PDF; `tools/build-packs.mjs`
+needs the Foundry CLI, pulled in by `npm install`.
+
+Document ids are derived from a hash of the skill name, so rebuilding produces
+identical ids and existing world references survive.
+
+**What is and is not shipped.** The compendium carries mechanical data only:
+name, Difficulty Factor, attribute pair, rulebook group and page reference.
+No description text is reproduced — the `description` field on every compendium
+entry is empty, and the page reference points the reader at the book.
+
 ## Errata found while implementing
 
 The rulebook contradicts itself in three places. Where it does, the tables are
@@ -91,12 +125,17 @@ treated as authoritative over the worked examples and the character sheet.
   experience cost of 900 at DF 7, where the Difficulty Factor table gives 1,000.
   The Magick Grimoire page prints Transcendental Mode as 5 [500] where DF 5 is
   700.
+- **p147, skills list.** The Athletic Skills heading is printed `Atheletic`.
+  Normalised in the extractor.
+- **p148, skills list.** Ritual Preparations is listed as `Ritual Preperations`;
+  the description on p217 spells it correctly. The list is preserved as printed.
+- **p148, skills list.** Debate cites p232, which is the first page of The
+  Marketplace. Its description ends on p231.
 
 ## Verification
 
-Run the tests with `node test/derived-stats.test.mjs` and
-`node test/skillskape.test.mjs`. They need no Foundry runtime, because both the
-config tables and the clamp engine are pure functions.
+Run the tests with `npm test`, or individually. They need no Foundry runtime,
+because the config tables, the clamp engine and the skills data are all inert.
 
 Derived stats are checked against Brother Arbutus for Weight Factor, Body,
 Fatigue and both recovery rates; Harold for Jump; Eleanor and Henry for Base
@@ -108,3 +147,11 @@ both of Roderick's chirurgery examples including the Crit Die modifiers and
 final outcomes, and Thomas's brewing, plus the band edges: exactly at Max% or
 Min% gives no modifier, 1% over gives +1, 20% over is still +1, and 21% over
 becomes +2.
+
+The skills data was extracted twice by independent means: a positional parse
+using word coordinates, which recovers names, groups and column structure, and a
+regex pass over the flat text layer, which recovers only the numeric triples.
+Both produced 248 entries with identical page and Difficulty Factor pairs.
+`test/skills-data.test.mjs` then checks the result structurally — every
+Difficulty Factor in the table, every attribute key real, every skill carrying
+either two attributes or an explanation for having none.

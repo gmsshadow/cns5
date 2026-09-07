@@ -192,6 +192,47 @@ export class CnS5CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2)
     for (const input of this.element.querySelectorAll('[data-action="editLevel"]')) {
       input.addEventListener("change", this.#onEditLevel.bind(this));
     }
+
+    // Accept skills dragged in from the compendium.
+    new foundry.applications.ux.DragDrop.implementation({
+      dropSelector: ".window-content",
+      callbacks: { drop: this.#onDrop.bind(this) }
+    }).bind(this.element);
+  }
+
+  /* -------------------------------------------- */
+
+  /**
+   * Handle a document dropped onto the sheet.
+   *
+   * Only skills are accepted for now. Dropping one the character already has
+   * would silently create a second copy with its own level, which is never what
+   * anyone means, so a duplicate name is refused rather than merged.
+   *
+   * @param {DragEvent} event
+   */
+  async #onDrop(event) {
+    const data = foundry.applications.ux.TextEditor.implementation.getDragEventData(event);
+    if (data?.type !== "Item") return;
+
+    const item = await fromUuid(data.uuid);
+    if (!item || item.type !== "skill") return;
+
+    // A drop from within this same actor is a reorder, not a new skill.
+    if (item.parent?.id === this.actor.id) return;
+
+    const duplicate = this.actor.items.find(
+      (i) => i.type === "skill" && i.name.toLowerCase() === item.name.toLowerCase()
+    );
+    if (duplicate) {
+      ui.notifications.warn(
+        game.i18n.format("CNS5.Skill.duplicate", { name: item.name })
+      );
+      return;
+    }
+
+    await this.actor.createEmbeddedDocuments("Item", [item.toObject()]);
+    ui.notifications.info(game.i18n.format("CNS5.Skill.added", { name: item.name }));
   }
 
   /* -------------------------------------------- */

@@ -621,6 +621,7 @@
 
 .cns5-grid--two { grid-template-columns: repeat(2, 1fr); }
 .cns5-grid--three { grid-template-columns: repeat(3, 1fr); }
+.cns5-grid--four { grid-template-columns: repeat(4, 1fr); }
 
 .cns5-fieldset {
     border: 1px solid var(--cns-rule);

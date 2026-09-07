@@ -1,0 +1,2699 @@
+{
+  "source": "Chivalry & Sorcery 5th Edition core rules, skills list, pp.147-148",
+  "note": "Mechanical data only: name, difficulty factor, attribute pair, rulebook group and page reference. No description text is reproduced.",
+  "count": 248,
+  "skills": [
+    {
+      "name": "Field Crops",
+      "category": "Agricultural",
+      "reference": "149",
+      "df": 3,
+      "attributes": [
+        "str",
+        "wis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Fruit Crops",
+      "category": "Agricultural",
+      "reference": "149",
+      "df": 3,
+      "attributes": [
+        "int",
+        "wis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Vegetable Crops",
+      "category": "Agricultural",
+      "reference": "149",
+      "df": 2,
+      "attributes": [
+        "wis",
+        "wis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Viniculture",
+      "category": "Agricultural",
+      "reference": "149",
+      "df": 3,
+      "attributes": [
+        "int",
+        "wis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Animal Riding – Camel",
+      "category": "Animal",
+      "reference": "151",
+      "df": 4,
+      "attributes": [
+        "str",
+        "dis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Animal Riding – Donkey",
+      "category": "Animal",
+      "reference": "151",
+      "df": 2,
+      "attributes": [
+        "str",
+        "dis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Animal Riding - Exotic Animal",
+      "category": "Animal",
+      "reference": "151",
+      "df": 5,
+      "attributes": [
+        "str",
+        "dis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Animal Riding Horse / Pony / Mule",
+      "category": "Animal",
+      "reference": "151",
+      "df": 3,
+      "attributes": [
+        "str",
+        "dis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Animal Riding Mythical / Legendary Beast",
+      "category": "Animal",
+      "reference": "151",
+      "df": 6,
+      "attributes": [
+        "str",
+        "dis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Animal Training",
+      "category": "Animal",
+      "reference": "152",
+      "df": 3,
+      "attributes": [
+        "bv",
+        "dis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Bee Keeping",
+      "category": "Animal",
+      "reference": "150",
+      "df": 4,
+      "attributes": [
+        "int",
+        "wis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Cattle Herding",
+      "category": "Animal",
+      "reference": "150",
+      "df": 3,
+      "attributes": [
+        "int",
+        "wis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Dog Breeding",
+      "category": "Animal",
+      "reference": "153",
+      "df": 4,
+      "attributes": [
+        "int",
+        "wis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Drover",
+      "category": "Animal",
+      "reference": "150",
+      "df": 3,
+      "attributes": [
+        "int",
+        "wis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Horse Breeding",
+      "category": "Animal",
+      "reference": "150",
+      "df": 4,
+      "attributes": [
+        "int",
+        "wis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Pig Raising",
+      "category": "Animal",
+      "reference": "150",
+      "df": 2,
+      "attributes": [
+        "int",
+        "wis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Poultry Raising",
+      "category": "Animal",
+      "reference": "150",
+      "df": 2,
+      "attributes": [
+        "int",
+        "wis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Running a Dairy",
+      "category": "Animal",
+      "reference": "150",
+      "df": 3,
+      "attributes": [
+        "int",
+        "wis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Sheep Herding",
+      "category": "Animal",
+      "reference": "150",
+      "df": 2,
+      "attributes": [
+        "int",
+        "wis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Veterinary Medicine",
+      "category": "Animal",
+      "reference": "153",
+      "df": 4,
+      "attributes": [
+        "int",
+        "wis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Veterinary Surgeon",
+      "category": "Animal",
+      "reference": "153",
+      "df": 3,
+      "attributes": [
+        "int",
+        "dex"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Acting: Costume & Makeup",
+      "category": "Art & Entertainment",
+      "reference": "153",
+      "df": 3,
+      "attributes": [
+        "int",
+        "dis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Acting: Performance",
+      "category": "Art & Entertainment",
+      "reference": "153",
+      "df": 4,
+      "attributes": [
+        "bv",
+        "dis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Acting: Ventriloquism",
+      "category": "Art & Entertainment",
+      "reference": "153",
+      "df": 4,
+      "attributes": [
+        "bv",
+        "dex"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Bagpipes",
+      "category": "Art & Entertainment",
+      "reference": "154",
+      "df": 4,
+      "attributes": [
+        "dex",
+        "con"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Calligraphy & Illumination",
+      "category": "Art & Entertainment",
+      "reference": "154",
+      "df": 4,
+      "attributes": [
+        "dex",
+        "dis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Dancing: Court Dancing",
+      "category": "Art & Entertainment",
+      "reference": "154",
+      "df": 3,
+      "attributes": [
+        "agl",
+        "dis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Dancing: Folk Dance",
+      "category": "Art & Entertainment",
+      "reference": "154",
+      "df": 2,
+      "attributes": [
+        "agl",
+        "dis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Drums",
+      "category": "Art & Entertainment",
+      "reference": "154",
+      "df": 2,
+      "attributes": [
+        "str",
+        "dis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Flutes",
+      "category": "Art & Entertainment",
+      "reference": "155",
+      "df": 3,
+      "attributes": [
+        "dex",
+        "con"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Horns",
+      "category": "Art & Entertainment",
+      "reference": "155",
+      "df": 3,
+      "attributes": [
+        "dex",
+        "con"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Juggling",
+      "category": "Art & Entertainment",
+      "reference": "154",
+      "df": 2,
+      "attributes": [
+        "agl",
+        "agl"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Painting & Sketching",
+      "category": "Art & Entertainment",
+      "reference": "155",
+      "df": 4,
+      "attributes": [
+        "dex",
+        "dex"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Poetic Composition",
+      "category": "Art & Entertainment",
+      "reference": "155",
+      "df": 4,
+      "attributes": [
+        "int",
+        "wis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Poetic Recitation",
+      "category": "Art & Entertainment",
+      "reference": "155",
+      "df": 3,
+      "attributes": [
+        "bv",
+        "con"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Sculpting",
+      "category": "Art & Entertainment",
+      "reference": "155",
+      "df": 4,
+      "attributes": [
+        "dex",
+        "dis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Singing",
+      "category": "Art & Entertainment",
+      "reference": "156",
+      "df": 4,
+      "attributes": [
+        "bv",
+        "con"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Sleight of Hand",
+      "category": "Art & Entertainment",
+      "reference": "156",
+      "df": 4,
+      "attributes": [
+        "dex",
+        "int"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Storytelling",
+      "category": "Art & Entertainment",
+      "reference": "156",
+      "df": 4,
+      "attributes": [
+        "bv",
+        "int"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Strings",
+      "category": "Art & Entertainment",
+      "reference": "155",
+      "df": 3,
+      "attributes": [
+        "dex",
+        "dis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Boxing",
+      "category": "Athletic",
+      "reference": "156",
+      "df": 4,
+      "attributes": [
+        "str",
+        "agl"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Climbing",
+      "category": "Athletic",
+      "reference": "156",
+      "df": 3,
+      "attributes": [
+        "str",
+        "con"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Conditioning",
+      "category": "Athletic",
+      "reference": "157",
+      "df": 5,
+      "attributes": [],
+      "kind": "competency"
+    },
+    {
+      "name": "Endurance",
+      "category": "Athletic",
+      "reference": "157",
+      "df": 4,
+      "attributes": [],
+      "kind": "competency"
+    },
+    {
+      "name": "Jumping",
+      "category": "Athletic",
+      "reference": "158",
+      "df": 3,
+      "attributes": [],
+      "kind": "competency"
+    },
+    {
+      "name": "Lifting",
+      "category": "Athletic",
+      "reference": "158",
+      "df": 3,
+      "attributes": [],
+      "kind": "competency"
+    },
+    {
+      "name": "Stamina",
+      "category": "Athletic",
+      "reference": "158",
+      "df": 3,
+      "attributes": [
+        "str",
+        "con"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Swimming",
+      "category": "Athletic",
+      "reference": "158",
+      "df": 3,
+      "attributes": [
+        "str",
+        "con"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Wrestling",
+      "category": "Athletic",
+      "reference": "160",
+      "df": 4,
+      "attributes": [
+        "str",
+        "agl"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Bargaining",
+      "category": "Charismatic",
+      "reference": "161",
+      "df": 3,
+      "attributes": [
+        "bv",
+        "cha"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Begging",
+      "category": "Charismatic",
+      "reference": "161",
+      "df": 3,
+      "attributes": [
+        "bv",
+        "cha"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Charm",
+      "category": "Charismatic",
+      "reference": "161",
+      "df": 4,
+      "attributes": [
+        "app",
+        "cha"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Con",
+      "category": "Charismatic",
+      "reference": "161",
+      "df": 4,
+      "attributes": [
+        "cha",
+        "wis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Diplomacy & Politics",
+      "category": "Charismatic",
+      "reference": "162",
+      "df": 4,
+      "attributes": [
+        "bv",
+        "wis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Intimidation",
+      "category": "Charismatic",
+      "reference": "162",
+      "df": 4,
+      "attributes": [
+        "fer",
+        "cha"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Leadership",
+      "category": "Charismatic",
+      "reference": "162",
+      "df": 4,
+      "attributes": [
+        "bv",
+        "cha"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Oratory",
+      "category": "Charismatic",
+      "reference": "162",
+      "df": 4,
+      "attributes": [
+        "bv",
+        "cha"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Archery",
+      "category": "Combat",
+      "reference": "164",
+      "df": 5,
+      "attributes": [
+        "dex",
+        "wis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Axes",
+      "category": "Combat",
+      "reference": "164",
+      "df": 4,
+      "attributes": [
+        "str",
+        "str"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Battlefield Tactics",
+      "category": "Combat",
+      "reference": "164",
+      "df": 5,
+      "attributes": [
+        "int",
+        "wis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Brawling",
+      "category": "Combat",
+      "reference": "165",
+      "df": 3,
+      "attributes": [
+        "str",
+        "agl"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Cavalry Lances",
+      "category": "Combat",
+      "reference": "165",
+      "df": 5,
+      "attributes": [
+        "str",
+        "dis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Chivalric Great Blow",
+      "category": "Combat",
+      "reference": "165",
+      "df": 5,
+      "attributes": [],
+      "kind": "competency"
+    },
+    {
+      "name": "Dodge",
+      "category": "Combat",
+      "reference": "165",
+      "df": 3,
+      "attributes": [
+        "agl",
+        "wis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Fighting Staves",
+      "category": "Combat",
+      "reference": "165",
+      "df": 4,
+      "attributes": [
+        "str",
+        "agl"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Flails",
+      "category": "Combat",
+      "reference": "165",
+      "df": 5,
+      "attributes": [
+        "str",
+        "dis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Great Swords",
+      "category": "Combat",
+      "reference": "165",
+      "df": 5,
+      "attributes": [
+        "str",
+        "str"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Horse Archery",
+      "category": "Combat",
+      "reference": "165",
+      "df": 5,
+      "attributes": [
+        "agl",
+        "agl"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Hurling Axes",
+      "category": "Combat",
+      "reference": "165",
+      "df": 3,
+      "attributes": [
+        "str",
+        "agl"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Hurling Javelins",
+      "category": "Combat",
+      "reference": "165",
+      "df": 3,
+      "attributes": [
+        "str",
+        "agl"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Knife & Dagger Fighting",
+      "category": "Combat",
+      "reference": "166",
+      "df": 3,
+      "attributes": [
+        "dex",
+        "agl"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Maces, Hammers & Clubs",
+      "category": "Combat",
+      "reference": "166",
+      "df": 4,
+      "attributes": [
+        "str",
+        "str"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Mounted Combat",
+      "category": "Combat",
+      "reference": "166",
+      "df": 5,
+      "attributes": [
+        "agl",
+        "agl"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Polearms",
+      "category": "Combat",
+      "reference": "167",
+      "df": 6,
+      "attributes": [
+        "str",
+        "dis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Riding a Warhorse",
+      "category": "Combat",
+      "reference": "166",
+      "df": 5,
+      "attributes": [
+        "agl",
+        "dis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Shield Play Light / Heavy",
+      "category": "Combat",
+      "reference": "167",
+      "df": 4,
+      "attributes": [
+        "str",
+        "agl"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Short Swords",
+      "category": "Combat",
+      "reference": "167",
+      "df": 4,
+      "attributes": [
+        "str",
+        "agl"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Slashing Swords",
+      "category": "Combat",
+      "reference": "167",
+      "df": 4,
+      "attributes": [
+        "str",
+        "agl"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Slings",
+      "category": "Combat",
+      "reference": "167",
+      "df": 4,
+      "attributes": [
+        "agl",
+        "wis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Spears",
+      "category": "Combat",
+      "reference": "167",
+      "df": 3,
+      "attributes": [
+        "str",
+        "dis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Throwing Knives & Daggers",
+      "category": "Combat",
+      "reference": "167",
+      "df": 4,
+      "attributes": [
+        "agl",
+        "wis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Throwing Objects",
+      "category": "Combat",
+      "reference": "167",
+      "df": 3,
+      "attributes": [
+        "agl",
+        "wis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Two Weapon Fighting",
+      "category": "Combat",
+      "reference": "168",
+      "df": 7,
+      "attributes": [],
+      "kind": "competency"
+    },
+    {
+      "name": "Wearing Battle Armour",
+      "category": "Combat",
+      "reference": "168",
+      "df": 5,
+      "attributes": [],
+      "kind": "competency"
+    },
+    {
+      "name": "Wearing Heavy Armour",
+      "category": "Combat",
+      "reference": "168",
+      "df": 4,
+      "attributes": [],
+      "kind": "competency"
+    },
+    {
+      "name": "Wearing Light Armour",
+      "category": "Combat",
+      "reference": "167",
+      "df": 3,
+      "attributes": [],
+      "kind": "competency"
+    },
+    {
+      "name": "Brewing",
+      "category": "Cooking and Brewing",
+      "reference": "169",
+      "df": 3,
+      "attributes": [
+        "int",
+        "wis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Cooking",
+      "category": "Cooking and Brewing",
+      "reference": "169",
+      "df": 3,
+      "attributes": [
+        "int",
+        "wis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Winemaking",
+      "category": "Cooking and Brewing",
+      "reference": "171",
+      "df": 4,
+      "attributes": [
+        "int",
+        "wis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Basketwork",
+      "category": "Craft & Trade",
+      "reference": "173",
+      "df": 3,
+      "attributes": [
+        "dex",
+        "dis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Blacksmithing",
+      "category": "Craft & Trade",
+      "reference": "173",
+      "df": 3,
+      "attributes": [
+        "str",
+        "con"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Bone, Horn & Ivory work",
+      "category": "Craft & Trade",
+      "reference": "174",
+      "df": 4,
+      "attributes": [
+        "dex",
+        "dis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Bowery & Fletching",
+      "category": "Craft & Trade",
+      "reference": "174",
+      "df": 4,
+      "attributes": [
+        "int",
+        "dex"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Carpentry",
+      "category": "Craft & Trade",
+      "reference": "174",
+      "df": 3,
+      "attributes": [
+        "str",
+        "dex"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Cartwright & Wheelwright",
+      "category": "Craft & Trade",
+      "reference": "174",
+      "df": 4,
+      "attributes": [
+        "int",
+        "dex"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Chandler",
+      "category": "Craft & Trade",
+      "reference": "174",
+      "df": 3,
+      "attributes": [
+        "int",
+        "wis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Charcoal Burning",
+      "category": "Craft & Trade",
+      "reference": "174",
+      "df": 3,
+      "attributes": [
+        "int",
+        "wis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Cooper",
+      "category": "Craft & Trade",
+      "reference": "174",
+      "df": 3,
+      "attributes": [
+        "str",
+        "dex"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Cord & Rope Making",
+      "category": "Craft & Trade",
+      "reference": "175",
+      "df": 3,
+      "attributes": [
+        "str",
+        "dex"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Dyeing",
+      "category": "Craft & Trade",
+      "reference": "175",
+      "df": 2,
+      "attributes": [
+        "int",
+        "wis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Fashioning Arrowheads",
+      "category": "Craft & Trade",
+      "reference": "175",
+      "df": 3,
+      "attributes": [
+        "str",
+        "dex"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Glassblowing & Glazing",
+      "category": "Craft & Trade",
+      "reference": "175",
+      "df": 4,
+      "attributes": [
+        "dex",
+        "con"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Gold & Silversmithing",
+      "category": "Craft & Trade",
+      "reference": "176",
+      "df": 4,
+      "attributes": [
+        "dis",
+        "dex"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Lapidary (Gemcutting)",
+      "category": "Craft & Trade",
+      "reference": "176",
+      "df": 4,
+      "attributes": [
+        "dis",
+        "dex"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Leatherworking & Tanning",
+      "category": "Craft & Trade",
+      "reference": "177",
+      "df": 3,
+      "attributes": [
+        "con",
+        "dex"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Masonry & Stone Cutting",
+      "category": "Craft & Trade",
+      "reference": "177",
+      "df": 4,
+      "attributes": [
+        "str",
+        "con"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Mining & Tunnelling",
+      "category": "Craft & Trade",
+      "reference": "177",
+      "df": 3,
+      "attributes": [
+        "str",
+        "con"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Paper & Ink Making",
+      "category": "Craft & Trade",
+      "reference": "178",
+      "df": 3,
+      "attributes": [
+        "int",
+        "dex"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Perfumery",
+      "category": "Craft & Trade",
+      "reference": "178",
+      "df": 4,
+      "attributes": [
+        "int",
+        "dex"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Pottery",
+      "category": "Craft & Trade",
+      "reference": "178",
+      "df": 4,
+      "attributes": [
+        "int",
+        "dex"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Seal Making & Engraving",
+      "category": "Craft & Trade",
+      "reference": "178",
+      "df": 4,
+      "attributes": [
+        "int",
+        "dex"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Sewing, Embroidery & Knitting",
+      "category": "Craft & Trade",
+      "reference": "175",
+      "df": 2,
+      "attributes": [
+        "dex",
+        "int"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Smelting & Casting",
+      "category": "Craft & Trade",
+      "reference": "175",
+      "df": 3,
+      "attributes": [
+        "str",
+        "con"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Spinning & Weaving",
+      "category": "Craft & Trade",
+      "reference": "175",
+      "df": 3,
+      "attributes": [
+        "dex",
+        "int"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Sulphur & Saltpetre Making",
+      "category": "Craft & Trade",
+      "reference": "178",
+      "df": 3,
+      "attributes": [
+        "int",
+        "wis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Tailoring",
+      "category": "Craft & Trade",
+      "reference": "175",
+      "df": 4,
+      "attributes": [
+        "dex",
+        "int"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Thatching",
+      "category": "Craft & Trade",
+      "reference": "178",
+      "df": 3,
+      "attributes": [
+        "agl",
+        "wis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Tinkering",
+      "category": "Craft & Trade",
+      "reference": "178",
+      "df": 4,
+      "attributes": [
+        "int",
+        "dex"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Weaponsmithing & Armoury",
+      "category": "Craft & Trade",
+      "reference": "179",
+      "df": 5,
+      "attributes": [
+        "str",
+        "con"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Ancient Language - Spoken",
+      "category": "Language",
+      "reference": "182",
+      "df": 3,
+      "attributes": [
+        "int",
+        "bv"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Ancient Language - Read / Write",
+      "category": "Language",
+      "reference": "182",
+      "df": 3,
+      "attributes": [
+        "int",
+        "dex"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Beast Tongues—Read / Write",
+      "category": "Language",
+      "reference": "184",
+      "df": 6,
+      "attributes": [
+        "int",
+        "dex"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Beast Tongues—Spoken",
+      "category": "Language",
+      "reference": "184",
+      "df": 6,
+      "attributes": [
+        "int",
+        "bv"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Common Tongue— Spoken",
+      "category": "Language",
+      "reference": "182",
+      "df": 2,
+      "attributes": [
+        "int",
+        "bv"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Common Tongue Read / Write",
+      "category": "Language",
+      "reference": "182",
+      "df": 2,
+      "attributes": [
+        "int",
+        "dex"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Dwarven Tongue Read / Write",
+      "category": "Language",
+      "reference": "183",
+      "df": 3,
+      "attributes": [
+        "int",
+        "dex"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Dwarven Tongue—Spoken",
+      "category": "Language",
+      "reference": "182",
+      "df": 3,
+      "attributes": [
+        "int",
+        "bv"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Elven Tongue—Read / Write",
+      "category": "Language",
+      "reference": "183",
+      "df": 4,
+      "attributes": [
+        "int",
+        "dex"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Elven Tongue—Spoken",
+      "category": "Language",
+      "reference": "183",
+      "df": 4,
+      "attributes": [
+        "int",
+        "bv"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Foreign Language Read/Write",
+      "category": "Language",
+      "reference": "182",
+      "df": 2,
+      "attributes": [
+        "int",
+        "dex"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Foreign Language-Spoken",
+      "category": "Language",
+      "reference": "182",
+      "df": 2,
+      "attributes": [
+        "int",
+        "bv"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Mage Speech-Read / Write",
+      "category": "Language",
+      "reference": "183",
+      "df": 4,
+      "attributes": [
+        "int",
+        "dex"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Mage Speech-Spoken",
+      "category": "Language",
+      "reference": "183",
+      "df": 4,
+      "attributes": [
+        "int",
+        "bv"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Monster Tongues Read / Write",
+      "category": "Language",
+      "reference": "183",
+      "df": 3,
+      "attributes": [
+        "int",
+        "dex"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Monster Tongues—Spoken",
+      "category": "Language",
+      "reference": "183",
+      "df": 3,
+      "attributes": [
+        "int",
+        "bv"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Own Language—Read/Write",
+      "category": "Language",
+      "reference": "181",
+      "df": 1,
+      "attributes": [
+        "int",
+        "dex"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Own Language—Spoken",
+      "category": "Language",
+      "reference": "181",
+      "df": 1,
+      "attributes": [
+        "int",
+        "bv"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Ancient Local Geography",
+      "category": "Lore Historical",
+      "reference": "185",
+      "df": 2,
+      "attributes": [
+        "int",
+        "int"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Ancient Regional/ National Geography",
+      "category": "Lore Historical",
+      "reference": "185",
+      "df": 3,
+      "attributes": [
+        "int",
+        "int"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Ancient world Geography",
+      "category": "Lore Historical",
+      "reference": "185",
+      "df": 5,
+      "attributes": [
+        "int",
+        "int"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Astronomical Lore",
+      "category": "Lore Historical",
+      "reference": "186",
+      "df": 4,
+      "attributes": [
+        "int",
+        "wis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Bestiary Lore",
+      "category": "Lore Historical",
+      "reference": "186",
+      "df": 3,
+      "attributes": [
+        "int",
+        "wis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Cartography",
+      "category": "Lore Historical",
+      "reference": "187",
+      "df": 3,
+      "attributes": [
+        "int",
+        "wis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Finance",
+      "category": "Lore Historical",
+      "reference": "187",
+      "df": 4,
+      "attributes": [
+        "int",
+        "wis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Geological Lore",
+      "category": "Lore Historical",
+      "reference": "187",
+      "df": 3,
+      "attributes": [
+        "int",
+        "wis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Local Geography",
+      "category": "Lore Historical",
+      "reference": "184",
+      "df": 1,
+      "attributes": [
+        "int",
+        "int"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Local History & Legend",
+      "category": "Lore Historical",
+      "reference": "185",
+      "df": 1,
+      "attributes": [
+        "int",
+        "int"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Regional & National Geography",
+      "category": "Lore Historical",
+      "reference": "184",
+      "df": 2,
+      "attributes": [
+        "int",
+        "int"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Regional/National History & Legend",
+      "category": "Lore Historical",
+      "reference": "185",
+      "df": 2,
+      "attributes": [
+        "int",
+        "int"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "World Geography",
+      "category": "Lore Historical",
+      "reference": "185",
+      "df": 4,
+      "attributes": [
+        "int",
+        "int"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "World History & Legend",
+      "category": "Lore Historical",
+      "reference": "185",
+      "df": 4,
+      "attributes": [
+        "int",
+        "int"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Accurate Counting",
+      "category": "Lore Scientific",
+      "reference": "186",
+      "df": 1,
+      "attributes": [],
+      "kind": "competency"
+    },
+    {
+      "name": "Architecture & Engineering",
+      "category": "Lore Scientific",
+      "reference": "186",
+      "df": 4,
+      "attributes": [
+        "int",
+        "wis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Arithmetic & Mathematics",
+      "category": "Lore Scientific",
+      "reference": "186",
+      "df": 4,
+      "attributes": [
+        "int",
+        "wis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Arcane Magick",
+      "category": "Materia Magicka",
+      "reference": "220",
+      "df": 6,
+      "attributes": [
+        "int",
+        "con"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Artefact Lore",
+      "category": "Materia Magicka",
+      "reference": "213",
+      "df": 6,
+      "attributes": [
+        "int",
+        "int"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Basic Magick – Air",
+      "category": "Materia Magicka",
+      "reference": "220",
+      "df": 5,
+      "attributes": [
+        "int",
+        "agl"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Basic Magick – Earth",
+      "category": "Materia Magicka",
+      "reference": "220",
+      "df": 5,
+      "attributes": [
+        "int",
+        "con"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Basic Magick – Fire",
+      "category": "Materia Magicka",
+      "reference": "220",
+      "df": 5,
+      "attributes": [
+        "int",
+        "con"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Basic Magick – Water",
+      "category": "Materia Magicka",
+      "reference": "220",
+      "df": 5,
+      "attributes": [
+        "int",
+        "agl"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Command Magick",
+      "category": "Materia Magicka",
+      "reference": "220",
+      "df": 5,
+      "attributes": [
+        "int",
+        "bv"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Conjuration Mode of Magick",
+      "category": "Materia Magicka",
+      "reference": "221",
+      "df": 6,
+      "attributes": [
+        "int",
+        "con"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Demonology",
+      "category": "Materia Magicka",
+      "reference": "213",
+      "df": 5,
+      "attributes": [
+        "int",
+        "int"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Divination Magick",
+      "category": "Materia Magicka",
+      "reference": "220",
+      "df": 5,
+      "attributes": [
+        "wis",
+        "int"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Divination Mode of Magick",
+      "category": "Materia Magicka",
+      "reference": "222",
+      "df": 5,
+      "attributes": [
+        "wis",
+        "int"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Druidic Priest Mode",
+      "category": "Materia Magicka",
+      "reference": "227",
+      "df": 7,
+      "attributes": [],
+      "kind": "skill",
+      "attributeNote": "Various"
+    },
+    {
+      "name": "Elementalist Magus Mode of Magick",
+      "category": "Materia Magicka",
+      "reference": "225",
+      "df": 7,
+      "attributes": [
+        "int",
+        "con"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Enchantment Mode of Magick",
+      "category": "Materia Magicka",
+      "reference": "223",
+      "df": 6,
+      "attributes": [
+        "int",
+        "bv"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Faerie Lore",
+      "category": "Materia Magicka",
+      "reference": "214",
+      "df": 3,
+      "attributes": [
+        "int",
+        "int"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Hex Master Mode of Magick",
+      "category": "Materia Magicka",
+      "reference": "223",
+      "df": 6,
+      "attributes": [
+        "int",
+        "dis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Illusion Magick",
+      "category": "Materia Magicka",
+      "reference": "220",
+      "df": 4,
+      "attributes": [
+        "int",
+        "wis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Interpret the Omens",
+      "category": "Materia Magicka",
+      "reference": "213",
+      "df": 5,
+      "attributes": [
+        "wis",
+        "dis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Laws of Magick",
+      "category": "Materia Magicka",
+      "reference": "214",
+      "df": 3,
+      "attributes": [
+        "int",
+        "int"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Lore of Correspondences",
+      "category": "Materia Magicka",
+      "reference": "214",
+      "df": 5,
+      "attributes": [
+        "int",
+        "int"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Lore of the Dead",
+      "category": "Materia Magicka",
+      "reference": "215",
+      "df": 3,
+      "attributes": [
+        "int",
+        "int"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Magickal & Enchanted Races Lore",
+      "category": "Materia Magicka",
+      "reference": "215",
+      "df": 3,
+      "attributes": [
+        "int",
+        "int"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Magickal Beast Lore",
+      "category": "Materia Magicka",
+      "reference": "215",
+      "df": 4,
+      "attributes": [
+        "int",
+        "int"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Necromantic Mode of Magick",
+      "category": "Materia Magicka",
+      "reference": "224",
+      "df": 6,
+      "attributes": [
+        "int",
+        "dis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Plant Magick",
+      "category": "Materia Magicka",
+      "reference": "220",
+      "df": 5,
+      "attributes": [
+        "int",
+        "dis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Power Word Mode of Magick",
+      "category": "Materia Magicka",
+      "reference": "224",
+      "df": 6,
+      "attributes": [
+        "int",
+        "bv"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Ritual Preperations",
+      "category": "Materia Magicka",
+      "reference": "217",
+      "df": 4,
+      "attributes": [
+        "int",
+        "wis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Shamanic Priest Mode",
+      "category": "Materia Magicka",
+      "reference": "229",
+      "df": 6,
+      "attributes": [
+        "con",
+        "spr"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Spell Enhancement",
+      "category": "Materia Magicka",
+      "reference": "217",
+      "df": 4,
+      "attributes": [
+        "dis",
+        "dis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Spell Research",
+      "category": "Materia Magicka",
+      "reference": "217",
+      "df": 4,
+      "attributes": [
+        "int",
+        "int"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Summoning Magick",
+      "category": "Materia Magicka",
+      "reference": "220",
+      "df": 5,
+      "attributes": [
+        "int",
+        "con"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Thaumaturgy Mode of Magick",
+      "category": "Materia Magicka",
+      "reference": "225",
+      "df": 6,
+      "attributes": [
+        "int",
+        "wis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Transcendental Magick",
+      "category": "Materia Magicka",
+      "reference": "220",
+      "df": 5,
+      "attributes": [
+        "int",
+        "dis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Transmutation Magick",
+      "category": "Materia Magicka",
+      "reference": "220",
+      "df": 5,
+      "attributes": [
+        "int",
+        "con"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Wards Magick",
+      "category": "Materia Magicka",
+      "reference": "221",
+      "df": 5,
+      "attributes": [
+        "int",
+        "con"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Witchcraft Priest Mode",
+      "category": "Materia Magicka",
+      "reference": "229",
+      "df": 6,
+      "attributes": [
+        "int",
+        "spr"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Word of Guard",
+      "category": "Materia Magicka",
+      "reference": "219",
+      "df": 4,
+      "attributes": [
+        "int",
+        "bv"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Chirurgery",
+      "category": "Materia Medicina",
+      "reference": "187",
+      "df": 4,
+      "attributes": [
+        "int",
+        "dex"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "First Aid",
+      "category": "Materia Medicina",
+      "reference": "187",
+      "df": 2,
+      "attributes": [
+        "int",
+        "wis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Herbalism",
+      "category": "Materia Medicina",
+      "reference": "190",
+      "df": 4,
+      "attributes": [
+        "int",
+        "wis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Pharmacology & Medicine",
+      "category": "Materia Medicina",
+      "reference": "188",
+      "df": 4,
+      "attributes": [
+        "int",
+        "wis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Debate",
+      "category": "Materia Theologica",
+      "reference": "232",
+      "df": 4,
+      "attributes": [
+        "int",
+        "wis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Faith",
+      "category": "Materia Theologica",
+      "reference": "231",
+      "df": 5,
+      "attributes": [
+        "spr",
+        "spr"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Law",
+      "category": "Materia Theologica",
+      "reference": "231",
+      "df": 3,
+      "attributes": [
+        "int",
+        "dis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Theology of (“Religion”)",
+      "category": "Materia Theologica",
+      "reference": "230",
+      "df": 4,
+      "attributes": [
+        "int",
+        "dis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Concentration",
+      "category": "Mental Fortitude",
+      "reference": "191",
+      "df": 3,
+      "attributes": [
+        "dis",
+        "dis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Meditation",
+      "category": "Mental Fortitude",
+      "reference": "191",
+      "df": 3,
+      "attributes": [
+        "dis",
+        "dis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Riddling",
+      "category": "Mental Fortitude",
+      "reference": "192",
+      "df": 3,
+      "attributes": [
+        "dis",
+        "dis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Willpower",
+      "category": "Mental Fortitude",
+      "reference": "192",
+      "df": 3,
+      "attributes": [
+        "dis",
+        "wis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Chess",
+      "category": "Noble",
+      "reference": "193",
+      "df": 3,
+      "attributes": [
+        "int",
+        "int"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Courtly Love",
+      "category": "Noble",
+      "reference": "193",
+      "df": 3,
+      "attributes": [
+        "cha",
+        "wis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Courtly Manners",
+      "category": "Noble",
+      "reference": "195",
+      "df": 3,
+      "attributes": [
+        "int",
+        "dis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Heraldry",
+      "category": "Noble",
+      "reference": "195",
+      "df": 3,
+      "attributes": [
+        "int",
+        "wis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Blending into Surroundings",
+      "category": "Outdoor",
+      "reference": "196",
+      "df": 4,
+      "attributes": [
+        "wis",
+        "agl"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Calm & Attract Animals",
+      "category": "Outdoor",
+      "reference": "196",
+      "df": 4,
+      "attributes": [
+        "bv",
+        "dis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Covering tracks",
+      "category": "Outdoor",
+      "reference": "197",
+      "df": 4,
+      "attributes": [
+        "int",
+        "agl"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Detecting Snares",
+      "category": "Outdoor",
+      "reference": "197",
+      "df": 4,
+      "attributes": [
+        "wis",
+        "int"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Finding Direction",
+      "category": "Outdoor",
+      "reference": "197",
+      "df": 2,
+      "attributes": [
+        "wis",
+        "int"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Finding One’s Location",
+      "category": "Outdoor",
+      "reference": "197",
+      "df": 3,
+      "attributes": [
+        "wis",
+        "agl"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Finding Water",
+      "category": "Outdoor",
+      "reference": "198",
+      "df": 3,
+      "attributes": [
+        "wis",
+        "agl"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Fishing",
+      "category": "Outdoor",
+      "reference": "198",
+      "df": 3,
+      "attributes": [
+        "wis",
+        "agl"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Foraging for wild foods",
+      "category": "Outdoor",
+      "reference": "199",
+      "df": 3,
+      "attributes": [
+        "wis",
+        "int"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Forester’s Stealth",
+      "category": "Outdoor",
+      "reference": "199",
+      "df": 4,
+      "attributes": [
+        "wis",
+        "agl"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Intentions of Animals",
+      "category": "Outdoor",
+      "reference": "200",
+      "df": 3,
+      "attributes": [
+        "int",
+        "wis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Setting & Disarming Traps",
+      "category": "Outdoor",
+      "reference": "200",
+      "df": 4,
+      "attributes": [
+        "int",
+        "agl"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Tracking Prey",
+      "category": "Outdoor",
+      "reference": "200",
+      "df": 4,
+      "attributes": [
+        "agl",
+        "wis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Alertness Sound",
+      "category": "Perception",
+      "reference": "202",
+      "df": 7,
+      "attributes": [],
+      "kind": "skill",
+      "attributeNote": "N/A"
+    },
+    {
+      "name": "Alertness: Sight",
+      "category": "Perception",
+      "reference": "201",
+      "df": 7,
+      "attributes": [],
+      "kind": "skill",
+      "attributeNote": "N/A"
+    },
+    {
+      "name": "Detect Lie",
+      "category": "Perception",
+      "reference": "202",
+      "df": 5,
+      "attributes": [
+        "wis",
+        "int"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Lip Reading",
+      "category": "Perception",
+      "reference": "203",
+      "df": 5,
+      "attributes": [
+        "wis",
+        "int"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Read Character",
+      "category": "Perception",
+      "reference": "202",
+      "df": 5,
+      "attributes": [
+        "wis",
+        "int"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Fisherman",
+      "category": "Seamanship",
+      "reference": "203",
+      "df": 3,
+      "attributes": [
+        "str",
+        "con"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Mariner",
+      "category": "Seamanship",
+      "reference": "204",
+      "df": 4,
+      "attributes": [
+        "str",
+        "con"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Piloting & Navigation",
+      "category": "Seamanship",
+      "reference": "204",
+      "df": 4,
+      "attributes": [
+        "int",
+        "wis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Sailing Small Boats",
+      "category": "Seamanship",
+      "reference": "204",
+      "df": 3,
+      "attributes": [
+        "str",
+        "agl"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Sailmaking & Rigging",
+      "category": "Seamanship",
+      "reference": "204",
+      "df": 2,
+      "attributes": [
+        "int",
+        "wis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Shipbuilder Maritime Architecture",
+      "category": "Seamanship",
+      "reference": "204",
+      "df": 5,
+      "attributes": [
+        "int",
+        "wis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Ships Carpenter",
+      "category": "Seamanship",
+      "reference": "204",
+      "df": 4,
+      "attributes": [
+        "str",
+        "agl"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Administer Poisons & Drugs",
+      "category": "Thievish",
+      "reference": "205",
+      "df": 4,
+      "attributes": [
+        "int",
+        "dis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Backstabbing",
+      "category": "Thievish",
+      "reference": "205",
+      "df": 5,
+      "attributes": [
+        "int",
+        "agl"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Concealing & Finding",
+      "category": "Thievish",
+      "reference": "207",
+      "df": 4,
+      "attributes": [
+        "wis",
+        "int"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Detecting Mantraps",
+      "category": "Thievish",
+      "reference": "207",
+      "df": 4,
+      "attributes": [
+        "wis",
+        "int"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Detecting Thievery",
+      "category": "Thievish",
+      "reference": "207",
+      "df": 5,
+      "attributes": [
+        "wis",
+        "agl"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Disguises",
+      "category": "Thievish",
+      "reference": "207",
+      "df": 3,
+      "attributes": [
+        "wis",
+        "int"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Evaluating Goods",
+      "category": "Thievish",
+      "reference": "207",
+      "df": 2,
+      "attributes": [
+        "int",
+        "wis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Garrotting",
+      "category": "Thievish",
+      "reference": "209",
+      "df": 4,
+      "attributes": [
+        "str",
+        "agl"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Hearing Rumours",
+      "category": "Thievish",
+      "reference": "208",
+      "df": 2,
+      "attributes": [
+        "dis",
+        "dis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Mugging",
+      "category": "Thievish",
+      "reference": "209",
+      "df": 4,
+      "attributes": [
+        "str",
+        "str"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Picking Locks",
+      "category": "Thievish",
+      "reference": "210",
+      "df": 3,
+      "attributes": [
+        "int",
+        "dex"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Picking Pockets & Cutting Purses",
+      "category": "Thievish",
+      "reference": "210",
+      "df": 3,
+      "attributes": [
+        "int",
+        "dex"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Setting & Disarming Mantraps",
+      "category": "Thievish",
+      "reference": "211",
+      "df": 4,
+      "attributes": [
+        "int",
+        "dex"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Skulking in Shadows",
+      "category": "Thievish",
+      "reference": "211",
+      "df": 4,
+      "attributes": [
+        "agl",
+        "dis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Stealth of Thieves & Assassins",
+      "category": "Thievish",
+      "reference": "211",
+      "df": 4,
+      "attributes": [
+        "agl",
+        "dis"
+      ],
+      "kind": "skill"
+    },
+    {
+      "name": "Streetwise",
+      "category": "Thievish",
+      "reference": "212",
+      "df": 4,
+      "attributes": [
+        "int",
+        "wis"
+      ],
+      "kind": "skill"
+    }
+  ]
+}

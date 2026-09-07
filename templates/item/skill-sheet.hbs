@@ -89,7 +89,7 @@
         </div>
     </fieldset>
 
-    <div class="cns5-grid cns5-grid--three">
+    <div class="cns5-grid cns5-grid--four">
         <label class="cns5-field">
             <span>{{localize "CNS5.Skill.otherMod"}}</span>
             <input type="number" name="system.otherMod" value="{{system.otherMod}}"
@@ -99,6 +99,11 @@
             <span>{{localize "CNS5.Skill.resistedBy"}}</span>
             <input type="text" name="system.resistedBy" value="{{system.resistedBy}}"
                    {{#unless editable}}disabled{{/unless}}>
+        </label>
+        <label class="cns5-field">
+            <span>{{localize "CNS5.Skill.group"}}</span>
+            <input type="text" name="system.group" value="{{system.group}}"
+                   placeholder="Combat" {{#unless editable}}disabled{{/unless}}>
         </label>
         <label class="cns5-field">
             <span>{{localize "CNS5.Skill.reference"}}</span>

@@ -134,7 +134,7 @@
   "CNS5.Skill.deleteConfirm": "Delete {name} from this character?",
   "CNS5.Skill.newSkill": "New Skill",
   "CNS5.Skill.namePlaceholder": "Skill name",
-  "CNS5.Skill.empty": "No skills yet. Add core skills to get the nine every character has, then build out from there.",
+  "CNS5.Skill.empty": "No skills yet. Add core skills to get the nine every character has, or drag skills in from the C&S Skills compendium.",
   "CNS5.Skill.coreAlreadyPresent": "This character already has all nine core skills.",
   "CNS5.Skill.difficulty": "Difficulty Factor",
   "CNS5.Skill.category": "Category",
@@ -185,5 +185,9 @@
   "CNS5.Roll.shortfallNote": "Below Min%, so the Crit Die suffers",
   "CNS5.Roll.overflowChat": "Above Max% by",
   "CNS5.Roll.shortfallChat": "Below Min% by",
-  "CNS5.Roll.unskilledNote": "Unskilled attempt: a failed Crit Die is worsened by 2."
+  "CNS5.Roll.unskilledNote": "Unskilled attempt: a failed Crit Die is worsened by 2.",
+  "CNS5.Skill.group": "Rulebook group",
+  "CNS5.Skill.duplicate": "{name} is already on this character.",
+  "CNS5.Skill.added": "Added {name}.",
+  "CNS5.Skill.browseCompendium": "Open skills compendium"
 }

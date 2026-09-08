@@ -1,6 +1,7 @@
 import { CNS5 } from "./config.mjs";
 import { CnS5Actor } from "./documents/actor.mjs";
 import { CnS5Item } from "./documents/item.mjs";
+import { CnS5Combat, CnS5Combatant } from "./documents/combat.mjs";
 import { CnS5Character } from "./data/actor-character.mjs";
 import { CnS5NPC } from "./data/actor-npc.mjs";
 import { CnS5Skill } from "./data/item-skill.mjs";
@@ -22,6 +23,8 @@ Hooks.once("init", () => {
   game.cns5 = { CreationWizard: CnS5CreationWizard };
   CONFIG.Actor.documentClass = CnS5Actor;
   CONFIG.Item.documentClass = CnS5Item;
+  CONFIG.Combat.documentClass = CnS5Combat;
+  CONFIG.Combatant.documentClass = CnS5Combatant;
   CONFIG.Actor.dataModels = {
     character: CnS5Character,
     npc: CnS5NPC

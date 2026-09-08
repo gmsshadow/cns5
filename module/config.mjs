@@ -979,6 +979,17 @@ CNS5.exhaustedApPenalty = -10;
  */
 CNS5.initiativeFormula = "1d10 + @initiative";
 
+/** The die rolled afresh at the start of every Combat Round. */
+CNS5.initiativeDie = "1d10";
+
+/**
+ * A maximum of ten Action Points may be spent on any one action within a single
+ * Action Phase, and no more than ten on movement in a phase (p268). A character
+ * taking two actions in a phase may therefore spend more than ten in total, so
+ * this is what the prompt advises rather than what it enforces.
+ */
+CNS5.maxApPerAction = 10;
+
 /* -------------------------------------------- */
 /*  Talents and flaws                           */
 /* -------------------------------------------- */

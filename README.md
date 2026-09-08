@@ -497,6 +497,48 @@ The one bonus that does attach to background is now implemented: a character of
 gentle birth gains +10% PSF in Leadership, and in Courtly Love outside the Early
 Feudal period. There is a Gentle birth toggle on the Background & Social tab.
 
+## The Combat Round
+
+A round is not a list of turns taken once each. It is a series of Action
+Phases: within a phase everyone acts once in order of remaining Action Points,
+and when the phase closes the order is worked out again from what everyone has
+left. The round continues until every combatant has spent their pool or held
+what remains of it over (p268).
+
+**Initiative is the Action Point pool.** They are one number rather than two.
+The tracker already shows initiative and already sorts on it, so a pool kept
+anywhere else would mean two figures that must agree and a tracker showing the
+wrong one. Spending lowers initiative, which is what the rules describe: the
+order of play is the order of remaining pool, and it changes as the round is
+spent.
+
+**The order is frozen for the length of a phase.** Re-sorting the moment someone
+spends would move people around the list while it is being worked through, and
+nobody could tell who had yet to act. Each combatant carries the index it was
+given when the phase opened, and the tracker sorts on that until the phase
+closes.
+
+**How a turn goes.** Pressing next prompts the active combatant, not the one
+about to act — a player does not know what they spent until they have done it.
+They move, strike or cast, then say what it cost. Three answers: act and record
+the spend, pass, or hold over. Holding keeps no more than Base Action Points'
+worth, ends that character's round, and drops them out of the order at once.
+
+**When the round turns**, held points carry over and are added to a fresh d10
+and the round bonus. Points neither spent nor held are lost.
+
+### Not automated
+
+Declaration order. The optional rule on p268 has actions declared from lowest
+current AP to highest and then resolved from highest to lowest. Resolution order
+is what this implements; declaration is a table convention that needs no
+enforcement.
+
+The ten-point cap is advisory rather than enforced. It applies to any one
+action, and to movement within a phase, so a character taking two actions in a
+phase may legitimately spend more than ten in total — the prompt says so and
+lets the number through.
+
 ## Non-player characters
 
 NPCs come in two sorts, and the sheet asks which before it shows anything else.

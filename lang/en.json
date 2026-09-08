@@ -612,5 +612,15 @@
   "CNS5.Trait.pcNet": "Net PC Points",
   "CNS5.Trait.rollShort": "Roll",
   "CNS5.Trait.costShort": "PC",
-  "CNS5.Trait.pageShort": "Page"
+  "CNS5.Trait.pageShort": "Page",
+  "CNS5.Combat.turnTitle": "{name}'s turn",
+  "CNS5.Combat.poolRemaining": "{name} has {ap} Action Points left this round.",
+  "CNS5.Combat.apSpent": "Action Points spent",
+  "CNS5.Combat.apSpentHint": "Take your actions first, then record what they cost. No single action may cost more than {max} Action Points, nor may more than {max} be spent on movement in one phase.",
+  "CNS5.Combat.holdHint": "Holding over keeps {ap} Action Points for the next round — no more than Base Action Points, which is {bap} — and ends this character's round.",
+  "CNS5.Combat.act": "Act",
+  "CNS5.Combat.pass": "Pass",
+  "CNS5.Combat.hold": "Hold over",
+  "CNS5.Combat.heldOver": "{name} holds over {ap} Action Points and is done for the round.",
+  "CNS5.Combat.apRemaining": "AP"
 }

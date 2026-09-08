@@ -1,25 +1,15 @@
 <div class="cns5-round">
     <h4 class="cns5-round__title">{{localize "CNS5.Combat.poolsTitle"}}</h4>
-    <table class="cns5-round__table">
-        <thead>
-        <tr>
-            <th scope="col">{{localize "CNS5.Combat.combatant"}}</th>
-            <th scope="col">{{localize "CNS5.Combat.die"}}</th>
-            <th scope="col">{{localize "CNS5.Combat.bonus"}}</th>
-            {{#if anyCarried}}<th scope="col">{{localize "CNS5.Combat.carried"}}</th>{{/if}}
-            <th scope="col">{{localize "CNS5.Combat.pool"}}</th>
-        </tr>
-        </thead>
-        <tbody>
+
+    <ul class="cns5-round__list">
         {{#each lines}}
-        <tr>
-            <th scope="row">{{name}}</th>
-            <td>{{die}}</td>
-            <td>{{cns5Signed bonus}}</td>
-            {{#if ../anyCarried}}<td>{{#if carried}}+{{carried}}{{else}}—{{/if}}</td>{{/if}}
-            <td class="cns5-round__total">{{total}}</td>
-        </tr>
+        <li class="cns5-round__entry">
+            <span class="cns5-round__name">{{name}}</span>
+            <span class="cns5-round__total {{#if debt}}is-debt{{/if}}">{{total}}</span>
+            <span class="cns5-round__workings">
+                {{die}} {{cns5Signed bonus}}{{#if carried}} {{localize "CNS5.Combat.carried"}} {{cns5Signed carried}}{{/if}}
+            </span>
+        </li>
         {{/each}}
-        </tbody>
-    </table>
+    </ul>
 </div>

@@ -1,6 +1,6 @@
 {
   "name": "cns5",
-  "version": "0.13.1",
+  "version": "0.13.2",
   "private": true,
   "description": "Build tooling for the Chivalry & Sorcery 5th Edition system for Foundry VTT",
   "type": "module",

@@ -164,10 +164,14 @@ export class CnS5Combat extends Combat {
     const rolls = [];
 
     for (const combatant of this.combatants) {
-      const carried = combatant.held ? Math.min(combatant.pool, combatant.bap) : 0;
+      // Held points carry over, capped at Base Action Points. An unheld surplus
+      // is simply lost — but an overspend is a debt, and that does carry.
+      const carried = combatant.held
+        ? Math.min(combatant.pool, combatant.bap)
+        : Math.min(0, combatant.pool);
       const roll = await new Roll(CNS5.initiativeDie).evaluate();
       const bonus = combatant.roundBonus;
-      const total = Math.max(0, carried + roll.total + bonus);
+      const total = carried + roll.total + bonus;
 
       rolls.push(roll);
       updates.push({
@@ -182,7 +186,8 @@ export class CnS5Combat extends Combat {
         die: roll.total,
         bonus,
         carried,
-        total
+        total,
+        debt: total < 0
       });
     }
 
@@ -230,7 +235,8 @@ export class CnS5Combat extends Combat {
     if (!combatant) return this.#advance();
 
     const choice = await CnS5Combat.promptTurn(combatant);
-    if (choice === null) return this;
+    // Dismissed, or a spend that was refused: either way the turn stands.
+    if (!choice) return this;
 
     if (choice.action === "hold") {
       // Only Base Action Points' worth may be carried over; the rest is lost.
@@ -245,10 +251,18 @@ export class CnS5Combat extends Combat {
       );
     } else {
       const spent = choice.action === "pass" ? 0 : choice.spent;
-      await combatant.update({
-        initiative: Math.max(0, combatant.pool - spent),
-        "flags.cns5.acted": true
-      });
+      const left = combatant.pool - spent;
+
+      // Overspending is allowed. The rules let a character begin an action in
+      // one round and finish it in the first phase of the next, so a pool may
+      // go below zero and the debt is carried rather than forgiven.
+      await combatant.update({ initiative: left, "flags.cns5.acted": true });
+
+      if (left < 0) {
+        ui.notifications.info(
+          game.i18n.format("CNS5.Combat.overspent", { name: combatant.name, ap: -left })
+        );
+      }
     }
 
     return this.#advance();
@@ -314,38 +328,71 @@ export class CnS5Combat extends Combat {
   }
 
   /* -------------------------------------------- */
-
   /**
    * Ask what the active combatant did with their turn.
+   *
+   * The field has no maximum. A character may commit to an action costing more
+   * than their pool holds, beginning it now and finishing it in the first phase
+   * of the next round (p268); the pool goes below zero and the shortfall
+   * carries against the new round. Refusing the number would make a legal
+   * declaration impossible to record.
    *
    * @param {CnS5Combatant} combatant
    * @returns {Promise<{action: string, spent: number}|null>} null if dismissed
    */
   static async promptTurn(combatant) {
     const pool = combatant.pool;
-    const holdable = Math.min(pool, combatant.bap);
+    const holdable = Math.max(0, Math.min(pool, combatant.bap));
 
     const content = `
       <div class="cns5-prompt">
         <p>${game.i18n.format("CNS5.Combat.poolRemaining", { name: combatant.name, ap: pool })}</p>
         <label for="cns5-spent">${game.i18n.localize("CNS5.Combat.apSpent")}</label>
-        <input id="cns5-spent" type="number" name="spent" value="0" min="0" max="${pool}" autofocus>
+        <input id="cns5-spent" type="number" name="spent" value="0" min="0" step="1" autofocus>
+        <p class="hint" data-cns5-warning hidden></p>
         <p class="hint">${game.i18n.format("CNS5.Combat.apSpentHint", { max: CNS5.maxApPerAction })}</p>
+        <p class="hint">${game.i18n.localize("CNS5.Combat.overspendHint")}</p>
         <p class="hint">${game.i18n.format("CNS5.Combat.holdHint", { ap: holdable, bap: combatant.bap })}</p>
       </div>`;
 
     return foundry.applications.api.DialogV2.wait({
       window: { title: game.i18n.format("CNS5.Combat.turnTitle", { name: combatant.name }) },
       content,
+
+      /**
+       * Say what an overspend will cost before it is committed, rather than
+       * after. The number is still allowed through — it is a legal declaration
+       * — but nobody should discover the debt only when the next round opens.
+       */
+      render: (event, dialog) => {
+        const input = dialog.element.querySelector("#cns5-spent");
+        const warning = dialog.element.querySelector("[data-cns5-warning]");
+        if (!input || !warning) return;
+
+        const check = () => {
+          const value = Number(input.value);
+          const over = Number.isFinite(value) ? value - pool : 0;
+          warning.hidden = over <= 0;
+          if (over > 0) {
+            warning.textContent = game.i18n.format("CNS5.Combat.willOverspend", { ap: over });
+          }
+        };
+        input.addEventListener("input", check);
+        check();
+      },
+
       buttons: [
         {
           action: "act",
           label: game.i18n.localize("CNS5.Combat.act"),
           default: true,
-          callback: (event, button) => ({
-            action: "act",
-            spent: Math.clamp(Number(button.form.elements.spent.value) || 0, 0, pool)
-          })
+          callback: (dialogEvent, button) => {
+            const spent = Number(button.form.elements.spent.value);
+            return {
+              action: "act",
+              spent: Number.isFinite(spent) ? Math.max(0, Math.floor(spent)) : 0
+            };
+          }
         },
         {
           action: "pass",

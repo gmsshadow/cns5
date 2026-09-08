@@ -622,12 +622,10 @@
   "CNS5.Combat.pass": "Pass",
   "CNS5.Combat.hold": "Hold over",
   "CNS5.Combat.heldOver": "{name} holds over {ap} Action Points and is done for the round.",
-  "CNS5.Combat.apRemaining": "AP",
   "CNS5.Combat.roundTitle": "Combat Round {round}",
   "CNS5.Combat.poolsTitle": "Action Point pools",
-  "CNS5.Combat.combatant": "Combatant",
-  "CNS5.Combat.die": "d10",
-  "CNS5.Combat.bonus": "BAP & armour",
-  "CNS5.Combat.carried": "Held over",
-  "CNS5.Combat.pool": "Pool"
+  "CNS5.Combat.overspendHint": "Spending more than the pool holds is allowed: the action begins now and finishes in the first phase of the next round, and the shortfall carries over against it.",
+  "CNS5.Combat.overspent": "{name} has overspent by {ap} Action Points, which carries against the next round.",
+  "CNS5.Combat.carried": "held",
+  "CNS5.Combat.willOverspend": "That is {ap} more than the pool holds. The action begins now and finishes next round, and the shortfall carries against it."
 }

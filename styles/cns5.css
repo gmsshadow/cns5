@@ -1225,34 +1225,49 @@
     padding-bottom: 0.15rem;
 }
 
-.cns5-round__table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.9rem;
+/* Not a table. A table needs a column for the held-over points, which only some
+   rounds have, so the header row gained and lost a column between rounds and
+   the remaining headings were squeezed until they broke mid-word in the chat
+   sidebar. Each combatant is a small block instead: name and pool on one line,
+   the workings beneath, and the shape never changes. */
+.cns5-round__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
 }
 
-.cns5-round__table th,
-.cns5-round__table td {
-    padding: 0.1rem 0.3rem;
-    text-align: right;
-    font-variant-numeric: tabular-nums;
+.cns5-round__entry {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    column-gap: 0.5rem;
+    align-items: baseline;
+    padding-bottom: 0.15rem;
+    border-bottom: 1px dotted currentColor;
 }
 
-.cns5-round__table tbody th {
-    text-align: left;
-    font-weight: 400;
+.cns5-round__name {
+    font-size: 0.95rem;
 }
 
-.cns5-round__table thead th {
-    font-size: 0.75rem;
-    font-weight: 600;
-    font-variant: small-caps;
-    opacity: 0.8;
-    border-bottom: 1px solid currentColor;
-}
-
-/* The pool is the number anyone reads; the workings behind it are secondary. */
 .cns5-round__total {
     font-weight: 700;
-    font-size: 1rem;
+    font-size: 1.15rem;
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+}
+
+.cns5-round__workings {
+    grid-column: 1 / -1;
+    font-size: 0.78rem;
+    font-variant-numeric: tabular-nums;
+    opacity: 0.75;
+}
+
+/* An overspent pool is a debt carried into the next round, so it is marked
+   rather than left to look like an ordinary small number. */
+.cns5-round__total.is-debt {
+    color: var(--cns-oxblood, #6d2723);
 }

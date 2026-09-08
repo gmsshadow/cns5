@@ -37,20 +37,30 @@ function reorder(list) {
   });
 }
 
-/** Apply a combatant's declaration. */
+/**
+ * Apply a combatant's declaration.
+ *
+ * Spending is not floored at zero: a character may commit to an action costing
+ * more than they have, and the pool goes into debt.
+ */
 function declare(c, choice, spent = 0) {
   if (choice === "hold") {
     c.pool = Math.min(c.pool, c.bap);
     c.held = true;
   } else {
-    c.pool = Math.max(0, c.pool - spent);
+    c.pool -= spent;
   }
   c.acted = true;
 }
 
-/** What a combatant starts the next round with. */
+/**
+ * What a combatant starts the next round with.
+ *
+ * Held points carry, capped at Base Action Points. An unheld surplus is lost.
+ * An overspend is a debt, and that carries whether it was held or not.
+ */
 function carryOver(c) {
-  return c.held ? Math.min(c.pool, c.bap) : 0;
+  return c.held ? Math.min(c.pool, c.bap) : Math.min(0, c.pool);
 }
 
 /* -------------------------------------------- */
@@ -121,6 +131,28 @@ ok("so the roll is not optional", newPool(boar, 6) - newPool(boar, 1), 5);
    rather than replacing it. */
 ok("holding does not skip the roll", newPool(knight, 1) > carryOver(knight), true);
 ok("and the held points are on top of it", newPool(knight, 1), 11 + 1 + 14);
+
+/* -------------------------------------------- */
+/*  Overspending                                                              */
+/* -------------------------------------------- */
+
+/* A character may commit to an action costing more than their pool holds,
+   beginning it now and finishing it in the first phase of the next round. The
+   pool goes below zero and the shortfall carries against the new round. */
+const rash = { name: "Rash", bap: 12, pool: 4, held: false, acted: false };
+declare(rash, "act", 11);
+ok("the pool goes below zero", rash.pool, -7);
+ok("which takes them out of the round", active(rash), false);
+ok("and the debt carries", carryOver(rash), -7);
+ok("against the new round's roll", carryOver(rash) + 6 + rash.bap, 11);
+
+/* A debt is not forgiven by having chosen to hold, nor doubled by it. */
+const rashHolder = { name: "Rash Holder", bap: 12, pool: -5, held: true, acted: true };
+ok("holding an empty pool carries the debt once", carryOver(rashHolder), -5);
+
+/* An unheld surplus is still lost — the asymmetry is deliberate. */
+const wasteful = { name: "Wasteful", bap: 12, pool: 6, held: false, acted: true };
+ok("unspent points that were not held are lost", carryOver(wasteful), 0);
 
 /* -------------------------------------------- */
 /*  Configuration                                                             */

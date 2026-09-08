@@ -1,0 +1,342 @@
+<header class="cns5-header">
+    <img class="cns5-header__portrait" src="{{document.img}}" data-edit="img"
+         data-action="editImage" alt="{{document.name}}">
+    <div class="cns5-header__fields">
+        <div class="cns5-header__title">
+            <input class="cns5-header__name" type="text" name="name" value="{{document.name}}"
+                   {{#unless editable}}disabled{{/unless}}>
+            {{#unless isCreature}}
+            {{#if editable}}
+            <button type="button" class="cns5-add" data-action="openWizard">
+                {{localize "CNS5.Creation.open"}}
+            </button>
+            {{/if}}
+            {{/unless}}
+        </div>
+
+        <div class="cns5-header__row">
+            <label class="cns5-field cns5-field--narrow">
+                <span>{{localize "CNS5.Npc.kindLabel"}}</span>
+                <select name="system.kind" {{#unless editable}}disabled{{/unless}}>
+                    {{#each kinds}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{localize label}}</option>{{/each}}
+                </select>
+            </label>
+            <label class="cns5-field">
+                <span>{{localize "CNS5.Npc.descriptor"}}</span>
+                <input type="text" name="system.details.descriptor"
+                       value="{{system.details.descriptor}}" {{#unless editable}}disabled{{/unless}}>
+            </label>
+            <label class="cns5-field cns5-field--narrow">
+                <span>{{localize "CNS5.Details.race"}}</span>
+                <input type="text" name="system.details.race" value="{{system.details.race}}"
+                       {{#unless editable}}disabled{{/unless}}>
+            </label>
+        </div>
+
+        <div class="cns5-header__row">
+            <label class="cns5-field cns5-field--narrow">
+                <span>{{localize "CNS5.Npc.qualityLabel"}}</span>
+                <select name="system.quality" {{#unless editable}}disabled{{/unless}}>
+                    {{#each qualities}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{localize label}}</option>{{/each}}
+                </select>
+            </label>
+            <label class="cns5-field cns5-field--narrow">
+                <span>{{localize "CNS5.Npc.tier"}}</span>
+                <select name="system.tier" {{#unless editable}}disabled{{/unless}}>
+                    {{#each tiers}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{localize label}}</option>{{/each}}
+                </select>
+            </label>
+            <label class="cns5-field">
+                <span>{{localize "CNS5.Npc.disposition"}}</span>
+                <input type="text" name="system.details.disposition"
+                       value="{{system.details.disposition}}" {{#unless editable}}disabled{{/unless}}>
+            </label>
+        </div>
+    </div>
+</header>
+
+{{#if system.psfModifier}}
+<p class="cns5-hint">
+    {{localize "CNS5.Npc.modifierNote"}}
+    {{cns5Signed system.psfModifier}}% {{localize "CNS5.PsfShort"}},
+    {{cns5Signed system.arModifier}}% {{localize "CNS5.ArShort"}}
+</p>
+{{/if}}
+
+<div class="cns5-vitals">
+    <div class="cns5-vitals__pair">
+        <span class="cns5-vitals__label">{{localize "CNS5.Vitals.body"}}</span>
+        <input type="number" name="system.body.value" value="{{system.body.value}}"
+               {{#unless editable}}disabled{{/unless}}>
+        <span class="cns5-vitals__max">/ {{system.body.max}}</span>
+    </div>
+    <div class="cns5-vitals__pair">
+        <span class="cns5-vitals__label">{{localize "CNS5.Vitals.fatigue"}}</span>
+        <input type="number" name="system.fatigue.value" value="{{system.fatigue.value}}"
+               {{#unless editable}}disabled{{/unless}}>
+        <span class="cns5-vitals__max">/ {{system.fatigue.max}}</span>
+    </div>
+    <div class="cns5-vitals__pair">
+        <span class="cns5-vitals__label">{{localize "CNS5.Derived.bap"}}</span>
+        <output class="cns5-vitals__max">{{system.bap}}</output>
+    </div>
+    <div class="cns5-vitals__pair">
+        <span class="cns5-vitals__label">{{localize "CNS5.Derived.magickResistance"}}</span>
+        <input type="number" name="system.magickResistance" value="{{system.magickResistance}}"
+               min="0" {{#unless editable}}disabled{{/unless}}>
+    </div>
+</div>
+
+{{#if isCreature}}
+<fieldset class="cns5-fieldset">
+    <legend>{{localize "CNS5.Npc.printedFigures"}}</legend>
+    <p class="cns5-hint">{{localize "CNS5.Npc.printedHint"}}</p>
+    <div class="cns5-grid cns5-grid--four">
+        <label class="cns5-field">
+            <span>{{localize "CNS5.Vitals.body"}}</span>
+            <input type="number" name="system.vitals.bodyOverride"
+                   value="{{system.vitals.bodyOverride}}" {{#unless editable}}disabled{{/unless}}>
+        </label>
+        <label class="cns5-field">
+            <span>{{localize "CNS5.Vitals.fatigue"}}</span>
+            <input type="number" name="system.vitals.fatigueOverride"
+                   value="{{system.vitals.fatigueOverride}}" {{#unless editable}}disabled{{/unless}}>
+        </label>
+        <label class="cns5-field">
+            <span>{{localize "CNS5.Derived.bap"}}</span>
+            <input type="number" name="system.vitals.bapOverride"
+                   value="{{system.vitals.bapOverride}}" {{#unless editable}}disabled{{/unless}}>
+        </label>
+        <label class="cns5-field">
+            <span>{{localize "CNS5.Npc.honour"}}</span>
+            <input type="number" name="system.details.honour" value="{{system.details.honour}}"
+                   {{#unless editable}}disabled{{/unless}}>
+        </label>
+    </div>
+    <div class="cns5-grid cns5-grid--four">
+        <label class="cns5-field">
+            <span>{{localize "CNS5.Size.weight"}}</span>
+            <input type="number" name="system.size.weight" value="{{system.size.weight}}"
+                   min="1" {{#unless editable}}disabled{{/unless}}>
+        </label>
+        <label class="cns5-field">
+            <span>{{localize "CNS5.Size.height"}}</span>
+            <input type="number" name="system.size.height" value="{{system.size.height}}"
+                   min="1" {{#unless editable}}disabled{{/unless}}>
+        </label>
+        <label class="cns5-field">
+            <span>{{localize "CNS5.Npc.pace"}}</span>
+            <input type="text" name="system.movement.pace" value="{{system.movement.pace}}"
+                   {{#unless editable}}disabled{{/unless}}>
+        </label>
+        <label class="cns5-field">
+            <span>{{localize "CNS5.Npc.sprint"}}</span>
+            <input type="text" name="system.movement.sprint" value="{{system.movement.sprint}}"
+                   {{#unless editable}}disabled{{/unless}}>
+        </label>
+    </div>
+</fieldset>
+{{else}}
+<div class="cns5-attributes">
+    {{#each groups as |group|}}
+    <table class="cns5-attributes__group">
+        <caption>{{localize group.label}}</caption>
+        <thead>
+        <tr>
+            <th scope="col" class="cns5-attributes__name">{{localize "CNS5.Attributes"}}</th>
+            <th scope="col">{{localize "CNS5.Att"}}</th>
+            <th scope="col">{{localize "CNS5.ArShort"}}</th>
+            <th scope="col">{{localize "CNS5.PsfShort"}}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each group.attributes as |attr|}}
+        <tr class="{{#if attr.derived}}is-derived{{/if}}">
+            <th scope="row">
+                <button type="button" class="cns5-attributes__roll" data-action="rollAttribute"
+                        data-attribute="{{attr.key}}">{{localize attr.label}}</button>
+            </th>
+            <td>
+                <input type="number" class="cns5-attributes__value" name="{{attr.path}}"
+                       value="{{attr.editValue}}" {{#unless @root.editable}}disabled{{/unless}}>
+                {{#if attr.derived}}<span class="cns5-attributes__total">{{attr.value}}</span>{{/if}}
+            </td>
+            <td class="cns5-attributes__readout">{{cns5Percent attr.ar}}</td>
+            <td class="cns5-attributes__readout">{{cns5Signed attr.bonus}}</td>
+        </tr>
+        {{/each}}
+        </tbody>
+    </table>
+    {{/each}}
+</div>
+{{/if}}
+
+<section class="cns5-skills">
+    <h3 class="cns5-skills__heading">
+        {{localize "CNS5.Npc.attacks"}}
+        <button type="button" class="cns5-add" data-action="createItem" data-type="weapon">
+            {{localize "CNS5.Item.add"}}
+        </button>
+    </h3>
+    {{#if weapons.length}}
+    <table class="cns5-skills__table">
+        <thead>
+        <tr>
+            <th scope="col" class="cns5-skills__name">{{localize "CNS5.Combat.weapon"}}</th>
+            <th scope="col">{{localize "CNS5.PsfShort"}}</th>
+            <th scope="col">{{localize "CNS5.Skill.tscShort"}}</th>
+            <th scope="col">{{localize "CNS5.Weapon.apShort"}}</th>
+            <th scope="col">{{localize "CNS5.Weapon.damage"}}</th>
+            <th scope="col">{{localize "CNS5.Weapon.critShort"}}</th>
+            <th scope="col"><span class="cns5-visually-hidden">{{localize "CNS5.Skill.controls"}}</span></th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each weapons as |weapon|}}
+        <tr class="{{#if weapon.system.skillMissing}}is-unskilled{{/if}}">
+            <th scope="row">
+                <button type="button" class="cns5-skills__roll" data-action="rollWeapon"
+                        data-item-id="{{weapon.id}}">{{weapon.name}}</button>
+                <span class="cns5-tag">{{localize (concat "CNS5.DamageTypeAbbr." weapon.system.damageType)}}</span>
+                {{#if weapon.system.natural}}
+                <span class="cns5-tag" data-tooltip="{{localize 'CNS5.Weapon.naturalHint'}}">
+                    {{localize "CNS5.Weapon.natural"}}
+                </span>
+                {{/if}}
+            </th>
+            <td class="cns5-skills__readout">{{cns5Signed weapon.system.psf}}</td>
+            <td class="cns5-skills__readout cns5-skills__readout--total">
+                {{#if weapon.system.tsc}}{{cns5Percent weapon.system.tsc}}{{else}}—{{/if}}
+            </td>
+            <td class="cns5-skills__readout">{{weapon.system.ap}}</td>
+            <td class="cns5-skills__readout cns5-skills__readout--total">{{weapon.system.damage}}</td>
+            <td class="cns5-skills__readout">{{cns5Signed weapon.system.critDieModifier}}</td>
+            <td class="cns5-skills__controls">
+                <button type="button" data-action="editItem" data-item-id="{{weapon.id}}">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </button>
+                <button type="button" data-action="deleteItem" data-item-id="{{weapon.id}}">
+                    <i class="fa-solid fa-trash"></i>
+                </button>
+            </td>
+        </tr>
+        {{/each}}
+        </tbody>
+    </table>
+    {{else}}
+    <p class="cns5-hint">{{localize "CNS5.Npc.noAttacks"}}</p>
+    {{/if}}
+</section>
+
+<section class="cns5-skills">
+    <h3 class="cns5-skills__heading">
+        {{localize "CNS5.Combat.armour"}}
+        <button type="button" class="cns5-add" data-action="createItem" data-type="armour">
+            {{localize "CNS5.Item.add"}}
+        </button>
+    </h3>
+    {{#if armour.length}}
+    <table class="cns5-skills__table">
+        <thead>
+        <tr>
+            <th scope="col" class="cns5-skills__name">{{localize "CNS5.Combat.armour"}}</th>
+            <th scope="col">{{localize "CNS5.DamageTypeAbbr.slash"}}</th>
+            <th scope="col">{{localize "CNS5.DamageTypeAbbr.crush"}}</th>
+            <th scope="col">{{localize "CNS5.DamageTypeAbbr.pierce"}}</th>
+            <th scope="col">{{localize "CNS5.DamageTypeAbbr.missile"}}</th>
+            <th scope="col">{{localize "CNS5.DamageTypeAbbr.energy"}}</th>
+            <th scope="col"><span class="cns5-visually-hidden">{{localize "CNS5.Skill.controls"}}</span></th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each armour as |piece|}}
+        <tr class="{{#unless piece.system.equipped}}is-unskilled{{/unless}}">
+            <th scope="row">
+                <button type="button" class="cns5-skills__roll" data-action="toggleEquipped"
+                        data-item-id="{{piece.id}}"
+                        data-tooltip="{{localize 'CNS5.Item.toggleEquipped'}}">{{piece.name}}</button>
+            </th>
+            <td class="cns5-skills__readout">{{piece.system.absorption.slash}}</td>
+            <td class="cns5-skills__readout">{{piece.system.absorption.crush}}</td>
+            <td class="cns5-skills__readout">{{piece.system.absorption.pierce}}</td>
+            <td class="cns5-skills__readout">{{piece.system.absorption.missile}}</td>
+            <td class="cns5-skills__readout">{{piece.system.absorption.energy}}</td>
+            <td class="cns5-skills__controls">
+                <button type="button" data-action="editItem" data-item-id="{{piece.id}}">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </button>
+                <button type="button" data-action="deleteItem" data-item-id="{{piece.id}}">
+                    <i class="fa-solid fa-trash"></i>
+                </button>
+            </td>
+        </tr>
+        {{/each}}
+        <tr class="cns5-total-row">
+            <th scope="row">{{localize "CNS5.Armour.worn"}}</th>
+            <td>{{system.protection.slash}}</td>
+            <td>{{system.protection.crush}}</td>
+            <td>{{system.protection.pierce}}</td>
+            <td>{{system.protection.missile}}</td>
+            <td>{{system.protection.energy}}</td>
+            <td></td>
+        </tr>
+        </tbody>
+    </table>
+    {{else}}
+    <p class="cns5-hint">{{localize "CNS5.Npc.noArmour"}}</p>
+    {{/if}}
+</section>
+
+<section class="cns5-skills">
+    <h3 class="cns5-skills__heading">
+        {{localize "CNS5.Tabs.skills"}}
+        <button type="button" class="cns5-add" data-action="createItem" data-type="skill">
+            {{localize "CNS5.Item.add"}}
+        </button>
+    </h3>
+    {{#if skills.length}}
+    <table class="cns5-skills__table">
+        <thead>
+        <tr>
+            <th scope="col" class="cns5-skills__name">{{localize "CNS5.Skill.skill"}}</th>
+            <th scope="col">{{localize "CNS5.Skill.dfShort"}}</th>
+            <th scope="col">{{localize "CNS5.PsfShort"}}</th>
+            <th scope="col">{{localize "CNS5.Skill.tscShort"}}</th>
+            <th scope="col"><span class="cns5-visually-hidden">{{localize "CNS5.Skill.controls"}}</span></th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each skills as |skill|}}
+        <tr>
+            <th scope="row">
+                <button type="button" class="cns5-skills__roll" data-action="rollSkill"
+                        data-item-id="{{skill.id}}">{{skill.name}}</button>
+                {{#if skill.system.psfIsOverridden}}
+                <span class="cns5-tag" data-tooltip="{{localize 'CNS5.Skill.psfOverrideHint'}}">×</span>
+                {{/if}}
+            </th>
+            <td class="cns5-skills__readout">{{skill.system.df}}</td>
+            <td class="cns5-skills__readout">{{cns5Signed skill.system.psf}}</td>
+            <td class="cns5-skills__readout cns5-skills__readout--total">{{cns5Percent skill.system.target}}</td>
+            <td class="cns5-skills__controls">
+                <button type="button" data-action="editItem" data-item-id="{{skill.id}}">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </button>
+                <button type="button" data-action="deleteItem" data-item-id="{{skill.id}}">
+                    <i class="fa-solid fa-trash"></i>
+                </button>
+            </td>
+        </tr>
+        {{/each}}
+        </tbody>
+    </table>
+    {{else}}
+    <p class="cns5-hint">{{localize "CNS5.Npc.noSkills"}}</p>
+    {{/if}}
+</section>
+
+<fieldset class="cns5-fieldset">
+    <legend>{{localize "CNS5.Details.biography"}}</legend>
+    {{formInput fields.biography value=system.biography enriched=biographyHTML
+                toggled=true disabled=(not editable)}}
+</fieldset>

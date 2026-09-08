@@ -437,6 +437,43 @@ book against itself had turned up.
   forced on the anchor. The `important` there is deliberate and commented: it is
   the only reliable way to win against a theme whose rules we cannot reorder.
 
+## Non-player characters
+
+NPCs come in two sorts, and the sheet asks which before it shows anything else.
+
+A **person** is built the way a character is: attributes, from which Body,
+Fatigue and Action Points follow.
+
+A **creature** is not. The bestiary gives a boar a Body of 57 and a Fatigue of
+34 outright and never mentions its Constitution, because those figures were
+settled by whoever wrote the table rather than derived from anything. So a
+creature states its vitals and the derivation is skipped, and the sheet hides
+the attribute grid rather than inviting someone to fill in numbers that mean
+nothing.
+
+Two mechanisms make creature stat blocks expressible:
+
+- **A natural attack** carries its own Personal Skill Factor instead of naming a
+  combat skill. A boar's tusk is printed as `Med. tusk (36) 16P`, so it rolls at
+  Difficulty Factor 3 with 36 as the whole of its PSF, for a 76% chance, and
+  deals 16 pierce. It takes no Strength bonus and no Attacker's Bonus: the
+  printed figure is the whole of its damage.
+- **A skill can state a flat PSF**, replacing attributes, level and category
+  entirely. The bestiary gives Dodge, Stamina and Willpower this way.
+
+**Quality and campaign tier** (p513) modify the PSF of every skill and every
+Attribute Roll, and stack. Inferior is -2, Superior +2, Exceptional +4. The
+rules state only that "an Exceptional Heroic NPC would receive +8% to PSF and
++6% to all AR rolls"; since Exceptional alone is +4 and +4, Heroic contributes
++4 and +2 by subtraction rather than by guesswork. Mythic is never given a
+figure anywhere, so it borrows Heroic's rather than inventing one.
+
+**C&S Bestiary** ships with the Boar from p544 as a worked example, complete
+with both attacks, its hide and its three skills. The bestiary pages are printed
+in landscape with rotated text, so they are not extracted the way the skill,
+gear and spell tables are — that is a job of its own, and this one creature was
+transcribed by hand to prove the shape.
+
 ## Errata found while implementing
 
 The rulebook contradicts itself in three places. Where it does, the tables are

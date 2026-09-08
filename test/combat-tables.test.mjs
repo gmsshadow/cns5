@@ -64,6 +64,15 @@ ok("a bow", action({ role: "launcher", group: "" , name: "Longbow" }), "fireBow"
 ok("a crossbow", action({ role: "launcher", group: "", name: "Light Crossbow" }), "fireCrossbow");
 ok("a sling", action({ role: "launcher", group: "Sling", name: "Shepherds" }), "fireSling");
 
+/* Natural weapons have their own rows, and the Attacker's Bonus table pairs a
+   natural medium with a light and a natural heavy with a medium. */
+ok("a boar's tusk", action({ role: "melee", weightClass: "naturalMedium", group: "" }), "attackNaturalMedium");
+ok("a bear's claws", action({ role: "melee", weightClass: "naturalHeavy", group: "" }), "attackNaturalHeavy");
+ok("natural medium shares the light column",
+   CNS5.weaponWeights.naturalMedium.column, CNS5.weaponWeights.light.column);
+ok("natural heavy shares the medium column",
+   CNS5.weaponWeights.naturalHeavy.column, CNS5.weaponWeights.medium.column);
+
 /* -- Table - Aimed Shot Modifiers (p272) ----------------------------------- */
 
 ok("the chest is the unaimed default", CNS5.aimedShotModifiers.chest.modifier, 0);

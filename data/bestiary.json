@@ -1,0 +1,63 @@
+{
+  "source": "Chivalry & Sorcery 5th Edition core rules, bestiary p544",
+  "note": "One creature, transcribed by hand as a worked example. The bestiary pages are printed in landscape with rotated text, so they are not extracted the way the skill, gear and spell tables are; that is a job of its own.",
+  "creatures": [
+    {
+      "name": "Boar",
+      "descriptor": "Large creature of the woodlands & grasslands",
+      "race": "Boar",
+      "weight": 450,
+      "height": 36,
+      "length": "48\"",
+      "fatigue": 34,
+      "body": 57,
+      "bap": 12,
+      "pace": "7'",
+      "sprint": "16'",
+      "magickResistance": 10,
+      "honour": 23,
+      "attacks": [
+        {
+          "name": "Tusk",
+          "weightClass": "naturalMedium",
+          "psf": 36,
+          "damage": 16,
+          "damageType": "pierce"
+        },
+        {
+          "name": "Hooves",
+          "weightClass": "naturalLight",
+          "psf": 6,
+          "damage": 4,
+          "damageType": "crush"
+        }
+      ],
+      "skills": [
+        {
+          "name": "Dodge",
+          "df": 3,
+          "psf": 0
+        },
+        {
+          "name": "Stamina",
+          "df": 3,
+          "psf": 36
+        },
+        {
+          "name": "Willpower",
+          "df": 3,
+          "psf": 24
+        }
+      ],
+      "armour": {
+        "name": "Hide",
+        "slash": 8,
+        "crush": 12,
+        "pierce": 6,
+        "missile": 8,
+        "energy": 5
+      },
+      "page": 544
+    }
+  ]
+}

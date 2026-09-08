@@ -92,7 +92,12 @@
         </div>
     </fieldset>
 
-    <div class="cns5-grid cns5-grid--four">
+    <div class="cns5-grid cns5-grid--five">
+        <label class="cns5-field">
+            <span>{{localize "CNS5.Skill.psfOverride"}}</span>
+            <input type="number" name="system.psfOverride" value="{{system.psfOverride}}"
+                   {{#unless editable}}disabled{{/unless}}>
+        </label>
         <label class="cns5-field">
             <span>{{localize "CNS5.Skill.otherMod"}}</span>
             <input type="number" name="system.otherMod" value="{{system.otherMod}}"

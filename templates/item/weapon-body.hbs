@@ -46,6 +46,13 @@
 </div>
 
 <label class="cns5-field">
+    <span>{{localize "CNS5.Weapon.psfOverride"}}</span>
+    <input type="number" name="system.psfOverride" value="{{system.psfOverride}}"
+           {{#unless editable}}disabled{{/unless}}>
+</label>
+<p class="cns5-hint">{{localize "CNS5.Weapon.psfOverrideHint"}}</p>
+
+<label class="cns5-field">
     <span>{{localize "CNS5.Weapon.apAction"}}</span>
     <select name="system.apAction" {{#unless editable}}disabled{{/unless}}>
         {{#each combatActions}}

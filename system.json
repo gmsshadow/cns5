@@ -2,7 +2,7 @@
   "id": "cns5",
   "title": "Chivalry & Sorcery 5th Edition",
   "description": "An unofficial system implementation of Chivalry & Sorcery 5th Edition for Foundry Virtual Tabletop.",
-  "version": "0.8.6",
+  "version": "0.9.0",
   "compatibility": {
     "minimum": "14",
     "verified": "14.367"
@@ -144,6 +144,17 @@
         "PLAYER": "OBSERVER",
         "ASSISTANT": "OWNER"
       }
+    },
+    {
+      "name": "bestiary",
+      "label": "C&S Bestiary",
+      "path": "packs/bestiary",
+      "type": "Actor",
+      "system": "cns5",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
     }
   ],
   "packFolders": [
@@ -156,7 +167,8 @@
         "weapons",
         "armour",
         "spells",
-        "acts-of-faith"
+        "acts-of-faith",
+        "bestiary"
       ]
     }
   ]

@@ -366,7 +366,141 @@ function toSpell(row, byName, name = row.name) {
 
 /* -------------------------------------------- */
 
+/**
+ * Convert a bestiary creature into an NPC actor with its attacks, skills and
+ * natural armour as embedded items.
+ *
+ * A creature's Body, Fatigue and Action Points are stated rather than derived,
+ * its attacks carry their own Personal Skill Factor instead of naming a skill,
+ * and its three listed skills likewise. Everything the bestiary prints has
+ * somewhere to go; nothing is invented to fill a gap.
+ *
+ * @param {object} row
+ * @returns {object}
+ */
+function toCreature(row) {
+  const _id = stableId(`cns5.npc.${row.name}`);
+  // Embedded documents need a key naming their parent, or the pack compiler
+  // cannot place them: `!actors.items!<actor id>.<item id>`.
+  const embedded = (suffix) => {
+    const itemId = stableId(`cns5.npc.${row.name}.${suffix}`);
+    return { _id: itemId, _key: `!actors.items!${_id}.${itemId}` };
+  };
+
+  const items = [
+    ...row.attacks.map((attack) => ({
+      ...embedded(`attack.${attack.name}`),
+      name: attack.name,
+      type: "weapon",
+      img: "icons/svg/sword.svg",
+      system: {
+        role: "melee",
+        weightClass: attack.weightClass,
+        damageType: attack.damageType,
+        baseDamage: attack.damage,
+        psfOverride: attack.psf,
+        skill: "",
+        carried: true,
+        equipped: true,
+        reference: `p${row.page}`
+      },
+      effects: [],
+      folder: null,
+      sort: 0,
+      ownership: { default: 0 },
+      flags: {}
+    })),
+    ...row.skills.map((skill) => ({
+      ...embedded(`skill.${skill.name}`),
+      name: skill.name,
+      type: "skill",
+      img: "icons/svg/book.svg",
+      system: {
+        df: skill.df,
+        attributes: [],
+        kind: "skill",
+        category: "core",
+        known: true,
+        level: 0,
+        psfOverride: skill.psf,
+        reference: `p${row.page}`
+      },
+      effects: [],
+      folder: null,
+      sort: 0,
+      ownership: { default: 0 },
+      flags: {}
+    })),
+    {
+      ...embedded("armour"),
+      name: row.armour.name,
+      type: "armour",
+      img: "icons/svg/shield.svg",
+      system: {
+        location: "body",
+        weightClass: "light",
+        armourType: row.armour.name,
+        absorption: {
+          slash: row.armour.slash,
+          crush: row.armour.crush,
+          pierce: row.armour.pierce,
+          missile: row.armour.missile,
+          energy: row.armour.energy
+        },
+        carried: true,
+        equipped: true,
+        reference: `p${row.page}`
+      },
+      effects: [],
+      folder: null,
+      sort: 0,
+      ownership: { default: 0 },
+      flags: {}
+    }
+  ];
+
+  return {
+    _id,
+    _key: `!actors!${_id}`,
+    name: row.name,
+    type: "npc",
+    img: "icons/svg/mystery-man.svg",
+    system: {
+      kind: "creature",
+      quality: "average",
+      tier: "historical",
+      details: {
+        descriptor: row.descriptor,
+        race: row.race,
+        disposition: "",
+        honour: row.honour
+      },
+      vitals: {
+        bodyOverride: row.body,
+        fatigueOverride: row.fatigue,
+        bapOverride: row.bap
+      },
+      movement: { pace: row.pace, sprint: row.sprint },
+      magickResistance: row.magickResistance,
+      size: { height: row.height, build: 5, weight: row.weight },
+      body: { value: row.body },
+      fatigue: { value: row.fatigue },
+      biography: ""
+    },
+    items,
+    effects: [],
+    folder: null,
+    sort: 0,
+    ownership: { default: 0 },
+    prototypeToken: { name: row.name, actorLink: false },
+    flags: {}
+  };
+}
+
+/* -------------------------------------------- */
+
 const skills = JSON.parse(await readFile(path.join(DATA, "skills.json"), "utf8"));
+const bestiary = JSON.parse(await readFile(path.join(DATA, "bestiary.json"), "utf8"));
 const spellData = JSON.parse(await readFile(path.join(DATA, "spells.json"), "utf8"));
 const faith = JSON.parse(await readFile(path.join(DATA, "acts-of-faith.json"), "utf8"));
 const gear = JSON.parse(await readFile(path.join(DATA, "gear.json"), "utf8"));
@@ -431,6 +565,7 @@ function buildArmour() {
 
 await build("armour", buildArmour());
 await build("acts-of-faith", faith.acts.map(toActOfFaith));
+await build("bestiary", bestiary.creatures.map(toCreature));
 
 /**
  * Three spells are listed twice, under two elemental sections apiece — Mist &

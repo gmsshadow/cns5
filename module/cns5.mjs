@@ -10,6 +10,7 @@ import { CnS5Spell, CnS5ActOfFaith, CnS5Religion } from "./data/item-mystical.mj
 import { CnS5CharacterSheet } from "./sheets/character-sheet.mjs";
 import { CnS5SkillSheet } from "./sheets/skill-sheet.mjs";
 import { CnS5ItemSheet } from "./sheets/item-sheet.mjs";
+import { CnS5NPCSheet } from "./sheets/npc-sheet.mjs";
 import { CnS5CreationWizard } from "./apps/creation-wizard.mjs";
 import { registerHandlebarsHelpers } from "./helpers/handlebars.mjs";
 
@@ -54,6 +55,12 @@ Hooks.once("init", () => {
     label: "CNS5.Sheet.character"
   });
 
+  foundry.documents.collections.Actors.registerSheet("cns5", CnS5NPCSheet, {
+    types: ["npc"],
+    makeDefault: true,
+    label: "CNS5.Sheet.npc"
+  });
+
   foundry.documents.collections.Items.registerSheet("cns5", CnS5SkillSheet, {
     types: ["skill"],
     makeDefault: true,
@@ -67,6 +74,7 @@ Hooks.once("init", () => {
   });
 
   return foundry.applications.handlebars.loadTemplates([
+    "systems/cns5/templates/actor/npc-sheet.hbs",
     "systems/cns5/templates/actor/parts/header.hbs",
     "systems/cns5/templates/actor/parts/core-combat.hbs",
     "systems/cns5/templates/actor/parts/skills.hbs",

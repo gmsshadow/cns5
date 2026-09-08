@@ -136,13 +136,16 @@ export class CnS5ActorBase extends foundry.abstract.TypeDataModel {
         // A weapon with no skill named on it falls back to the one its group
         // implies, so a bow dragged in from the compendium is rollable without
         // anyone having to type "Archery" into it first.
+        // A natural attack states its own chance and needs no skill at all.
         const wanted =
-          item.system.skill ||
-          CNS5.weaponSkill({
-            name: item.name,
-            group: item.system.group,
-            role: item.system.role
-          });
+          item.system.psfOverride !== null
+            ? ""
+            : item.system.skill ||
+              CNS5.weaponSkill({
+                name: item.name,
+                group: item.system.group,
+                role: item.system.role
+              });
         item.system.resolvedSkill = wanted;
         item.system.prepareForActor(this, skills.get(wanted.toLowerCase()) ?? null);
         continue;
@@ -230,7 +233,8 @@ export class CnS5ActorBase extends foundry.abstract.TypeDataModel {
 
     for (const entry of Object.values(this.attr)) {
       entry.bonus = CNS5.attributeBonus(entry.value);
-      entry.ar = CNS5.attributeRoll(entry.value);
+      // An NPC's quality and campaign tier shift every Attribute Roll it makes.
+      entry.ar = Math.max(1, CNS5.attributeRoll(entry.value) + (this.arModifier ?? 0));
     }
   }
 

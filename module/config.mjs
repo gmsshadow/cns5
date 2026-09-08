@@ -295,7 +295,11 @@ CNS5.magickResistance = {
  * bonus; the damage type sets which armour absorption value applies.
  */
 CNS5.weaponWeights = {
-  naturalLight: { label: "CNS5.WeaponWeight.naturalLight", column: 0, light: true },
+  naturalLight: { label: "CNS5.WeaponWeight.naturalLight", column: 0, light: true, natural: true },
+  // The Attacker's Bonus table pairs a natural medium weapon with a light one
+  // and a natural heavy with a medium, which is why these share their columns.
+  naturalMedium: { label: "CNS5.WeaponWeight.naturalMedium", column: 1, light: false, natural: true },
+  naturalHeavy: { label: "CNS5.WeaponWeight.naturalHeavy", column: 2, light: false, natural: true },
   light: { label: "CNS5.WeaponWeight.light", column: 1, light: true },
   medium: { label: "CNS5.WeaponWeight.medium", column: 2, light: false },
   heavy: { label: "CNS5.WeaponWeight.heavy", column: 3, light: false },
@@ -584,6 +588,8 @@ CNS5.weaponAttackAction = function (weapon) {
 
   return {
     naturalLight: "attackNaturalLight",
+    naturalMedium: "attackNaturalMedium",
+    naturalHeavy: "attackNaturalHeavy",
     light: "attackLight",
     medium: "attackMedium",
     heavy: "attackHeavy",
@@ -869,4 +875,45 @@ CNS5.spellGroupModes = {
  */
 CNS5.spellMode = function (spell, casterMode = "") {
   return spell.mode || CNS5.spellGroupModes[spell.group] || casterMode || "";
+};
+
+/* -------------------------------------------- */
+/*  Non-player characters                       */
+/* -------------------------------------------- */
+
+/**
+ * How well suited an NPC is to what it does (p513).
+ *
+ * The modifiers apply to the PSF% of every skill and to every Attribute Roll.
+ */
+CNS5.npcQuality = {
+  inferior: { label: "CNS5.Npc.quality.inferior", psf: -2, ar: -2 },
+  average: { label: "CNS5.Npc.quality.average", psf: 0, ar: 0 },
+  superior: { label: "CNS5.Npc.quality.superior", psf: 2, ar: 2 },
+  exceptional: { label: "CNS5.Npc.quality.exceptional", psf: 4, ar: 4 }
+};
+
+/**
+ * The campaign tier an NPC was built for, which stacks with quality.
+ *
+ * The rules state only that "an Exceptional Heroic NPC would receive +8% to
+ * PSF and +6% to all AR rolls". Exceptional on its own is +4 and +4, so Heroic
+ * contributes +4 and +2 — that is arithmetic from the book's own example, not a
+ * guess. Mythic is never given a figure anywhere, so it borrows Heroic's rather
+ * than inventing one; a GM who disagrees can set the modifiers by hand.
+ */
+CNS5.npcTier = {
+  historical: { label: "CNS5.CharacterType.historical", psf: 0, ar: 0 },
+  heroic: { label: "CNS5.CharacterType.heroic", psf: 4, ar: 2 },
+  mythic: { label: "CNS5.CharacterType.mythic", psf: 4, ar: 2 }
+};
+
+/**
+ * An NPC is either a person, built the way a character is, or a creature, whose
+ * Body, Fatigue and Action Points the bestiary gives outright rather than
+ * deriving from attributes it does not have.
+ */
+CNS5.npcKinds = {
+  person: "CNS5.Npc.kind.person",
+  creature: "CNS5.Npc.kind.creature"
 };

@@ -62,6 +62,13 @@ export class CnS5Weapon extends CnS5PhysicalItem {
     // character's skills by name, so it survives the skill being replaced.
     schema.skill = new fields.StringField({ required: true, blank: true, initial: "" });
 
+    // A natural attack has no skill behind it — the bestiary prints a boar's
+    // tusk as "Med. tusk (36) 16P", where 36 is the whole of its PSF. Setting
+    // this makes the weapon rollable without any skill at all.
+    schema.psfOverride = new fields.NumberField({
+      required: false, nullable: true, integer: true, initial: null
+    });
+
     schema.missile = new fields.BooleanField({ required: true, initial: false });
     schema.ranges = new fields.SchemaField({
       short: new fields.NumberField({ required: true, integer: true, initial: 0, min: 0 }),
@@ -99,10 +106,25 @@ export class CnS5Weapon extends CnS5PhysicalItem {
     const isLight = CNS5.weaponWeights[this.weightClass]?.light ?? false;
 
     this.skillItem = skillItem ?? null;
-    this.psf = skillItem?.system.psf ?? 0;
-    this.tsc = skillItem?.system.target ?? null;
-    this.level = skillItem?.system.level ?? 0;
-    this.skillMissing = !skillItem;
+    this.natural = this.psfOverride !== null;
+
+    if (this.natural) {
+      // A natural attack carries its own chance. Difficulty Factor 3 is the
+      // ordinary band, which is what the printed figures assume.
+      const band = CNS5.difficultyFactors[3];
+      this.psf = this.psfOverride + (actorSystem.psfModifier ?? 0);
+      this.level = 0;
+      this.skillMissing = false;
+      const total = band.skilled + this.psf;
+      this.tsc = Math.min(Math.max(total, band.min), band.max);
+      this.naturalDf = 3;
+      this.naturalTsc = total;
+    } else {
+      this.psf = skillItem?.system.psf ?? 0;
+      this.tsc = skillItem?.system.target ?? null;
+      this.level = skillItem?.system.level ?? 0;
+      this.skillMissing = !skillItem;
+    }
 
     // A launcher contributes only its bonus; the strength of the arm does not
     // add to a crossbow bolt the way it adds to a sword blow.

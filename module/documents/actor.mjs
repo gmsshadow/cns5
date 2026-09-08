@@ -162,7 +162,7 @@ export class CnS5Actor extends Actor {
     }
 
     const skill = weapon.system.skillItem;
-    if (!skill) {
+    if (!skill && !weapon.system.natural) {
       // Name the skill that is missing, or say plainly that none is set. The
       // old message quoted an empty string, which read as nonsense.
       const wanted = weapon.system.resolvedSkill || weapon.system.skill;
@@ -190,14 +190,19 @@ export class CnS5Actor extends Actor {
     const aimed = CNS5.aimedShotModifiers[area] ?? CNS5.aimedShotModifiers.none;
     situational += aimed.modifier;
 
-    const unclamped = skill.system.tsc + situational;
-    const { target, critMod, overflow, shortfall } = clampSuccessChance(unclamped, skill.system.df);
+    // A natural attack carries its own success chance and Difficulty Factor;
+    // everything else reads them off the linked skill.
+    const df = skill ? skill.system.df : weapon.system.naturalDf;
+    const base = skill ? skill.system.tsc : weapon.system.naturalTsc;
+
+    const unclamped = base + situational;
+    const { target, critMod, overflow, shortfall } = clampSuccessChance(unclamped, df);
 
     const result = await resolveCheck({
       target,
       // The weapon's own Crit Die modifier stacks with any from the band.
       critMod: critMod + weapon.system.critDieModifier,
-      failureCritMod: skill.system.failureCritMod
+      failureCritMod: skill ? skill.system.failureCritMod : 0
     });
 
     // Only a hit deals damage, and the adjusted Crit Die is part of it.
@@ -207,20 +212,23 @@ export class CnS5Actor extends Actor {
       ...result,
       title,
       subtitle: game.i18n.format("CNS5.Roll.weaponSubtitle", {
-        skill: skill.name,
+        skill: skill ? skill.name : game.i18n.localize("CNS5.Weapon.natural"),
         target
       }),
       unclamped,
       overflow,
       shortfall,
-      unskilled: !skill.system.known,
+      unskilled: skill ? !skill.system.known : false,
       damage: result.success ? damage : null,
       damageType: game.i18n.localize(`CNS5.DamageType.${weapon.system.damageType}`),
       targetArea: area === "none" ? null : game.i18n.localize(aimed.label),
       cost: game.i18n.format("CNS5.Roll.weaponCost", { ap: weapon.system.ap }),
       breakdown: this.#breakdown([
-        { label: "CNS5.Roll.bcsSkilled", value: skill.system.bcs },
-        { label: "CNS5.Roll.psf", value: skill.system.psf, signed: true },
+        {
+          label: "CNS5.Roll.bcsSkilled",
+          value: skill ? skill.system.bcs : CNS5.difficultyFactors[3].skilled
+        },
+        { label: "CNS5.Roll.psf", value: weapon.system.psf, signed: true },
         { label: "CNS5.Roll.aimedShot", value: aimed.modifier, signed: true },
         { label: "CNS5.Roll.situational", value: situational - aimed.modifier, signed: true },
         { label: "CNS5.Weapon.baseDamage", value: weapon.system.baseDamage },

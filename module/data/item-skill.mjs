@@ -69,6 +69,13 @@ export class CnS5Skill extends foundry.abstract.TypeDataModel {
 
       otherMod: new fields.NumberField({ required: true, integer: true, initial: 0 }),
 
+      // A flat Personal Skill Factor, replacing the whole derivation. The
+      // bestiary gives a creature's Dodge, Stamina and Willpower as bare PSF
+      // figures with no attributes or levels behind them.
+      psfOverride: new fields.NumberField({
+        required: false, nullable: true, integer: true, initial: null
+      }),
+
       // A few skills print something other than an attribute pair in the skills
       // list: 'N/A' for the two Alertness skills, 'Various' for Druidic Priest
       // Mode. Preserving the printed text explains the absent bonus.
@@ -107,12 +114,16 @@ export class CnS5Skill extends foundry.abstract.TypeDataModel {
     this.categoryBonus = CNS5.skillCategories[this.category]?.psf ?? 0;
     this.masteryBonus = (this.mastered ? 10 : 0) + (this.sunsign ? 10 : 0);
 
-    this.psf =
+    this.derivedPsf =
       this.attributeBonus +
       this.levelBonus +
       this.categoryBonus +
       this.masteryBonus +
       this.otherMod;
+
+    // An NPC's quality and campaign tier shift the PSF of every skill it has.
+    this.psf = (this.psfOverride ?? this.derivedPsf) + (actorSystem.psfModifier ?? 0);
+    this.psfIsOverridden = this.psfOverride !== null;
 
     // TSC before any situational modifier, and the clamped figure a player would
     // actually roll against right now.

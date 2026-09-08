@@ -40,26 +40,38 @@
     <div class="cns5-vitals">
         <div class="cns5-vitals__pair">
             <span class="cns5-vitals__label">{{localize "CNS5.Vitals.body"}}</span>
-            <input type="number" name="system.body.value" value="{{system.body.value}}"
-                   {{#unless editable}}disabled{{/unless}}>
-            <span class="cns5-vitals__max">/ {{system.body.max}}</span>
+            <span class="cns5-vitals__figures">
+                <input type="number" name="system.body.value" value="{{system.body.value}}"
+                       {{#unless editable}}disabled{{/unless}}>
+                <span class="cns5-vitals__max">/ {{system.body.max}}</span>
+            </span>
         </div>
         <div class="cns5-vitals__pair">
             <span class="cns5-vitals__label">{{localize "CNS5.Vitals.fatigue"}}</span>
-            <input type="number" name="system.fatigue.value" value="{{system.fatigue.value}}"
-                   {{#unless editable}}disabled{{/unless}}>
-            <span class="cns5-vitals__max">/ {{system.fatigue.max}}</span>
+            <span class="cns5-vitals__figures">
+                <input type="number" name="system.fatigue.value" value="{{system.fatigue.value}}"
+                       {{#unless editable}}disabled{{/unless}}>
+                <span class="cns5-vitals__max">/ {{system.fatigue.max}}</span>
+            </span>
         </div>
         <div class="cns5-vitals__pair">
             <span class="cns5-vitals__label">{{localize "CNS5.Vitals.spirit"}}</span>
-            <input type="number" name="system.spirit.value" value="{{system.spirit.value}}"
-                   {{#unless editable}}disabled{{/unless}}>
-            <span class="cns5-vitals__max">/ {{system.attr.spr.value}}</span>
+            <span class="cns5-vitals__figures">
+                <input type="number" name="system.spirit.value" value="{{system.spirit.value}}"
+                       {{#unless editable}}disabled{{/unless}}>
+                <span class="cns5-vitals__max">/ {{system.attr.spr.value}}</span>
+            </span>
         </div>
     </div>
 
     <dl class="cns5-derived">
         <div><dt>{{localize "CNS5.Derived.bap"}}</dt><dd>{{system.bap}}</dd></div>
+        <div>
+            <dt>{{localize "CNS5.Combat.apPool"}}</dt>
+            <dd data-tooltip="{{localize 'CNS5.Combat.apPoolHint'}}">
+                1d10 {{cns5Signed system.actionPoints.bonus}}
+            </dd>
+        </div>
         <div><dt>{{localize "CNS5.Derived.jump"}}</dt><dd>{{system.jump}} ft</dd></div>
         <div><dt>{{localize "CNS5.Derived.lcap"}}</dt><dd>{{system.lcap}} lb</dd></div>
         <div><dt>{{localize "CNS5.Derived.ccap"}}</dt><dd>{{system.ccap}} lb</dd></div>
@@ -234,6 +246,7 @@
         <p class="cns5-hint">
             {{localize "CNS5.Armour.penaltyNote"}}
             {{localize "CNS5.Armour.dodgePenalty"}} {{cns5Signed system.dodgePenalty}},
+            {{localize "CNS5.Armour.apModifier"}} {{cns5Signed system.actionPoints.armour}},
             {{localize "CNS5.Armour.fatigueToWear"}} {{system.fatigueToWear}}
         </p>
         {{else}}

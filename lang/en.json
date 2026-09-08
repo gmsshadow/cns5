@@ -569,5 +569,8 @@
   "CNS5.Details.gentleHint": "A character of gentle birth gains +10% PSF in Leadership, and in Courtly Love outside the Early Feudal period.",
   "CNS5.Item.bundle": "Cost covers",
   "CNS5.Item.bundleHint": "Priced by the bundle:",
-  "CNS5.Item.bundleFor": "for"
+  "CNS5.Item.bundleFor": "for",
+  "CNS5.Combat.apPool": "AP pool",
+  "CNS5.Combat.apPoolHint": "Action Points for the round: a d10 added to Base Action Points, modified for armour worn, less ten if out of Fatigue.",
+  "CNS5.Armour.apModifier": "AP modifier"
 }

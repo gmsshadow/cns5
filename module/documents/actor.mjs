@@ -19,6 +19,19 @@ import {
 export class CnS5Actor extends Actor {
   /* -------------------------------------------- */
 
+  /**
+   * Data available to roll formulae, including initiative.
+   * @inheritDoc
+   */
+  getRollData() {
+    const data = { ...super.getRollData() };
+    data.initiative = this.system.actionPoints?.bonus ?? 0;
+    data.bap = this.system.bap ?? 0;
+    return data;
+  }
+
+  /* -------------------------------------------- */
+
   /** @inheritDoc */
   prepareBaseData() {
     // v14 resets the Active Effect phase tracker inside _clearData(), which is

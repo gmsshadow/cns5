@@ -522,6 +522,20 @@ transcribed by hand to prove the shape.
   in a PARTS block. It was checked against the broken template before the fix
   went in, and reported nine.
 
+- **Initiative threw on every roll.** No initiative formula was configured, so
+  Foundry fell back to its own, which names fields this system does not have.
+  It is now a d10 added to Base Action Points and modified for armour, as p268
+  gives it, with the modified figure exposed through the actor's roll data.
+- **Table - Armour Modifiers (p268) was not implemented.** Wearing nothing gains
+  three Action Points a round, light armour is neutral, heavy costs three and
+  battle costs five; a character out of Fatigue Points loses a further ten. The
+  AP pool is shown on both sheets as the d10 and the modifier it will be added
+  to.
+- **The vitals band wrapped badly.** Ranging each label alongside its figure
+  meant a two-word label such as Base Action Points broke across lines and
+  pushed its own value onto another. The labels sit above their figures now, so
+  every entry is the same shape however long its name.
+
 ## Errata found while implementing
 
 The rulebook contradicts itself in three places. Where it does, the tables are
@@ -542,6 +556,10 @@ treated as authoritative over the worked examples and the character sheet.
   the description on p217 spells it correctly. The list is preserved as printed.
 - **p148, skills list.** Debate cites p232, which is the first page of The
   Marketplace. Its description ends on p231.
+- **p268 against pp.37-39, the Crit Die overflow.** p268 says to divide the
+  excess above Max% by 20 "rounded down". Both worked examples round up: 42%
+  over gives +3, and 17% over gives +1, which rounding down would make +2 and
+  +0. The examples are followed.
 - **p271, Action Point bands.** The fourth band ends at 70% and the fifth begins
   at 75%, leaving 71-74% unstated. Read as the top band starting at 71%, which
   is the only reading that leaves no hole.

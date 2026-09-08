@@ -35,6 +35,11 @@ Hooks.once("init", () => {
     religion: CnS5Religion
   };
 
+  // Initiative is a d10 added to Base Action Points and modified for armour
+  // (p268). Without this Foundry falls back to its own formula, which names
+  // fields this system does not have and throws when rolled.
+  CONFIG.Combat.initiative = { formula: CNS5.initiativeFormula, decimals: 0 };
+
   registerSettings();
   registerHandlebarsHelpers();
 

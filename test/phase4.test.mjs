@@ -101,5 +101,41 @@ ok("short range is unpenalised", CNS5.spellRanges.short.modifier, 0);
 ok("long range", CNS5.spellRanges.long.modifier, -10);
 ok("maximum range", CNS5.spellRanges.max.modifier, -30);
 
+/* -- Table - Armour Modifiers and initiative (p268) ------------------------ */
+
+/* Wearing nothing is an advantage rather than merely the absence of one. */
+ok("unarmoured gains Action Points", CNS5.armourModifiers.none.ap, 3);
+ok("light armour is neutral", CNS5.armourModifiers.light.ap, 0);
+ok("heavy armour costs three", CNS5.armourModifiers.heavy.ap, -3);
+ok("battle armour costs five", CNS5.armourModifiers.battle.ap, -5);
+
+ok("and its flat Fatigue cost", CNS5.armourModifiers.heavy.fatigue, 1);
+ok("battle armour is worse", CNS5.armourModifiers.battle.fatigue, 2);
+ok("nothing lighter costs any", CNS5.armourModifiers.light.fatigue, 0);
+
+/* Every armour weight class must have modifiers, or a character in that class
+   silently gets none. */
+ok(
+  "every armour weight is covered",
+  Object.keys(CNS5.armourWeights).filter((k) => !CNS5.armourModifiers[k]),
+  []
+);
+
+ok("running out of Fatigue costs ten", CNS5.exhaustedApPenalty, -10);
+
+/* The formula has to name a field the actor's roll data actually provides, or
+   Foundry throws an unresolved-term error the moment initiative is rolled. */
+ok("initiative rolls a d10", CNS5.initiativeFormula.startsWith("1d10"), true);
+ok("and adds the prepared bonus", CNS5.initiativeFormula.includes("@initiative"), true);
+
+/* The pool itself: Base Action Points, the armour modifier, and the exhaustion
+   penalty when Fatigue is gone. */
+const pool = (bap, armour, fatigueLeft) =>
+  bap + CNS5.armourModifiers[armour].ap + (fatigueLeft <= 0 ? CNS5.exhaustedApPenalty : 0);
+ok("a boar, unarmoured but for its hide", pool(12, "light", 34), 12);
+ok("a knight in battle armour", pool(14, "battle", 27), 9);
+ok("a naked man", pool(14, "none", 27), 17);
+ok("and one who has run out of Fatigue", pool(14, "none", 0), 7);
+
 console.log(fails ? `\n${fails} FAILURES` : "\nAll checks passed.");
 process.exit(fails ? 1 : 0);

@@ -70,24 +70,41 @@
 <div class="cns5-vitals">
     <div class="cns5-vitals__pair">
         <span class="cns5-vitals__label">{{localize "CNS5.Vitals.body"}}</span>
-        <input type="number" name="system.body.value" value="{{system.body.value}}"
-               {{#unless editable}}disabled{{/unless}}>
-        <span class="cns5-vitals__max">/ {{system.body.max}}</span>
+        <span class="cns5-vitals__figures">
+            <input type="number" name="system.body.value" value="{{system.body.value}}"
+                   {{#unless editable}}disabled{{/unless}}>
+            <span class="cns5-vitals__max">/ {{system.body.max}}</span>
+        </span>
     </div>
     <div class="cns5-vitals__pair">
         <span class="cns5-vitals__label">{{localize "CNS5.Vitals.fatigue"}}</span>
-        <input type="number" name="system.fatigue.value" value="{{system.fatigue.value}}"
-               {{#unless editable}}disabled{{/unless}}>
-        <span class="cns5-vitals__max">/ {{system.fatigue.max}}</span>
+        <span class="cns5-vitals__figures">
+            <input type="number" name="system.fatigue.value" value="{{system.fatigue.value}}"
+                   {{#unless editable}}disabled{{/unless}}>
+            <span class="cns5-vitals__max">/ {{system.fatigue.max}}</span>
+        </span>
     </div>
     <div class="cns5-vitals__pair">
         <span class="cns5-vitals__label">{{localize "CNS5.Derived.bap"}}</span>
-        <output class="cns5-vitals__max">{{system.bap}}</output>
+        <span class="cns5-vitals__figures">
+            <output class="cns5-vitals__max">{{system.bap}}</output>
+        </span>
+    </div>
+    <div class="cns5-vitals__pair">
+        <span class="cns5-vitals__label">{{localize "CNS5.Combat.apPool"}}</span>
+        <span class="cns5-vitals__figures">
+            <output class="cns5-vitals__max"
+                    data-tooltip="{{localize 'CNS5.Combat.apPoolHint'}}">
+                1d10 {{cns5Signed system.actionPoints.bonus}}
+            </output>
+        </span>
     </div>
     <div class="cns5-vitals__pair">
         <span class="cns5-vitals__label">{{localize "CNS5.Derived.magickResistance"}}</span>
-        <input type="number" name="system.magickResistance" value="{{system.magickResistance}}"
-               min="0" {{#unless editable}}disabled{{/unless}}>
+        <span class="cns5-vitals__figures">
+            <input type="number" name="system.magickResistance" value="{{system.magickResistance}}"
+                   min="0" {{#unless editable}}disabled{{/unless}}>
+        </span>
     </div>
 </div>
 

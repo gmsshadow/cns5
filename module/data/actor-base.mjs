@@ -173,6 +173,20 @@ export class CnS5ActorBase extends foundry.abstract.TypeDataModel {
 
     this.dodgePenalty = CNS5.dodgePenalty[this.armourWeight] ?? 0;
     this.thiefPenalty = CNS5.armourWeights[this.armourWeight]?.thiefPenalty ?? 0;
+
+    // The Action Point pool for a round: Base Action Points, modified for what
+    // is worn, plus a d10 rolled as initiative (p268). Wearing nothing is worth
+    // three points rather than none.
+    const modifiers = CNS5.armourModifiers[this.armourWeight] ?? CNS5.armourModifiers.light;
+    this.actionPoints = {
+      base: this.bap,
+      armour: modifiers.ap,
+      armourFatigue: modifiers.fatigue,
+      // Running out of Fatigue costs ten Action Points a round.
+      exhausted: this.fatigue.value <= 0 ? CNS5.exhaustedApPenalty : 0
+    };
+    this.actionPoints.bonus =
+      this.actionPoints.base + this.actionPoints.armour + this.actionPoints.exhausted;
   }
 
   /* -------------------------------------------- */

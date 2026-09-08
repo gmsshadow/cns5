@@ -330,37 +330,55 @@
    Vitals and derived values
    -------------------------------------------------------------------------- */
 
+/* Laid out in columns rather than one long row. Ranging the label alongside the
+   figure meant a two-word label such as Base Action Points wrapped and pushed
+   its own value onto another line; stacking the label above keeps every entry
+   the same shape however long its name. */
 .cns5-vitals {
-    display: flex;
-    gap: 1rem;
-    padding: 0.5rem 0.6rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(8.5rem, 1fr));
+    gap: 0.5rem 1rem;
+    padding: 0.5rem 0.7rem;
     background: var(--cns-vellum-light);
     border-left: 3px solid var(--cns-lapis);
 }
 
 .cns5-vitals__pair {
     display: flex;
-    align-items: baseline;
-    gap: 0.3rem;
+    flex-direction: column;
+    gap: 0.1rem;
+    min-width: 0;
 }
 
 .cns5-vitals__label {
     font-variant: small-caps;
     letter-spacing: 0.04em;
-    font-size: 0.95rem;
-    color: var(--cns-ink);
+    font-size: 0.8rem;
+    line-height: 1.2;
+    color: var(--cns-ink-soft);
+}
+
+/* The figures themselves sit on one baseline, so a current-over-maximum pair
+   reads as a single value rather than two. */
+.cns5-vitals__figures {
+    display: flex;
+    align-items: baseline;
+    gap: 0.3rem;
 }
 
 .cns5-vitals__pair input {
-    width: 3.2rem;
+    width: 3.4rem;
     text-align: center;
+    font-size: 1rem;
+    font-variant-numeric: tabular-nums;
 }
 
 .cns5-vitals__max {
     color: var(--cns-ink);
-    font-size: 0.95rem;
-    font-weight: 600;
+    font-size: 1.05rem;
+    font-weight: 700;
     font-variant-numeric: tabular-nums;
+    white-space: nowrap;
 }
 
 .cns5-derived {

@@ -949,3 +949,32 @@ CNS5.npcKinds = {
   person: "CNS5.Npc.kind.person",
   creature: "CNS5.Npc.kind.creature"
 };
+
+/* -------------------------------------------- */
+/*  Initiative and the Action Point pool        */
+/* -------------------------------------------- */
+
+/**
+ * Table - Armour Modifiers (p268).
+ *
+ * Wearing nothing is an advantage rather than merely the absence of one: an
+ * unarmoured character gains three Action Points a round. The Fatigue column
+ * here is a flat cost by armour class, separate from the per-piece Fatigue the
+ * armour tables on pp.261-263 give.
+ */
+CNS5.armourModifiers = {
+  none: { ap: 3, fatigue: 0 },
+  light: { ap: 0, fatigue: 0 },
+  heavy: { ap: -3, fatigue: 1 },
+  battle: { ap: -5, fatigue: 2 }
+};
+
+/** A character with no Fatigue Points left loses ten Action Points a round (p268). */
+CNS5.exhaustedApPenalty = -10;
+
+/**
+ * The dice rolled for initiative. Each character rolls this and adds it to
+ * their Base Action Points, modified for armour, to get the round's Action
+ * Point pool (p268).
+ */
+CNS5.initiativeFormula = "1d10 + @initiative";

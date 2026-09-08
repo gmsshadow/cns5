@@ -27,7 +27,9 @@ export class CnS5ItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     equipment: "systems/cns5/templates/item/equipment-body.hbs",
     spell: "systems/cns5/templates/item/spell-body.hbs",
     actOfFaith: "systems/cns5/templates/item/act-of-faith-body.hbs",
-    religion: "systems/cns5/templates/item/religion-body.hbs"
+    religion: "systems/cns5/templates/item/religion-body.hbs",
+    talent: "systems/cns5/templates/item/talent-body.hbs",
+    flaw: "systems/cns5/templates/item/flaw-body.hbs"
   };
 
   /** @override */
@@ -52,6 +54,8 @@ export class CnS5ItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     context.armourWeights = this.#choices(CNS5.armourWeights, this.item.system.weightClass);
     context.damageTypes = this.#choices(CNS5.damageTypes, this.item.system.damageType);
     context.armourLocations = this.#choices(CNS5.armourLocations, this.item.system.location);
+    context.flawKinds = this.#choices(CNS5.flawKinds, this.item.system.kind);
+    context.phobiaSeverities = this.#choices(CNS5.phobiaSeverities, this.item.system.severity);
 
     context.combatActions = [
       { value: "", label: "CNS5.Weapon.apAuto", selected: !this.item.system.apAction },

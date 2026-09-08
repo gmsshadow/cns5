@@ -1,0 +1,44 @@
+<div class="cns5-grid cns5-grid--four">
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Trait.rollMin"}}</span>
+        <input type="number" name="system.roll.min" value="{{system.roll.min}}" min="1"
+               {{#unless editable}}disabled{{/unless}}>
+    </label>
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Trait.rollMax"}}</span>
+        <input type="number" name="system.roll.max" value="{{system.roll.max}}" min="1"
+               {{#unless editable}}disabled{{/unless}}>
+    </label>
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Talent.pcCost"}}</span>
+        <input type="number" name="system.pcCost" value="{{system.pcCost}}" min="0"
+               {{#unless editable}}disabled{{/unless}}>
+    </label>
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Item.reference"}}</span>
+        <input type="text" name="system.reference" value="{{system.reference}}"
+               {{#unless editable}}disabled{{/unless}}>
+    </label>
+</div>
+
+<div class="cns5-checks">
+    <label class="cns5-checkbox">
+        <input type="checkbox" name="system.randomOnly" {{checked system.randomOnly}}
+               {{#unless editable}}disabled{{/unless}}>
+        <span>{{localize "CNS5.Talent.randomOnly"}}</span>
+    </label>
+    <label class="cns5-checkbox">
+        <input type="checkbox" name="system.wellAspectedOnly" {{checked system.wellAspectedOnly}}
+               {{#unless editable}}disabled{{/unless}}>
+        <span>{{localize "CNS5.Talent.wellAspectedOnly"}}</span>
+    </label>
+</div>
+
+{{#if system.randomOnly}}
+<p class="cns5-hint">{{localize "CNS5.Talent.randomOnlyHint"}}</p>
+{{/if}}
+{{#if onActor}}
+{{#unless system.aspectAllowed}}
+<p class="cns5-hint cns5-hint--bad">{{localize "CNS5.Talent.wrongAspect"}}</p>
+{{/unless}}
+{{/if}}

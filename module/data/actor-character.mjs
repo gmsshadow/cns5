@@ -209,7 +209,7 @@ export class CnS5Character extends CnS5ActorBase {
         const wanted = CNS5.spellMode(item.system, this.magick.mode);
         item.system.resolvedMode = wanted;
         item.system.prepareForActor(this, skills.get(wanted.toLowerCase()) ?? null);
-      } else if (item.type === "actOfFaith" || item.type === "religion") {
+      } else if (["actOfFaith", "religion", "talent"].includes(item.type)) {
         item.system.prepareForActor(this);
       }
     }

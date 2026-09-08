@@ -75,6 +75,108 @@
         <div><dt>{{localize "CNS5.Details.attributeMax"}}</dt><dd>{{system.attributeMax}}</dd></div>
     </dl>
 
+    <section class="cns5-skills">
+        <h3 class="cns5-skills__heading">
+            {{localize "CNS5.Trait.talents"}}
+            <button type="button" class="cns5-add" data-action="createItem" data-type="talent">
+                {{localize "CNS5.Item.add"}}
+            </button>
+        </h3>
+        {{#if talents.length}}
+        <table class="cns5-skills__table">
+            <thead>
+            <tr>
+                <th scope="col" class="cns5-skills__name">{{localize "CNS5.Trait.talents"}}</th>
+                <th scope="col">{{localize "CNS5.Trait.rollShort"}}</th>
+                <th scope="col">{{localize "CNS5.Trait.costShort"}}</th>
+                <th scope="col"><span class="cns5-visually-hidden">{{localize "CNS5.Skill.controls"}}</span></th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#each talents as |talent|}}
+            <tr class="{{#unless talent.system.aspectAllowed}}is-unskilled{{/unless}}">
+                <th scope="row">
+                    <button type="button" class="cns5-skills__roll" data-action="editItem"
+                            data-item-id="{{talent.id}}">{{talent.name}}</button>
+                    {{#if talent.system.wellAspectedOnly}}
+                    <span class="cns5-tag" data-tooltip="{{localize 'CNS5.Talent.wellAspectedOnly'}}">W</span>
+                    {{/if}}
+                    {{#if talent.system.randomOnly}}
+                    <span class="cns5-tag cns5-tag--origin"
+                          data-tooltip="{{localize 'CNS5.Talent.randomOnlyHint'}}">
+                        {{localize "CNS5.Talent.randomOnly"}}
+                    </span>
+                    {{/if}}
+                </th>
+                <td class="cns5-skills__readout">{{talent.system.rollLabel}}</td>
+                <td class="cns5-skills__readout">
+                    {{#if talent.system.pcCost}}{{talent.system.pcCost}}{{else}}—{{/if}}
+                </td>
+                <td class="cns5-skills__controls">
+                    <button type="button" data-action="deleteItem" data-item-id="{{talent.id}}">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+            {{/each}}
+            </tbody>
+        </table>
+        {{else}}
+        <p class="cns5-hint">{{localize "CNS5.Trait.noTalents"}}</p>
+        {{/if}}
+    </section>
+
+    <section class="cns5-skills">
+        <h3 class="cns5-skills__heading">
+            {{localize "CNS5.Trait.flaws"}}
+            <button type="button" class="cns5-add" data-action="createItem" data-type="flaw">
+                {{localize "CNS5.Item.add"}}
+            </button>
+        </h3>
+        {{#if flaws.length}}
+        <table class="cns5-skills__table">
+            <thead>
+            <tr>
+                <th scope="col" class="cns5-skills__name">{{localize "CNS5.Trait.flaws"}}</th>
+                <th scope="col">{{localize "CNS5.Trait.rollShort"}}</th>
+                <th scope="col">{{localize "CNS5.Trait.costShort"}}</th>
+                <th scope="col"><span class="cns5-visually-hidden">{{localize "CNS5.Skill.controls"}}</span></th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#each flaws as |flaw|}}
+            <tr>
+                <th scope="row">
+                    <button type="button" class="cns5-skills__roll" data-action="editItem"
+                            data-item-id="{{flaw.id}}">{{flaw.name}}</button>
+                    {{#if flaw.system.isPhobia}}
+                    <span class="cns5-tag" data-tooltip="{{flaw.system.fear}}">
+                        {{localize (concat "CNS5.Flaw.severity." flaw.system.severity)}}
+                    </span>
+                    {{/if}}
+                </th>
+                <td class="cns5-skills__readout">{{flaw.system.rollLabel}}</td>
+                <td class="cns5-skills__readout">
+                    {{#if flaw.system.pcBonus}}+{{flaw.system.pcBonus}}{{else}}—{{/if}}
+                </td>
+                <td class="cns5-skills__controls">
+                    <button type="button" data-action="deleteItem" data-item-id="{{flaw.id}}">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+            {{/each}}
+            </tbody>
+        </table>
+        {{else}}
+        <p class="cns5-hint">{{localize "CNS5.Trait.noFlaws"}}</p>
+        {{/if}}
+    </section>
+
+    <dl class="cns5-derived">
+        <div><dt>{{localize "CNS5.Trait.pcNet"}}</dt><dd>{{cns5Signed traitPoints}}</dd></div>
+    </dl>
+
     <fieldset class="cns5-fieldset">
         <legend>{{localize "CNS5.Details.biography"}}</legend>
         {{formInput fields.biography value=system.biography enriched=biographyHTML

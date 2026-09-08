@@ -978,3 +978,54 @@ CNS5.exhaustedApPenalty = -10;
  * Point pool (p268).
  */
 CNS5.initiativeFormula = "1d10 + @initiative";
+
+/* -------------------------------------------- */
+/*  Talents and flaws                           */
+/* -------------------------------------------- */
+
+/** What sort of blemish a flaw item records. */
+CNS5.flawKinds = {
+  deficiency: "CNS5.Flaw.kind.deficiency",
+  phobia: "CNS5.Flaw.kind.phobia",
+  curse: "CNS5.Flaw.kind.curse"
+};
+
+/**
+ * Phobia intensity and the Willpower penalty for facing it (p94).
+ *
+ * A minor phobia has a 13% chance of turning out to be major, and each major
+ * one a further 13% chance of being severe.
+ */
+CNS5.phobiaSeverities = {
+  minor: { label: "CNS5.Flaw.severity.minor", willpower: -10 },
+  major: { label: "CNS5.Flaw.severity.major", willpower: -20 },
+  severe: { label: "CNS5.Flaw.severity.severe", willpower: -30 }
+};
+
+/** The chance that a phobia proves a degree worse than rolled (p94). */
+CNS5.phobiaEscalationChance = 13;
+
+/**
+ * Ways of resisting fear other than a straight Willpower roll (p94).
+ *
+ * A character of Ferocity 16 or better may use their FER Attribute Roll
+ * instead, and pious laity may take a flat penalty rather than roll at all.
+ */
+CNS5.fearAlternatives = {
+  ferocity: { minimum: 16, label: "CNS5.Fear.ferocity" },
+  piety: { modifier: -15, label: "CNS5.Fear.piety" }
+};
+
+/**
+ * Table - Special Abilities Outcomes (p88): how many talents a character gets.
+ */
+CNS5.talentOutcomes = [
+  { max: 3, count: 3, label: "CNS5.Talent.outcome.three" },
+  { max: 9, count: 2, label: "CNS5.Talent.outcome.two" },
+  { max: 50, count: 1, label: "CNS5.Talent.outcome.one" },
+  { max: 99, count: 0, label: "CNS5.Talent.outcome.none" },
+  { max: 100, count: 1, label: "CNS5.Talent.outcome.choose", choose: true }
+];
+
+/** A character with a talent must roll for a flaw; 01-40 gives one (p94). */
+CNS5.flawChance = 40;

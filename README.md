@@ -437,6 +437,39 @@ book against itself had turned up.
   forced on the anchor. The `important` there is deliberate and commented: it is
   the only reliable way to win against a theme whose rules we cannot reorder.
 
+## Talents and flaws
+
+Two more item types and two more compendia, covering steps 9 and 10 of the
+worksheet.
+
+**C&S Talents — 34 entries** from the Special Abilities & Talents table on p88,
+each with the span of the d100 that produces it and its PC Point cost. Four are
+marked (w) for Well Aspected characters only, and the sheet dims one held by a
+character of the wrong aspect. Thirteen carry no price at all: the table gives
+them as "Random roll only", meaning they cannot be bought and must be come by on
+the dice.
+
+**C&S Flaws — 75 entries**: 39 deficiencies and defects from p95, the five rows
+of the 1D10 table at the foot of that page, and 31 phobias from pp.96-97. Flaws
+grant PC Points rather than costing them, and the Background & Social tab totals
+the two against each other so a player can see what a flaw is buying.
+
+A phobia carries a severity, and the Willpower penalty for facing it follows:
+-10% minor, -20% major, -30% severe. A minor phobia has a 13% chance of proving
+major and each major one a further 13% chance of being severe. A character of
+Ferocity 16 or better may use their FER Attribute Roll instead of rolling
+Willpower, and pious laity may take a flat -15% rather than rolling at all.
+
+### What was transcribed rather than parsed
+
+The 1D10 table at the foot of p95 is five rows, and every one of them is
+awkward: the names sit in a column to the right of the costs, two wrap onto the
+line below their roll and two onto the line above it, and the page's prose runs
+close enough alongside to be picked up as a continuation. A parser that coped
+with all of that would have been longer than the table and harder to check, so
+those five rows are written out in `tools/extract-traits.py` with the reasoning
+beside them.
+
 ## Skill categories
 
 There are three, and only three: Primary, Secondary and Tertiary.
@@ -560,6 +593,13 @@ treated as authoritative over the worked examples and the character sheet.
   excess above Max% by 20 "rounded down". Both worked examples round up: 42%
   over gives +3, and 17% over gives +1, which rounding down would make +2 and
   +0. The examples are followed.
+- **p95, roll 100 on the Flaws table.** The row carries the roll and nothing
+  else — no name and no cost in its own columns. It is absent from the data
+  rather than guessed at, and the test names it so the gap is not mistaken for
+  an extraction fault.
+- **p95, the 1D10 table.** Rolls 01-05 and 06 print the same text, "Minor Phobia
+  & roll again for another flaw", at seven points and thirteen respectively.
+  Both ship as printed, told apart by the roll that produces them.
 - **p271, Action Point bands.** The fourth band ends at 70% and the fifth begins
   at 75%, leaving 71-74% unstated. Read as the top band starting at 71%, which
   is the only reading that leaves no hole.

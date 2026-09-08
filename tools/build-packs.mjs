@@ -503,7 +503,57 @@ function toCreature(row) {
 
 /* -------------------------------------------- */
 
+/**
+ * Convert a talent row into an item document.
+ * @param {object} row
+ * @returns {object}
+ */
+function toTalent(row) {
+  const notes = [];
+  if (row.wellAspectedOnly) notes.push("Well Aspected characters only");
+  if (row.randomOnly) notes.push("cannot be bought — random roll only");
+
+  return document("talent", row.name, "icons/svg/upgrade.svg", {
+    roll: { min: row.roll[0], max: row.roll[1] },
+    die: "1d100",
+    pcCost: row.pcCost,
+    randomOnly: row.randomOnly,
+    wellAspectedOnly: row.wellAspectedOnly,
+    notes: notes.join("; "),
+    reference: `p${row.page}`,
+    description: ""
+  });
+}
+
+/**
+ * Convert a flaw, deficiency or phobia row into an item document.
+ * @param {object} row
+ * @param {string} kind
+ * @returns {object}
+ */
+function toFlaw(row, kind, name = row.name) {
+  const notes = [];
+  if (row.rollsOnAnotherTable) notes.push("roll again on the table it names");
+
+  return document("flaw", name, "icons/svg/downgrade.svg", {
+    kind,
+    roll: { min: row.roll[0], max: row.roll[1] },
+    die: row.die ?? "1d100",
+    pcBonus: row.pcBonus,
+    // Every phobia starts minor; the dice may make it worse (p94).
+    severity: "minor",
+    fear: row.fear ?? "",
+    rollsOnAnotherTable: Boolean(row.rollsOnAnotherTable),
+    notes: notes.join("; "),
+    reference: `p${row.page}`,
+    description: ""
+  });
+}
+
+/* -------------------------------------------- */
+
 const skills = JSON.parse(await readFile(path.join(DATA, "skills.json"), "utf8"));
+const traits = JSON.parse(await readFile(path.join(DATA, "traits.json"), "utf8"));
 const bestiary = JSON.parse(await readFile(path.join(DATA, "bestiary.json"), "utf8"));
 const spellData = JSON.parse(await readFile(path.join(DATA, "spells.json"), "utf8"));
 const faith = JSON.parse(await readFile(path.join(DATA, "acts-of-faith.json"), "utf8"));
@@ -570,6 +620,32 @@ function buildArmour() {
 await build("armour", buildArmour());
 await build("acts-of-faith", faith.acts.map(toActOfFaith));
 await build("bestiary", bestiary.creatures.map(toCreature));
+await build("talents", traits.talents.map(toTalent));
+
+/* Deficiencies, the small additional table, and the phobias all become flaws;
+ * only their kind differs.
+ *
+ * The 1D10 table prints the same entry twice — "Minor Phobia & roll again for
+ * another flaw" at 01-05 for seven points and again at 06 for thirteen. That is
+ * as printed, so both ship, told apart by the roll that produces them. */
+const flawRows = [
+  ...traits.flaws.map((row) => [row, "deficiency"]),
+  ...traits.additionalFlaws.map((row) => [row, "deficiency"]),
+  ...traits.phobias.map((row) => [row, "phobia"])
+];
+const flawCounts = flawRows.reduce((acc, [row]) => {
+  acc[row.name] = (acc[row.name] ?? 0) + 1;
+  return acc;
+}, {});
+
+await build(
+  "flaws",
+  flawRows.map(([row, kind]) => {
+    if (flawCounts[row.name] === 1) return toFlaw(row, kind);
+    const span = row.roll[0] === row.roll[1] ? `${row.roll[0]}` : `${row.roll[0]}-${row.roll[1]}`;
+    return toFlaw(row, kind, `${row.name} (${span})`);
+  })
+);
 
 /**
  * Three spells are listed twice, under two elemental sections apiece — Mist &

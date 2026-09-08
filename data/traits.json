@@ -1,0 +1,1113 @@
+{
+  "source": "Chivalry & Sorcery 5th Edition core rules: Special Abilities & Talents p88, Flaws, Deficiencies & Defects p95, Phobias pp.96-97",
+  "note": "Table data only; the descriptions on pp.89-94 are prose and are not reproduced. Roll 100 on the Flaws table has no entry printed in its own columns and is absent here. The 1D10 table at the foot of p95 was transcribed by hand rather than parsed, for the reasons given in tools/extract-traits.py.",
+  "talentCount": 34,
+  "flawCount": 39,
+  "phobiaCount": 31,
+  "talents": [
+    {
+      "name": "Ambidextrous",
+      "roll": [
+        1,
+        2
+      ],
+      "pcCost": 10,
+      "randomOnly": false,
+      "wellAspectedOnly": false,
+      "page": 88
+    },
+    {
+      "name": "Berserker Rage",
+      "roll": [
+        3,
+        4
+      ],
+      "pcCost": 10,
+      "randomOnly": false,
+      "wellAspectedOnly": false,
+      "page": 88
+    },
+    {
+      "name": "Born with an aptitude for a skill",
+      "roll": [
+        5,
+        9
+      ],
+      "pcCost": null,
+      "randomOnly": true,
+      "wellAspectedOnly": false,
+      "page": 88
+    },
+    {
+      "name": "Clairvoyance",
+      "roll": [
+        10,
+        10
+      ],
+      "pcCost": null,
+      "randomOnly": true,
+      "wellAspectedOnly": false,
+      "page": 88
+    },
+    {
+      "name": "Enhanced Sight",
+      "roll": [
+        11,
+        15
+      ],
+      "pcCost": 5,
+      "randomOnly": false,
+      "wellAspectedOnly": false,
+      "page": 88
+    },
+    {
+      "name": "Extra Magickal Spells",
+      "roll": [
+        16,
+        18
+      ],
+      "pcCost": 10,
+      "randomOnly": false,
+      "wellAspectedOnly": false,
+      "page": 88
+    },
+    {
+      "name": "Extraordinary Beauty",
+      "roll": [
+        19,
+        19
+      ],
+      "pcCost": null,
+      "randomOnly": true,
+      "wellAspectedOnly": false,
+      "page": 88
+    },
+    {
+      "name": "Extraordinary Potential",
+      "roll": [
+        20,
+        20
+      ],
+      "pcCost": 10,
+      "randomOnly": false,
+      "wellAspectedOnly": false,
+      "page": 88
+    },
+    {
+      "name": "Fey Affinity",
+      "roll": [
+        21,
+        24
+      ],
+      "pcCost": 5,
+      "randomOnly": false,
+      "wellAspectedOnly": true,
+      "page": 88
+    },
+    {
+      "name": "Fey Blood",
+      "roll": [
+        25,
+        27
+      ],
+      "pcCost": 5,
+      "randomOnly": false,
+      "wellAspectedOnly": true,
+      "page": 88
+    },
+    {
+      "name": "Healing Powers",
+      "roll": [
+        28,
+        28
+      ],
+      "pcCost": null,
+      "randomOnly": true,
+      "wellAspectedOnly": false,
+      "page": 88
+    },
+    {
+      "name": "Herculean Strength",
+      "roll": [
+        29,
+        29
+      ],
+      "pcCost": null,
+      "randomOnly": true,
+      "wellAspectedOnly": false,
+      "page": 88
+    },
+    {
+      "name": "Highly Resistant to Disease",
+      "roll": [
+        30,
+        30
+      ],
+      "pcCost": null,
+      "randomOnly": true,
+      "wellAspectedOnly": false,
+      "page": 88
+    },
+    {
+      "name": "Highly Resistant to Magick",
+      "roll": [
+        31,
+        31
+      ],
+      "pcCost": null,
+      "randomOnly": true,
+      "wellAspectedOnly": false,
+      "page": 88
+    },
+    {
+      "name": "Highly Resistant to Poison",
+      "roll": [
+        32,
+        32
+      ],
+      "pcCost": null,
+      "randomOnly": true,
+      "wellAspectedOnly": false,
+      "page": 88
+    },
+    {
+      "name": "Incredibly Lucky",
+      "roll": [
+        33,
+        33
+      ],
+      "pcCost": null,
+      "randomOnly": true,
+      "wellAspectedOnly": true,
+      "page": 88
+    },
+    {
+      "name": "Incredibly Strong",
+      "roll": [
+        34,
+        36
+      ],
+      "pcCost": null,
+      "randomOnly": true,
+      "wellAspectedOnly": false,
+      "page": 88
+    },
+    {
+      "name": "Keen Hearing",
+      "roll": [
+        37,
+        41
+      ],
+      "pcCost": 3,
+      "randomOnly": false,
+      "wellAspectedOnly": false,
+      "page": 88
+    },
+    {
+      "name": "Light Sleeper",
+      "roll": [
+        42,
+        46
+      ],
+      "pcCost": 5,
+      "randomOnly": false,
+      "wellAspectedOnly": false,
+      "page": 88
+    },
+    {
+      "name": "Low Metabolic Rate",
+      "roll": [
+        47,
+        51
+      ],
+      "pcCost": 5,
+      "randomOnly": false,
+      "wellAspectedOnly": false,
+      "page": 88
+    },
+    {
+      "name": "Naturally Charismatic",
+      "roll": [
+        52,
+        52
+      ],
+      "pcCost": null,
+      "randomOnly": true,
+      "wellAspectedOnly": false,
+      "page": 88
+    },
+    {
+      "name": "Night Vision",
+      "roll": [
+        53,
+        56
+      ],
+      "pcCost": 0,
+      "randomOnly": false,
+      "wellAspectedOnly": false,
+      "page": 88
+    },
+    {
+      "name": "Premonition",
+      "roll": [
+        57,
+        59
+      ],
+      "pcCost": 7,
+      "randomOnly": false,
+      "wellAspectedOnly": false,
+      "page": 88
+    },
+    {
+      "name": "Primitive Talent Magickal Powers",
+      "roll": [
+        60,
+        60
+      ],
+      "pcCost": null,
+      "randomOnly": true,
+      "wellAspectedOnly": false,
+      "page": 88
+    },
+    {
+      "name": "Resistant to Disease",
+      "roll": [
+        61,
+        65
+      ],
+      "pcCost": 5,
+      "randomOnly": false,
+      "wellAspectedOnly": false,
+      "page": 88
+    },
+    {
+      "name": "Resistant to Magick",
+      "roll": [
+        66,
+        70
+      ],
+      "pcCost": 10,
+      "randomOnly": false,
+      "wellAspectedOnly": false,
+      "page": 88
+    },
+    {
+      "name": "Resistant to Poison",
+      "roll": [
+        71,
+        75
+      ],
+      "pcCost": 5,
+      "randomOnly": false,
+      "wellAspectedOnly": false,
+      "page": 88
+    },
+    {
+      "name": "Scholarship",
+      "roll": [
+        76,
+        80
+      ],
+      "pcCost": 5,
+      "randomOnly": false,
+      "wellAspectedOnly": false,
+      "page": 88
+    },
+    {
+      "name": "Sense Auras",
+      "roll": [
+        81,
+        82
+      ],
+      "pcCost": 7,
+      "randomOnly": false,
+      "wellAspectedOnly": false,
+      "page": 88
+    },
+    {
+      "name": "Sense Good & Evil",
+      "roll": [
+        83,
+        84
+      ],
+      "pcCost": 5,
+      "randomOnly": false,
+      "wellAspectedOnly": false,
+      "page": 88
+    },
+    {
+      "name": "Shape Shifting",
+      "roll": [
+        85,
+        86
+      ],
+      "pcCost": 7,
+      "randomOnly": false,
+      "wellAspectedOnly": false,
+      "page": 88
+    },
+    {
+      "name": "Speak with Animals",
+      "roll": [
+        87,
+        88
+      ],
+      "pcCost": 7,
+      "randomOnly": false,
+      "wellAspectedOnly": true,
+      "page": 88
+    },
+    {
+      "name": "Unerring Sense of Direction",
+      "roll": [
+        89,
+        96
+      ],
+      "pcCost": 5,
+      "randomOnly": false,
+      "wellAspectedOnly": false,
+      "page": 88
+    },
+    {
+      "name": "Very Persuasive",
+      "roll": [
+        97,
+        100
+      ],
+      "pcCost": null,
+      "randomOnly": true,
+      "wellAspectedOnly": false,
+      "page": 88
+    }
+  ],
+  "flaws": [
+    {
+      "name": "Absent-Minded",
+      "roll": [
+        1,
+        3
+      ],
+      "pcBonus": 10,
+      "rollsOnAnotherTable": false,
+      "page": 95
+    },
+    {
+      "name": "Angry",
+      "roll": [
+        4,
+        6
+      ],
+      "pcBonus": 5,
+      "rollsOnAnotherTable": false,
+      "page": 95
+    },
+    {
+      "name": "Argumentative",
+      "roll": [
+        7,
+        9
+      ],
+      "pcBonus": 3,
+      "rollsOnAnotherTable": false,
+      "page": 95
+    },
+    {
+      "name": "Arrogant",
+      "roll": [
+        10,
+        12
+      ],
+      "pcBonus": 10,
+      "rollsOnAnotherTable": false,
+      "page": 95
+    },
+    {
+      "name": "Avaricious",
+      "roll": [
+        13,
+        15
+      ],
+      "pcBonus": 10,
+      "rollsOnAnotherTable": false,
+      "page": 95
+    },
+    {
+      "name": "Cannot Hold Liquor",
+      "roll": [
+        16,
+        18
+      ],
+      "pcBonus": 7,
+      "rollsOnAnotherTable": false,
+      "page": 95
+    },
+    {
+      "name": "Clumsy",
+      "roll": [
+        19,
+        21
+      ],
+      "pcBonus": 10,
+      "rollsOnAnotherTable": false,
+      "page": 95
+    },
+    {
+      "name": "Compulsive Gambler",
+      "roll": [
+        22,
+        24
+      ],
+      "pcBonus": 10,
+      "rollsOnAnotherTable": false,
+      "page": 95
+    },
+    {
+      "name": "Compulsive Liar",
+      "roll": [
+        25,
+        27
+      ],
+      "pcBonus": 7,
+      "rollsOnAnotherTable": false,
+      "page": 95
+    },
+    {
+      "name": "Cowardly",
+      "roll": [
+        28,
+        29
+      ],
+      "pcBonus": 15,
+      "rollsOnAnotherTable": false,
+      "page": 95
+    },
+    {
+      "name": "Deep Sleeper",
+      "roll": [
+        30,
+        33
+      ],
+      "pcBonus": 5,
+      "rollsOnAnotherTable": false,
+      "page": 95
+    },
+    {
+      "name": "Disrespectful",
+      "roll": [
+        34,
+        35
+      ],
+      "pcBonus": 7,
+      "rollsOnAnotherTable": false,
+      "page": 95
+    },
+    {
+      "name": "Drunkard",
+      "roll": [
+        36,
+        38
+      ],
+      "pcBonus": 7,
+      "rollsOnAnotherTable": false,
+      "page": 95
+    },
+    {
+      "name": "Envious",
+      "roll": [
+        39,
+        41
+      ],
+      "pcBonus": 5,
+      "rollsOnAnotherTable": false,
+      "page": 95
+    },
+    {
+      "name": "Frivolous",
+      "roll": [
+        42,
+        44
+      ],
+      "pcBonus": 5,
+      "rollsOnAnotherTable": false,
+      "page": 95
+    },
+    {
+      "name": "Gluttonous",
+      "roll": [
+        45,
+        47
+      ],
+      "pcBonus": 5,
+      "rollsOnAnotherTable": false,
+      "page": 95
+    },
+    {
+      "name": "Hypochondriac",
+      "roll": [
+        48,
+        50
+      ],
+      "pcBonus": 3,
+      "rollsOnAnotherTable": false,
+      "page": 95
+    },
+    {
+      "name": "Impatient",
+      "roll": [
+        51,
+        53
+      ],
+      "pcBonus": 3,
+      "rollsOnAnotherTable": false,
+      "page": 95
+    },
+    {
+      "name": "Kleptomaniac",
+      "roll": [
+        54,
+        54
+      ],
+      "pcBonus": 10,
+      "rollsOnAnotherTable": false,
+      "page": 95
+    },
+    {
+      "name": "Larcenous",
+      "roll": [
+        55,
+        58
+      ],
+      "pcBonus": 5,
+      "rollsOnAnotherTable": false,
+      "page": 95
+    },
+    {
+      "name": "Lazy",
+      "roll": [
+        59,
+        61
+      ],
+      "pcBonus": 3,
+      "rollsOnAnotherTable": false,
+      "page": 95
+    },
+    {
+      "name": "Lecherous concentrate, etc.",
+      "roll": [
+        62,
+        63
+      ],
+      "pcBonus": 7,
+      "rollsOnAnotherTable": false,
+      "page": 95
+    },
+    {
+      "name": "Lustful Phobia1",
+      "roll": [
+        64,
+        66
+      ],
+      "pcBonus": 5,
+      "rollsOnAnotherTable": false,
+      "page": 95
+    },
+    {
+      "name": "Major",
+      "roll": [
+        67,
+        67
+      ],
+      "pcBonus": 10,
+      "rollsOnAnotherTable": false,
+      "page": 95
+    },
+    {
+      "name": "Manic- Depressive",
+      "roll": [
+        68,
+        68
+      ],
+      "pcBonus": 7,
+      "rollsOnAnotherTable": false,
+      "page": 95
+    },
+    {
+      "name": "Megalomaniac",
+      "roll": [
+        69,
+        69
+      ],
+      "pcBonus": 7,
+      "rollsOnAnotherTable": false,
+      "page": 95
+    },
+    {
+      "name": "Minor Phobia",
+      "roll": [
+        70,
+        72
+      ],
+      "pcBonus": 5,
+      "rollsOnAnotherTable": true,
+      "page": 95
+    },
+    {
+      "name": "Over-confident",
+      "roll": [
+        73,
+        75
+      ],
+      "pcBonus": 7,
+      "rollsOnAnotherTable": false,
+      "page": 95
+    },
+    {
+      "name": "Overly Trusting",
+      "roll": [
+        76,
+        78
+      ],
+      "pcBonus": 10,
+      "rollsOnAnotherTable": false,
+      "page": 95
+    },
+    {
+      "name": "Severely Phobic",
+      "roll": [
+        79,
+        79
+      ],
+      "pcBonus": 13,
+      "rollsOnAnotherTable": false,
+      "page": 95
+    },
+    {
+      "name": "Rude",
+      "roll": [
+        80,
+        82
+      ],
+      "pcBonus": 5,
+      "rollsOnAnotherTable": false,
+      "page": 95
+    },
+    {
+      "name": "Poor Hearing",
+      "roll": [
+        83,
+        85
+      ],
+      "pcBonus": 4,
+      "rollsOnAnotherTable": false,
+      "page": 95
+    },
+    {
+      "name": "Poor Vision",
+      "roll": [
+        86,
+        88
+      ],
+      "pcBonus": 4,
+      "rollsOnAnotherTable": false,
+      "page": 95
+    },
+    {
+      "name": "Paranoid",
+      "roll": [
+        89,
+        90
+      ],
+      "pcBonus": 5,
+      "rollsOnAnotherTable": false,
+      "page": 95
+    },
+    {
+      "name": "Pessimistic",
+      "roll": [
+        91,
+        92
+      ],
+      "pcBonus": 5,
+      "rollsOnAnotherTable": false,
+      "page": 95
+    },
+    {
+      "name": "Slovenly",
+      "roll": [
+        93,
+        94
+      ],
+      "pcBonus": 3,
+      "rollsOnAnotherTable": false,
+      "page": 95
+    },
+    {
+      "name": "Slothful",
+      "roll": [
+        95,
+        96
+      ],
+      "pcBonus": 7,
+      "rollsOnAnotherTable": false,
+      "page": 95
+    },
+    {
+      "name": "Tactless",
+      "roll": [
+        97,
+        98
+      ],
+      "pcBonus": 10,
+      "rollsOnAnotherTable": false,
+      "page": 95
+    },
+    {
+      "name": "Vengeful Instead of prescribing",
+      "roll": [
+        99,
+        99
+      ],
+      "pcBonus": 10,
+      "rollsOnAnotherTable": false,
+      "page": 95
+    }
+  ],
+  "additionalFlaws": [
+    {
+      "name": "Minor Phobia & roll again for another flaw",
+      "roll": [
+        1,
+        5
+      ],
+      "pcBonus": 7,
+      "rollsOnAnotherTable": true,
+      "die": "1d10",
+      "page": 95
+    },
+    {
+      "name": "Minor Phobia & roll again for another flaw",
+      "roll": [
+        6,
+        6
+      ],
+      "pcBonus": 13,
+      "rollsOnAnotherTable": true,
+      "die": "1d10",
+      "page": 95
+    },
+    {
+      "name": "Cursed",
+      "roll": [
+        7,
+        8
+      ],
+      "pcBonus": 7,
+      "rollsOnAnotherTable": true,
+      "die": "1d10",
+      "page": 95
+    },
+    {
+      "name": "Twice Cursed",
+      "roll": [
+        9,
+        9
+      ],
+      "pcBonus": 13,
+      "rollsOnAnotherTable": true,
+      "die": "1d10",
+      "page": 95
+    },
+    {
+      "name": "Thrice Cursed",
+      "roll": [
+        10,
+        10
+      ],
+      "pcBonus": 21,
+      "rollsOnAnotherTable": true,
+      "die": "1d10",
+      "page": 95
+    }
+  ],
+  "phobias": [
+    {
+      "name": "Acrophobia",
+      "roll": [
+        1,
+        4
+      ],
+      "fear": "Fear of heights",
+      "page": 96
+    },
+    {
+      "name": "Agoraphobia",
+      "roll": [
+        5,
+        7
+      ],
+      "fear": "Fear of open and public spaces",
+      "page": 96
+    },
+    {
+      "name": "Algophobia",
+      "roll": [
+        8,
+        10
+      ],
+      "fear": "Fear of pain",
+      "page": 96
+    },
+    {
+      "name": "Ailurophobia",
+      "roll": [
+        11,
+        13
+      ],
+      "fear": "Fear of felines",
+      "page": 96
+    },
+    {
+      "name": "Androphobia (Female) or Gynophobia (Male)",
+      "roll": [
+        14,
+        16
+      ],
+      "fear": "Fear of men or Fear of women",
+      "page": 96
+    },
+    {
+      "name": "Arachniphobia",
+      "roll": [
+        17,
+        20
+      ],
+      "fear": "Fear of spiders",
+      "page": 96
+    },
+    {
+      "name": "Astrophobia",
+      "roll": [
+        21,
+        23
+      ],
+      "fear": "Fear of thunder & lightning",
+      "page": 96
+    },
+    {
+      "name": "Autophobia",
+      "roll": [
+        24,
+        26
+      ],
+      "fear": "Fear of being alone",
+      "page": 96
+    },
+    {
+      "name": "Claustrophobia",
+      "roll": [
+        27,
+        30
+      ],
+      "fear": "Fear of close spaces",
+      "page": 96
+    },
+    {
+      "name": "Cynophobia",
+      "roll": [
+        31,
+        33
+      ],
+      "fear": "Fear of dogs",
+      "page": 96
+    },
+    {
+      "name": "Oemophobia",
+      "roll": [
+        34,
+        36
+      ],
+      "fear": "Fear of large crowds",
+      "page": 96
+    },
+    {
+      "name": "Entomophobia",
+      "roll": [
+        37,
+        40
+      ],
+      "fear": "Fear of insects",
+      "page": 96
+    },
+    {
+      "name": "Florophobia",
+      "roll": [
+        41,
+        44
+      ],
+      "fear": "Fear of some plants/flowers",
+      "page": 96
+    },
+    {
+      "name": "Heliophobia",
+      "roll": [
+        45,
+        47
+      ],
+      "fear": "Fear of sunlight",
+      "page": 96
+    },
+    {
+      "name": "Haemophobia",
+      "roll": [
+        48,
+        50
+      ],
+      "fear": "Fear of blood.",
+      "page": 96
+    },
+    {
+      "name": "Heptaphobia",
+      "roll": [
+        51,
+        53
+      ],
+      "fear": "Fear of being touched by anyone, even a close friend or a family member",
+      "page": 96
+    },
+    {
+      "name": "Hydrophobia",
+      "roll": [
+        54,
+        57
+      ],
+      "fear": "Fear of water",
+      "page": 96
+    },
+    {
+      "name": "Hypnophobia",
+      "roll": [
+        58,
+        60
+      ],
+      "fear": "Fear of sleeping and also of dreaming",
+      "page": 96
+    },
+    {
+      "name": "Kronophobia",
+      "roll": [
+        61,
+        63
+      ],
+      "fear": "Fear of aging",
+      "page": 96
+    },
+    {
+      "name": "Musophobia",
+      "roll": [
+        64,
+        66
+      ],
+      "fear": "Fear of mice/small rodents",
+      "page": 96
+    },
+    {
+      "name": "Mysophobia",
+      "roll": [
+        67,
+        69
+      ],
+      "fear": "Fear of being contaminated by dirt and filth",
+      "page": 96
+    },
+    {
+      "name": "Necrophobia",
+      "roll": [
+        70,
+        72
+      ],
+      "fear": "Fear of corpses, Undead etc.",
+      "page": 96
+    },
+    {
+      "name": "Neophobia",
+      "roll": [
+        73,
+        75
+      ],
+      "fear": "Fear of new things, new ideas, or change in general",
+      "page": 96
+    },
+    {
+      "name": "Nyctophobia",
+      "roll": [
+        76,
+        79
+      ],
+      "fear": "Fear of darkness & night",
+      "page": 96
+    },
+    {
+      "name": "Orphidophobia",
+      "roll": [
+        80,
+        82
+      ],
+      "fear": "Fear of snakes & reptiles",
+      "page": 96
+    },
+    {
+      "name": "Photophobia",
+      "roll": [
+        83,
+        84
+      ],
+      "fear": "Fear of intense light",
+      "page": 96
+    },
+    {
+      "name": "Pyrophobia",
+      "roll": [
+        85,
+        87
+      ],
+      "fear": "Fear of fire",
+      "page": 96
+    },
+    {
+      "name": "Thanophobia",
+      "roll": [
+        88,
+        90
+      ],
+      "fear": "Fear of personal death",
+      "page": 96
+    },
+    {
+      "name": "Toxicophobia",
+      "roll": [
+        91,
+        93
+      ],
+      "fear": "Fear of being poisoned",
+      "page": 96
+    },
+    {
+      "name": "Xenophobia",
+      "roll": [
+        94,
+        97
+      ],
+      "fear": "Fear of strangers",
+      "page": 96
+    },
+    {
+      "name": "Zoophobia",
+      "roll": [
+        98,
+        100
+      ],
+      "fear": "Fear of large animals",
+      "page": 96
+    }
+  ]
+}

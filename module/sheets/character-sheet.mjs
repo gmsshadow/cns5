@@ -131,6 +131,15 @@ export class CnS5CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2)
       .filter((i) => i.type === "religion")
       .sort((a, b) => Number(b.system.primary) - Number(a.system.primary) || byName(a, b));
 
+    context.talents = this.actor.items.filter((i) => i.type === "talent").sort(byName);
+    context.flaws = this.actor.items.filter((i) => i.type === "flaw").sort(byName);
+
+    // Flaws grant PC Points and talents cost them, so the net is what a player
+    // wants to see when weighing one against the other.
+    context.traitPoints =
+      context.flaws.reduce((total, f) => total + (f.system.pcBonus ?? 0), 0) -
+      context.talents.reduce((total, t) => total + (t.system.pcCost ?? 0), 0);
+
     context.rangeKeys = Object.keys(CNS5.spellRanges);
     context.spentMR = context.spells.reduce((total, s) => total + s.system.mr, 0);
 

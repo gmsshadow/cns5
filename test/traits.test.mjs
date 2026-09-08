@@ -121,6 +121,39 @@ ok("and piety takes a flat penalty", CNS5.fearAlternatives.piety.modifier, -15);
 /* Having a talent obliges a roll for a flaw, on 01-40 (p94). */
 ok("the chance of a flaw", CNS5.flawChance, 40);
 
+/* -- Description pages ------------------------------------------------------ */
+
+/* The sheet cites where an entry is described, not where its table is: once a
+   talent has been rolled, the table it came from is of no further use. */
+ok(
+  "every talent knows its description page",
+  talents.filter((t) => !t.descriptionPage).map((t) => t.name),
+  []
+);
+ok(
+  "every flaw knows its description page",
+  flaws.filter((f) => !f.descriptionPage).map((f) => f.name),
+  []
+);
+
+/* Talent descriptions run pp.89-94, deficiency descriptions pp.97-101. Nothing
+   should cite the page its own table sits on — that was the bug this replaced. */
+ok(
+  "talent pages fall in the descriptions",
+  [...new Set(talents.map((t) => t.descriptionPage))].sort((a, b) => a - b),
+  [89, 90, 91, 92, 93]
+);
+ok(
+  "flaw pages fall in the descriptions",
+  [...new Set(flaws.map((f) => f.descriptionPage))].sort((a, b) => a - b),
+  [97, 98, 99, 100, 101]
+);
+ok("no flaw cites its own table page", flaws.filter((f) => f.descriptionPage === 95).length, 0);
+
+/* Two names wrap in the printed table, one across a hyphen. */
+ok("a name broken across a hyphen", flaws.find((f) => f.roll[0] === 68)?.name, "Manic-Depressive");
+ok("a name wrapped onto the next line", flaws.find((f) => f.roll[0] === 67)?.name, "Major Phobia");
+
 ok("no description text is shipped", "description" in talents[0], false);
 
 console.log(`\n${talents.length} talents, ${flaws.length + additionalFlaws.length} flaws, ${phobias.length} phobias`);

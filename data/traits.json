@@ -1,6 +1,6 @@
 {
-  "source": "Chivalry & Sorcery 5th Edition core rules: Special Abilities & Talents p88, Flaws, Deficiencies & Defects p95, Phobias pp.96-97",
-  "note": "Table data only; the descriptions on pp.89-94 are prose and are not reproduced. Roll 100 on the Flaws table has no entry printed in its own columns and is absent here. The 1D10 table at the foot of p95 was transcribed by hand rather than parsed, for the reasons given in tools/extract-traits.py.",
+  "source": "Chivalry & Sorcery 5th Edition core rules: Special Abilities & Talents p88 with descriptions pp.89-94, Flaws, Deficiencies & Defects p95 with descriptions pp.97-101, Phobias pp.96-97",
+  "note": "Table data only; the descriptions are prose and are not reproduced — only the page each is on. Roll 100 on the Flaws table has no name or cost printed in its own columns and is absent here. The 1D10 table at the foot of p95 was transcribed by hand rather than parsed, for the reasons given in tools/extract-traits.py.",
   "talentCount": 34,
   "flawCount": 39,
   "phobiaCount": 31,
@@ -14,7 +14,8 @@
       "pcCost": 10,
       "randomOnly": false,
       "wellAspectedOnly": false,
-      "page": 88
+      "page": 88,
+      "descriptionPage": 89
     },
     {
       "name": "Berserker Rage",
@@ -25,7 +26,8 @@
       "pcCost": 10,
       "randomOnly": false,
       "wellAspectedOnly": false,
-      "page": 88
+      "page": 88,
+      "descriptionPage": 89
     },
     {
       "name": "Born with an aptitude for a skill",
@@ -36,7 +38,8 @@
       "pcCost": null,
       "randomOnly": true,
       "wellAspectedOnly": false,
-      "page": 88
+      "page": 88,
+      "descriptionPage": 89
     },
     {
       "name": "Clairvoyance",
@@ -47,7 +50,8 @@
       "pcCost": null,
       "randomOnly": true,
       "wellAspectedOnly": false,
-      "page": 88
+      "page": 88,
+      "descriptionPage": 89
     },
     {
       "name": "Enhanced Sight",
@@ -58,7 +62,8 @@
       "pcCost": 5,
       "randomOnly": false,
       "wellAspectedOnly": false,
-      "page": 88
+      "page": 88,
+      "descriptionPage": 89
     },
     {
       "name": "Extra Magickal Spells",
@@ -69,7 +74,8 @@
       "pcCost": 10,
       "randomOnly": false,
       "wellAspectedOnly": false,
-      "page": 88
+      "page": 88,
+      "descriptionPage": 89
     },
     {
       "name": "Extraordinary Beauty",
@@ -80,7 +86,8 @@
       "pcCost": null,
       "randomOnly": true,
       "wellAspectedOnly": false,
-      "page": 88
+      "page": 88,
+      "descriptionPage": 89
     },
     {
       "name": "Extraordinary Potential",
@@ -91,7 +98,8 @@
       "pcCost": 10,
       "randomOnly": false,
       "wellAspectedOnly": false,
-      "page": 88
+      "page": 88,
+      "descriptionPage": 89
     },
     {
       "name": "Fey Affinity",
@@ -102,7 +110,8 @@
       "pcCost": 5,
       "randomOnly": false,
       "wellAspectedOnly": true,
-      "page": 88
+      "page": 88,
+      "descriptionPage": 90
     },
     {
       "name": "Fey Blood",
@@ -113,7 +122,8 @@
       "pcCost": 5,
       "randomOnly": false,
       "wellAspectedOnly": true,
-      "page": 88
+      "page": 88,
+      "descriptionPage": 90
     },
     {
       "name": "Healing Powers",
@@ -124,7 +134,8 @@
       "pcCost": null,
       "randomOnly": true,
       "wellAspectedOnly": false,
-      "page": 88
+      "page": 88,
+      "descriptionPage": 90
     },
     {
       "name": "Herculean Strength",
@@ -135,7 +146,8 @@
       "pcCost": null,
       "randomOnly": true,
       "wellAspectedOnly": false,
-      "page": 88
+      "page": 88,
+      "descriptionPage": 90
     },
     {
       "name": "Highly Resistant to Disease",
@@ -146,7 +158,8 @@
       "pcCost": null,
       "randomOnly": true,
       "wellAspectedOnly": false,
-      "page": 88
+      "page": 88,
+      "descriptionPage": 90
     },
     {
       "name": "Highly Resistant to Magick",
@@ -157,7 +170,8 @@
       "pcCost": null,
       "randomOnly": true,
       "wellAspectedOnly": false,
-      "page": 88
+      "page": 88,
+      "descriptionPage": 90
     },
     {
       "name": "Highly Resistant to Poison",
@@ -168,7 +182,8 @@
       "pcCost": null,
       "randomOnly": true,
       "wellAspectedOnly": false,
-      "page": 88
+      "page": 88,
+      "descriptionPage": 90
     },
     {
       "name": "Incredibly Lucky",
@@ -179,7 +194,8 @@
       "pcCost": null,
       "randomOnly": true,
       "wellAspectedOnly": true,
-      "page": 88
+      "page": 88,
+      "descriptionPage": 91
     },
     {
       "name": "Incredibly Strong",
@@ -190,7 +206,8 @@
       "pcCost": null,
       "randomOnly": true,
       "wellAspectedOnly": false,
-      "page": 88
+      "page": 88,
+      "descriptionPage": 90
     },
     {
       "name": "Keen Hearing",
@@ -201,7 +218,8 @@
       "pcCost": 3,
       "randomOnly": false,
       "wellAspectedOnly": false,
-      "page": 88
+      "page": 88,
+      "descriptionPage": 91
     },
     {
       "name": "Light Sleeper",
@@ -212,7 +230,8 @@
       "pcCost": 5,
       "randomOnly": false,
       "wellAspectedOnly": false,
-      "page": 88
+      "page": 88,
+      "descriptionPage": 91
     },
     {
       "name": "Low Metabolic Rate",
@@ -223,7 +242,8 @@
       "pcCost": 5,
       "randomOnly": false,
       "wellAspectedOnly": false,
-      "page": 88
+      "page": 88,
+      "descriptionPage": 91
     },
     {
       "name": "Naturally Charismatic",
@@ -234,7 +254,8 @@
       "pcCost": null,
       "randomOnly": true,
       "wellAspectedOnly": false,
-      "page": 88
+      "page": 88,
+      "descriptionPage": 91
     },
     {
       "name": "Night Vision",
@@ -245,7 +266,8 @@
       "pcCost": 0,
       "randomOnly": false,
       "wellAspectedOnly": false,
-      "page": 88
+      "page": 88,
+      "descriptionPage": 91
     },
     {
       "name": "Premonition",
@@ -256,7 +278,8 @@
       "pcCost": 7,
       "randomOnly": false,
       "wellAspectedOnly": false,
-      "page": 88
+      "page": 88,
+      "descriptionPage": 91
     },
     {
       "name": "Primitive Talent Magickal Powers",
@@ -267,7 +290,8 @@
       "pcCost": null,
       "randomOnly": true,
       "wellAspectedOnly": false,
-      "page": 88
+      "page": 88,
+      "descriptionPage": 91
     },
     {
       "name": "Resistant to Disease",
@@ -278,7 +302,8 @@
       "pcCost": 5,
       "randomOnly": false,
       "wellAspectedOnly": false,
-      "page": 88
+      "page": 88,
+      "descriptionPage": 90
     },
     {
       "name": "Resistant to Magick",
@@ -289,7 +314,8 @@
       "pcCost": 10,
       "randomOnly": false,
       "wellAspectedOnly": false,
-      "page": 88
+      "page": 88,
+      "descriptionPage": 90
     },
     {
       "name": "Resistant to Poison",
@@ -300,7 +326,8 @@
       "pcCost": 5,
       "randomOnly": false,
       "wellAspectedOnly": false,
-      "page": 88
+      "page": 88,
+      "descriptionPage": 90
     },
     {
       "name": "Scholarship",
@@ -311,7 +338,8 @@
       "pcCost": 5,
       "randomOnly": false,
       "wellAspectedOnly": false,
-      "page": 88
+      "page": 88,
+      "descriptionPage": 92
     },
     {
       "name": "Sense Auras",
@@ -322,7 +350,8 @@
       "pcCost": 7,
       "randomOnly": false,
       "wellAspectedOnly": false,
-      "page": 88
+      "page": 88,
+      "descriptionPage": 92
     },
     {
       "name": "Sense Good & Evil",
@@ -333,7 +362,8 @@
       "pcCost": 5,
       "randomOnly": false,
       "wellAspectedOnly": false,
-      "page": 88
+      "page": 88,
+      "descriptionPage": 92
     },
     {
       "name": "Shape Shifting",
@@ -344,7 +374,8 @@
       "pcCost": 7,
       "randomOnly": false,
       "wellAspectedOnly": false,
-      "page": 88
+      "page": 88,
+      "descriptionPage": 92
     },
     {
       "name": "Speak with Animals",
@@ -355,7 +386,8 @@
       "pcCost": 7,
       "randomOnly": false,
       "wellAspectedOnly": true,
-      "page": 88
+      "page": 88,
+      "descriptionPage": 93
     },
     {
       "name": "Unerring Sense of Direction",
@@ -366,7 +398,8 @@
       "pcCost": 5,
       "randomOnly": false,
       "wellAspectedOnly": false,
-      "page": 88
+      "page": 88,
+      "descriptionPage": 93
     },
     {
       "name": "Very Persuasive",
@@ -377,7 +410,8 @@
       "pcCost": null,
       "randomOnly": true,
       "wellAspectedOnly": false,
-      "page": 88
+      "page": 88,
+      "descriptionPage": 93
     }
   ],
   "flaws": [
@@ -389,7 +423,8 @@
       ],
       "pcBonus": 10,
       "rollsOnAnotherTable": false,
-      "page": 95
+      "page": 95,
+      "descriptionPage": 97
     },
     {
       "name": "Angry",
@@ -399,7 +434,8 @@
       ],
       "pcBonus": 5,
       "rollsOnAnotherTable": false,
-      "page": 95
+      "page": 95,
+      "descriptionPage": 97
     },
     {
       "name": "Argumentative",
@@ -409,7 +445,8 @@
       ],
       "pcBonus": 3,
       "rollsOnAnotherTable": false,
-      "page": 95
+      "page": 95,
+      "descriptionPage": 97
     },
     {
       "name": "Arrogant",
@@ -419,7 +456,8 @@
       ],
       "pcBonus": 10,
       "rollsOnAnotherTable": false,
-      "page": 95
+      "page": 95,
+      "descriptionPage": 97
     },
     {
       "name": "Avaricious",
@@ -429,7 +467,8 @@
       ],
       "pcBonus": 10,
       "rollsOnAnotherTable": false,
-      "page": 95
+      "page": 95,
+      "descriptionPage": 97
     },
     {
       "name": "Cannot Hold Liquor",
@@ -439,7 +478,8 @@
       ],
       "pcBonus": 7,
       "rollsOnAnotherTable": false,
-      "page": 95
+      "page": 95,
+      "descriptionPage": 97
     },
     {
       "name": "Clumsy",
@@ -449,7 +489,8 @@
       ],
       "pcBonus": 10,
       "rollsOnAnotherTable": false,
-      "page": 95
+      "page": 95,
+      "descriptionPage": 97
     },
     {
       "name": "Compulsive Gambler",
@@ -459,7 +500,8 @@
       ],
       "pcBonus": 10,
       "rollsOnAnotherTable": false,
-      "page": 95
+      "page": 95,
+      "descriptionPage": 98
     },
     {
       "name": "Compulsive Liar",
@@ -469,7 +511,8 @@
       ],
       "pcBonus": 7,
       "rollsOnAnotherTable": false,
-      "page": 95
+      "page": 95,
+      "descriptionPage": 98
     },
     {
       "name": "Cowardly",
@@ -479,7 +522,8 @@
       ],
       "pcBonus": 15,
       "rollsOnAnotherTable": false,
-      "page": 95
+      "page": 95,
+      "descriptionPage": 98
     },
     {
       "name": "Deep Sleeper",
@@ -489,7 +533,8 @@
       ],
       "pcBonus": 5,
       "rollsOnAnotherTable": false,
-      "page": 95
+      "page": 95,
+      "descriptionPage": 98
     },
     {
       "name": "Disrespectful",
@@ -499,7 +544,8 @@
       ],
       "pcBonus": 7,
       "rollsOnAnotherTable": false,
-      "page": 95
+      "page": 95,
+      "descriptionPage": 98
     },
     {
       "name": "Drunkard",
@@ -509,7 +555,8 @@
       ],
       "pcBonus": 7,
       "rollsOnAnotherTable": false,
-      "page": 95
+      "page": 95,
+      "descriptionPage": 98
     },
     {
       "name": "Envious",
@@ -519,7 +566,8 @@
       ],
       "pcBonus": 5,
       "rollsOnAnotherTable": false,
-      "page": 95
+      "page": 95,
+      "descriptionPage": 98
     },
     {
       "name": "Frivolous",
@@ -529,7 +577,8 @@
       ],
       "pcBonus": 5,
       "rollsOnAnotherTable": false,
-      "page": 95
+      "page": 95,
+      "descriptionPage": 98
     },
     {
       "name": "Gluttonous",
@@ -539,7 +588,8 @@
       ],
       "pcBonus": 5,
       "rollsOnAnotherTable": false,
-      "page": 95
+      "page": 95,
+      "descriptionPage": 99
     },
     {
       "name": "Hypochondriac",
@@ -549,7 +599,8 @@
       ],
       "pcBonus": 3,
       "rollsOnAnotherTable": false,
-      "page": 95
+      "page": 95,
+      "descriptionPage": 99
     },
     {
       "name": "Impatient",
@@ -559,7 +610,8 @@
       ],
       "pcBonus": 3,
       "rollsOnAnotherTable": false,
-      "page": 95
+      "page": 95,
+      "descriptionPage": 99
     },
     {
       "name": "Kleptomaniac",
@@ -569,7 +621,8 @@
       ],
       "pcBonus": 10,
       "rollsOnAnotherTable": false,
-      "page": 95
+      "page": 95,
+      "descriptionPage": 99
     },
     {
       "name": "Larcenous",
@@ -579,7 +632,8 @@
       ],
       "pcBonus": 5,
       "rollsOnAnotherTable": false,
-      "page": 95
+      "page": 95,
+      "descriptionPage": 99
     },
     {
       "name": "Lazy",
@@ -589,47 +643,52 @@
       ],
       "pcBonus": 3,
       "rollsOnAnotherTable": false,
-      "page": 95
+      "page": 95,
+      "descriptionPage": 99
     },
     {
-      "name": "Lecherous concentrate, etc.",
+      "name": "Lecherous",
       "roll": [
         62,
         63
       ],
       "pcBonus": 7,
       "rollsOnAnotherTable": false,
-      "page": 95
+      "page": 95,
+      "descriptionPage": 99
     },
     {
-      "name": "Lustful Phobia1",
+      "name": "Lustful",
       "roll": [
         64,
         66
       ],
       "pcBonus": 5,
       "rollsOnAnotherTable": false,
-      "page": 95
+      "page": 95,
+      "descriptionPage": 99
     },
     {
-      "name": "Major",
+      "name": "Major Phobia",
       "roll": [
         67,
         67
       ],
       "pcBonus": 10,
-      "rollsOnAnotherTable": false,
-      "page": 95
+      "rollsOnAnotherTable": true,
+      "page": 95,
+      "descriptionPage": 99
     },
     {
-      "name": "Manic- Depressive",
+      "name": "Manic-Depressive",
       "roll": [
         68,
         68
       ],
       "pcBonus": 7,
       "rollsOnAnotherTable": false,
-      "page": 95
+      "page": 95,
+      "descriptionPage": 99
     },
     {
       "name": "Megalomaniac",
@@ -639,7 +698,8 @@
       ],
       "pcBonus": 7,
       "rollsOnAnotherTable": false,
-      "page": 95
+      "page": 95,
+      "descriptionPage": 100
     },
     {
       "name": "Minor Phobia",
@@ -649,7 +709,8 @@
       ],
       "pcBonus": 5,
       "rollsOnAnotherTable": true,
-      "page": 95
+      "page": 95,
+      "descriptionPage": 100
     },
     {
       "name": "Over-confident",
@@ -659,7 +720,8 @@
       ],
       "pcBonus": 7,
       "rollsOnAnotherTable": false,
-      "page": 95
+      "page": 95,
+      "descriptionPage": 100
     },
     {
       "name": "Overly Trusting",
@@ -669,7 +731,8 @@
       ],
       "pcBonus": 10,
       "rollsOnAnotherTable": false,
-      "page": 95
+      "page": 95,
+      "descriptionPage": 100
     },
     {
       "name": "Severely Phobic",
@@ -679,7 +742,8 @@
       ],
       "pcBonus": 13,
       "rollsOnAnotherTable": false,
-      "page": 95
+      "page": 95,
+      "descriptionPage": 100
     },
     {
       "name": "Rude",
@@ -689,7 +753,8 @@
       ],
       "pcBonus": 5,
       "rollsOnAnotherTable": false,
-      "page": 95
+      "page": 95,
+      "descriptionPage": 100
     },
     {
       "name": "Poor Hearing",
@@ -699,7 +764,8 @@
       ],
       "pcBonus": 4,
       "rollsOnAnotherTable": false,
-      "page": 95
+      "page": 95,
+      "descriptionPage": 100
     },
     {
       "name": "Poor Vision",
@@ -709,7 +775,8 @@
       ],
       "pcBonus": 4,
       "rollsOnAnotherTable": false,
-      "page": 95
+      "page": 95,
+      "descriptionPage": 100
     },
     {
       "name": "Paranoid",
@@ -719,7 +786,8 @@
       ],
       "pcBonus": 5,
       "rollsOnAnotherTable": false,
-      "page": 95
+      "page": 95,
+      "descriptionPage": 98
     },
     {
       "name": "Pessimistic",
@@ -729,7 +797,8 @@
       ],
       "pcBonus": 5,
       "rollsOnAnotherTable": false,
-      "page": 95
+      "page": 95,
+      "descriptionPage": 101
     },
     {
       "name": "Slovenly",
@@ -739,7 +808,8 @@
       ],
       "pcBonus": 3,
       "rollsOnAnotherTable": false,
-      "page": 95
+      "page": 95,
+      "descriptionPage": 101
     },
     {
       "name": "Slothful",
@@ -749,7 +819,8 @@
       ],
       "pcBonus": 7,
       "rollsOnAnotherTable": false,
-      "page": 95
+      "page": 95,
+      "descriptionPage": 101
     },
     {
       "name": "Tactless",
@@ -759,17 +830,19 @@
       ],
       "pcBonus": 10,
       "rollsOnAnotherTable": false,
-      "page": 95
+      "page": 95,
+      "descriptionPage": 101
     },
     {
-      "name": "Vengeful Instead of prescribing",
+      "name": "Vengeful",
       "roll": [
         99,
         99
       ],
       "pcBonus": 10,
       "rollsOnAnotherTable": false,
-      "page": 95
+      "page": 95,
+      "descriptionPage": 101
     }
   ],
   "additionalFlaws": [

@@ -611,5 +611,6 @@
   "CNS5.Trait.noFlaws": "No flaws yet.",
   "CNS5.Trait.pcNet": "Net PC Points",
   "CNS5.Trait.rollShort": "Roll",
-  "CNS5.Trait.costShort": "PC"
+  "CNS5.Trait.costShort": "PC",
+  "CNS5.Trait.pageShort": "Page"
 }

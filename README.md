@@ -460,6 +460,12 @@ major and each major one a further 13% chance of being severe. A character of
 Ferocity 16 or better may use their FER Attribute Roll instead of rolling
 Willpower, and pious laity may take a flat -15% rather than rolling at all.
 
+Both tables cite the page an entry is *described* on rather than the page its
+table sits on. Once a talent has been rolled, the table it came from is of no
+further use; where to read what it does is what a player wants at hand. They sit
+side by side on the sheet, since three short columns leave most of a row empty
+on their own.
+
 ### What was transcribed rather than parsed
 
 The 1D10 table at the foot of p95 is five rows, and every one of them is
@@ -600,6 +606,11 @@ treated as authoritative over the worked examples and the character sheet.
 - **p95, the 1D10 table.** Rolls 01-05 and 06 print the same text, "Minor Phobia
   & roll again for another flaw", at seven points and thirteen respectively.
   Both ship as printed, told apart by the roll that produces them.
+- **p95, two names wrap in the printed table.** Major Phobia breaks across two
+  lines and Manic-Depressive across its hyphen. The row grouping had to widen to
+  six points to catch the first: the two halves of "Major Phobia" sit four
+  tenths of a point apart, and a tighter band split them, putting the second
+  half onto the entry above.
 - **p271, Action Point bands.** The fourth band ends at 70% and the fifth begins
   at 75%, leaving 71-74% unstated. Read as the top band starting at 71%, which
   is the only reading that leaves no hole.

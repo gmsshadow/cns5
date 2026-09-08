@@ -19,7 +19,11 @@ import sys
 import pdfplumber
 
 PDF = sys.argv[1] if len(sys.argv) > 1 else "CS_5th_Edition_Digital_Colour_2020_HAPPY_PRINTER.pdf"
-ROW = 3
+# Rows are about fifteen points apart, but two words in the same row can sit
+# almost half a point out — "Major" and the "Phobia" beside it differ by 0.4 —
+# and a tighter band split them into separate rows, which put the second half of
+# the name on the entry above. Six points groups a row without merging two.
+ROW = 6
 
 
 def rows_of(page, x_min=0, x_max=10_000):
@@ -91,17 +95,35 @@ def extract_flaws(pdf):
 
     for roll_x, name_x, cost_x, end_x in columns:
         column = []
+        last_top = None
         for row in rows_of(page, roll_x - 4, end_x):
             rolls = leading_range(row, name_x - 4)
             name = span(row, name_x - 4, cost_x - 4)
             cost_text = span(row, cost_x - 4, end_x)
+            top = row[0]["top"]
 
             if not rolls:
-                # A name that wrapped belongs to the entry above it.
-                if name and column and not cost_text:
-                    column[-1]["name"] = f'{column[-1]["name"]} {name}'.strip()
+                # A name too long for its column wraps onto the next line. Only
+                # the line immediately below counts: the page's prose runs on
+                # under the table in the same columns, and without a bound it
+                # was being read as more of the last flaw's name.
+                if (
+                    name
+                    and column
+                    and not cost_text
+                    and last_top is not None
+                    and 0 < top - last_top <= 20
+                ):
+                    # A name broken across a hyphen joins without a space.
+                    joiner = "" if column[-1]["name"].endswith("-") else " "
+                    column[-1]["name"] = f'{column[-1]["name"]}{joiner}{name}'.strip()
+                    last_top = top
                 continue
-            if not name:
+            # The 1D10 table at the foot of the page overlaps this column in x,
+            # so its roll can land where a name belongs. Roll 100 of the Flaws
+            # table has no name or cost printed in its own columns at all, and
+            # is dropped rather than given the neighbouring table's figures.
+            if not name or name.isdigit():
                 continue
 
             # A superscript footnote marks the entries that send the reader to
@@ -109,6 +131,7 @@ def extract_flaws(pdf):
             footnote = bool(re.search(r"\d$", name))
             name = re.sub(r"\s*\d+$", "", name).strip()
 
+            last_top = top
             bonus = re.search(r"\+?(\d+)", cost_text)
             column.append({
                 "name": name,
@@ -195,14 +218,43 @@ def extract_phobias(pdf):
     return out
 
 
+def description_pages(pdf, rows, first, last):
+    """Find the page each entry is described on.
+
+    The tables give only where the table is. What a player wants at the table is
+    where to read what the thing does, which is a different page for every
+    entry — the talents run over pp.89-94 and the flaws on from there.
+    """
+    text = {}
+    for pno in range(first - 1, last):
+        text[pno + 1] = re.sub(
+            r"[^a-z0-9]", "", pdf.pages[pno].extract_text().lower()
+        )
+
+    for row in rows:
+        key = re.sub(r"[^a-z0-9]", "", row["name"].lower())
+        if not key:
+            continue
+        found = next((page for page, body in text.items() if key in body), None)
+        if found:
+            row["descriptionPage"] = found
+
+
 if __name__ == "__main__":
     with pdfplumber.open(PDF) as pdf:
         talents = extract_talents(pdf)
         flaws = extract_flaws(pdf)
         additional = extract_additional_flaws(pdf)
         phobias = extract_phobias(pdf)
+
+        description_pages(pdf, talents, 89, 95)
+        # Deficiency Descriptions begin on p97; p95 is the table itself, where
+        # every name appears and so would match every entry.
+        description_pages(pdf, flaws, 97, 102)
+    undescribed = [r["name"] for r in talents + flaws if "descriptionPage" not in r]
     print(f"talents {len(talents)}  flaws {len(flaws)}  "
           f"additional {len(additional)}  phobias {len(phobias)}", file=sys.stderr)
+    print(f"without a description page: {undescribed or 'none'}", file=sys.stderr)
     json.dump({"talents": talents, "flaws": flaws,
                "additionalFlaws": additional, "phobias": phobias},
               sys.stdout, indent=2, ensure_ascii=False)

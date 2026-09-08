@@ -1187,3 +1187,19 @@
     flex-direction: column;
     gap: 0.75rem;
 }
+
+/* Two narrow tables set side by side. Each has only three short columns, so on
+   its own it leaves most of the row empty; together they fill it. Below the
+   breakpoint they stack, because three columns squeezed into half a narrow
+   window is worse than scrolling. */
+.cns5-columns {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr));
+    gap: 0.75rem 1.25rem;
+    align-items: start;
+}
+
+.cns5-columns > .cns5-skills {
+    margin-top: 0;
+    min-width: 0;
+}

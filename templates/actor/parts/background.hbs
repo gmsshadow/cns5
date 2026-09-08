@@ -75,6 +75,7 @@
         <div><dt>{{localize "CNS5.Details.attributeMax"}}</dt><dd>{{system.attributeMax}}</dd></div>
     </dl>
 
+    <div class="cns5-columns">
     <section class="cns5-skills">
         <h3 class="cns5-skills__heading">
             {{localize "CNS5.Trait.talents"}}
@@ -87,7 +88,7 @@
             <thead>
             <tr>
                 <th scope="col" class="cns5-skills__name">{{localize "CNS5.Trait.talents"}}</th>
-                <th scope="col">{{localize "CNS5.Trait.rollShort"}}</th>
+                <th scope="col">{{localize "CNS5.Trait.pageShort"}}</th>
                 <th scope="col">{{localize "CNS5.Trait.costShort"}}</th>
                 <th scope="col"><span class="cns5-visually-hidden">{{localize "CNS5.Skill.controls"}}</span></th>
             </tr>
@@ -108,7 +109,7 @@
                     </span>
                     {{/if}}
                 </th>
-                <td class="cns5-skills__readout">{{talent.system.rollLabel}}</td>
+                <td class="cns5-skills__readout">{{talent.system.reference}}</td>
                 <td class="cns5-skills__readout">
                     {{#if talent.system.pcCost}}{{talent.system.pcCost}}{{else}}—{{/if}}
                 </td>
@@ -138,7 +139,7 @@
             <thead>
             <tr>
                 <th scope="col" class="cns5-skills__name">{{localize "CNS5.Trait.flaws"}}</th>
-                <th scope="col">{{localize "CNS5.Trait.rollShort"}}</th>
+                <th scope="col">{{localize "CNS5.Trait.pageShort"}}</th>
                 <th scope="col">{{localize "CNS5.Trait.costShort"}}</th>
                 <th scope="col"><span class="cns5-visually-hidden">{{localize "CNS5.Skill.controls"}}</span></th>
             </tr>
@@ -155,7 +156,7 @@
                     </span>
                     {{/if}}
                 </th>
-                <td class="cns5-skills__readout">{{flaw.system.rollLabel}}</td>
+                <td class="cns5-skills__readout">{{flaw.system.reference}}</td>
                 <td class="cns5-skills__readout">
                     {{#if flaw.system.pcBonus}}+{{flaw.system.pcBonus}}{{else}}—{{/if}}
                 </td>
@@ -172,6 +173,7 @@
         <p class="cns5-hint">{{localize "CNS5.Trait.noFlaws"}}</p>
         {{/if}}
     </section>
+    </div>
 
     <dl class="cns5-derived">
         <div><dt>{{localize "CNS5.Trait.pcNet"}}</dt><dd>{{cns5Signed traitPoints}}</dd></div>

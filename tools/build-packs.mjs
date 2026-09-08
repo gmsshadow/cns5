@@ -520,7 +520,9 @@ function toTalent(row) {
     randomOnly: row.randomOnly,
     wellAspectedOnly: row.wellAspectedOnly,
     notes: notes.join("; "),
-    reference: `p${row.page}`,
+    // The page the ability is described on, which is what a player wants to
+    // look up. The table it was rolled on is of no use once it has been rolled.
+    reference: `p${row.descriptionPage ?? row.page}`,
     description: ""
   });
 }
@@ -545,7 +547,7 @@ function toFlaw(row, kind, name = row.name) {
     fear: row.fear ?? "",
     rollsOnAnotherTable: Boolean(row.rollsOnAnotherTable),
     notes: notes.join("; "),
-    reference: `p${row.page}`,
+    reference: `p${row.descriptionPage ?? row.page}`,
     description: ""
   });
 }

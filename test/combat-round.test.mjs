@@ -109,10 +109,18 @@ declare(hoarder, "hold", 0);
 ok("the excess above BAP is lost", hoarder.pool, 8);
 ok("and that is what carries", carryOver(hoarder), 8);
 
-/* A new round: what was held, plus the round bonus, plus a fresh d10. */
+/* A new round: what was held, plus the round bonus, plus a fresh d10. Every
+   combatant rolls again — the pool is not carried forward untouched. */
 const newPool = (c, die) => carryOver(c) + die + c.bap;
 ok("the knight's new pool on a 6", newPool(knight, 6), 31);
 ok("the boar's, having spent all", newPool(boar, 6), 18);
+ok("a different die gives a different pool", newPool(boar, 1), 13);
+ok("so the roll is not optional", newPool(boar, 6) - newPool(boar, 1), 5);
+
+/* Someone who held over still rolls; the held points are added to the roll
+   rather than replacing it. */
+ok("holding does not skip the roll", newPool(knight, 1) > carryOver(knight), true);
+ok("and the held points are on top of it", newPool(knight, 1), 11 + 1 + 14);
 
 /* -------------------------------------------- */
 /*  Configuration                                                             */

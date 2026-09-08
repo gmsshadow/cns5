@@ -1203,3 +1203,56 @@
     margin-top: 0;
     min-width: 0;
 }
+
+/* --------------------------------------------------------------------------
+   Combat round announcement
+   -------------------------------------------------------------------------- */
+
+.cns5-round {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    font-family: var(--cns-serif, Georgia, serif);
+}
+
+.cns5-round__title {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 600;
+    font-variant: small-caps;
+    letter-spacing: 0.04em;
+    border-bottom: 1px solid var(--cns-lapis, #21406e);
+    padding-bottom: 0.15rem;
+}
+
+.cns5-round__table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.cns5-round__table th,
+.cns5-round__table td {
+    padding: 0.1rem 0.3rem;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+.cns5-round__table tbody th {
+    text-align: left;
+    font-weight: 400;
+}
+
+.cns5-round__table thead th {
+    font-size: 0.75rem;
+    font-weight: 600;
+    font-variant: small-caps;
+    opacity: 0.8;
+    border-bottom: 1px solid currentColor;
+}
+
+/* The pool is the number anyone reads; the workings behind it are secondary. */
+.cns5-round__total {
+    font-weight: 700;
+    font-size: 1rem;
+}

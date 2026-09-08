@@ -524,8 +524,16 @@ They move, strike or cast, then say what it cost. Three answers: act and record
 the spend, pass, or hold over. Holding keeps no more than Base Action Points'
 worth, ends that character's round, and drops them out of the order at once.
 
-**When the round turns**, held points carry over and are added to a fresh d10
-and the round bonus. Points neither spent nor held are lost.
+**Every round opens with a fresh roll** (p268, step 1). Each combatant rolls a
+new d10 and adds it to their Base Action Points and armour modifier, plus
+anything they held over. Points neither spent nor held are lost. The first round
+opens the same way as every later one, through the same method, with nothing
+carried in.
+
+The rolls are announced to chat as a table of the round's pools, showing the
+die, the bonus and any held-over points beside each total. Without that the
+reroll is invisible: a number quietly changing in the tracker is
+indistinguishable from a number that did not change at all.
 
 ### Not automated
 

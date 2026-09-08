@@ -132,15 +132,86 @@ export class CnS5Combat extends Combat {
   /* -------------------------------------------- */
 
   /**
-   * Begin the encounter: everyone rolls, the order is worked out, and the
-   * highest pool takes the first turn.
+   * Begin the encounter.
+   *
+   * The first round opens exactly as every later one does — a fresh d10 added
+   * to Base Action Points and the armour modifier — so it goes through the same
+   * method rather than Foundry's rollAll. Nothing is carried into round one.
    *
    * @inheritDoc
    */
   async startCombat() {
-    await this.rollAll();
     await super.startCombat();
+    await this.beginRound();
     return this.#openPhase();
+  }
+
+  /* -------------------------------------------- */
+
+  /**
+   * Roll everyone's Action Point pool for a new Combat Round (p268, step 1).
+   *
+   * Each combatant rolls a fresh d10 and adds it to their Base Action Points
+   * and armour modifier, plus whatever they held over from the round before.
+   * The rolls are announced, because a number quietly changing in the tracker
+   * is indistinguishable from a number that did not change at all.
+   *
+   * @returns {Promise<void>}
+   */
+  async beginRound() {
+    const updates = [];
+    const lines = [];
+    const rolls = [];
+
+    for (const combatant of this.combatants) {
+      const carried = combatant.held ? Math.min(combatant.pool, combatant.bap) : 0;
+      const roll = await new Roll(CNS5.initiativeDie).evaluate();
+      const bonus = combatant.roundBonus;
+      const total = Math.max(0, carried + roll.total + bonus);
+
+      rolls.push(roll);
+      updates.push({
+        _id: combatant.id,
+        initiative: total,
+        "flags.cns5.held": false,
+        "flags.cns5.acted": false,
+        "flags.cns5.carried": carried
+      });
+      lines.push({
+        name: combatant.name,
+        die: roll.total,
+        bonus,
+        carried,
+        total
+      });
+    }
+
+    await this.updateEmbeddedDocuments("Combatant", updates);
+    await this.#reorder();
+    await this.#announce(lines.sort((a, b) => b.total - a.total), rolls);
+  }
+
+  /* -------------------------------------------- */
+
+  /**
+   * Post the round's pools to chat.
+   * @param {Array<object>} lines
+   * @param {Roll[]} rolls
+   */
+  async #announce(lines, rolls) {
+    if (!lines.length) return;
+
+    const content = await foundry.applications.handlebars.renderTemplate(
+      "systems/cns5/templates/chat/round.hbs",
+      { round: this.round, lines, anyCarried: lines.some((l) => l.carried > 0) }
+    );
+
+    await ChatMessage.create({
+      content,
+      rolls,
+      sound: CONFIG.sounds.dice,
+      flavor: game.i18n.format("CNS5.Combat.roundTitle", { round: this.round })
+    });
   }
 
   /* -------------------------------------------- */
@@ -235,22 +306,10 @@ export class CnS5Combat extends Combat {
    * @inheritDoc
    */
   async nextRound() {
-    const updates = [];
-    for (const combatant of this.combatants) {
-      const carried = combatant.held ? Math.min(combatant.pool, combatant.bap) : 0;
-      const roll = await new Roll(CNS5.initiativeDie).evaluate();
-      updates.push({
-        _id: combatant.id,
-        initiative: Math.max(0, carried + roll.total + combatant.roundBonus),
-        "flags.cns5.held": false,
-        "flags.cns5.acted": false,
-        "flags.cns5.carried": carried
-      });
-    }
-    await this.updateEmbeddedDocuments("Combatant", updates);
-    await this.#reorder();
-
+    // Foundry advances the round counter first, so the announcement carries the
+    // number of the round being opened rather than the one just finished.
     await super.nextRound();
+    await this.beginRound();
     return this.#openPhase();
   }
 

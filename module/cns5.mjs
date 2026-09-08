@@ -113,7 +113,8 @@ Hooks.once("init", () => {
     "systems/cns5/templates/wizard/step-size.hbs",
     "systems/cns5/templates/wizard/step-age.hbs",
     "systems/cns5/templates/wizard/step-review.hbs",
-    "systems/cns5/templates/chat/check.hbs"
+    "systems/cns5/templates/chat/check.hbs",
+    "systems/cns5/templates/chat/round.hbs"
   ]);
 });
 

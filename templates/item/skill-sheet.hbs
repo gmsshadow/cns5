@@ -33,6 +33,15 @@
         </label>
 
         <label class="cns5-field">
+            <span>{{localize "CNS5.Skill.origin"}}</span>
+            <select name="system.origin" {{#unless editable}}disabled{{/unless}}>
+                {{#each origins}}
+                <option value="{{value}}" {{#if selected}}selected{{/if}}>{{localize label}}</option>
+                {{/each}}
+            </select>
+        </label>
+
+        <label class="cns5-field">
             <span>{{localize "CNS5.Skill.kind"}}</span>
             <select name="system.kind" {{#unless editable}}disabled{{/unless}}>
                 <option value="skill" {{#if (eq system.kind "skill")}}selected{{/if}}>

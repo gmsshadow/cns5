@@ -1153,3 +1153,12 @@
     flex: 1;
     min-width: 0;
 }
+
+/* An origin tag says where a skill came from, which is quieter information than
+   Mastery or a training requirement — those change the numbers, this does not. */
+.cns5-tag--origin {
+    border-color: var(--cns-rule);
+    color: var(--cns-ink-soft);
+    font-variant: small-caps;
+    letter-spacing: 0.02em;
+}

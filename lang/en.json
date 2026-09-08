@@ -106,10 +106,8 @@
   "CNS5.Difficulty.8": "Extremely Difficult",
   "CNS5.Difficulty.9": "Nearly Impossible",
   "CNS5.Difficulty.10": "Impossible",
-  "CNS5.SkillCategory.core": "Core Skills",
-  "CNS5.SkillCategory.background": "Background Skills",
-  "CNS5.SkillCategory.primary": "Vocational — Primary",
-  "CNS5.SkillCategory.secondary": "Vocational — Secondary",
+  "CNS5.SkillCategory.primary": "Primary (Vocational)",
+  "CNS5.SkillCategory.secondary": "Secondary",
   "CNS5.SkillCategory.tertiary": "Tertiary (Hobby)",
   "CNS5.Skill.competencies": "Competencies",
   "CNS5.Skill.skill": "Skill",
@@ -560,5 +558,13 @@
   "CNS5.Skill.psfOverride": "PSF% override",
   "CNS5.Skill.psfOverrideHint": "A flat Personal Skill Factor, replacing attributes, level and category. The bestiary gives a creature's Dodge, Stamina and Willpower this way.",
   "CNS5.WeaponWeight.naturalMedium": "Natural Medium",
-  "CNS5.WeaponWeight.naturalHeavy": "Natural Heavy"
+  "CNS5.WeaponWeight.naturalHeavy": "Natural Heavy",
+  "CNS5.Skill.origin": "Origin",
+  "CNS5.Skill.originHint": "Where the skill came from. It carries no bonus of its own — a core or background skill is promoted as a Secondary Skill unless the vocation lists it as Primary.",
+  "CNS5.SkillOrigin.chosen": "Chosen",
+  "CNS5.SkillOrigin.core": "Core",
+  "CNS5.SkillOrigin.background": "Background",
+  "CNS5.SkillOrigin.vocational": "Vocational",
+  "CNS5.Details.gentle": "Gentle birth",
+  "CNS5.Details.gentleHint": "A character of gentle birth gains +10% PSF in Leadership, and in Courtly Love outside the Early Feudal period."
 }

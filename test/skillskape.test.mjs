@@ -1,5 +1,14 @@
+import { readFile } from "node:fs/promises";
+import { fileURLToPath } from "node:url";
+import path from "node:path";
+
 import { CNS5 } from "../module/config.mjs";
 import { clampSuccessChance } from "../module/helpers/checks.mjs";
+
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const skillList = JSON.parse(
+  await readFile(path.join(ROOT, "data", "skills.json"), "utf8")
+).skills;
 
 let fails = 0;
 const ok = (label, got, want) => {
@@ -68,6 +77,53 @@ ok("Sue short sword attribute bonus", psfAttr(["str", "agl"], [11, 16]), 4);
 
 /* A doubled attribute is the same key twice: Faith is SPR x 2. */
 ok("Faith SPR 16 x 2", psfAttr(["spr", "spr"], [16, 16]), 8);
+
+/* -- Skill categories (p119-120) ------------------------------------------- */
+
+/* There are three and only three. Core and Background are not categories: the
+   rules promote both as Secondary Skills, and a vocational skill that is also a
+   background skill "receives no additional bonuses for being part" of both. */
+ok("the categories the rules recognise", Object.keys(CNS5.skillCategories).sort(),
+   ["primary", "secondary", "tertiary"]);
+ok("Primary is the vocational bonus", CNS5.skillCategories.primary.psf, 10);
+ok("Secondary is the neutral case", CNS5.skillCategories.secondary.psf, 0);
+ok("Tertiary is the hobby penalty", CNS5.skillCategories.tertiary.psf, -10);
+
+/* Origin is provenance and must never carry a bonus of its own, or core and
+   background skills would quietly stack a second adjustment. */
+ok("origins are labels, not modifiers",
+   Object.values(CNS5.skillOrigins).filter((v) => typeof v !== "string"), []);
+ok("every origin is known",
+   Object.keys(CNS5.skillOrigins).sort(), ["background", "chosen", "core", "vocational"]);
+
+/* Old data used core and background as categories; both become Secondary with
+   the origin preserved. */
+const migrate = (source) => {
+  if (source.category === "core" || source.category === "background") {
+    source.origin ??= source.category;
+    source.category = "secondary";
+  }
+  return source;
+};
+ok("a core skill migrates", migrate({ category: "core" }),
+   { category: "secondary", origin: "core" });
+ok("a background skill migrates", migrate({ category: "background" }),
+   { category: "secondary", origin: "background" });
+ok("a primary skill is left alone", migrate({ category: "primary" }), { category: "primary" });
+ok("an explicit origin survives", migrate({ category: "core", origin: "vocational" }),
+   { category: "secondary", origin: "vocational" });
+
+/* The gentle birth bonus (p119). */
+ok("the skills it applies to", CNS5.gentleSkills.map((g) => g.name), ["Courtly Love", "Leadership"]);
+ok("Courtly Love is excepted in the Early Feudal period",
+   CNS5.gentleSkills[0].exceptPeriods, ["ef"]);
+ok("Leadership is not excepted anywhere", CNS5.gentleSkills[1].exceptPeriods, []);
+ok("both are worth +10%", CNS5.gentleSkills.map((g) => g.bonus), [10, 10]);
+
+/* Every gentle skill has to name a skill that exists, or the bonus never lands
+   and nothing anywhere says so. */
+const known = new Set(skillList.map((s) => s.name));
+ok("and both name a real skill", CNS5.gentleSkills.filter((g) => !known.has(g.name)).map((g) => g.name), []);
 
 console.log(fails ? `\n${fails} FAILURES` : "\nAll checks passed.");
 process.exit(fails ? 1 : 0);

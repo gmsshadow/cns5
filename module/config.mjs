@@ -102,22 +102,54 @@ CNS5.difficultyFactors = {
 /**
  * Skill categories and their PSF% adjustment (p32, p119-120).
  *
+ * There are only three. A skill is Primary if the character's vocation lists it
+ * as such, Tertiary if it is a hobby, and Secondary otherwise — which is what
+ * both core and background skills are, "unless they are listed as Primary (or
+ * Vocational) Skills for the character's chosen vocation" (p119). Where a
+ * vocational skill is also a background skill it gains nothing extra for being
+ * both, so the categories do not stack and there is no reason to keep more of
+ * them than the rules recognise.
+ *
  * Mastery and Sunsign are not categories: each adds its own separate +10% and
  * both can apply to a skill of any category, so they are flags on the item.
  *
- * `limit` is the number of skills a character may hold in that category at
- * creation. It is advisory here; the creation wizard will enforce it.
+ * `limit` is the number of skills a character may take in that category among
+ * their starting choices. It is advisory here; the creation wizard will enforce
+ * it.
  */
 CNS5.skillCategories = {
-  core: { psf: 0, label: "CNS5.SkillCategory.core", limit: null },
-  background: { psf: 0, label: "CNS5.SkillCategory.background", limit: 15 },
   primary: { psf: 10, label: "CNS5.SkillCategory.primary", limit: 10 },
   secondary: { psf: 0, label: "CNS5.SkillCategory.secondary", limit: 4 },
-  tertiary: { psf: -10, label: "CNS5.SkillCategory.tertiary", limit: 6 }
+  tertiary: { psf: -10, label: "CNS5.SkillCategory.tertiary", limit: null }
 };
 
 /** Display order for the skills tab. */
-CNS5.skillCategoryOrder = ["core", "primary", "secondary", "background", "tertiary"];
+CNS5.skillCategoryOrder = ["primary", "secondary", "tertiary"];
+
+/**
+ * Where a skill came from.
+ *
+ * This is provenance, not mechanics: it carries no PSF adjustment of its own
+ * and exists so the sheet can show at a glance which skills a character was
+ * born to, which came with the vocation, and which were chosen. The rules use
+ * these words freely but promote all of them as one of the three categories
+ * above.
+ */
+CNS5.skillOrigins = {
+  chosen: "CNS5.SkillOrigin.chosen",
+  core: "CNS5.SkillOrigin.core",
+  background: "CNS5.SkillOrigin.background",
+  vocational: "CNS5.SkillOrigin.vocational"
+};
+
+/**
+ * Skills a gentle character gains +10% PSF in (p119). Courtly Love is excluded
+ * in the Early Feudal period, when it had not yet taken hold.
+ */
+CNS5.gentleSkills = [
+  { name: "Courtly Love", bonus: 10, exceptPeriods: ["ef"] },
+  { name: "Leadership", bonus: 10, exceptPeriods: [] }
+];
 
 /**
  * The nine skills every character possesses (printed character sheet, p597).

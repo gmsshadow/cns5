@@ -31,6 +31,8 @@ export class CnS5Character extends CnS5ActorBase {
       vocation: new fields.StringField({ required: true, blank: true, initial: "" }),
       socialClass: new fields.StringField({ required: true, blank: true, initial: "" }),
       socialStatus: new fields.StringField({ required: true, blank: true, initial: "" }),
+      // Gentle birth carries a bonus to courtesy and command (p119).
+      gentle: new fields.BooleanField({ required: true, initial: false }),
       fathersVocation: new fields.StringField({ required: true, blank: true, initial: "" }),
       familyStatus: new fields.StringField({ required: true, blank: true, initial: "" }),
       birthOmens: new fields.StringField({

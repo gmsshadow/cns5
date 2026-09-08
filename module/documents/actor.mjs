@@ -391,7 +391,10 @@ export class CnS5Actor extends Actor {
         system: {
           df: skill.df,
           attributes: skill.attributes,
-          category: "core",
+          // Promoted as Secondary Skills; "core" records where they came from
+          // rather than how they advance (p119).
+          category: "secondary",
+          origin: "core",
           known: true,
           level: 0
         }
@@ -423,7 +426,15 @@ export class CnS5Actor extends Actor {
       {
         name: "Accurate Counting",
         type: "skill",
-        system: { df: 1, attributes: [], kind: "competency", category: "core", known: true, level: 1 }
+        system: {
+          df: 1,
+          attributes: [],
+          kind: "competency",
+          category: "secondary",
+          origin: "core",
+          known: true,
+          level: 1
+        }
       }
     ]);
   }

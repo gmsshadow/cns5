@@ -54,6 +54,12 @@
                             data-tooltip="{{localize 'CNS5.Roll.skillTooltip'}}">
                         {{skill.name}}
                     </button>
+                    {{#unless (eq skill.system.origin "chosen")}}
+                    <span class="cns5-tag cns5-tag--origin"
+                          data-tooltip="{{localize 'CNS5.Skill.originHint'}}">
+                        {{localize (concat "CNS5.SkillOrigin." skill.system.origin)}}
+                    </span>
+                    {{/unless}}
                     {{#if skill.system.mastered}}<span class="cns5-tag" data-tooltip="{{localize 'CNS5.Skill.mastered'}}">M</span>{{/if}}
                     {{#if skill.system.sunsign}}<span class="cns5-tag" data-tooltip="{{localize 'CNS5.Skill.sunsign'}}">☉</span>{{/if}}
                     {{#if skill.system.trainingRequired}}<span class="cns5-tag" data-tooltip="{{localize 'CNS5.Skill.trainingRequired'}}">TR</span>{{/if}}

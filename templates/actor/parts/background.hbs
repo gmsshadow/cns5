@@ -63,6 +63,13 @@
         </label>
     </div>
 
+    <label class="cns5-checkbox">
+        <input type="checkbox" name="system.details.gentle" {{checked system.details.gentle}}
+               {{#unless editable}}disabled{{/unless}}>
+        <span>{{localize "CNS5.Details.gentle"}}</span>
+    </label>
+    <p class="cns5-hint">{{localize "CNS5.Details.gentleHint"}}</p>
+
     <dl class="cns5-derived">
         <div><dt>{{localize "CNS5.Derived.magickResistance"}}</dt><dd>{{cns5Percent system.magick.resistance}}</dd></div>
         <div><dt>{{localize "CNS5.Details.attributeMax"}}</dt><dd>{{system.attributeMax}}</dd></div>

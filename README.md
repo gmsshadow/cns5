@@ -437,6 +437,27 @@ book against itself had turned up.
   forced on the anchor. The `important` there is deliberate and commented: it is
   the only reliable way to win against a theme whose rules we cannot reorder.
 
+## Skill categories
+
+There are three, and only three: Primary, Secondary and Tertiary.
+
+The system used to carry Core and Background as categories of their own. They
+never were. The rules make both Secondary Skills "unless they are listed as
+Primary (or Vocational) Skills for the character's chosen vocation" (p119), and
+a vocational skill that is also a background skill "receives no additional
+bonuses for being part" of both — so there is nothing for a fourth or fifth
+category to do except invite a bonus that does not exist.
+
+Where a skill came from is still worth knowing, so it moved to an `origin`
+field: chosen, core, background or vocational. It carries no adjustment and
+shows on the sheet as a quiet tag. Existing characters migrate automatically —
+a skill whose category was core or background becomes Secondary with its origin
+preserved.
+
+The one bonus that does attach to background is now implemented: a character of
+gentle birth gains +10% PSF in Leadership, and in Courtly Love outside the Early
+Feudal period. There is a Gentle birth toggle on the Background & Social tab.
+
 ## Non-player characters
 
 NPCs come in two sorts, and the sheet asks which before it shows anything else.

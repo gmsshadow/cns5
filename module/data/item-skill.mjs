@@ -54,6 +54,15 @@ export class CnS5Skill extends foundry.abstract.TypeDataModel {
         choices: Object.keys(CNS5.skillCategories)
       }),
 
+      // Where the skill came from. Provenance only: a background or core skill
+      // is promoted as a Secondary Skill like any other, so this carries no
+      // adjustment of its own.
+      origin: new fields.StringField({
+        required: true,
+        initial: "chosen",
+        choices: Object.keys(CNS5.skillOrigins)
+      }),
+
       // Level 0 is basic knowledge. `known` distinguishes a character who has
       // basic knowledge at Level 0 from one attempting the skill unskilled.
       known: new fields.BooleanField({ required: true, initial: true }),
@@ -89,6 +98,25 @@ export class CnS5Skill extends foundry.abstract.TypeDataModel {
   /* -------------------------------------------- */
 
   /**
+   * Bring older data up to date.
+   *
+   * Core and Background used to be categories of their own. They never were in
+   * the rules — both are promoted as Secondary Skills — so they move to the
+   * `origin` field, which is where that information actually belonged.
+   *
+   * @inheritDoc
+   */
+  static migrateData(source) {
+    if (source.category === "core" || source.category === "background") {
+      source.origin ??= source.category;
+      source.category = "secondary";
+    }
+    return super.migrateData(source);
+  }
+
+  /* -------------------------------------------- */
+
+  /**
    * Compute BCS%, PSF%, TSC% and the Min%/Max% band against a prepared actor.
    *
    * @param {object} actorSystem  the parent actor's prepared system data
@@ -114,11 +142,22 @@ export class CnS5Skill extends foundry.abstract.TypeDataModel {
     this.categoryBonus = CNS5.skillCategories[this.category]?.psf ?? 0;
     this.masteryBonus = (this.mastered ? 10 : 0) + (this.sunsign ? 10 : 0);
 
+    // A gentle character is better at courtesy and at command (p119). Courtly
+    // Love is excepted in the Early Feudal period.
+    const gentle = CNS5.gentleSkills.find(
+      (entry) => entry.name.toLowerCase() === this.parent?.name?.toLowerCase()
+    );
+    this.gentleBonus =
+      gentle && actorSystem.details?.gentle && !gentle.exceptPeriods.includes(actorSystem.details.period)
+        ? gentle.bonus
+        : 0;
+
     this.derivedPsf =
       this.attributeBonus +
       this.levelBonus +
       this.categoryBonus +
       this.masteryBonus +
+      this.gentleBonus +
       this.otherMod;
 
     // An NPC's quality and campaign tier shift the PSF of every skill it has.

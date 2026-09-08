@@ -52,6 +52,12 @@ export class CnS5SkillSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
       selected: key === system.category
     }));
 
+    context.origins = Object.entries(CNS5.skillOrigins).map(([key, label]) => ({
+      value: key,
+      label,
+      selected: key === system.origin
+    }));
+
     // Two independent selects, so "WIS x 2" is expressed by picking the same
     // attribute twice and a competency by leaving both blank.
     const allAttributes = Object.values(CNS5.attributeGroups).flat();

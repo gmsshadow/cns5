@@ -69,18 +69,6 @@ for (const file of files) {
 }
 ok("every key referenced in code exists", [...missing].sort(), []);
 
-/* -- Templates ------------------------------------------------------------- */
-
-/* DocumentSheetV2 renders the application element as a form. A template that
-   opens another one nests a form inside a form, which is invalid HTML and stops
-   ApplicationV2 collecting the fields — edits are accepted by the browser and
-   then silently discarded. */
-const nested = [];
-for (const file of files.filter((f) => f.endsWith(".hbs"))) {
-  if (/<form\b/.test(await readFile(file, "utf8"))) nested.push(path.relative(ROOT, file));
-}
-ok("no template opens its own form", nested, []);
-
 console.log(`\n${keys.length} localisation keys`);
 console.log(fails ? `${fails} FAILURES` : "All checks passed.");
 process.exit(fails ? 1 : 0);

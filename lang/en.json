@@ -566,5 +566,8 @@
   "CNS5.SkillOrigin.background": "Background",
   "CNS5.SkillOrigin.vocational": "Vocational",
   "CNS5.Details.gentle": "Gentle birth",
-  "CNS5.Details.gentleHint": "A character of gentle birth gains +10% PSF in Leadership, and in Courtly Love outside the Early Feudal period."
+  "CNS5.Details.gentleHint": "A character of gentle birth gains +10% PSF in Leadership, and in Courtly Love outside the Early Feudal period.",
+  "CNS5.Item.bundle": "Cost covers",
+  "CNS5.Item.bundleHint": "Priced by the bundle:",
+  "CNS5.Item.bundleFor": "for"
 }

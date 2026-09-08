@@ -57,6 +57,23 @@ def rows_of(page, upright_only=True):
     return {k: sorted(v, key=lambda w: w["x0"]) for k, v in sorted(rows.items())}
 
 
+def stray_in_column(page, low, high, row_top):
+    """Find a word in one column that missed its own row.
+
+    A vulgar fraction sits on a raised baseline, so a knife's weight of a
+    quarter pound falls outside its row's band and is lost — which is how
+    fourteen weapons came to be recorded as weighing nothing. Rows are about
+    fifteen points apart, so looking five either side finds the stray without
+    ever reaching the row above or below.
+    """
+    for w in page.extract_words(extra_attrs=["upright"]):
+        if not w["upright"]:
+            continue
+        if low <= w["x0"] < high and 0 < abs(w["top"] - row_top) <= 5:
+            return w["text"]
+    return ""
+
+
 def boundaries(header_x):
     """Midpoints between adjacent column header positions.
 
@@ -83,6 +100,31 @@ def split_row(row, bounds):
     return [" ".join(c) for c in cells]
 
 
+def bundle_footnotes(page, spec_left):
+    """Map footnote markers to a bundle size.
+
+    Six entries in the missile table price their ammunition by the score:
+    "Cost is for 20 arrows", and the same for bolts and war darts. The marker
+    is a superscript digit against the weapon's name, so the footnote block is
+    read and only those saying so are picked up — rather than hard-coding a
+    list of names that would drift the next time the tables are re-read.
+    """
+    sizes = {}
+    rows = collections.defaultdict(list)
+    for w in page.extract_words():
+        rows[round(w["top"] / ROW)].append(w)
+
+    for key in sorted(rows):
+        line = " ".join(w["text"] for w in sorted(rows[key], key=lambda w: w["x0"]))
+        m = re.match(r"^(\d{1,2})\D", line)
+        if not m:
+            continue
+        size = re.search(r"[Cc]ost is for (\d+)", line)
+        if size:
+            sizes[m.group(1)] = int(size.group(1))
+    return sizes
+
+
 def parse_damage(text):
     """'5S' is 5 points of slashing damage; '10 P' occurs too."""
     m = re.match(r"(\d+)\s*([SCPME])", text.strip().upper())
@@ -91,9 +133,35 @@ def parse_damage(text):
     return int(m.group(1)), DAMAGE_TYPE[m.group(2)]
 
 
+FRACTION_GLYPHS = {"½": 0.5, "¼": 0.25, "¾": 0.75, "⅓": 1 / 3, "⅔": 2 / 3, "⅛": 0.125}
+
+
 def number(text, default=None):
+    """An integer, for columns that only ever hold whole numbers."""
     m = re.search(r"-?\d+", text.replace(",", ""))
     return int(m.group()) if m else default
+
+
+def measure(text, default=None):
+    """A weight or similar, which may be written "3", "2 ½", "½" or "0.1".
+
+    The weight column mixes all four. Reading it with an integer parser turned a
+    knife at half a pound and an arrow at a tenth of one into zero, and took
+    them out of the encumbrance total entirely.
+    """
+    if text is None:
+        return default
+    cleaned = text.replace(",", "").strip()
+    total = 0.0
+    found = False
+    for m in re.finditer(r"\d+(?:\.\d+)?", cleaned):
+        total += float(m.group())
+        found = True
+    for glyph, value in FRACTION_GLYPHS.items():
+        if glyph in cleaned:
+            total += value
+            found = True
+    return round(total, 3) if found else default
 
 
 def extract_weapons(pdf):
@@ -111,6 +179,7 @@ def extract_weapons(pdf):
             continue
         bounds = boundaries(header_x.values())
         left = min(header_x.values())
+        footnotes = bundle_footnotes(page, left)
 
         group = None
         for row in rows_of(page).values():
@@ -124,8 +193,16 @@ def extract_weapons(pdf):
             damage, dtype = parse_damage(cells[6])
             # Footnote markers are printed against the name; strip them so the
             # name matches the ranges table and reads properly in the compendium.
+            # They are kept, because some of them price the entry by the score.
             name = re.sub(r"\s+", " ", cells[1]).strip()
+            markers = re.findall(r"(?<=[a-z\)])([\d,]+)$", name)
             name = re.sub(r"(?<=[a-z\)])[\d,]+$", "", name).strip()
+
+            # A marker set slightly right of the name lands in the date column
+            # instead, so it is picked up from there as well.
+            stray = re.match(r"^(\d{1,2})\s+\d{3}", cells[2].strip())
+            if stray:
+                markers.append(stray.group(1))
 
             # A data row fills the date and weight columns; a group heading is a
             # centred name and nothing else. Testing for numbers there does not
@@ -173,7 +250,9 @@ def extract_weapons(pdf):
                 "weightClass": WEIGHT_CLASS.get(code, "medium"),
                 "dates": cells[2].strip(),
                 "productionDays": number(cells[3]),
-                "weight": number(cells[4], 0),
+                "weight": measure(cells[4], None)
+                if measure(cells[4], None) is not None
+                else measure(stray_in_column(page, bounds[3], bounds[4], row[0]["top"]), 0),
                 "length": cells[5].strip(),
                 "critDieModifier": number(cells[7], 0),
                 "bash": number(cells[8], 0),
@@ -181,6 +260,14 @@ def extract_weapons(pdf):
                 "costNote": cells[9].strip() if number(cells[9]) is None else "",
                 "page": pno + 1,
             }
+
+            # The printed cost covers a bundle for anything the footnotes price
+            # by the score. The weight is left alone: the footnotes say "cost",
+            # and nothing anywhere says the weight is for twenty as well.
+            bundle = 1
+            for marker in ",".join(markers).split(","):
+                bundle = max(bundle, footnotes.get(marker.strip(), 1))
+            entry["bundle"] = bundle
 
             if damage is not None:
                 # A melee weapon: damage carries its type as a letter suffix.
@@ -320,9 +407,6 @@ PIECE_TABLES = [
          location="body"),
 ]
 
-FRACTIONS = {"½": 0.5, "¼": 0.25, "¾": 0.75, "⅓": 1 / 3, "⅔": 2 / 3}
-
-
 def words_in(page, spec):
     return [
         w for w in page.extract_words(extra_attrs=["upright"])
@@ -380,19 +464,7 @@ def split_piece_row(row, cols):
 
 def quantity(text):
     """Parse '5', '5½', '3 ½' and '1,536' into a number."""
-    text = text.replace(",", "").strip()
-    if not text:
-        return None
-    total = 0.0
-    found = False
-    for m in re.finditer(r"\d+(?:\.\d+)?", text):
-        total += float(m.group())
-        found = True
-    for glyph, value in FRACTIONS.items():
-        if glyph in text:
-            total += value
-            found = True
-    return round(total, 2) if found else None
+    return measure(text)
 
 
 def fatigue(text):

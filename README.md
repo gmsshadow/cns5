@@ -495,6 +495,33 @@ in landscape with rotated text, so they are not extracted the way the skill,
 gear and spell tables are — that is a job of its own, and this one creature was
 transcribed by hand to prove the shape.
 
+- **Fourteen weapons weighed nothing.** The weight column is full of vulgar
+  fractions and decimals — a knife at a quarter pound, an arrow at a tenth — and
+  the integer parser read every one of them as zero, taking them out of the
+  encumbrance total entirely. A fraction also sits on a raised baseline, so it
+  falls outside its own row's band and was being dropped even before parsing;
+  the weight cell is now looked for a few points either side of the row when it
+  comes back empty.
+- **Ammunition was priced per arrow.** The missile table's footnotes price six
+  kinds of ammunition by the score — "Cost is for 20 arrows", and the same for
+  bolts and war darts. A physical item now carries a `bundle` saying how many
+  pieces its cost covers, and the per-piece cost follows from it, so thirty
+  arrows cost one and a half times the printed figure rather than thirty times
+  it. The bundle sizes are read out of the footnote text rather than hard-coded
+  against a list of names.
+
+  The weight is deliberately left per piece. The footnotes say cost, and nothing
+  anywhere says the weight is for twenty as well — a tenth of a pound is about
+  right for one arrow and absurd for twenty.
+
+- **The NPC sheet would not open.** ApplicationV2 requires each part to render
+  exactly one root element, and the NPC template had nine — a header, some
+  sections and a fieldset side by side. The error names the part rather than the
+  mistake, which makes it a poor thing to debug twice, so
+  `test/templates.test.mjs` now counts the root elements of every template named
+  in a PARTS block. It was checked against the broken template before the fix
+  went in, and reported nine.
+
 ## Errata found while implementing
 
 The rulebook contradicts itself in three places. Where it does, the tables are

@@ -132,7 +132,10 @@ function toWeapon(row, name = row.name) {
     missile: Boolean(row.missile),
     ranges: { ...blank, ...(row.ranges ?? {}) },
     rangeModifiers: { ...blank, ...(row.rangeModifiers ?? {}) },
-    quantity: 1,
+    // Ammunition priced by the score starts as a full bundle, since that is
+    // how it is bought.
+    quantity: row.bundle ?? 1,
+    bundle: row.bundle ?? 1,
     weight: row.weight ?? 0,
     cost: row.cost ?? 0,
     location: "",

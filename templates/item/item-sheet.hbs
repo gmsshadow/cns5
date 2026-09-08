@@ -17,7 +17,7 @@
     {{#if isPhysical}}
     <fieldset class="cns5-fieldset">
         <legend>{{localize "CNS5.Item.carried"}}</legend>
-        <div class="cns5-grid cns5-grid--four">
+        <div class="cns5-grid cns5-grid--five">
             <label class="cns5-field">
                 <span>{{localize "CNS5.Item.quantity"}}</span>
                 <input type="number" name="system.quantity" value="{{system.quantity}}" min="0"
@@ -34,11 +34,22 @@
                        {{#unless editable}}disabled{{/unless}}>
             </label>
             <label class="cns5-field">
+                <span>{{localize "CNS5.Item.bundle"}}</span>
+                <input type="number" name="system.bundle" value="{{system.bundle}}" min="1"
+                       {{#unless editable}}disabled{{/unless}}>
+            </label>
+            <label class="cns5-field">
                 <span>{{localize "CNS5.Item.reference"}}</span>
                 <input type="text" name="system.reference" value="{{system.reference}}"
                        {{#unless editable}}disabled{{/unless}}>
             </label>
         </div>
+        {{#if system.isBundled}}
+        <p class="cns5-hint">
+            {{localize "CNS5.Item.bundleHint"}}
+            {{system.cost}}d {{localize "CNS5.Item.bundleFor"}} {{system.bundle}}.
+        </p>
+        {{/if}}
         <div class="cns5-checks">
             <label class="cns5-checkbox">
                 <input type="checkbox" name="system.carried" {{checked system.carried}}

@@ -1162,3 +1162,10 @@
     font-variant: small-caps;
     letter-spacing: 0.02em;
 }
+
+/* The NPC sheet is a single scrolling column rather than a set of tabs. */
+.cns5-npc {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}

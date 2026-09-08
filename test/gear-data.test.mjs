@@ -170,6 +170,43 @@ ok(
   []
 );
 
+/* -- Weights and bundles --------------------------------------------------- */
+
+/* Everything has a weight. The column is full of vulgar fractions and decimals
+   — a knife at a quarter pound, an arrow at a tenth — and an integer parser
+   silently read all fourteen of them as zero, taking them out of encumbrance
+   altogether. */
+ok("every weapon has a weight", weapons.filter((w) => !(w.weight > 0)).map((w) => w.name), []);
+
+/* The missile table's footnotes price six kinds of ammunition by the score.
+   They say cost, not weight, so only the cost is treated as a bundle. */
+ok(
+  "what is priced by the score",
+  weapons.filter((w) => (w.bundle ?? 1) > 1).map((w) => w.name).sort(),
+  [
+    "Armour Piercing Arrows", "Heavy Crossbow Bolts", "Hunting Arrows",
+    "Hunting Bolts", "Light Crossbow Bolts", "Medium Crossbow Bolts",
+    "War Arrows", "War Darts"
+  ]
+);
+ok(
+  "and all of them by twenty",
+  [...new Set(weapons.filter((w) => (w.bundle ?? 1) > 1).map((w) => w.bundle))],
+  [20]
+);
+ok(
+  "nothing else carries a bundle",
+  weapons.filter((w) => (w.bundle ?? 1) > 1 && w.role !== "ammunition").map((w) => w.name),
+  []
+);
+
+/* An arrow weighs a tenth of a pound each, so a score of them is two pounds —
+   the weight is per piece whatever the cost covers. */
+const arrows = weapons.find((w) => w.name === "Hunting Arrows");
+ok("an arrow's weight", arrows.weight, 0.1);
+ok("twenty of them cost", arrows.cost, 10);
+ok("so one costs half a penny", arrows.cost / arrows.bundle, 0.5);
+
 ok(
   "every piece has a weight and a cost",
   pieces.filter((p) => !(p.weight > 0) || !(p.cost > 0)).map((p) => p.name),

@@ -19,6 +19,13 @@ export class CnS5PhysicalItem extends foundry.abstract.TypeDataModel {
       // Cost is held in pennies, the unit the equipment tables use.
       cost: new fields.NumberField({ required: true, integer: true, initial: 0, min: 0 }),
 
+      // How many pieces that cost covers. The missile table prices arrows,
+      // bolts and war darts by the score — "Cost is for 20 arrows" — so a
+      // quantity of thirty arrows costs one and a half times the printed
+      // figure, not thirty times it. Weight stays per piece: the footnotes say
+      // cost, and nothing anywhere says the weight is for twenty as well.
+      bundle: new fields.NumberField({ required: true, integer: true, initial: 1, min: 1 }),
+
       // Where the item is: worn, in hand, in a pack, on the packhorse. Free text
       // because the rules impose no fixed set and tables vary by campaign.
       location: new fields.StringField({ required: true, blank: true, initial: "" }),
@@ -36,6 +43,9 @@ export class CnS5PhysicalItem extends foundry.abstract.TypeDataModel {
 
   prepareDerivedData() {
     this.totalWeight = Math.round(this.weight * this.quantity * 100) / 100;
-    this.totalCost = this.cost * this.quantity;
+
+    this.unitCost = this.cost / this.bundle;
+    this.totalCost = Math.round(this.unitCost * this.quantity);
+    this.isBundled = this.bundle > 1;
   }
 }

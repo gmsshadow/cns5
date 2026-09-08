@@ -1,13 +1,13 @@
 {
   "name": "cns5",
-  "version": "0.10.0",
+  "version": "0.10.2",
   "private": true,
   "description": "Build tooling for the Chivalry & Sorcery 5th Edition system for Foundry VTT",
   "type": "module",
   "scripts": {
     "build:packs": "node tools/build-packs.mjs",
     "extract:skills": "python tools/extract-skills.py > data/skills.json",
-    "test": "node test/lang.test.mjs && node test/styles.test.mjs && node test/derived-stats.test.mjs && node test/skillskape.test.mjs && node test/skills-data.test.mjs && node test/phase4.test.mjs && node test/gear-data.test.mjs && node test/combat-tables.test.mjs && node test/creation.test.mjs && node test/spells-data.test.mjs && node test/npc.test.mjs",
+    "test": "node test/lang.test.mjs && node test/templates.test.mjs && node test/styles.test.mjs && node test/derived-stats.test.mjs && node test/skillskape.test.mjs && node test/skills-data.test.mjs && node test/phase4.test.mjs && node test/gear-data.test.mjs && node test/combat-tables.test.mjs && node test/creation.test.mjs && node test/spells-data.test.mjs && node test/npc.test.mjs",
     "extract:gear": "python tools/extract-gear.py > data/gear.json",
     "extract:faith": "python tools/extract-faith.py > data/acts-of-faith.json",
     "extract:spells": "python tools/extract-spells.py > data/spells.json"

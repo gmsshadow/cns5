@@ -17,6 +17,17 @@
 
     <p class="cns5-check__result">{{resultLabel}} &mdash; {{outcomeLabel}}</p>
 
+    {{#if targetName}}
+    <p class="cns5-check__target">
+        {{localize "CNS5.Roll.against"}} <strong>{{targetName}}</strong>
+        {{#if defence}} &mdash; {{localize (concat "CNS5.Defence." defence.defence)}}
+        {{defence.roll}} / {{defence.target}}%{{/if}}
+    </p>
+    {{/if}}
+    {{#if exchangeLabel}}
+    <p class="cns5-check__exchange">{{exchangeLabel}}</p>
+    {{/if}}
+
     {{#if damage}}
     <p class="cns5-check__damage">
         {{localize "CNS5.Roll.damage"}}: <strong>{{damage}}</strong> {{damageType}}

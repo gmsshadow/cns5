@@ -98,9 +98,20 @@ export class CnS5Combat extends Combat {
     return (a.name ?? "").localeCompare(b.name ?? "");
   }
 
-  /** @returns {string} the setting governing declarations that cannot be paid for. */
+  /**
+   * The setting governing declarations that cannot be paid for.
+   *
+   * Falls back to the strict reading if the setting is somehow missing, since
+   * refusing an unaffordable action is the safer of the two to do by accident.
+   *
+   * @returns {string}
+   */
   get overspendRule() {
-    return game.settings.get("cns5", "overspendRule");
+    try {
+      return game.settings.get("cns5", "overspendRule") ?? "disallow";
+    } catch {
+      return "disallow";
+    }
   }
 
   /* -------------------------------------------- */

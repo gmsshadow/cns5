@@ -1062,3 +1062,109 @@ CNS5.talentOutcomes = [
 
 /** A character with a talent must roll for a flaw; 01-40 gives one (p94). */
 CNS5.flawChance = 40;
+
+/* -------------------------------------------- */
+/*  Defences                                    */
+/* -------------------------------------------- */
+
+/**
+ * The two ways of resolving a defence (p270).
+ *
+ * Basic folds the defence into the attacker's chance: the attacker's Total
+ * Success Chance is reduced by a share of the defender's Personal Skill Factor,
+ * and one roll settles it.
+ *
+ * Advanced rolls separately for attack and defence and reads the pair, which is
+ * what makes a shield able to absorb a blow it stopped.
+ */
+CNS5.defenceModes = {
+  basic: "CNS5.Settings.defence.basic",
+  advanced: "CNS5.Settings.defence.advanced"
+};
+
+/**
+ * How much of the defender's PSF% comes off the attacker under basic combat
+ * (p270): half for an active defence, a quarter for a passive one.
+ */
+CNS5.defenceShare = { active: 0.5, passive: 0.25 };
+
+/**
+ * The defences a target may declare.
+ *
+ * All three active defences cost Fatigue Points but no Action Points (p278), so
+ * a character may defend whether or not they have any pool left. Which skill
+ * each uses decides both the chance and, under basic combat, what comes off the
+ * attacker.
+ */
+CNS5.defences = {
+  none: { label: "CNS5.Defence.none", stance: null, skill: null },
+  dodge: { label: "CNS5.Defence.dodge", stance: "active", skill: "Dodge" },
+  weaponParry: { label: "CNS5.Defence.weaponParry", stance: "active", skill: null },
+  shieldBlock: { label: "CNS5.Defence.shieldBlock", stance: "active", skill: null },
+  passive: { label: "CNS5.Defence.passive", stance: "passive", skill: null }
+};
+
+/**
+ * A weapon parry is made at the defender's skill less the attacker's PSF%,
+ * and a dodge at the dodger's less the penalty for what they are wearing
+ * (p278-280). A shield block instead gains the shield's own bonus.
+ */
+CNS5.defenceModifiers = {
+  weaponParry: { opposedByAttackerPsf: true },
+  dodge: { opposedByAttackerPsf: false },
+  shieldBlock: { opposedByAttackerPsf: false }
+};
+
+/**
+ * What gets past a weapon parry, by how the two weapons compare (p279).
+ *
+ * A parry with a weapon of the same weight stops everything. One step lighter
+ * and the base damage still lands; two steps and the Crit Die lands with it. A
+ * light weapon cannot parry a two-handed weapon or polearm at all without a
+ * Critical Success.
+ */
+/**
+ * How heavy each weight class counts as when weapons are compared for a parry.
+ *
+ * The natural classes are not extra rungs on the ladder — a natural medium
+ * weapon is a medium weapon for this purpose. Listing them in sequence made a
+ * light weapon two steps below a medium one and let the Crit Die through a
+ * parry that should have stopped it.
+ */
+CNS5.parryRank = {
+  naturalLight: 0,
+  light: 0,
+  naturalMedium: 1,
+  medium: 1,
+  naturalHeavy: 2,
+  heavy: 2,
+  twoHanded: 3
+};
+
+/**
+ * What a parry lets through, given how many steps lighter the defending weapon
+ * is than the attacking one.
+ *
+ * @param {string} defending  the parrying weapon's weight class
+ * @param {string} attacking  the attacking weapon's weight class
+ * @returns {{base: boolean, crit: boolean, impossible: boolean}}
+ */
+CNS5.parryOutcome = function (defending, attacking) {
+  const gap = (CNS5.parryRank[attacking] ?? 1) - (CNS5.parryRank[defending] ?? 1);
+
+  if (gap <= 0) return { base: false, crit: false, impossible: false };
+  if (gap === 1) return { base: true, crit: false, impossible: false };
+  return {
+    base: true,
+    crit: true,
+    // A light weapon cannot parry a two-handed weapon or polearm at all.
+    impossible: defending === "light" && attacking === "twoHanded"
+  };
+};
+
+/**
+ * Every blow that gets past a shield risks breaking it: a cumulative ten per
+ * cent, checked on a d100, and the chance stays with the shield afterwards
+ * unless it is repaired (p279).
+ */
+CNS5.shieldFailureStep = 10;

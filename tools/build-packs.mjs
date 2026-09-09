@@ -554,7 +554,46 @@ function toFlaw(row, kind, name = row.name) {
 
 /* -------------------------------------------- */
 
+/**
+ * Convert a shield row into an armour item.
+ *
+ * A shield is armour worn in the hand: it absorbs by damage type like anything
+ * else, and adds its own bonus to the attempt to interpose it.
+ *
+ * @param {object} row
+ * @returns {object}
+ */
+function toShield(row) {
+  const notes = row.gamemasterSet
+    ? " — absorption set by the Gamemaster at the start of a combat"
+    : "";
+
+  return document("armour", row.name, "icons/svg/shield.svg", {
+    location: "shield",
+    // Bucklers and objects at hand are light; anything larger takes the heavy
+    // shield play skill, which is what the weight class selects.
+    weightClass: row.blockBonus <= 5 ? "light" : "heavy",
+    armourType: row.name,
+    absorption: row.absorption,
+    blockBonus: row.blockBonus,
+    failureChance: 0,
+    fpToWear: 0,
+    weightModifier: 0,
+    damageTaken: 0,
+    quantity: 1,
+    weight: 0,
+    cost: 0,
+    carried: true,
+    equipped: false,
+    reference: `p${row.page}${notes}`,
+    description: ""
+  });
+}
+
+/* -------------------------------------------- */
+
 const skills = JSON.parse(await readFile(path.join(DATA, "skills.json"), "utf8"));
+const shieldData = JSON.parse(await readFile(path.join(DATA, "shields.json"), "utf8"));
 const traits = JSON.parse(await readFile(path.join(DATA, "traits.json"), "utf8"));
 const bestiary = JSON.parse(await readFile(path.join(DATA, "bestiary.json"), "utf8"));
 const spellData = JSON.parse(await readFile(path.join(DATA, "spells.json"), "utf8"));
@@ -619,7 +658,7 @@ function buildArmour() {
   );
 }
 
-await build("armour", buildArmour());
+await build("armour", [...buildArmour(), ...shieldData.shields.map(toShield)]);
 await build("acts-of-faith", faith.acts.map(toActOfFaith));
 await build("bestiary", bestiary.creatures.map(toCreature));
 await build("talents", traits.talents.map(toTalent));

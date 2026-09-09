@@ -1,0 +1,137 @@
+{
+  "source": "Chivalry & Sorcery 5th Edition core rules, Table - Shields & Shield Failure p279",
+  "note": "Mechanical data only. 'Any object at hand' has its absorption set by the Gamemaster at the start of a combat, so its values ship at zero.",
+  "count": 10,
+  "shields": [
+    {
+      "name": "Any object at hand",
+      "blockBonus": 1,
+      "absorption": {
+        "slash": 0,
+        "crush": 1,
+        "pierce": 0,
+        "missile": 0,
+        "energy": 0
+      },
+      "gamemasterSet": true,
+      "page": 279
+    },
+    {
+      "name": "Buckler",
+      "blockBonus": 5,
+      "absorption": {
+        "slash": 6,
+        "crush": 5,
+        "pierce": 5,
+        "missile": 5,
+        "energy": 5
+      },
+      "gamemasterSet": false,
+      "page": 279
+    },
+    {
+      "name": "Target Shield - Wicker",
+      "blockBonus": 5,
+      "absorption": {
+        "slash": 10,
+        "crush": 12,
+        "pierce": 8,
+        "missile": 10,
+        "energy": 10
+      },
+      "gamemasterSet": false,
+      "page": 279
+    },
+    {
+      "name": "Target Shield - Wood",
+      "blockBonus": 5,
+      "absorption": {
+        "slash": 10,
+        "crush": 9,
+        "pierce": 12,
+        "missile": 10,
+        "energy": 10
+      },
+      "gamemasterSet": false,
+      "page": 279
+    },
+    {
+      "name": "Target Shield - Reinforced",
+      "blockBonus": 10,
+      "absorption": {
+        "slash": 15,
+        "crush": 15,
+        "pierce": 16,
+        "missile": 15,
+        "energy": 15
+      },
+      "gamemasterSet": false,
+      "page": 279
+    },
+    {
+      "name": "Large Shield - Wicker",
+      "blockBonus": 10,
+      "absorption": {
+        "slash": 10,
+        "crush": 12,
+        "pierce": 8,
+        "missile": 10,
+        "energy": 10
+      },
+      "gamemasterSet": false,
+      "page": 279
+    },
+    {
+      "name": "Large Shield - Wood",
+      "blockBonus": 10,
+      "absorption": {
+        "slash": 10,
+        "crush": 9,
+        "pierce": 12,
+        "missile": 10,
+        "energy": 10
+      },
+      "gamemasterSet": false,
+      "page": 279
+    },
+    {
+      "name": "Large Shield - Reinforced",
+      "blockBonus": 15,
+      "absorption": {
+        "slash": 16,
+        "crush": 16,
+        "pierce": 16,
+        "missile": 16,
+        "energy": 16
+      },
+      "gamemasterSet": false,
+      "page": 279
+    },
+    {
+      "name": "Heavy Kite Shield",
+      "blockBonus": 15,
+      "absorption": {
+        "slash": 18,
+        "crush": 16,
+        "pierce": 16,
+        "missile": 16,
+        "energy": 16
+      },
+      "gamemasterSet": false,
+      "page": 279
+    },
+    {
+      "name": "Roman Tower Shield",
+      "blockBonus": 20,
+      "absorption": {
+        "slash": 20,
+        "crush": 18,
+        "pierce": 20,
+        "missile": 22,
+        "energy": 18
+      },
+      "gamemasterSet": false,
+      "page": 279
+    }
+  ]
+}

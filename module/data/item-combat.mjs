@@ -215,6 +215,16 @@ export class CnS5Armour extends CnS5PhysicalItem {
     // the magnitude is what matters, so the sign is normalised away.
     schema.fpToWear = new fields.NumberField({ required: true, integer: true, initial: 0, min: 0 });
 
+    // Shields are built to block, and each gives its own bonus to the attempt
+    // (p279). Worn armour gives none.
+    schema.blockBonus = new fields.NumberField({ required: true, integer: true, initial: 0 });
+
+    // Every blow that gets past a shield adds ten per cent to the chance that
+    // it breaks, and the chance stays with it until it is repaired.
+    schema.failureChance = new fields.NumberField({
+      required: true, integer: true, initial: 0, min: 0, max: 100
+    });
+
     // Printed weights assume a 150-174 lb wearer. A bigger frame needs more
     // metal, so each piece carries a modifier applied in steps from that band.
     schema.weightModifier = new fields.NumberField({ required: true, initial: 0, min: 0 });

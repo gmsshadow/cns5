@@ -497,6 +497,52 @@ The one bonus that does attach to background is now implemented: a character of
 gentle birth gains +10% PSF in Leadership, and in Courtly Love outside the Early
 Feudal period. There is a Gentle birth toggle on the Background & Social tab.
 
+## Defences
+
+An attack is declared against somebody, and that somebody says how they are
+meeting it before the dice come out (p270). Target a token, roll the weapon, and
+the target is asked what they declare — offering only defences they could
+actually make, since there is no sense offering a shield block to someone
+carrying no shield.
+
+Which form of combat is in use is a world setting, **Combat defences**, under
+Configure Settings.
+
+**Basic** folds the defence into the attacker's chance and rolls once: half the
+defender's PSF% for an active defence, a quarter for a passive one. The
+defender never rolls.
+
+**Advanced** rolls both and reads them together, which is what lets a shield
+absorb a blow it stopped. The four outcomes are the ones the rules give: a hit
+against no defence or a failed one lands; a hit against a successful defence is
+taken by the defending item; a miss against a successful defence hands the
+defender a combat advantage; and a Critical Success needs a Critical Success to
+turn away entirely — an ordinary defence against one reduces the blow to a plain
+hit rather than stopping it, which here means losing the Crit Die.
+
+A weapon parry is rolled at the defender's skill less the attacker's PSF%, a
+dodge at its own less the penalty for what the defender is wearing, and a shield
+block gains the shield's own bonus.
+
+### Shields
+
+**Ten shields** from the table on p279, in the armour compendium. The absorption
+table on p260 covers body and head only, so until now a shield block had nothing
+to block with. Each carries the bonus it gives to a block and what it absorbs of
+each damage type, and an accumulating failure chance for blows that get past it.
+"Any object at hand" ships with its absorption at zero, because the rules have
+the Gamemaster set that at the start of a combat.
+
+### Not automated
+
+Fatigue is not deducted. Active defences cost Fatigue Points but no Action
+Points (p278), and the amount is not stated in one place — so the cost is
+reported rather than taken.
+
+Nor is damage applied, or shield breakage rolled. `checkShield` in
+`helpers/defence.mjs` implements the cumulative ten per cent, but nothing calls
+it yet: it wants damage application to exist first.
+
 ## The Combat Round
 
 A round is not a list of turns taken once each. It is a series of Action
@@ -527,6 +573,9 @@ worth, ends that character's round, and drops them out of the order at once.
 **Actions that cannot be paid for.** The rulebook does not settle what happens
 when a character declares an action costing more than their pool holds, so both
 readings offered by the game's designers are available as a world setting:
+
+The setting is **Actions that cannot be paid for**, under Configure Settings →
+System Settings.
 
 - **Disallow** (the default) — no action may be begun that cannot be completed.
   The prompt refuses a larger number outright rather than quietly reducing it,

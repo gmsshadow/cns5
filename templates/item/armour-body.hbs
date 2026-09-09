@@ -1,4 +1,4 @@
-<div class="cns5-grid cns5-grid--three">
+<div class="cns5-grid cns5-grid--five">
     <label class="cns5-field">
         <span>{{localize "CNS5.Armour.location"}}</span>
         <select name="system.location" {{#unless editable}}disabled{{/unless}}>
@@ -14,6 +14,16 @@
             <option value="{{value}}" {{#if selected}}selected{{/if}}>{{localize label}}</option>
             {{/each}}
         </select>
+    </label>
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Armour.blockBonus"}}</span>
+        <input type="number" name="system.blockBonus" value="{{system.blockBonus}}"
+               {{#unless editable}}disabled{{/unless}}>
+    </label>
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Armour.failureChance"}}</span>
+        <input type="number" name="system.failureChance" value="{{system.failureChance}}"
+               min="0" max="100" {{#unless editable}}disabled{{/unless}}>
     </label>
     <label class="cns5-field">
         <span>{{localize "CNS5.Armour.fpToWear"}}</span>

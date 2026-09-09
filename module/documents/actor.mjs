@@ -5,6 +5,12 @@ import {
   checkToMessage,
   promptModifier
 } from "../helpers/checks.mjs";
+import {
+  basicDefence,
+  rollDefence,
+  resolveExchange,
+  promptDefence
+} from "../helpers/defence-prompt.mjs";
 
 /**
  * The C&S Actor.
@@ -189,6 +195,11 @@ export class CnS5Actor extends Actor {
 
     const title = game.i18n.format("CNS5.Roll.weaponTitle", { weapon: weapon.name });
 
+    // An attack is declared against somebody. The target is whoever this user
+    // has targeted on the canvas, which is how Foundry expects it to be said.
+    const target = [...game.user.targets][0]?.actor ?? null;
+    const mode = game.settings.get("cns5", "defenceMode");
+
     let situational = modifier;
     let area = "none";
     if (!skipDialog) {
@@ -203,36 +214,69 @@ export class CnS5Actor extends Actor {
     const aimed = CNS5.aimedShotModifiers[area] ?? CNS5.aimedShotModifiers.none;
     situational += aimed.modifier;
 
+    // The target declares how they are defending before the attack is rolled
+    // (p270). Without a target there is nobody to ask.
+    let declared = "none";
+    let basic = null;
+    if (target) {
+      declared = await promptDefence(target, mode);
+      if (declared === null) return null;
+
+      if (mode === "basic") {
+        // Basic combat folds the defence into the attacker's chance and never
+        // rolls for it: half the defender's PSF for an active defence, a
+        // quarter for a passive one.
+        basic = basicDefence(target, declared);
+        situational += basic.modifier;
+      }
+    }
+
     // A natural attack carries its own success chance and Difficulty Factor;
     // everything else reads them off the linked skill.
     const df = skill ? skill.system.df : weapon.system.naturalDf;
     const base = skill ? skill.system.tsc : weapon.system.naturalTsc;
 
     const unclamped = base + situational;
-    const { target, critMod, overflow, shortfall } = clampSuccessChance(unclamped, df);
+    const { target: chance, critMod, overflow, shortfall } = clampSuccessChance(unclamped, df);
 
     const result = await resolveCheck({
-      target,
+      target: chance,
       // The weapon's own Crit Die modifier stacks with any from the band.
       critMod: critMod + weapon.system.critDieModifier,
       failureCritMod: skill ? skill.system.failureCritMod : 0
     });
+    result.attackerPsf = weapon.system.psf;
 
-    // Only a hit deals damage, and the adjusted Crit Die is part of it.
-    const damage = result.success ? weapon.system.damage + result.critTotal : 0;
+    // Advanced combat rolls the defence separately and reads the pair.
+    const defence =
+      target && mode === "advanced" && declared !== "none"
+        ? await rollDefence(target, declared, result)
+        : null;
+    const exchange = resolveExchange(result, defence);
+
+    // Only a landed blow deals damage, and the adjusted Crit Die is part of it.
+    // A critical attack met by an ordinary defence is reduced to a plain hit,
+    // which means losing the Crit Die rather than the whole blow.
+    const damage = exchange.damage
+      ? weapon.system.damage + (exchange.reduced ? 0 : result.critTotal)
+      : 0;
 
     return checkToMessage(this, {
       ...result,
       title,
       subtitle: game.i18n.format("CNS5.Roll.weaponSubtitle", {
         skill: skill ? skill.name : game.i18n.localize("CNS5.Weapon.natural"),
-        target
+        target: chance
       }),
+      targetName: target?.name ?? null,
+      defence,
+      exchange,
+      exchangeLabel: game.i18n.localize(`CNS5.Exchange.${exchange.outcome}`),
       unclamped,
       overflow,
       shortfall,
       unskilled: skill ? !skill.system.known : false,
-      damage: result.success ? damage : null,
+      damage: exchange.damage ? damage : null,
       damageType: game.i18n.localize(`CNS5.DamageType.${weapon.system.damageType}`),
       targetArea: area === "none" ? null : game.i18n.localize(aimed.label),
       cost: game.i18n.format("CNS5.Roll.weaponCost", { ap: weapon.system.ap }),
@@ -243,7 +287,12 @@ export class CnS5Actor extends Actor {
         },
         { label: "CNS5.Roll.psf", value: weapon.system.psf, signed: true },
         { label: "CNS5.Roll.aimedShot", value: aimed.modifier, signed: true },
-        { label: "CNS5.Roll.situational", value: situational - aimed.modifier, signed: true },
+        { label: "CNS5.Roll.defended", value: basic?.modifier ?? 0, signed: true },
+        {
+          label: "CNS5.Roll.situational",
+          value: situational - aimed.modifier - (basic?.modifier ?? 0),
+          signed: true
+        },
         { label: "CNS5.Weapon.baseDamage", value: weapon.system.baseDamage },
         { label: "CNS5.Weapon.strengthBonus", value: weapon.system.strengthBonus, signed: true },
         { label: "CNS5.Weapon.attackerBonus", value: weapon.system.attackerBonus, signed: true }

@@ -1271,3 +1271,17 @@
 .cns5-round__total.is-debt {
     color: var(--cns-oxblood, #6d2723);
 }
+
+/* The target and the outcome of an exchange, which are the two lines a reader
+   looks for first on an attack card. */
+.cns5-check__target {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+.cns5-check__exchange {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--cns-check-accent);
+}

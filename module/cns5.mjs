@@ -157,6 +157,18 @@ function registerSettings() {
     requiresReload: true
   });
 
+  // Basic combat folds the defence into the attacker's chance; advanced rolls
+  // for it separately and reads the pair (p270).
+  game.settings.register("cns5", "defenceMode", {
+    name: "CNS5.Settings.defence.name",
+    hint: "CNS5.Settings.defence.hint",
+    scope: "world",
+    config: true,
+    type: String,
+    choices: CNS5.defenceModes,
+    default: "basic"
+  });
+
   // The rules do not say what happens when a character declares an action they
   // cannot pay for. Both readings the designers offered are available.
   game.settings.register("cns5", "overspendRule", {

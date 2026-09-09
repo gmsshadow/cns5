@@ -990,6 +990,28 @@ CNS5.initiativeDie = "1d10";
  */
 CNS5.maxApPerAction = 10;
 
+/**
+ * What happens when a character declares an action costing more Action Points
+ * than their pool holds.
+ *
+ * The rulebook does not settle this, so both readings offered by the game's
+ * designers are provided:
+ *
+ *   - `disallow` — no action may be begun that cannot be paid for. The prompt
+ *     refuses a larger number outright.
+ *   - `finishFirst` — the action is begun, the pool is emptied, and what is
+ *     still owed is paid out of the next round's pool. That character resolves
+ *     before anybody else acts, because the unfinished action is completed
+ *     first.
+ *
+ * Note that neither leaves a pool below zero. An earlier version of this system
+ * carried the shortfall as a negative pool, which is not how either rule works.
+ */
+CNS5.overspendRules = {
+  disallow: "CNS5.Settings.overspend.disallow",
+  finishFirst: "CNS5.Settings.overspend.finishFirst"
+};
+
 /* -------------------------------------------- */
 /*  Talents and flaws                           */
 /* -------------------------------------------- */

@@ -624,8 +624,16 @@
   "CNS5.Combat.heldOver": "{name} holds over {ap} Action Points and is done for the round.",
   "CNS5.Combat.roundTitle": "Combat Round {round}",
   "CNS5.Combat.poolsTitle": "Action Point pools",
-  "CNS5.Combat.overspendHint": "Spending more than the pool holds is allowed: the action begins now and finishes in the first phase of the next round, and the shortfall carries over against it.",
-  "CNS5.Combat.overspent": "{name} has overspent by {ap} Action Points, which carries against the next round.",
   "CNS5.Combat.carried": "held",
-  "CNS5.Combat.willOverspend": "That is {ap} more than the pool holds. The action begins now and finishes next round, and the shortfall carries against it."
+  "CNS5.Settings.overspend.name": "Actions that cannot be paid for",
+  "CNS5.Settings.overspend.hint": "What happens when a character declares an action costing more Action Points than their pool holds. The rulebook does not settle it; both readings offered by the game's designers are here.",
+  "CNS5.Settings.overspend.disallow": "Disallow — no action may be begun that cannot be completed",
+  "CNS5.Settings.overspend.finishFirst": "Allow — the action is finished first thing next round, and paid for from that pool",
+  "CNS5.Combat.disallowHint": "An action that cannot be paid for in full may not be begun.",
+  "CNS5.Combat.finishFirstHint": "An action costing more than the pool holds may be begun. It is finished at the start of the next round, before anybody else acts, and paid for out of that round's pool.",
+  "CNS5.Combat.tooMuch": "That is {ap} more than the pool holds. An action that cannot be paid for in full may not be begun.",
+  "CNS5.Combat.willOwe": "That is {ap} more than the pool holds. The action will be finished at the start of the next round, before anybody else acts, and {ap} taken from that pool.",
+  "CNS5.Combat.owes": "{name} has {ap} Action Points still to pay, and finishes the action before anybody else acts next round.",
+  "CNS5.Combat.finishFirstNote": "This character has an action to finish from last round, and finishes it before anybody else acts.",
+  "CNS5.Combat.owed": "owed"
 }

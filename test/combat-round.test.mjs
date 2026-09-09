@@ -40,27 +40,34 @@ function reorder(list) {
 /**
  * Apply a combatant's declaration.
  *
- * Spending is not floored at zero: a character may commit to an action costing
- * more than they have, and the pool goes into debt.
+ * A pool never goes below zero. Where a declaration costs more than is left —
+ * which the strict rule forbids outright — the pool empties and the remainder
+ * is owed against the next round.
  */
 function declare(c, choice, spent = 0) {
   if (choice === "hold") {
     c.pool = Math.min(c.pool, c.bap);
     c.held = true;
   } else {
-    c.pool -= spent;
+    c.owed = Math.max(0, spent - c.pool);
+    c.pool = Math.max(0, c.pool - spent);
+    c.unfinished = false;
   }
   c.acted = true;
 }
 
 /**
- * What a combatant starts the next round with.
+ * What a combatant carries into the next round.
  *
  * Held points carry, capped at Base Action Points. An unheld surplus is lost.
- * An overspend is a debt, and that carries whether it was held or not.
  */
 function carryOver(c) {
-  return c.held ? Math.min(c.pool, c.bap) : Math.min(0, c.pool);
+  return c.held ? Math.min(c.pool, c.bap) : 0;
+}
+
+/** The pool a combatant opens the next round with, after paying what is owed. */
+function newPool(c, die) {
+  return Math.max(0, carryOver(c) + die + c.bap - (c.owed ?? 0));
 }
 
 /* -------------------------------------------- */
@@ -121,7 +128,6 @@ ok("and that is what carries", carryOver(hoarder), 8);
 
 /* A new round: what was held, plus the round bonus, plus a fresh d10. Every
    combatant rolls again — the pool is not carried forward untouched. */
-const newPool = (c, die) => carryOver(c) + die + c.bap;
 ok("the knight's new pool on a 6", newPool(knight, 6), 31);
 ok("the boar's, having spent all", newPool(boar, 6), 18);
 ok("a different die gives a different pool", newPool(boar, 1), 13);
@@ -133,26 +139,54 @@ ok("holding does not skip the roll", newPool(knight, 1) > carryOver(knight), tru
 ok("and the held points are on top of it", newPool(knight, 1), 11 + 1 + 14);
 
 /* -------------------------------------------- */
-/*  Overspending                                                              */
+/*  An action that cannot be paid for                                         */
 /* -------------------------------------------- */
 
-/* A character may commit to an action costing more than their pool holds,
-   beginning it now and finishing it in the first phase of the next round. The
-   pool goes below zero and the shortfall carries against the new round. */
+/* Under the permissive rule the action is begun, the pool empties, and the
+   remainder is owed. A pool never goes below zero. */
 const rash = { name: "Rash", bap: 12, pool: 4, held: false, acted: false };
 declare(rash, "act", 11);
-ok("the pool goes below zero", rash.pool, -7);
+ok("the pool empties rather than going negative", rash.pool, 0);
+ok("and the remainder is owed", rash.owed, 7);
 ok("which takes them out of the round", active(rash), false);
-ok("and the debt carries", carryOver(rash), -7);
-ok("against the new round's roll", carryOver(rash) + 6 + rash.bap, 11);
+ok("nothing carries but the debt", carryOver(rash), 0);
+ok("the owed points come off the next pool", newPool(rash, 6), 11);
 
-/* A debt is not forgiven by having chosen to hold, nor doubled by it. */
-const rashHolder = { name: "Rash Holder", bap: 12, pool: -5, held: true, acted: true };
-ok("holding an empty pool carries the debt once", carryOver(rashHolder), -5);
+/* Owing more than the new pool can pay leaves nothing, not a negative. */
+const ruined = { name: "Ruined", bap: 4, pool: 0, held: false, acted: true, owed: 20 };
+ok("a pool never opens below zero", newPool(ruined, 1), 0);
+
+/* Whoever owes points finishes that action before anybody else acts, whatever
+   their pool. */
+function openingOrder(list) {
+  return [...list].sort((a, b) => {
+    const unfinishedA = (a.owed ?? 0) > 0;
+    const unfinishedB = (b.owed ?? 0) > 0;
+    if (unfinishedA !== unfinishedB) return unfinishedA ? -1 : 1;
+    return b.pool - a.pool;
+  }).map((c) => c.name);
+}
+ok(
+  "an unfinished action leads regardless of pool",
+  openingOrder([
+    { name: "Fresh", pool: 22, owed: 0 },
+    { name: "Rash", pool: 3, owed: 7 },
+    { name: "Steady", pool: 15, owed: 0 }
+  ]),
+  ["Rash", "Fresh", "Steady"]
+);
 
 /* An unheld surplus is still lost — the asymmetry is deliberate. */
 const wasteful = { name: "Wasteful", bap: 12, pool: 6, held: false, acted: true };
 ok("unspent points that were not held are lost", carryOver(wasteful), 0);
+
+/* Under the strict rule the declaration is refused, so no debt can arise. */
+const allowed = (spent, pool, rule) => (rule === "disallow" ? spent <= pool : true);
+ok("the strict rule refuses what cannot be paid", allowed(11, 4, "disallow"), false);
+ok("and accepts what can", allowed(4, 4, "disallow"), true);
+ok("the permissive rule accepts either", allowed(11, 4, "finishFirst"), true);
+
+ok("both rules are offered", Object.keys(CNS5.overspendRules).sort(), ["disallow", "finishFirst"]);
 
 /* -------------------------------------------- */
 /*  Configuration                                                             */

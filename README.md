@@ -524,11 +524,19 @@ They move, strike or cast, then say what it cost. Three answers: act and record
 the spend, pass, or hold over. Holding keeps no more than Base Action Points'
 worth, ends that character's round, and drops them out of the order at once.
 
-**Overspending is allowed.** A character may commit to an action costing more
-than their pool holds, beginning it now and finishing it in the first phase of
-the next round (p268). The pool goes below zero and the shortfall carries
-against the new round's roll. The asymmetry is deliberate: an unheld surplus is
-lost, but a debt is not forgiven.
+**Actions that cannot be paid for.** The rulebook does not settle what happens
+when a character declares an action costing more than their pool holds, so both
+readings offered by the game's designers are available as a world setting:
+
+- **Disallow** (the default) — no action may be begun that cannot be completed.
+  The prompt refuses a larger number outright rather than quietly reducing it,
+  because clamping would accept one figure and act on another.
+- **Finish first** — the action is begun, the pool empties, and what is still
+  owed comes out of the next round's pool. That character opens the next round
+  whatever their remaining Action Points, because the unfinished action is
+  completed before anybody else acts.
+
+Under neither rule does a pool go below zero.
 
 **Every round opens with a fresh roll** (p268, step 1). Each combatant rolls a
 new d10 and adds it to their Base Action Points and armour modifier, plus

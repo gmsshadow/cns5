@@ -156,4 +156,16 @@ function registerSettings() {
     default: "asr",
     requiresReload: true
   });
+
+  // The rules do not say what happens when a character declares an action they
+  // cannot pay for. Both readings the designers offered are available.
+  game.settings.register("cns5", "overspendRule", {
+    name: "CNS5.Settings.overspend.name",
+    hint: "CNS5.Settings.overspend.hint",
+    scope: "world",
+    config: true,
+    type: String,
+    choices: CNS5.overspendRules,
+    default: "disallow"
+  });
 }

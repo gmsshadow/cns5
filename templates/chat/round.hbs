@@ -5,9 +5,9 @@
         {{#each lines}}
         <li class="cns5-round__entry">
             <span class="cns5-round__name">{{name}}</span>
-            <span class="cns5-round__total {{#if debt}}is-debt{{/if}}">{{total}}</span>
+            <span class="cns5-round__total {{#if owed}}is-debt{{/if}}">{{total}}</span>
             <span class="cns5-round__workings">
-                {{die}} {{cns5Signed bonus}}{{#if carried}} {{localize "CNS5.Combat.carried"}} {{cns5Signed carried}}{{/if}}
+                {{die}} {{cns5Signed bonus}}{{#if carried}} {{localize "CNS5.Combat.carried"}} {{cns5Signed carried}}{{/if}}{{#if owed}} {{localize "CNS5.Combat.owed"}} -{{owed}}{{/if}}
             </span>
         </li>
         {{/each}}

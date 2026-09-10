@@ -533,15 +533,62 @@ each damage type, and an accumulating failure chance for blows that get past it.
 "Any object at hand" ships with its absorption at zero, because the rules have
 the Gamemaster set that at the start of a combat.
 
+## Damage
+
+A landed blow is the weapon's damage, the Strength bonus, the Attacker's Bonus
+and the Crit Die. Armour covering that damage type absorbs what it can, and what
+gets through comes off Fatigue Points until they are gone and off Body
+thereafter.
+
+A Critical Success adds a further d10, and that die behaves quite differently:
+it "is directly removed from the target's Body", ignoring the armour and
+whatever Fatigue the target has left. **That is the whole of what a critical
+bypasses.** The rest of the blow is absorbed and soaked up as usual — a common
+misreading, and the worked example on p287 settles it.
+
+The attack card shows the split — the blow, what the armour stopped, what came
+off each pool — and an Apply button that takes it. The button carries what each
+pool loses rather than the raw damage, because the split was worked out against
+the target's armour and Fatigue at the moment of the blow; recomputing on click
+would use whatever they had become by then.
+
+**A natural ten on the Crit Die is always critical**, whichever way the roll
+went and whatever the modifiers would have made of it (p272). Otherwise a
+penalty could take the edge off a roll the rules call decisive.
+
+**A failed attack whose Crit Die reaches ten is a fumble.** The attacker rolls
+Agility to keep hold of the weapon and the opponent takes a free blow at -20%.
+The card says so; neither is rolled for you.
+
+Under advanced combat a critical met by an ordinary defence is "reduced to that
+of a normal attack success" — so the blow lands with its Crit Die and only the
+extra d10 is lost. A critical defence turns it away entirely.
+
+### The Fatigue cost of defending
+
+Table - Fatigue cost for Defence (p284) gives it: keyed by the weight of what is
+interposed and read against the same PSF% bands as Table - Combat Actions. A
+dodge costs one whatever the dodger's skill; a light weapon two falling to one,
+a medium three falling to one, a heavy three falling to two.
+
+The cost is taken automatically when the attacking client has permission over
+the target, and reported for the defender to take otherwise. Unlike damage it is
+not conditional on anything — an active defence costs Fatigue whether it worked
+or not — so there is nothing to decide and no button to press.
+
+Shields divide three ways for this and only two for the shield play skills, so
+each shield records its own defending weight: a buckler is light, a large shield
+or tower shield heavy, and a target, heater or kite between them.
+
+The same table doubles as the count of blows under the alternative combat system
+on that page. That system is not implemented; the figures are the same either
+way.
+
 ### Not automated
 
-Fatigue is not deducted. Active defences cost Fatigue Points but no Action
-Points (p278), and the amount is not stated in one place — so the cost is
-reported rather than taken.
-
-Nor is damage applied, or shield breakage rolled. `checkShield` in
-`helpers/defence.mjs` implements the cumulative ten per cent, but nothing calls
-it yet: it wants damage application to exist first.
+Shield breakage is not rolled. `checkShield` in `helpers/defence.mjs` implements
+the cumulative ten per cent, but nothing calls it: it needs to know what the
+shield absorbed, which means threading the defending item through the exchange.
 
 ## The Combat Round
 

@@ -1285,3 +1285,33 @@
     font-weight: 600;
     color: var(--cns-check-accent);
 }
+
+/* The workings behind a blow: what the armour stopped and where the rest went. */
+.cns5-check__damage-split {
+    list-style: none;
+    margin: 0.2rem 0 0;
+    padding: 0;
+    font-size: 0.82rem;
+}
+
+.cns5-check__damage-split li {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    font-variant-numeric: tabular-nums;
+}
+
+.cns5-check__damage-split li.is-critical {
+    font-weight: 600;
+    color: var(--cns-check-accent);
+}
+
+.cns5-check__apply {
+    margin-top: 0.35rem;
+}
+
+.cns5-check__fumble {
+    margin: 0.35rem 0 0;
+    font-size: 0.85rem;
+    color: var(--cns-check-accent);
+}

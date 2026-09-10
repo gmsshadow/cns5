@@ -16,6 +16,33 @@ import { CnS5NPCSheet } from "./sheets/npc-sheet.mjs";
 import { CnS5CreationWizard } from "./apps/creation-wizard.mjs";
 import { registerHandlebarsHelpers } from "./helpers/handlebars.mjs";
 
+/**
+ * Bind the Apply button on an attack card.
+ *
+ * The button carries what each pool loses rather than the raw damage, because
+ * the split was worked out against the target's armour and Fatigue at the
+ * moment of the blow. Recomputing it on click would use whatever they had
+ * become by then.
+ */
+Hooks.on("renderChatMessageHTML", (message, element) => {
+  for (const button of element.querySelectorAll("[data-cns5-apply]")) {
+    button.addEventListener("click", async () => {
+      const actor = await fromUuid(button.dataset.cns5Apply);
+      if (!actor) return;
+      if (!actor.isOwner) {
+        return ui.notifications.warn(game.i18n.localize("CNS5.Damage.notYours"));
+      }
+
+      await actor.applyDamage({
+        fatigueLost: Number(button.dataset.fatigue) || 0,
+        bodyLost: Number(button.dataset.body) || 0
+      });
+      button.disabled = true;
+      button.textContent = game.i18n.localize("CNS5.Damage.applied");
+    });
+  }
+});
+
 Hooks.once("init", () => {
   console.log("CnS5 | Initialising Chivalry & Sorcery 5th Edition");
 

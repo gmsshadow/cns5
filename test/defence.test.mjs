@@ -142,5 +142,69 @@ ok("a parry is opposed", CNS5.defenceModifiers.weaponParry.opposedByAttackerPsf,
 ok("a dodge is not", CNS5.defenceModifiers.dodge.opposedByAttackerPsf, false);
 ok("nor a shield block", CNS5.defenceModifiers.shieldBlock.opposedByAttackerPsf, false);
 
+/* -- Table - Fatigue cost for Defence (p284) -------------------------------- */
+
+/* Dodging costs one whatever the dodger's skill. */
+ok("a dodge always costs one",
+   [1, 30, 50, 65, 90].map((psf) => CNS5.defenceFatigueCost("dodge", psf)),
+   [1, 1, 1, 1, 1]);
+
+/* The heavier the thing interposed, the more it costs — and the better the
+   defender, the less. */
+ok("a light weapon across the bands",
+   [10, 30, 50, 65, 90].map((psf) => CNS5.defenceFatigueCost("light", psf)),
+   [2, 2, 1, 1, 1]);
+ok("a medium one",
+   [10, 30, 50, 65, 90].map((psf) => CNS5.defenceFatigueCost("medium", psf)),
+   [3, 2, 2, 2, 1]);
+ok("a heavy one",
+   [10, 30, 50, 65, 90].map((psf) => CNS5.defenceFatigueCost("heavy", psf)),
+   [3, 3, 2, 2, 2]);
+
+/* The bands are the ones Table - Combat Actions uses, so the boundaries have to
+   agree with it. */
+ok("25 is the top of the first band", CNS5.defenceFatigueCost("medium", 25), 3);
+ok("26 crosses into the second", CNS5.defenceFatigueCost("medium", 26), 2);
+ok("70 is the fourth", CNS5.defenceFatigueCost("medium", 70), 2);
+ok("71 reaches the top band", CNS5.defenceFatigueCost("medium", 71), 1);
+
+/* The table names three weights; a weapon may be any of seven, so each has to
+   map onto one or the cost silently falls back. */
+ok(
+  "every weapon weight has a defence weight",
+  Object.keys(CNS5.weaponWeights).filter((w) => !CNS5.defenceWeightOf[w]),
+  []
+);
+ok("a two-handed weapon parries as heavy", CNS5.defenceWeightOf.twoHanded, "heavy");
+ok("a natural medium as medium", CNS5.defenceWeightOf.naturalMedium, "medium");
+ok("and it costs what a medium costs",
+   CNS5.defenceFatigueCost("twoHanded", 10), CNS5.defenceFatigueCost("heavy", 10));
+
+/* Shields split three ways for Fatigue but only two for the skill, so the
+   division is recorded on each shield rather than inferred. */
+const shieldWeights = shields.map((s) => ({
+  name: s.name,
+  weight: /buckler|object at hand/i.test(s.name)
+    ? "light"
+    : /large shield|tower/i.test(s.name)
+      ? "heavy"
+      : "medium"
+}));
+ok(
+  "the bucklers",
+  shieldWeights.filter((s) => s.weight === "light").map((s) => s.name),
+  ["Any object at hand", "Buckler"]
+);
+ok(
+  "the large shields",
+  shieldWeights.filter((s) => s.weight === "heavy").map((s) => s.name),
+  ["Large Shield - Wicker", "Large Shield - Wood", "Large Shield - Reinforced", "Roman Tower Shield"]
+);
+ok(
+  "and everything between",
+  shieldWeights.filter((s) => s.weight === "medium").length,
+  4
+);
+
 console.log(fails ? `\n${fails} FAILURES` : "\nAll checks passed.");
 process.exit(fails ? 1 : 0);

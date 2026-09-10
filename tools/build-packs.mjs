@@ -568,11 +568,17 @@ function toShield(row) {
     ? " — absorption set by the Gamemaster at the start of a combat"
     : "";
 
+  // Two different divisions apply. The shield play skills split shields in two
+  // — a buckler against everything else — while the Fatigue table on p284 wants
+  // three, so a target or heater sits between a buckler and a large shield.
+  const buckler = /buckler|object at hand/i.test(row.name);
+  const large = /large shield|tower/i.test(row.name);
+  const defenceWeight = buckler ? "light" : large ? "heavy" : "medium";
+
   return document("armour", row.name, "icons/svg/shield.svg", {
     location: "shield",
-    // Bucklers and objects at hand are light; anything larger takes the heavy
-    // shield play skill, which is what the weight class selects.
-    weightClass: row.blockBonus <= 5 ? "light" : "heavy",
+    weightClass: buckler ? "light" : "heavy",
+    defenceWeight,
     armourType: row.name,
     absorption: row.absorption,
     blockBonus: row.blockBonus,

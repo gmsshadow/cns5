@@ -74,6 +74,11 @@ export async function resolveCheck({ target, critMod = 0, failureCritMod = 0 }) 
   const critTotal = success ? crit.total + applied : crit.total - applied;
   const outcome = CNS5.critOutcome(critTotal, success);
 
+  // A ten on the Crit Die is always critical, whichever way the roll went and
+  // whatever the modifiers would have made of it (p272). Otherwise a penalty
+  // could take the edge off a roll the rules say is decisive.
+  const critical = critTotal >= 10 || crit.total === 10;
+
   return {
     rolls: [pair, crit],
     target,
@@ -83,7 +88,9 @@ export async function resolveCheck({ target, critMod = 0, failureCritMod = 0 }) 
     critMod: applied,
     success,
     outcome,
-    critical: critTotal >= 10
+    critical,
+    // A natural ten stands on its own, which is worth saying on the card.
+    naturalCrit: crit.total === 10
   };
 }
 

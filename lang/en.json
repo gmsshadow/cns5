@@ -659,5 +659,17 @@
   "CNS5.Roll.defended": "Defence",
   "CNS5.Armour.blockBonus": "Block bonus",
   "CNS5.Armour.failureChance": "Failure chance",
-  "CNS5.Roll.against": "Against"
+  "CNS5.Roll.against": "Against",
+  "CNS5.Damage.blow": "Blow, Crit Die included",
+  "CNS5.Damage.absorbed": "Absorbed by armour",
+  "CNS5.Damage.toFatigue": "Off Fatigue",
+  "CNS5.Damage.toBody": "Off Body",
+  "CNS5.Damage.bonus": "Critical die, straight to Body",
+  "CNS5.Damage.apply": "Apply to target",
+  "CNS5.Damage.applied": "Applied",
+  "CNS5.Damage.notYours": "You do not have permission to change that character.",
+  "CNS5.Roll.fumble": "Critical failure — roll Agility to keep hold of the weapon, and the opponent takes a free blow at -20%.",
+  "CNS5.Defence.fatigueUnapplied": "{name} spends {fp} Fatigue Points defending — apply it yourself, as this client cannot change that character.",
+  "CNS5.Defence.fatigueSpent": "Fatigue spent defending",
+  "CNS5.Armour.defenceWeight": "Weight when defending"
 }

@@ -34,15 +34,27 @@ export function defenceSkill(defender, defence) {
   const byName = (name) =>
     skills.find((s) => s.name.toLowerCase() === name.toLowerCase()) ?? null;
 
-  if (defence === "dodge") return { skill: byName("Dodge"), item: null, bonus: 0 };
+  if (defence === "dodge") {
+    const skill = byName("Dodge");
+    return {
+      skill,
+      item: null,
+      bonus: 0,
+      fatigue: CNS5.defenceFatigueCost("dodge", skill?.system.psf ?? 0)
+    };
+  }
 
   if (defence === "weaponParry") {
     // The weapon in hand, and the combat skill that goes with it.
     const weapon = defender.items.find((i) => i.type === "weapon" && i.system.equipped);
+    const skill = weapon?.system.skillItem ?? null;
     return {
-      skill: weapon?.system.skillItem ?? null,
+      skill,
       item: weapon ?? null,
-      bonus: 0
+      bonus: 0,
+      fatigue: weapon
+        ? CNS5.defenceFatigueCost(weapon.system.weightClass, skill?.system.psf ?? 0)
+        : 0
     };
   }
 
@@ -51,15 +63,19 @@ export function defenceSkill(defender, defence) {
       (i) => i.type === "armour" && i.system.location === "shield" && i.system.equipped
     );
     const heavy = shield?.system.weightClass !== "light";
+    const skill = byName(heavy ? "Shield Play: Heavy" : "Shield Play: Light");
     return {
-      skill: byName(heavy ? "Shield Play: Heavy" : "Shield Play: Light"),
+      skill,
       item: shield ?? null,
       // Shields are built to block, and the table gives each its own bonus.
-      bonus: shield?.system.blockBonus ?? 0
+      bonus: shield?.system.blockBonus ?? 0,
+      fatigue: shield
+        ? CNS5.defenceFatigueCost(shield.system.defenceWeight, skill?.system.psf ?? 0)
+        : 0
     };
   }
 
-  return { skill: null, item: null, bonus: 0 };
+  return { skill: null, item: null, bonus: 0, fatigue: 0 };
 }
 
 /* -------------------------------------------- */
@@ -87,7 +103,10 @@ export function basicDefence(defender, defence) {
     modifier: -Math.floor(psf * share),
     psf,
     stance: entry.stance,
-    skill: found.skill
+    skill: found.skill,
+    // Making the defence costs Fatigue under either form of combat; only the
+    // rolling differs. A passive defence is not an active one and costs none.
+    fatigueCost: entry.stance === "active" ? found.fatigue ?? 0 : 0
   };
 }
 
@@ -128,6 +147,8 @@ export async function rollDefence(defender, defence, attack) {
     shieldBonus: found.bonus,
     armourPenalty: armour,
     attackerPsf: opposed,
+    // Every active defence costs Fatigue whether or not it succeeds (p278).
+    fatigueCost: found.fatigue ?? 0,
     unclamped
   };
 }
@@ -163,8 +184,10 @@ export function resolveExchange(attack, defence) {
     return { outcome: "advantage", damage: false, reduced: false, advantage: true };
   }
 
-  // A critical attack is only turned away entirely by a critical defence; a
-  // plain success against one takes the edge off rather than stopping it.
+  // A critical attack is only turned away entirely by a critical defence. A
+  // plain success against one reduces it "to that of a normal attack success"
+  // (p270) — so the blow still lands with its Crit Die, and only the extra d10
+  // that a critical would have added is lost.
   if (attack.critical && !defence.critical) {
     return { outcome: "reduced", damage: true, reduced: true, advantage: false };
   }

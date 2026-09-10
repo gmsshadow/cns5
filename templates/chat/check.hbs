@@ -24,6 +24,11 @@
         {{defence.roll}} / {{defence.target}}%{{/if}}
     </p>
     {{/if}}
+    {{#if defenceFatigue}}
+    <p class="cns5-check__cost">
+        {{localize "CNS5.Defence.fatigueSpent"}}: {{defenceFatigue}}
+    </p>
+    {{/if}}
     {{#if exchangeLabel}}
     <p class="cns5-check__exchange">{{exchangeLabel}}</p>
     {{/if}}
@@ -31,6 +36,46 @@
     {{#if damage}}
     <p class="cns5-check__damage">
         {{localize "CNS5.Roll.damage"}}: <strong>{{damage}}</strong> {{damageType}}
+    </p>
+    {{#if split}}
+    <ul class="cns5-check__damage-split">
+        <li>
+            <span>{{localize "CNS5.Damage.blow"}}</span>
+            <span>{{blow}}</span>
+        </li>
+        {{#if absorption}}
+        <li>
+            <span>{{localize "CNS5.Damage.absorbed"}}</span>
+            <span>-{{split.absorbed}}</span>
+        </li>
+        {{/if}}
+        <li>
+            <span>{{localize "CNS5.Damage.toFatigue"}}</span>
+            <span>{{split.fatigueLost}}</span>
+        </li>
+        <li>
+            <span>{{localize "CNS5.Damage.toBody"}}</span>
+            <span>{{split.bodyLost}}</span>
+        </li>
+        {{#if bonusDamage}}
+        <li class="is-critical">
+            <span>{{localize "CNS5.Damage.bonus"}}</span>
+            <span>{{bonusDamage}}</span>
+        </li>
+        {{/if}}
+    </ul>
+    {{#if targetId}}
+    <button type="button" class="cns5-check__apply" data-cns5-apply="{{targetId}}"
+            data-fatigue="{{split.fatigueLost}}" data-body="{{split.bodyLost}}">
+        {{localize "CNS5.Damage.apply"}}
+    </button>
+    {{/if}}
+    {{/if}}
+    {{/if}}
+
+    {{#if fumble}}
+    <p class="cns5-check__fumble">
+        {{localize "CNS5.Roll.fumble"}}
     </p>
     {{/if}}
     {{#if cost}}

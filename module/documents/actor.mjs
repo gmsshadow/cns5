@@ -254,12 +254,52 @@ export class CnS5Actor extends Actor {
         : null;
     const exchange = resolveExchange(result, defence);
 
-    // Only a landed blow deals damage, and the adjusted Crit Die is part of it.
-    // A critical attack met by an ordinary defence is reduced to a plain hit,
-    // which means losing the Crit Die rather than the whole blow.
-    const damage = exchange.damage
-      ? weapon.system.damage + (exchange.reduced ? 0 : result.critTotal)
-      : 0;
+    // Only a landed blow deals damage. The Crit Die always counts towards it on
+    // a hit; what a critical adds on top is a separate d10 that ignores armour
+    // and Fatigue alike (p272).
+    const landed = exchange.damage;
+    const blow = landed ? weapon.system.damage + result.critTotal : 0;
+
+    // A critical met by an ordinary defence is "reduced to that of a normal
+    // attack success" (p270) — the blow lands with its Crit Die and only the
+    // extra die is lost.
+    const criticalHit = landed && result.critical && !exchange.reduced;
+    let bonusRoll = null;
+    if (criticalHit) {
+      bonusRoll = await new Roll(CNS5.criticalBonusDie).evaluate();
+      result.rolls.push(bonusRoll);
+    }
+
+    const absorption = target?.system?.protection?.[weapon.system.damageType] ?? 0;
+    const split = landed
+      ? CNS5.applyDamage({
+          damage: blow,
+          bonus: bonusRoll?.total ?? 0,
+          absorption,
+          fatigue: target?.system?.fatigue?.value ?? 0
+        })
+      : null;
+
+    // A failed attack whose Crit Die reached ten is a fumble: the attacker must
+    // roll Agility to keep hold of the weapon, and the opponent gets a free
+    // blow at -20% (p272).
+    const fumble = !result.success && result.critical;
+
+    // An active defence costs Fatigue whether it worked or not (p278, p284).
+    // It is taken here rather than left on the card, because unlike damage it
+    // is not conditional on anything and nobody would choose to skip it.
+    const defenceFatigue = defence?.fatigueCost ?? basic?.fatigueCost ?? 0;
+    if (target && defenceFatigue > 0) {
+      if (target.isOwner) await target.spendFatigue(defenceFatigue);
+      else {
+        ui.notifications.info(
+          game.i18n.format("CNS5.Defence.fatigueUnapplied", {
+            name: target.name,
+            fp: defenceFatigue
+          })
+        );
+      }
+    }
 
     return checkToMessage(this, {
       ...result,
@@ -276,8 +316,17 @@ export class CnS5Actor extends Actor {
       overflow,
       shortfall,
       unskilled: skill ? !skill.system.known : false,
-      damage: exchange.damage ? damage : null,
+      damage: landed ? split.total : null,
       damageType: game.i18n.localize(`CNS5.DamageType.${weapon.system.damageType}`),
+      split,
+      blow,
+      absorption,
+      bonusDamage: bonusRoll?.total ?? 0,
+      criticalHit,
+      fumble,
+      fumbleModifier: CNS5.opportuneAttackModifier,
+      targetId: target?.uuid ?? null,
+      defenceFatigue,
       targetArea: area === "none" ? null : game.i18n.localize(aimed.label),
       cost: game.i18n.format("CNS5.Roll.weaponCost", { ap: weapon.system.ap }),
       breakdown: this.#breakdown([
@@ -468,6 +517,44 @@ export class CnS5Actor extends Actor {
     }
 
     return this.createEmbeddedDocuments("Item", toCreate);
+  }
+
+  /* -------------------------------------------- */
+
+  /**
+   * Spend Fatigue Points, as an active defence does.
+   *
+   * @param {number} points
+   * @returns {Promise<Actor>}
+   */
+  async spendFatigue(points) {
+    if (!(points > 0)) return this;
+    return this.update({
+      "system.fatigue.value": Math.max(0, this.system.fatigue.value - points)
+    });
+  }
+
+  /* -------------------------------------------- */
+
+  /**
+   * Take a blow.
+   *
+   * Fatigue absorbs what gets past the armour until it is gone, and Body takes
+   * the rest. A critical's bonus die comes straight off Body whatever remains
+   * of either.
+   *
+   * @param {object} split  the result of CNS5.applyDamage
+   * @returns {Promise<Actor>}
+   */
+  async applyDamage(split) {
+    if (!split) return this;
+
+    return this.update({
+      "system.fatigue.value": Math.max(0, this.system.fatigue.value - split.fatigueLost),
+      // Body is allowed below zero: a character is unconscious at nought and
+      // dead at negative Constitution (p282).
+      "system.body.value": this.system.body.value - split.bodyLost
+    });
   }
 
   /* -------------------------------------------- */

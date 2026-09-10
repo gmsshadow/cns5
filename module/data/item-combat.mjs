@@ -219,6 +219,16 @@ export class CnS5Armour extends CnS5PhysicalItem {
     // (p279). Worn armour gives none.
     schema.blockBonus = new fields.NumberField({ required: true, integer: true, initial: 0 });
 
+    // How heavy this shield is for the Fatigue cost of a block (p284). The
+    // Fatigue table names Light, Medium and Heavy, which is a finer division
+    // than the two shield play skills make, so it is recorded rather than
+    // inferred from the skill.
+    schema.defenceWeight = new fields.StringField({
+      required: true,
+      initial: "medium",
+      choices: ["light", "medium", "heavy"]
+    });
+
     // Every blow that gets past a shield adds ten per cent to the chance that
     // it breaks, and the chance stays with it until it is repaired.
     schema.failureChance = new fields.NumberField({

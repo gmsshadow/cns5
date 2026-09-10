@@ -21,6 +21,11 @@
                {{#unless editable}}disabled{{/unless}}>
     </label>
     <label class="cns5-field">
+        <span>{{localize "CNS5.Armour.defenceWeight"}}</span>
+        <input type="text" name="system.defenceWeight" value="{{system.defenceWeight}}"
+               {{#unless editable}}disabled{{/unless}}>
+    </label>
+    <label class="cns5-field">
         <span>{{localize "CNS5.Armour.failureChance"}}</span>
         <input type="number" name="system.failureChance" value="{{system.failureChance}}"
                min="0" max="100" {{#unless editable}}disabled{{/unless}}>

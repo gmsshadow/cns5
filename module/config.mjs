@@ -1168,3 +1168,114 @@ CNS5.parryOutcome = function (defending, attacking) {
  * unless it is repaired (p279).
  */
 CNS5.shieldFailureStep = 10;
+
+/* -------------------------------------------- */
+/*  Damage                                      */
+/* -------------------------------------------- */
+
+/**
+ * How a blow is applied (pp.272, 282, and the worked example on p287).
+ *
+ * The ordinary part of the damage — the weapon's, plus Strength, plus the
+ * Attacker's Bonus, plus the Crit Die — is reduced by the armour that covers
+ * the damage type, and what is left comes off Fatigue Points until they are
+ * gone and off Body Points thereafter.
+ *
+ * A Critical Success adds a further d10 which behaves quite differently: it
+ * "is directly removed from the target's Body", ignoring both the armour and
+ * whatever Fatigue the target has left. That is the whole of what a critical
+ * bypasses — the rest of the blow is absorbed and soaked up as usual.
+ */
+CNS5.criticalBonusDie = "1d10";
+
+/**
+ * A combat advantage buys an undefended opportune attack at -20% TSC% (p272).
+ * A critical failure hands one to the opponent, and costs the fumbler an
+ * Agility roll to keep hold of their weapon.
+ */
+CNS5.opportuneAttackModifier = -20;
+
+/**
+ * Split a blow between what armour and Fatigue can absorb and what goes
+ * straight to Body.
+ *
+ * @param {object} options
+ * @param {number} options.damage     the ordinary damage, Crit Die included
+ * @param {number} options.bonus      the critical's extra d10, if any
+ * @param {number} options.absorption the armour covering this damage type
+ * @param {number} options.fatigue    the target's Fatigue Points
+ * @returns {object} what each pool loses
+ */
+CNS5.applyDamage = function ({ damage = 0, bonus = 0, absorption = 0, fatigue = 0 }) {
+  const absorbed = Math.min(damage, absorption);
+  const throughArmour = Math.max(0, damage - absorbed);
+
+  // Fatigue takes the blow first and Body takes the remainder.
+  const fromFatigue = Math.min(throughArmour, Math.max(0, fatigue));
+  const toBodyFromBlow = throughArmour - fromFatigue;
+
+  return {
+    absorbed,
+    throughArmour,
+    fatigueLost: fromFatigue,
+    // The critical's bonus die ignores armour and Fatigue alike.
+    bodyLost: toBodyFromBlow + bonus,
+    bodyFromBonus: bonus,
+    total: throughArmour + bonus
+  };
+};
+
+/* -------------------------------------------- */
+/*  The Fatigue cost of defending               */
+/* -------------------------------------------- */
+
+/**
+ * Table - Fatigue cost for Defence (p284).
+ *
+ * "Dodging, weapon parries and shield blocks all cost a weapon blow or
+ * expenditure of fatigue." The cost falls with skill and rises with the weight
+ * of what is interposed, and it is read against the same PSF% bands as
+ * Table - Combat Actions, so `actionPointBands` picks the column.
+ *
+ * The table names Light, Medium and Heavy only. A two-handed weapon or polearm
+ * is read as Heavy — there is nothing heavier for it to be — and a dodge costs
+ * one whatever the defender's skill.
+ *
+ * The alternative Blows system on the same page uses this table as a count of
+ * blows rather than of Fatigue. That system is not implemented; the figures are
+ * the same either way.
+ */
+CNS5.defenceFatigue = {
+  dodge: [1, 1, 1, 1, 1],
+  light: [2, 2, 1, 1, 1],
+  medium: [3, 2, 2, 2, 1],
+  heavy: [3, 3, 2, 2, 2]
+};
+
+/**
+ * How the weight classes a weapon can have map onto the three the Fatigue
+ * table names.
+ */
+CNS5.defenceWeightOf = {
+  naturalLight: "light",
+  light: "light",
+  naturalMedium: "medium",
+  medium: "medium",
+  naturalHeavy: "heavy",
+  heavy: "heavy",
+  twoHanded: "heavy"
+};
+
+/**
+ * The Fatigue a declared defence costs.
+ *
+ * @param {string} weight  "dodge", or a weight class of the interposed item
+ * @param {number} psf     the defender's PSF% in the defending skill
+ * @returns {number}
+ */
+CNS5.defenceFatigueCost = function (weight, psf) {
+  const key = weight === "dodge" ? "dodge" : CNS5.defenceWeightOf[weight] ?? weight;
+  const row = CNS5.defenceFatigue[key] ?? CNS5.defenceFatigue.medium;
+  const band = CNS5.actionPointBands.findIndex((b) => (Number(psf) || 0) <= b.max);
+  return row[band];
+};

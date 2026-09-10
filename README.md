@@ -512,6 +512,11 @@ Configure Settings.
 defender's PSF% for an active defence, a quarter for a passive one. The
 defender never rolls.
 
+A defence is measured by whatever makes it, and a creature's tusk carries its
+own Personal Skill Factor rather than naming a skill. Both are reduced to the
+same shape — a name, a skill factor, a chance and a Difficulty Factor — so a
+boar can interpose its tusk exactly as a knight interposes a sword.
+
 A **passive defence** interposes a weapon or shield rather than avoiding the
 blow (p278) — the shield by preference, being the larger obstacle. It is never
 rolled under either form of combat, so a quarter of the defender's PSF% in that
@@ -538,6 +543,26 @@ to block with. Each carries the bonus it gives to a block and what it absorbs of
 each damage type, and an accumulating failure chance for blows that get past it.
 "Any object at hand" ships with its absorption at zero, because the rules have
 the Gamemaster set that at the start of a combat.
+
+## Absolute Strength
+
+The Absolute Strength Rating is the square root of Lifting Capacity, rounded
+down, and three things follow from it (p106):
+
+- **A bonus to Strength Attribute Rolls**, equal to the rating. A Strength roll
+  therefore does not match the AR table on its own — Devlin's Strength of 14
+  reads 73% there and 86% on the sheet — so the figure is marked with an
+  asterisk and says why on hover.
+- **The damage bonus**: half the rating rounded up for medium and heavier
+  weapons, a quarter rounded down for light ones. The two round opposite ways.
+- **The tie-break in a contest of strength**: where both parties succeed at
+  their Strength roll, the one with the *lower* rating wins, having had to try
+  harder. The rating is reported on a Strength roll's chat card so the two can
+  be compared.
+
+Which reading gives the damage bonus is a world setting, because p281 gives it
+as the Strength attribute halved rather than the rating. The rating is the
+default.
 
 ## Damage
 

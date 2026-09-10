@@ -147,6 +147,18 @@ for (const file of sheets) {
 }
 ok("no sheet shows an override where the derived figure belongs", misrendered, []);
 
+/* -------------------------------------------- */
+
+/* A test file that never sets an exit code passes whatever happens, and the
+   suite is chained with &&, so one such file hides every failure after it. */
+const suites = (await walk(path.join(ROOT, "test"), ".mjs"));
+const toothless = [];
+for (const file of suites) {
+  const text = await readFile(file, "utf8");
+  if (!/process\.exit\(/.test(text)) toothless.push(path.relative(ROOT, file));
+}
+ok("every test suite can fail the build", toothless, []);
+
 console.log(`\n${partPaths.size} parts checked`);
 console.log(fails ? `${fails} FAILURES` : "All checks passed.");
 process.exit(fails ? 1 : 0);

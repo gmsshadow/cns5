@@ -81,8 +81,13 @@ export class CnS5Actor extends Actor {
         value: attr.value,
         target
       }),
+      // A test of strength between two characters is settled by the lower
+      // Absolute Strength Rating where both succeed (p106), so it is reported
+      // on the card for a Strength roll rather than left to be looked up.
+      asr: attribute === "str" ? this.system.asr : null,
       breakdown: this.#breakdown([
-        { label: "CNS5.Roll.baseAr", value: attr.ar },
+        { label: "CNS5.Roll.baseAr", value: attr.ar - (attr.asrBonus ?? 0) },
+        { label: "CNS5.Roll.asrBonus", value: attr.asrBonus ?? 0, signed: true },
         { label: "CNS5.Roll.situational", value: situational, signed: true }
       ])
     });
@@ -310,6 +315,9 @@ export class CnS5Actor extends Actor {
       }),
       targetName: target?.name ?? null,
       defence,
+      // A basic or passive defence is never rolled, so it has nothing to show
+      // in the defence line unless it is reported separately.
+      passiveDefence: basic && basic.modifier !== 0 ? basic : null,
       exchange,
       exchangeLabel: game.i18n.localize(`CNS5.Exchange.${exchange.outcome}`),
       unclamped,

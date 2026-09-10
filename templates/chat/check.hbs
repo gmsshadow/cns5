@@ -21,8 +21,14 @@
     <p class="cns5-check__target">
         {{localize "CNS5.Roll.against"}} <strong>{{targetName}}</strong>
         {{#if defence}} &mdash; {{localize (concat "CNS5.Defence." defence.defence)}}
-        {{defence.roll}} / {{defence.target}}%{{/if}}
+        {{#if defence.skillName}}({{defence.skillName}}) {{/if}}{{defence.roll}} / {{defence.target}}%{{/if}}
+        {{#if passiveDefence}} &mdash; {{localize "CNS5.Defence.passive"}}
+        {{#if passiveDefence.skillName}}({{passiveDefence.skillName}}){{/if}}
+        {{cns5Signed passiveDefence.modifier}}%{{/if}}
     </p>
+    {{/if}}
+    {{#if asr}}
+    <p class="cns5-check__cost">{{localize "CNS5.Roll.asrNote"}} {{asr}}</p>
     {{/if}}
     {{#if defenceFatigue}}
     <p class="cns5-check__cost">

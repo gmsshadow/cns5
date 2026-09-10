@@ -173,7 +173,10 @@
                        value="{{attr.editValue}}" {{#unless @root.editable}}disabled{{/unless}}>
                 {{#if attr.derived}}<span class="cns5-attributes__total">{{attr.value}}</span>{{/if}}
             </td>
-            <td class="cns5-attributes__readout">{{cns5Percent attr.ar}}</td>
+            <td class="cns5-attributes__readout"
+                {{#if attr.asrBonus}}data-tooltip="{{localize 'CNS5.Attribute.asrHint'}}"{{/if}}>
+                {{cns5Percent attr.ar}}{{#if attr.asrBonus}}*{{/if}}
+            </td>
             <td class="cns5-attributes__readout">{{cns5Signed attr.bonus}}</td>
         </tr>
         {{/each}}

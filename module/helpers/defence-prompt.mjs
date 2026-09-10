@@ -34,11 +34,11 @@ export async function promptDefence(defender, mode) {
     }
 
     const found = defenceSkill(defender, key);
-    if (!found.skill) continue;
+    if (!found.usable) continue;
 
     const detail = [
-      found.itemName,
-      `${found.skill.name} ${found.skill.system.target}%`,
+      found.item?.name,
+      `${found.name} ${found.psf >= 0 ? "+" : ""}${found.psf}%`,
       found.bonus ? `+${found.bonus}%` : null
     ]
       .filter(Boolean)

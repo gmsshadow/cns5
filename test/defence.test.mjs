@@ -232,5 +232,56 @@ const quarterOf = (psf) => -Math.floor(psf * CNS5.defenceShare.passive);
 ok("a shield play of 28 passively", quarterOf(28), -7);
 ok("against the same actively", -Math.floor(28 * CNS5.defenceShare.active), -14);
 
+/* -- Defending with a natural weapon ---------------------------------------- */
+
+/* A creature's tusk carries its own Personal Skill Factor rather than naming a
+   skill. Looking for the skill item and reading the figure off it found
+   nothing, so a boar declaring a passive defence reduced the attacker's chance
+   by nought and the declaration did visibly nothing at all. */
+const { basicDefence, defenceSkill } = await import(
+  path.join(ROOT, "module", "helpers", "defence.mjs")
+);
+
+globalThis.game ??= { i18n: { localize: (k) => k, format: (k) => k } };
+
+function creature() {
+  const items = [
+    {
+      type: "weapon",
+      name: "Tusk",
+      system: {
+        equipped: true, natural: true, psf: 36, naturalTsc: 76,
+        naturalDf: 3, weightClass: "naturalMedium", skillItem: null
+      }
+    },
+    { type: "armour", name: "Hide", system: { location: "body", equipped: true } },
+    { type: "skill", name: "Dodge", system: { psf: 0, tsc: 40, df: 3 } }
+  ];
+  items.find = Array.prototype.find.bind(items);
+  items.filter = Array.prototype.filter.bind(items);
+  return { name: "Boar", items, system: { dodgePenalty: 0 } };
+}
+
+const boar = creature();
+
+ok("a natural weapon can be interposed", defenceSkill(boar, "weaponParry").usable, true);
+ok("and carries its own skill factor", defenceSkill(boar, "weaponParry").psf, 36);
+ok("with its own chance", defenceSkill(boar, "weaponParry").tsc, 76);
+
+/* A passive defence falls back to the weapon when there is no shield. */
+ok("a boar defends passively with its tusk", basicDefence(boar, "passive").skillName, "Tusk");
+ok("for a quarter of its skill factor", basicDefence(boar, "passive").modifier, -9);
+ok("costing no Fatigue", basicDefence(boar, "passive").fatigueCost, 0);
+
+/* Its Dodge is real but worthless, which is a different thing from absent. */
+ok("its dodge is offered", basicDefence(boar, "dodge").skillName, "Dodge");
+ok("and reduces nothing", basicDefence(boar, "dodge").modifier, 0);
+ok("but still costs Fatigue", basicDefence(boar, "dodge").fatigueCost, 1);
+
+/* An empty-handed defender with no shield has nothing to interpose. */
+const bare = { name: "Bare", items: Object.assign([], { find: () => undefined, filter: () => [] }), system: {} };
+ok("nothing to interpose is no defence", basicDefence(bare, "passive").modifier, 0);
+ok("and is marked unusable", defenceSkill(bare, "weaponParry").usable, false);
+
 console.log(fails ? `\n${fails} FAILURES` : "\nAll checks passed.");
 process.exit(fails ? 1 : 0);

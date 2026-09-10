@@ -300,6 +300,12 @@ export class CnS5ActorBase extends foundry.abstract.TypeDataModel {
         ? { medium: Math.floor(str / 2), light: Math.floor(str / 4) }
         : { medium: Math.ceil(this.asr / 2), light: Math.floor(this.asr / 4) };
 
+    // "The ASR provides a bonus modifier to any STR AR checks" (p106). It is
+    // added here rather than with the other attribute rolls because the rating
+    // is not known until Lifting Capacity has been worked out.
+    this.attr.str.asrBonus = this.asr;
+    this.attr.str.ar = Math.min(99, this.attr.str.ar + this.asr);
+
     this.jump = Math.ceil((str + agl) / 4) + (this.jumpModifier ?? 0);
 
     this.bap = Math.floor(Math.max(agl + fer, agl + int) / 2);

@@ -34,45 +34,62 @@ export function defenceSkill(defender, defence) {
   const byName = (name) =>
     skills.find((s) => s.name.toLowerCase() === name.toLowerCase()) ?? null;
 
+  /**
+   * Normalise what a defence is made with.
+   *
+   * A creature's tusk carries its own Personal Skill Factor instead of naming a
+   * skill, so asking for the skill item and reading the figure off it finds
+   * nothing. Both kinds are reduced to the same shape here — a name, a PSF, a
+   * chance and a Difficulty Factor — and the callers no longer care which they
+   * were given.
+   */
+  const from = ({ skill, weapon, item, bonus = 0, weight }) => {
+    const natural = weapon?.system.natural ?? false;
+    const psf = natural ? weapon.system.psf : skill?.system.psf ?? 0;
+    const usable = natural || Boolean(skill);
+
+    return {
+      usable,
+      name: natural ? weapon.name : skill?.name ?? null,
+      psf,
+      tsc: natural ? weapon.system.naturalTsc : skill?.system.tsc ?? 0,
+      df: natural ? weapon.system.naturalDf : skill?.system.df ?? 3,
+      item: item ?? weapon ?? null,
+      bonus,
+      fatigue: usable && weight ? CNS5.defenceFatigueCost(weight, psf) : 0
+    };
+  };
+
+  const nothing = { usable: false, name: null, psf: 0, tsc: 0, df: 3, item: null, bonus: 0, fatigue: 0 };
+
   if (defence === "dodge") {
     const skill = byName("Dodge");
-    return {
-      skill,
-      item: null,
-      bonus: 0,
-      fatigue: CNS5.defenceFatigueCost("dodge", skill?.system.psf ?? 0)
-    };
+    return skill ? from({ skill, weight: "dodge" }) : nothing;
   }
 
   if (defence === "weaponParry") {
-    // The weapon in hand, and the combat skill that goes with it.
     const weapon = defender.items.find((i) => i.type === "weapon" && i.system.equipped);
-    const skill = weapon?.system.skillItem ?? null;
-    return {
-      skill,
-      item: weapon ?? null,
-      bonus: 0,
-      fatigue: weapon
-        ? CNS5.defenceFatigueCost(weapon.system.weightClass, skill?.system.psf ?? 0)
-        : 0
-    };
+    if (!weapon) return nothing;
+    return from({ skill: weapon.system.skillItem, weapon, weight: weapon.system.weightClass });
   }
 
   if (defence === "shieldBlock") {
     const shield = defender.items.find(
       (i) => i.type === "armour" && i.system.location === "shield" && i.system.equipped
     );
-    const heavy = shield?.system.weightClass !== "light";
+    if (!shield) return nothing;
+
+    const heavy = shield.system.weightClass !== "light";
     const skill = byName(heavy ? "Shield Play: Heavy" : "Shield Play: Light");
-    return {
+    if (!skill) return nothing;
+
+    return from({
       skill,
-      item: shield ?? null,
+      item: shield,
       // Shields are built to block, and the table gives each its own bonus.
-      bonus: shield?.system.blockBonus ?? 0,
-      fatigue: shield
-        ? CNS5.defenceFatigueCost(shield.system.defenceWeight, skill?.system.psf ?? 0)
-        : 0
-    };
+      bonus: shield.system.blockBonus ?? 0,
+      weight: shield.system.defenceWeight
+    });
   }
 
   if (defence === "passive") {
@@ -80,16 +97,14 @@ export function defenceSkill(defender, defence) {
     // or shield in the way of an incoming attack" (p278) — not a dodge, which
     // is an active defence of its own. The shield is preferred, being the
     // larger obstacle, and it costs neither Action Points nor Fatigue.
-    const shield = defenceSkill(defender, "shieldBlock");
-    if (shield.skill && shield.item) return { ...shield, bonus: 0, fatigue: 0 };
-
-    const weapon = defenceSkill(defender, "weaponParry");
-    if (weapon.skill && weapon.item) return { ...weapon, bonus: 0, fatigue: 0 };
-
-    return { skill: null, item: null, bonus: 0, fatigue: 0 };
+    for (const kind of ["shieldBlock", "weaponParry"]) {
+      const found = defenceSkill(defender, kind);
+      if (found.usable) return { ...found, bonus: 0, fatigue: 0 };
+    }
+    return nothing;
   }
 
-  return { skill: null, item: null, bonus: 0, fatigue: 0 };
+  return nothing;
 }
 
 /* -------------------------------------------- */
@@ -110,14 +125,13 @@ export function basicDefence(defender, defence) {
   }
 
   const found = defenceSkill(defender, defence);
-  const psf = found.skill?.system.psf ?? 0;
   const share = CNS5.defenceShare[entry.stance] ?? 0;
 
   return {
-    modifier: -Math.floor(psf * share),
-    psf,
+    modifier: -Math.floor(found.psf * share),
+    psf: found.psf,
     stance: entry.stance,
-    skill: found.skill,
+    skillName: found.name,
     item: found.item,
     // Making the defence costs Fatigue under either form of combat; only the
     // rolling differs. A passive defence is not an active one and costs none.
@@ -142,22 +156,21 @@ export function basicDefence(defender, defence) {
  */
 export async function rollDefence(defender, defence, attack) {
   const found = defenceSkill(defender, defence);
-  if (!found.skill) return null;
+  if (!found.usable) return null;
 
-  const skill = found.skill.system;
   const armour = defence === "dodge" ? defender.system.dodgePenalty ?? 0 : 0;
   const opposed = CNS5.defenceModifiers[defence]?.opposedByAttackerPsf
     ? -(attack.attackerPsf ?? 0)
     : 0;
 
-  const unclamped = skill.tsc + found.bonus + armour + opposed;
-  const { target, critMod } = clampSuccessChance(unclamped, skill.df);
+  const unclamped = found.tsc + found.bonus + armour + opposed;
+  const { target, critMod } = clampSuccessChance(unclamped, found.df);
   const result = await resolveCheck({ target, critMod });
 
   return {
     ...result,
     defence,
-    skillName: found.skill.name,
+    skillName: found.name,
     itemName: found.item?.name ?? null,
     shieldBonus: found.bonus,
     armourPenalty: armour,

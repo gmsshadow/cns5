@@ -75,6 +75,20 @@ export function defenceSkill(defender, defence) {
     };
   }
 
+  if (defence === "passive") {
+    // "A passive defence consists of minor movements, which interposes a weapon
+    // or shield in the way of an incoming attack" (p278) — not a dodge, which
+    // is an active defence of its own. The shield is preferred, being the
+    // larger obstacle, and it costs neither Action Points nor Fatigue.
+    const shield = defenceSkill(defender, "shieldBlock");
+    if (shield.skill && shield.item) return { ...shield, bonus: 0, fatigue: 0 };
+
+    const weapon = defenceSkill(defender, "weaponParry");
+    if (weapon.skill && weapon.item) return { ...weapon, bonus: 0, fatigue: 0 };
+
+    return { skill: null, item: null, bonus: 0, fatigue: 0 };
+  }
+
   return { skill: null, item: null, bonus: 0, fatigue: 0 };
 }
 
@@ -91,11 +105,11 @@ export function defenceSkill(defender, defence) {
  */
 export function basicDefence(defender, defence) {
   const entry = CNS5.defences[defence];
-  if (!entry?.stance) return { modifier: 0, psf: 0, stance: null, skill: null };
+  if (!entry?.stance) {
+    return { modifier: 0, psf: 0, stance: null, skill: null, item: null, fatigueCost: 0 };
+  }
 
-  // A passive defence is the defender giving ground rather than committing to
-  // any one thing, so it is measured against whatever they would have used.
-  const found = defenceSkill(defender, defence === "passive" ? "dodge" : defence);
+  const found = defenceSkill(defender, defence);
   const psf = found.skill?.system.psf ?? 0;
   const share = CNS5.defenceShare[entry.stance] ?? 0;
 
@@ -104,6 +118,7 @@ export function basicDefence(defender, defence) {
     psf,
     stance: entry.stance,
     skill: found.skill,
+    item: found.item,
     // Making the defence costs Fatigue under either form of combat; only the
     // rolling differs. A passive defence is not an active one and costs none.
     fatigueCost: entry.stance === "active" ? found.fatigue ?? 0 : 0

@@ -127,15 +127,17 @@ export class CnS5Weapon extends CnS5PhysicalItem {
     }
 
     // A launcher contributes only its bonus; the strength of the arm does not
-    // add to a crossbow bolt the way it adds to a sword blow.
+    // add to a crossbow bolt the way it adds to a sword blow. A natural attack
+    // takes neither bonus: the bestiary's figure is the whole of its damage,
+    // already settled by whoever wrote the creature.
     this.strengthBonus =
-      this.role === "melee"
+      this.role === "melee" && !this.natural
         ? isLight
           ? actorSystem.damageBonus.light
           : actorSystem.damageBonus.medium
         : 0;
 
-    this.attackerBonus = CNS5.attackerBonus(this.level, this.weightClass);
+    this.attackerBonus = this.natural ? 0 : CNS5.attackerBonus(this.level, this.weightClass);
 
     // Action Points. The derived figure is always computed so the sheet can show
     // what the tables would give even when an override is set.
@@ -151,8 +153,9 @@ export class CnS5Weapon extends CnS5PhysicalItem {
     this.derivedAp = CNS5.actionPointCost(this.attackAction, this.psf) ?? 0;
     this.ap = this.apCost > 0 ? this.apCost : this.derivedAp;
     this.apOverridden = this.apCost > 0;
-    this.damage =
-      this.role === "launcher"
+    this.damage = this.natural
+      ? this.baseDamage
+      : this.role === "launcher"
         ? this.damageBonus
         : this.baseDamage + this.strengthBonus + this.attackerBonus;
   }

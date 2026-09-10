@@ -126,6 +126,27 @@ for (const relative of partPaths) {
 }
 ok("every referenced template exists", missing.sort(), []);
 
+/* -------------------------------------------- */
+
+/* A derived field and the override that feeds it are easy to confuse, and the
+   sheet showed the override — always zero — where the derived Action Point
+   cost belonged. These are the pairs where the wrong one renders as a plausible
+   number rather than as nothing, so a mistake is invisible. */
+const derivedPairs = [
+  { wrong: "system.apCost", right: "system.ap", what: "weapon Action Points" },
+  { wrong: "system.pcCost}}", right: "system.pcCost", what: "talent cost" }
+];
+
+const sheets = (await walk(path.join(ROOT, "templates", "actor"), ".hbs"));
+const misrendered = [];
+for (const file of sheets) {
+  const text = await readFile(file, "utf8");
+  if (/\{\{weapon\.system\.apCost\}\}/.test(text)) {
+    misrendered.push(`${path.relative(ROOT, file)}: shows the AP override, not the derived cost`);
+  }
+}
+ok("no sheet shows an override where the derived figure belongs", misrendered, []);
+
 console.log(`\n${partPaths.size} parts checked`);
 console.log(fails ? `${fails} FAILURES` : "All checks passed.");
 process.exit(fails ? 1 : 0);

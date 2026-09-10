@@ -206,5 +206,31 @@ ok(
   4
 );
 
+/* -- What a passive defence interposes (p278) ------------------------------- */
+
+/* "A passive defence consists of minor movements, which interposes a weapon or
+   shield in the way of an incoming attack" — not a dodge, which is an active
+   defence in its own right. Mapping it to Dodge gave no reduction at all to a
+   character who had a shield but little skill at dodging. */
+ok("a passive defence is a stance, not a skill", CNS5.defences.passive.skill, null);
+ok("and it is passive", CNS5.defences.passive.stance, "passive");
+ok("while a dodge is active", CNS5.defences.dodge.stance, "active");
+
+/* It costs neither Action Points nor Fatigue (p278), unlike the three active
+   defences. */
+ok(
+  "only active defences cost Fatigue",
+  Object.entries(CNS5.defences)
+    .filter(([, v]) => v.stance === "passive")
+    .map(([k]) => k),
+  ["passive"]
+);
+
+/* A quarter of the defender's PSF comes off the attacker, against a half for an
+   active defence. */
+const quarterOf = (psf) => -Math.floor(psf * CNS5.defenceShare.passive);
+ok("a shield play of 28 passively", quarterOf(28), -7);
+ok("against the same actively", -Math.floor(28 * CNS5.defenceShare.active), -14);
+
 console.log(fails ? `\n${fails} FAILURES` : "\nAll checks passed.");
 process.exit(fails ? 1 : 0);

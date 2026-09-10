@@ -222,10 +222,10 @@ export class CnS5Actor extends Actor {
       declared = await promptDefence(target, mode);
       if (declared === null) return null;
 
-      if (mode === "basic") {
-        // Basic combat folds the defence into the attacker's chance and never
-        // rolls for it: half the defender's PSF for an active defence, a
-        // quarter for a passive one.
+      // A passive defence is never rolled under either form of combat — that is
+      // what makes it passive — so it comes off the attacker's chance whichever
+      // mode is in use. Only an active defence changes with the mode.
+      if (mode === "basic" || declared === "passive") {
         basic = basicDefence(target, declared);
         situational += basic.modifier;
       }
@@ -249,7 +249,7 @@ export class CnS5Actor extends Actor {
 
     // Advanced combat rolls the defence separately and reads the pair.
     const defence =
-      target && mode === "advanced" && declared !== "none"
+      target && mode === "advanced" && declared !== "none" && declared !== "passive"
         ? await rollDefence(target, declared, result)
         : null;
     const exchange = resolveExchange(result, defence);

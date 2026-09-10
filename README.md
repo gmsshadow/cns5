@@ -512,6 +512,12 @@ Configure Settings.
 defender's PSF% for an active defence, a quarter for a passive one. The
 defender never rolls.
 
+A **passive defence** interposes a weapon or shield rather than avoiding the
+blow (p278) — the shield by preference, being the larger obstacle. It is never
+rolled under either form of combat, so a quarter of the defender's PSF% in that
+weapon or shield comes off the attacker whichever mode is in use, and it costs
+neither Action Points nor Fatigue.
+
 **Advanced** rolls both and reads them together, which is what lets a shield
 absorb a blow it stopped. The four outcomes are the ones the rules give: a hit
 against no defence or a failed one lands; a hit against a successful defence is

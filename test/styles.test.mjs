@@ -107,6 +107,35 @@ ok("every class used in a template is styled", undefinedClasses, []);
 ok("the chat card and the checkbox are different classes", /\.cns5-checkbox\s*{/.test(css), true);
 ok("no template still uses the old shared name", [...templateClasses].filter((c) => c === "cns5-check"), []);
 
-console.log(`\n${grounds.length} grounds, ${inks.length + 1} inks, ${templateClasses.size} classes checked`);
+/* -- Dice appearance -------------------------------------------------------- */
+
+/* "Use a different coloured dice for the Crit Die" (p36). A colourset that
+   leaves an attribute out falls back to the player's own setting, so every one
+   has to be given or the die is only partly distinct. */
+const { CNS5 } = await import(path.join(ROOT, "module", "config.mjs"));
+
+ok("a colourset for each distinguishable die", CNS5.diceColorsets.length, 2);
+ok(
+  "every colourset is fully specified",
+  CNS5.diceColorsets
+    .filter((c) => ["foreground", "background", "outline", "edge", "texture", "material"]
+      .some((k) => !c[k]))
+    .map((c) => c.name),
+  []
+);
+
+/* The Crit Die's colours must read against each other, or the die is pretty
+   and illegible. */
+const legible = CNS5.diceColorsets.map((c) => ({
+  name: c.name,
+  ratio: Number(contrast(c.foreground, c.background).toFixed(1))
+}));
+ok("the labels read against the dice", legible.filter((c) => c.ratio < 4.5), []);
+
+ok(
+  "each names itself for the settings list",
+  CNS5.diceColorsets.filter((c) => !c.description?.startsWith("CNS5.")).map((c) => c.name),
+  []
+);
 console.log(fails ? `${fails} FAILURES` : "All checks passed.");
 process.exit(fails ? 1 : 0);

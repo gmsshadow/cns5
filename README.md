@@ -564,6 +564,22 @@ Which reading gives the damage bonus is a world setting, because p281 gives it
 as the Strength attribute halved rather than the rating. The rating is the
 default.
 
+## Dice
+
+"Use a different coloured dice for the Crit Die" (p36). On a physical table that
+is a matter of picking one up; here the two land together and look identical,
+which is the confusion the suggestion exists to prevent.
+
+Where **Dice So Nice** is installed, the Crit Die rolls in oxblood and the extra
+die a critical adds rolls in gilt. The Percentile Pair is deliberately left
+alone — a player's own dice are their own, and recolouring everything to solve a
+problem that affects one die would take that away.
+
+It is a client setting, **Colour the Crit Die differently**, so each player
+decides for themselves. Nothing in the system depends on the module: setting an
+appearance on a roll is inert without it, and the registration happens on a hook
+that never fires when it is absent.
+
 ## Damage
 
 A landed blow is the weapon's damage, the Strength bonus, the Attacker's Bonus

@@ -1279,3 +1279,44 @@ CNS5.defenceFatigueCost = function (weight, psf) {
   const band = CNS5.actionPointBands.findIndex((b) => (Number(psf) || 0) <= b.max);
   return row[band];
 };
+
+/* -------------------------------------------- */
+/*  Dice appearance                             */
+/* -------------------------------------------- */
+
+/**
+ * Colour schemes for Dice So Nice, if it is installed.
+ *
+ * "Use a different coloured dice for the Crit Die" is the rulebook's own
+ * suggestion (p36), and a sensible one: the Percentile Pair and the Crit Die
+ * are read quite differently, and at a glance on a virtual table they are two
+ * indistinguishable dice landing together.
+ *
+ * The Percentile Pair is deliberately left alone. A player's own dice are their
+ * own, and recolouring everything would take that away to solve a problem that
+ * only affects the one die.
+ */
+CNS5.diceColorsets = [
+  {
+    name: "cns5-crit",
+    description: "CNS5.Dice.crit",
+    category: "Chivalry & Sorcery",
+    foreground: "#f2ede1",
+    background: "#6d2723",
+    outline: "#2b1210",
+    edge: "#4a1a17",
+    texture: "none",
+    material: "plastic"
+  },
+  {
+    name: "cns5-crit-bonus",
+    description: "CNS5.Dice.critBonus",
+    category: "Chivalry & Sorcery",
+    foreground: "#1a1611",
+    background: "#c8a03a",
+    outline: "#5a4715",
+    edge: "#7d611b",
+    texture: "none",
+    material: "metal"
+  }
+];

@@ -1,4 +1,5 @@
 import { CNS5 } from "../config.mjs";
+import { styleDie } from "./dice.mjs";
 
 /**
  * The Skillskape resolution engine.
@@ -65,7 +66,10 @@ export function clampSuccessChance(chance, df) {
  */
 export async function resolveCheck({ target, critMod = 0, failureCritMod = 0 }) {
   const pair = await new Roll("1d100").evaluate();
-  const crit = await new Roll("1d10").evaluate();
+
+  // The Crit Die is read quite differently from the Percentile Pair, and the
+  // rules suggest telling them apart by colour (p36).
+  const crit = styleDie(await new Roll("1d10").evaluate());
 
   // A Percentile Pair result of 100 is the maximum, never a wrap to zero, so it
   // fails against any target below 100.

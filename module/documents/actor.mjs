@@ -5,6 +5,7 @@ import {
   checkToMessage,
   promptModifier
 } from "../helpers/checks.mjs";
+import { styleDie } from "../helpers/dice.mjs";
 import {
   basicDefence,
   rollDefence,
@@ -271,7 +272,7 @@ export class CnS5Actor extends Actor {
     const criticalHit = landed && result.critical && !exchange.reduced;
     let bonusRoll = null;
     if (criticalHit) {
-      bonusRoll = await new Roll(CNS5.criticalBonusDie).evaluate();
+      bonusRoll = styleDie(await new Roll(CNS5.criticalBonusDie).evaluate(), "bonus");
       result.rolls.push(bonusRoll);
     }
 

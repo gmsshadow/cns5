@@ -674,5 +674,9 @@
   "CNS5.Armour.defenceWeight": "Weight when defending",
   "CNS5.Roll.asrBonus": "Absolute Strength",
   "CNS5.Roll.asrNote": "In a test of strength where both succeed, the lower Absolute Strength wins. This character's is",
-  "CNS5.Attribute.asrHint": "Strength rolls carry a bonus equal to the Absolute Strength Rating (p106)."
+  "CNS5.Attribute.asrHint": "Strength rolls carry a bonus equal to the Absolute Strength Rating (p106).",
+  "CNS5.Dice.crit": "C&S Crit Die",
+  "CNS5.Dice.critBonus": "C&S Critical Bonus Die",
+  "CNS5.Settings.critDie.name": "Colour the Crit Die differently",
+  "CNS5.Settings.critDie.hint": "The rules suggest using a different coloured die for the Crit Die, which on a virtual table means recolouring it. Requires Dice So Nice; the Percentile Pair keeps whatever appearance you have chosen for it."
 }

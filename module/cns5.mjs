@@ -15,6 +15,7 @@ import { CnS5ItemSheet } from "./sheets/item-sheet.mjs";
 import { CnS5NPCSheet } from "./sheets/npc-sheet.mjs";
 import { CnS5CreationWizard } from "./apps/creation-wizard.mjs";
 import { registerHandlebarsHelpers } from "./helpers/handlebars.mjs";
+import { registerDiceColorsets } from "./helpers/dice.mjs";
 
 /**
  * Bind the Apply button on an attack card.
@@ -41,6 +42,15 @@ Hooks.on("renderChatMessageHTML", (message, element) => {
       button.textContent = game.i18n.localize("CNS5.Damage.applied");
     });
   }
+});
+
+/**
+ * Give the Crit Die a colour of its own, where Dice So Nice is installed.
+ *
+ * This hook never fires without the module, so nothing here needs guarding.
+ */
+Hooks.once("diceSoNiceReady", (dice3d) => {
+  registerDiceColorsets(dice3d);
 });
 
 Hooks.once("init", () => {
@@ -182,6 +192,17 @@ function registerSettings() {
     },
     default: "asr",
     requiresReload: true
+  });
+
+  // Whether a player's own Crit Die is recoloured is their business, not the
+  // world's, so this is a client setting.
+  game.settings.register("cns5", "colourCritDie", {
+    name: "CNS5.Settings.critDie.name",
+    hint: "CNS5.Settings.critDie.hint",
+    scope: "client",
+    config: true,
+    type: Boolean,
+    default: true
   });
 
   // Basic combat folds the defence into the attacker's chance; advanced rolls

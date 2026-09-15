@@ -131,6 +131,7 @@ export class CnS5CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2)
       .filter((i) => i.type === "religion")
       .sort((a, b) => Number(b.system.primary) - Number(a.system.primary) || byName(a, b));
 
+    context.ammunition = this.actor.items.filter((i) => i.type === "ammunition").sort(byName);
     context.talents = this.actor.items.filter((i) => i.type === "talent").sort(byName);
     context.flaws = this.actor.items.filter((i) => i.type === "flaw").sort(byName);
 

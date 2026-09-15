@@ -406,7 +406,7 @@ export class CnS5Actor extends Actor {
     // is not conditional on anything and nobody would choose to skip it.
     const defenceFatigue = defence?.fatigueCost ?? basic?.fatigueCost ?? 0;
     // A missile loosed is a missile gone.
-    if (ammunition && landed !== null && ammunition.system.quantity > 0) {
+    if (ammunition && ammunition.system.quantity > 0) {
       await ammunition.update({ "system.quantity": ammunition.system.quantity - 1 });
     }
 

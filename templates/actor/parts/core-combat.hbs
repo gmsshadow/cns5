@@ -152,16 +152,6 @@
                     </button>
                 </td>
             </tr>
-            {{#if weapon.system.missile}}
-            <tr class="cns5-subrow">
-                <td colspan="8">
-                    {{localize "CNS5.Weapon.rangesLabel"}}
-                    {{weapon.system.ranges.short}} / {{weapon.system.ranges.medium}} /
-                    {{weapon.system.ranges.long}} / {{weapon.system.ranges.extreme}} /
-                    {{weapon.system.ranges.max}}
-                </td>
-            </tr>
-            {{/if}}
             {{/each}}
             </tbody>
         </table>

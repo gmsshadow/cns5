@@ -728,5 +728,13 @@
   "CNS5.Quick.critMod": "Crit Die modifier",
   "CNS5.Quick.critModHint": "Plenty of things move the Crit Die without touching the chance — a weapon, a range, a spell. A free-form roll cannot know which, so it asks. Anything from naming a Difficulty Factor is added to this.",
   "CNS5.TargetArea.upperArm": "Upper arm",
-  "CNS5.TargetArea.lowerArm": "Lower arm"
+  "CNS5.TargetArea.lowerArm": "Lower arm",
+  "TYPES.Item.ammunition": "Ammunition",
+  "CNS5.Ammunition.heading": "Ammunition",
+  "CNS5.Ammunition.kindLabel": "Shot from",
+  "CNS5.Ammunition.none": "No arrows, bolts or bullets carried.",
+  "CNS5.Ammunition.hint": "Loosing a bow asks which of these to load. Damage and reach belong to the launcher and its ammunition together, so they are looked up as a pair rather than added.",
+  "CNS5.Ammunition.damageHint": "This is what the missile contributes. What a shot actually does is looked up for the launcher and the ammunition together, since the same bow does more with a heavier arrow and reaches less far with it.",
+  "CNS5.Item.new.ammunition": "New Ammunition",
+  "CNS5.Weapon.rangesElsewhere": "Ranges belong to this weapon and its ammunition together, and are looked up when the shot is made."
 }

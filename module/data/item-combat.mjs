@@ -77,22 +77,11 @@ export class CnS5Weapon extends CnS5PhysicalItem {
     });
 
     schema.missile = new fields.BooleanField({ required: true, initial: false });
-    schema.ranges = new fields.SchemaField({
-      short: new fields.NumberField({ required: true, integer: true, initial: 0, min: 0 }),
-      medium: new fields.NumberField({ required: true, integer: true, initial: 0, min: 0 }),
-      long: new fields.NumberField({ required: true, integer: true, initial: 0, min: 0 }),
-      extreme: new fields.NumberField({ required: true, integer: true, initial: 0, min: 0 }),
-      max: new fields.NumberField({ required: true, integer: true, initial: 0, min: 0 })
-    });
-
-    // Each band carries its own TSC% modifier on top of the flat band penalty.
-    schema.rangeModifiers = new fields.SchemaField({
-      short: new fields.NumberField({ required: true, integer: true, initial: 0 }),
-      medium: new fields.NumberField({ required: true, integer: true, initial: 0 }),
-      long: new fields.NumberField({ required: true, integer: true, initial: 0 }),
-      extreme: new fields.NumberField({ required: true, integer: true, initial: 0 }),
-      max: new fields.NumberField({ required: true, integer: true, initial: 0 })
-    });
+    // Ranges are not a property of a weapon. Table - Missile Ranges gives them
+    // to a bow and an arrow together, and the same bow reaches different
+    // distances with different arrows, so they are looked up as a pairing
+    // rather than stored here. A thrown weapon is its own ammunition and is
+    // looked up the same way.
 
     return schema;
   }

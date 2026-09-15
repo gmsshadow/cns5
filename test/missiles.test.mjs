@@ -217,5 +217,47 @@ ok(
   3
 );
 
+/* -- Every missile finds its row --------------------------------------------- */
+
+/* The two tables name several things differently, and a near miss is silent.
+   A Throwing Knife found no row called "Thrown Knife", so the attack fell
+   through to a melee blow with no range asked for at all — which is how a
+   thrown knife came to be swung. */
+const { normaliseForTest } = await import(path.join(ROOT, "module", "helpers", "missiles.mjs"));
+
+const known = new Set([
+  ...profiles.map((p) => normaliseForTest(p.weapon)),
+  ...profiles.map((p) => normaliseForTest(p.ammunition ?? "")).filter(Boolean)
+]);
+
+const weapons = JSON.parse(await readFile(path.join(ROOT, "data", "gear.json"), "utf8")).weapons;
+const missiles = weapons.filter((w) =>
+  ["launcher", "ammunition", "thrown"].includes(w.role) && !/quiver|^arrow$/i.test(w.name)
+);
+
+ok(
+  "every missile weapon finds a row",
+  missiles.filter((w) => !known.has(normaliseForTest(w.name))).map((w) => w.name),
+  // Hunting Bolts are the exception the book makes: generic civilian bolts with
+  // no row of their own, usable in any crossbow.
+  ["Hunting Bolts"]
+);
+
+/* The names that differ, checked one by one, since each was a silent failure. */
+ok("a throwing knife is a thrown knife", normaliseForTest("Throwing Knives"), normaliseForTest("Thrown Knife"));
+ok("a roman pilum is a pilum", normaliseForTest("Roman Pilum"), normaliseForTest("Pilum"));
+ok("war darts are darts", normaliseForTest("War Darts"), normaliseForTest("Dart"));
+ok("shepherds are a sling", normaliseForTest("Shepherds"), normaliseForTest("Shepherd's Sling"));
+ok("armour piercing arrows are AP arrows",
+   normaliseForTest("Armour Piercing Arrows"), normaliseForTest("AP Arrow"));
+ok("a composite bow is a composite bow",
+   normaliseForTest("Composite Bow"), normaliseForTest("Composite. Bow"));
+ok("a medium crossbow is an mdm crossbow",
+   normaliseForTest("Medium Crossbow"), normaliseForTest("Mdm. Crossbow"));
+
+/* Ammunition is no longer a weapon, so nothing in the weapons pack can be
+   loaded into a bow by mistake. */
+ok("ammunition kinds", Object.keys(CNS5.ammunitionKinds).sort(), ["arrow", "bolt", "stone"]);
+
 console.log(fails ? `\n${fails} FAILURES` : "\nAll checks passed.");
 process.exit(fails ? 1 : 0);

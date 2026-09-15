@@ -1,0 +1,69 @@
+<div class="cns5-grid cns5-grid--four">
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Ammunition.kindLabel"}}</span>
+        <select name="system.kind" {{#unless editable}}disabled{{/unless}}>
+            {{#each ammunitionKinds}}
+            <option value="{{value}}" {{#if selected}}selected{{/if}}>{{localize label}}</option>
+            {{/each}}
+        </select>
+    </label>
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Weapon.baseDamage"}}</span>
+        <input type="number" name="system.baseDamage" value="{{system.baseDamage}}" min="0"
+               {{#unless editable}}disabled{{/unless}}>
+    </label>
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Weapon.critShort"}}</span>
+        <input type="number" name="system.critDieModifier" value="{{system.critDieModifier}}"
+               {{#unless editable}}disabled{{/unless}}>
+    </label>
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Weapon.bash"}}</span>
+        <input type="number" name="system.bash" value="{{system.bash}}" min="0"
+               {{#unless editable}}disabled{{/unless}}>
+    </label>
+</div>
+
+<p class="cns5-hint">{{localize "CNS5.Ammunition.damageHint"}}</p>
+
+<div class="cns5-grid cns5-grid--five">
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Item.quantity"}}</span>
+        <input type="number" name="system.quantity" value="{{system.quantity}}" min="0"
+               {{#unless editable}}disabled{{/unless}}>
+    </label>
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Item.weight"}}</span>
+        <input type="number" name="system.weight" value="{{system.weight}}" min="0" step="0.05"
+               {{#unless editable}}disabled{{/unless}}>
+    </label>
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Item.cost"}}</span>
+        <input type="number" name="system.cost" value="{{system.cost}}" min="0"
+               {{#unless editable}}disabled{{/unless}}>
+    </label>
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Item.bundle"}}</span>
+        <input type="number" name="system.bundle" value="{{system.bundle}}" min="1"
+               {{#unless editable}}disabled{{/unless}}>
+    </label>
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Item.reference"}}</span>
+        <input type="text" name="system.reference" value="{{system.reference}}"
+               {{#unless editable}}disabled{{/unless}}>
+    </label>
+</div>
+
+{{#if system.isBundled}}
+<p class="cns5-hint">
+    {{localize "CNS5.Item.bundleHint"}} {{system.cost}}d {{localize "CNS5.Item.bundleFor"}} {{system.bundle}}.
+</p>
+{{/if}}
+
+<div class="cns5-checks">
+    <label class="cns5-checkbox">
+        <input type="checkbox" name="system.carried" {{checked system.carried}}
+               {{#unless editable}}disabled{{/unless}}>
+        <span>{{localize "CNS5.Item.carried"}}</span>
+    </label>
+</div>

@@ -629,6 +629,14 @@ feet, the same bow shooting armour-piercing arrows does 17 and reaches four
 hundred and fifty. None of those figures is a property of the bow, which is why
 an earlier version treating each row as a weapon could not express any of it.
 
+**Ammunition is its own kind of item**, not a weapon. Treating a quiver of
+arrows as a weapon put it in the weapons list waiting to be rolled as an attack,
+gave it a set of ranges belonging to no particular bow, and let it be confused
+with the bow that shot it. None of that follows from the rules: an arrow is not
+a weapon, it is what a weapon shoots. An arrow carries what Table - Missile
+Weapons gives it — damage, the Crit Die modifier from its head, a bash chance —
+and nothing else. Weapons no longer carry ranges at all.
+
 **Twenty-five profiles** are extracted, each a launcher with a kind of
 ammunition or a thrown weapon with itself. Loosing a launcher asks what it is
 loaded with — from the ammunition actually carried — and at what range, then
@@ -662,12 +670,24 @@ takes -4 from the bracket, +3 from his arm and +2 from the arrow, for +1. The
 chat card shows the workings, since a modifier silently going missing is exactly
 what happened here.
 
+### Names that differ between the tables
+
+The weapon list and the ranges table do not always agree: a Throwing Knife
+against a "Thrown Knife", a Roman Pilum against a "Pilum", War Darts against a
+"Dart", Armour Piercing Arrows against "AP Arrow". A near miss here is silent —
+the weapon finds no row, no range is asked for, and a thrown knife is swung
+instead. Those names are matched explicitly, and a test names each pairing, since
+every one of them failed quietly.
+
 ### What the tables leave open
 
 Hunting Bolts name no crossbow and the others each name their own, so it is not
 said whether a heavy crossbow will take a light bolt. Anything that is a bolt
 loads anything that takes bolts, and the question is left where the rules left
 it.
+
+Hunting Bolts have no row of their own. They are generic civilian bolts usable
+in any crossbow, so a crossbow loaded with them falls back to its own row.
 
 Sling stones are nowhere given as an item. The ranges table prints a profile for
 a sling with no ammunition named, which is taken to be stones.

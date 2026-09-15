@@ -544,6 +544,35 @@ function toCreature(row) {
 /* -------------------------------------------- */
 
 /**
+ * Convert an ammunition row into an ammunition item.
+ *
+ * Arrows are not weapons. What they carry is what Table - Missile Weapons gives
+ * them — damage, a Crit Die modifier from the head, a bash chance — and not
+ * range, which belongs to the bow and the arrow together.
+ *
+ * @param {object} row
+ * @returns {object}
+ */
+function toAmmunition(row) {
+  return document("ammunition", row.name, "icons/svg/explosion.svg", {
+    kind: CNS5.ammunitionKindOf(row.name) || "arrow",
+    baseDamage: row.baseDamage ?? 0,
+    damageType: "missile",
+    critDieModifier: row.critDieModifier ?? 0,
+    bash: row.bash ?? 0,
+    quantity: row.bundle ?? 1,
+    bundle: row.bundle ?? 1,
+    weight: row.weight ?? 0,
+    cost: row.cost ?? 0,
+    location: "",
+    carried: true,
+    equipped: false,
+    reference: `p${row.page}`,
+    description: ""
+  });
+}
+
+/**
  * Convert a talent row into an item document.
  * @param {object} row
  * @returns {object}
@@ -743,7 +772,13 @@ function toQuiver(row) {
     });
 }
 
-await build("weapons", disambiguate(gear.weapons.filter((row) => !isQuiver(row))));
+const weaponRows = gear.weapons.filter((row) => !isQuiver(row));
+
+await build(
+  "weapons",
+  disambiguate(weaponRows.filter((row) => missileRole(row) !== "ammunition"))
+);
+await build("ammunition", weaponRows.filter((row) => missileRole(row) === "ammunition").map(toAmmunition));
 /**
  * Build the armour pack from the pieces, falling back to bare types for the two
  * absorption rows that no piece covers.

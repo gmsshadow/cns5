@@ -44,14 +44,41 @@ export async function missileData() {
  * @returns {string}
  */
 function normalise(name = "") {
-  return name
+  const stripped = name
     .toLowerCase()
     .replace(/\bmdm\b\.?/g, "medium")
     .replace(/\blt\b\.?/g, "light")
     .replace(/\bhvy\b\.?/g, "heavy")
-    .replace(/\bap\b/g, "armour piercing")
+    .replace(/\bap\b/g, "armourpiercing")
     .replace(/[^a-z0-9]/g, "");
+
+  // The two tables name several things differently, and a near miss is silent:
+  // a Throwing Knife found no row called "Thrown Knife", so the attack fell
+  // through to a melee blow with no range asked for at all.
+  for (const [pattern, canonical] of ALIASES) {
+    if (pattern.test(stripped)) return canonical;
+  }
+  return stripped;
 }
+
+/** Names that differ between the weapon list and the ranges table. */
+const ALIASES = [
+  [/^throw(ing|n)knives?$/, "thrownknife"],
+  [/^throw(ing|n)axe/, "thrownaxe"],
+  [/pilum/, "pilum"],
+  [/dart/, "dart"],
+  [/^shepherd/, "shepherdssling"],
+  [/^huntingjavelin/, "huntingjavelin"],
+  [/^warjavelin/, "warjavelin"],
+  [/armourpiercingarrow/, "armourpiercingarrow"],
+  [/^wararrow/, "wararrow"],
+  [/^huntingarrow/, "huntingarrows"],
+  [/^leadbullet/, "leadbullets"],
+  [/^compositebow/, "compositebow"]
+];
+
+/** Exposed so the name matching can be checked without a Foundry to run in. */
+export const normaliseForTest = normalise;
 
 /* -------------------------------------------- */
 
@@ -100,12 +127,11 @@ export function availableAmmunition(actor, launcher) {
   const kind = CNS5.ammunitionKindOf(launcher.name);
   if (!kind) return [];
 
+  // Ammunition is its own kind of item now, so a bow can no longer be loaded
+  // with a sword by accident, and an arrow no longer sits in the weapons list
+  // waiting to be attacked with.
   return actor.items.filter(
-    (i) =>
-      i.type === "weapon" &&
-      i.system.role === "ammunition" &&
-      i.system.quantity > 0 &&
-      CNS5.ammunitionKindOf(i.name) === kind
+    (i) => i.type === "ammunition" && i.system.kind === kind && i.system.quantity > 0
   );
 }
 

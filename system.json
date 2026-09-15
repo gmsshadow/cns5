@@ -2,7 +2,7 @@
   "id": "cns5",
   "title": "Chivalry & Sorcery 5th Edition",
   "description": "An unofficial system implementation of Chivalry & Sorcery 5th Edition for Foundry Virtual Tabletop.",
-  "version": "0.20.1",
+  "version": "0.21.0",
   "compatibility": {
     "minimum": "14",
     "verified": "14.367"
@@ -83,6 +83,11 @@
         ]
       },
       "flaw": {
+        "htmlFields": [
+          "description"
+        ]
+      },
+      "ammunition": {
         "htmlFields": [
           "description"
         ]
@@ -196,6 +201,17 @@
         "PLAYER": "OBSERVER",
         "ASSISTANT": "OWNER"
       }
+    },
+    {
+      "name": "ammunition",
+      "label": "C&S Ammunition",
+      "path": "packs/ammunition",
+      "type": "Item",
+      "system": "cns5",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
     }
   ],
   "packFolders": [
@@ -212,7 +228,8 @@
         "bestiary",
         "talents",
         "flaws",
-        "equipment"
+        "equipment",
+        "ammunition"
       ]
     }
   ]

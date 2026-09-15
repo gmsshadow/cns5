@@ -81,16 +81,7 @@
         <span>{{localize "CNS5.Weapon.isMissile"}}</span>
     </label>
     {{#if system.missile}}
-    <div class="cns5-grid cns5-grid--five">
-        {{#each system.ranges as |value key|}}
-        <label class="cns5-field">
-            <span>{{localize (concat "CNS5.Range." key)}}</span>
-            <input type="number" name="system.ranges.{{key}}" value="{{value}}" min="0"
-                   {{#unless @root.editable}}disabled{{/unless}}>
-        </label>
-        {{/each}}
-    </div>
-    <p class="cns5-hint">{{localize "CNS5.Weapon.rangeHint"}}</p>
+    <p class="cns5-hint">{{localize "CNS5.Weapon.rangesElsewhere"}}</p>
     {{/if}}
 </fieldset>
 

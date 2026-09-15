@@ -14,6 +14,7 @@ import { CnS5SkillSheet } from "./sheets/skill-sheet.mjs";
 import { CnS5ItemSheet } from "./sheets/item-sheet.mjs";
 import { CnS5NPCSheet } from "./sheets/npc-sheet.mjs";
 import { CnS5CreationWizard } from "./apps/creation-wizard.mjs";
+import { CnS5QuickRoll, addQuickRollButton } from "./apps/quick-roll.mjs";
 import { registerHandlebarsHelpers } from "./helpers/handlebars.mjs";
 import { registerDiceColorsets } from "./helpers/dice.mjs";
 
@@ -49,6 +50,15 @@ Hooks.on("renderChatMessageHTML", (message, element) => {
  *
  * This hook never fires without the module, so nothing here needs guarding.
  */
+/**
+ * A button for a free-form roll, beside the macro bar. Foundry replaces the
+ * hotbar element whenever it re-renders, so the button is added each time
+ * rather than once.
+ */
+Hooks.on("renderHotbar", (app, element) => {
+  addQuickRollButton(element instanceof HTMLElement ? element : element?.[0]);
+});
+
 Hooks.once("diceSoNiceReady", (dice3d) => {
   registerDiceColorsets(dice3d);
 });
@@ -57,7 +67,12 @@ Hooks.once("init", () => {
   console.log("CnS5 | Initialising Chivalry & Sorcery 5th Edition");
 
   CONFIG.CNS5 = CNS5;
-  game.cns5 = { CreationWizard: CnS5CreationWizard };
+  // Exposed so a macro or another module can reach them.
+  game.cns5 = {
+    CreationWizard: CnS5CreationWizard,
+    QuickRoll: CnS5QuickRoll,
+    quickRoll: (options) => CnS5QuickRoll.prompt(options)
+  };
   CONFIG.Actor.documentClass = CnS5Actor;
   CONFIG.Item.documentClass = CnS5Item;
   CONFIG.Combat.documentClass = CnS5Combat;
@@ -82,6 +97,19 @@ Hooks.once("init", () => {
   // (p268). Without this Foundry falls back to its own formula, which names
   // fields this system does not have and throws when rolled.
   CONFIG.Combat.initiative = { formula: CNS5.initiativeFormula, decimals: 0 };
+
+  // A key for the free-form roll, for anyone who would rather not reach for
+  // the mouse. Unbound by default: a system claiming a key uninvited is a
+  // nuisance to anyone who had it bound to something else.
+  game.keybindings.register("cns5", "quickRoll", {
+    name: "CNS5.Quick.title",
+    hint: "CNS5.Quick.tooltip",
+    editable: [],
+    onDown: () => {
+      CnS5QuickRoll.prompt();
+      return true;
+    }
+  });
 
   registerSettings();
   registerHandlebarsHelpers();

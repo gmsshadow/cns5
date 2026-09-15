@@ -1315,3 +1315,39 @@
     font-size: 0.85rem;
     color: var(--cns-check-accent);
 }
+
+/* --------------------------------------------------------------------------
+   Free-form roll button
+   -------------------------------------------------------------------------- */
+
+/* Sits beside the macro bar, where a player's hand already is. Sized to match
+   a hotbar slot so it reads as part of the bar rather than as something
+   floating over it. */
+.cns5-quick-roll {
+    flex: 0 0 auto;
+    width: var(--hotbar-height, 52px);
+    height: var(--hotbar-height, 52px);
+    margin-right: 0.25rem;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #6d2723;
+    border: 1px solid #2b1210;
+    border-radius: 4px;
+    color: #f2ede1;
+    font-size: 1.3rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.cns5-quick-roll:hover {
+    background: #8a3630;
+    color: #ffffff;
+    box-shadow: 0 0 6px #6d2723;
+}
+
+.cns5-quick-roll:focus-visible {
+    outline: 2px solid #f2ede1;
+    outline-offset: 1px;
+}

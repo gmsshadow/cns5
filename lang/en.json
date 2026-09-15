@@ -678,5 +678,15 @@
   "CNS5.Dice.crit": "C&S Crit Die",
   "CNS5.Dice.critBonus": "C&S Critical Bonus Die",
   "CNS5.Settings.critDie.name": "Colour the Crit Die differently",
-  "CNS5.Settings.critDie.hint": "The rules suggest using a different coloured die for the Crit Die, which on a virtual table means recolouring it. Requires Dice So Nice; the Percentile Pair keeps whatever appearance you have chosen for it."
+  "CNS5.Settings.critDie.hint": "The rules suggest using a different coloured die for the Crit Die, which on a virtual table means recolouring it. Requires Dice So Nice; the Percentile Pair keeps whatever appearance you have chosen for it.",
+  "CNS5.Quick.title": "Roll against a chance",
+  "CNS5.Quick.tooltip": "Roll a Percentile Pair and Crit Die against a chance you name",
+  "CNS5.Quick.chance": "Chance of success",
+  "CNS5.Quick.label": "What for",
+  "CNS5.Quick.labelPlaceholder": "Hearing the latch lift",
+  "CNS5.Quick.df": "Difficulty Factor",
+  "CNS5.Quick.noDf": "None — roll straight against the chance",
+  "CNS5.Quick.dfHint": "Naming a Factor applies its Min% and Max% band, turning anything outside it into a Crit Die modifier as a skill check would. Leave it out and the chance stands as typed.",
+  "CNS5.Quick.subtitle": "Needing {target}% or under",
+  "CNS5.Quick.subtitleBanded": "DF {df} {difficulty}, needing {target}% or under"
 }

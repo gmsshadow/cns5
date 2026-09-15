@@ -564,6 +564,26 @@ Which reading gives the damage bonus is a world setting, because p281 gives it
 as the Strength attribute halved rather than the rating. The rating is the
 default.
 
+## Rolling against a chance
+
+Everything else in the system rolls against something it can look up. The button
+beside the macro bar is for the rest of a session: a Gamemaster calling for a
+check against a number they have just decided, or a player rolling for something
+the sheet has no entry for. It asks for a chance, rolls a Percentile Pair and a
+Crit Die against it, and reads the result as any other check.
+
+The Difficulty Factor is optional, and that is the point. Name one and the roll
+behaves like a skill check — the chance is clamped to that Factor's band and
+whatever falls outside becomes a Crit Die modifier, settled by the same function
+so the two cannot drift apart. Leave it out and the number typed in is simply
+the number to roll under, which is what someone improvising a check usually
+means.
+
+There is also a keybinding, deliberately unbound: a system claiming a key
+uninvited is a nuisance to anyone who had it bound to something else. Bind it
+under Configure Controls. From a macro it is `game.cns5.quickRoll()`, which
+takes `{ chance, df }` to skip the prompt.
+
 ## Dice
 
 "Use a different coloured dice for the Crit Die" (p36). On a physical table that

@@ -1345,6 +1345,8 @@ CNS5.targetAreaLocations = {
   abdomen: "body",
   groin: "body",
   arm: "limbs",
+  upperArm: "limbs",
+  lowerArm: "limbs",
   hand: "limbs",
   upperLeg: "limbs",
   lowerLeg: "limbs",
@@ -1366,8 +1368,38 @@ CNS5.targetAreaLocations = {
  */
 CNS5.bodyAreas = [
   "head", "eyes", "neck", "chest", "abdomen", "groin",
-  "arm", "hand", "upperLeg", "lowerLeg", "foot"
+  "upperArm", "lowerArm", "hand", "upperLeg", "lowerLeg", "foot"
 ];
+
+/**
+ * Areas the aimed shot table names as a whole where armour is fitted in two
+ * parts, and the die that settles which part a blow found.
+ *
+ * The table already asks for an upper or a lower leg by name but treats an arm
+ * as one thing, while a vambrace and a rerebrace are two pieces. Where both
+ * halves are protected alike the roll changes nothing, which is most of the
+ * time; where they are not, it decides.
+ *
+ * The rulebook uses a d10 to settle this sort of question elsewhere — a leg hit
+ * against a hauberk is decided that way (p263) — but gives no split for the arm,
+ * so an even one is used.
+ */
+CNS5.areaSubdivisions = {
+  arm: { die: "1d10", parts: [{ area: "upperArm", max: 5 }, { area: "lowerArm", max: 10 }] }
+};
+
+/**
+ * Settle which part of a divided area a blow found.
+ *
+ * @param {string} area
+ * @param {number} roll
+ * @returns {string} the area struck
+ */
+CNS5.subdivideArea = function (area, roll) {
+  const split = CNS5.areaSubdivisions[area];
+  if (!split) return area;
+  return split.parts.find((p) => roll <= p.max)?.area ?? split.parts.at(-1).area;
+};
 
 /**
  * What each class of armour protects.
@@ -1396,26 +1428,34 @@ CNS5.armourClasses = {
   coif: { label: "CNS5.ArmourClass.coif", covers: ["head", "neck"] },
   enclosedHelm: { label: "CNS5.ArmourClass.enclosedHelm", covers: ["head", "eyes"] },
   visoredHelm: { label: "CNS5.ArmourClass.visoredHelm", covers: ["head", "eyes", "neck"] },
-  lightBody: { label: "CNS5.ArmourClass.lightBody", covers: ["chest", "abdomen", "arm"] },
+  lightBody: {
+    label: "CNS5.ArmourClass.lightBody",
+    covers: ["chest", "abdomen", "upperArm", "lowerArm"]
+  },
   heavyBody: {
     label: "CNS5.ArmourClass.heavyBody",
-    covers: ["chest", "abdomen", "groin", "arm"]
+    covers: ["chest", "abdomen", "groin", "upperArm", "lowerArm"]
   },
   threeQuarter: {
     label: "CNS5.ArmourClass.threeQuarter",
-    covers: ["chest", "abdomen", "groin", "arm", "hand", "upperLeg", "lowerLeg"],
+    covers: [
+      "chest", "abdomen", "groin", "upperArm", "lowerArm", "hand", "upperLeg", "lowerLeg"
+    ],
     // A leg hit falls on the armour seven times in ten.
     partial: { upperLeg: 70, lowerLeg: 70 }
   },
   heavyBattle: {
     label: "CNS5.ArmourClass.heavyBattle",
-    covers: ["chest", "abdomen", "groin", "arm", "hand", "upperLeg", "lowerLeg", "foot"]
+    covers: [
+      "chest", "abdomen", "groin", "upperArm", "lowerArm",
+      "hand", "upperLeg", "lowerLeg", "foot"
+    ]
   },
   superHeavy: {
     label: "CNS5.ArmourClass.superHeavy",
     covers: [
       "neck", "chest", "abdomen", "groin",
-      "arm", "hand", "upperLeg", "lowerLeg", "foot"
+      "upperArm", "lowerArm", "hand", "upperLeg", "lowerLeg", "foot"
     ]
   }
 };
@@ -1439,7 +1479,7 @@ CNS5.coverageOf = function (armour, area) {
  */
 CNS5.protectionOrder = [
   "head", "eyes", "neck", "chest", "abdomen", "groin",
-  "arm", "hand", "upperLeg", "lowerLeg", "foot"
+  "upperArm", "lowerArm", "hand", "upperLeg", "lowerLeg", "foot"
 ];
 
 /**

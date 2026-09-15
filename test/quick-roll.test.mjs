@@ -19,10 +19,13 @@ const ok = (label, got, want) => {
   console.log(`${pass ? "PASS" : "FAIL"}  ${label}: got ${JSON.stringify(got)}, want ${JSON.stringify(want)}`);
 };
 
-/** What the roll does with a chance and an optional Difficulty Factor. */
-const resolve = (chance, df) => {
+/** What the roll does with a chance, an optional Factor and a hand modifier. */
+const resolve = (chance, df, critMod = 0) => {
   const banded = df ? clampSuccessChance(chance, df) : null;
-  return { target: banded ? banded.target : chance, critMod: banded?.critMod ?? 0 };
+  return {
+    target: banded ? banded.target : chance,
+    critMod: (banded?.critMod ?? 0) + critMod
+  };
 };
 
 /* -- Without a Difficulty Factor -------------------------------------------- */
@@ -66,6 +69,20 @@ ok("nought becomes one", bound(0), 1);
 ok("a negative becomes one", bound(-20), 1);
 ok("beyond a hundred becomes a hundred", bound(150), 100);
 ok("a fraction rounds", bound(49.6), 50);
+
+/* -- A modifier given by hand ----------------------------------------------- */
+
+/* Plenty of things move the Crit Die without touching the chance, and a
+   free-form roll cannot know which, so it asks. */
+ok("a modifier on its own", resolve(50, null, 2).critMod, 2);
+ok("and a penalty", resolve(50, null, -3).critMod, -3);
+ok("none by default", resolve(50, null).critMod, 0);
+ok("it does not touch the chance", resolve(50, null, 4).target, 50);
+
+/* It stacks with whatever the band produced rather than replacing it. */
+ok("a band's surplus and a hand modifier add", resolve(120, 4, 1).critMod, 3);
+ok("as do a shortfall and a bonus", resolve(1, 4, 2).critMod, 1);
+ok("and they can cancel", resolve(120, 4, -2).critMod, 0);
 
 console.log(fails ? `\n${fails} FAILURES` : "\nAll checks passed.");
 process.exit(fails ? 1 : 0);

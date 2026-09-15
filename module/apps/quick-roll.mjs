@@ -24,8 +24,8 @@ export class CnS5QuickRoll {
    * @param {number|null} [options.df]  the Difficulty Factor band, if any
    * @returns {Promise<ChatMessage|null>}
    */
-  static async prompt({ chance = null, df = null } = {}) {
-    const answer = chance === null ? await CnS5QuickRoll.#ask() : { chance, df };
+  static async prompt({ chance = null, df = null, critMod = 0 } = {}) {
+    const answer = chance === null ? await CnS5QuickRoll.#ask() : { chance, df, critMod };
     if (answer === null) return null;
 
     return CnS5QuickRoll.roll(answer);
@@ -51,6 +51,10 @@ export class CnS5QuickRoll {
         <input id="cns5-quick-chance" type="number" name="chance" value="50"
                min="1" max="100" step="1" autofocus>
 
+        <label for="cns5-quick-crit">${game.i18n.localize("CNS5.Quick.critMod")}</label>
+        <input id="cns5-quick-crit" type="number" name="critMod" value="0" step="1">
+        <p class="hint">${game.i18n.localize("CNS5.Quick.critModHint")}</p>
+
         <label for="cns5-quick-label">${game.i18n.localize("CNS5.Quick.label")}</label>
         <input id="cns5-quick-label" type="text" name="label"
                placeholder="${game.i18n.localize("CNS5.Quick.labelPlaceholder")}">
@@ -71,9 +75,11 @@ export class CnS5QuickRoll {
         callback: (event, button) => {
           const form = button.form.elements;
           const value = Number(form.chance.value);
+          const crit = Number(form.critMod.value);
           return {
             chance: Number.isFinite(value) ? Math.clamp(Math.round(value), 1, 100) : 50,
             df: form.df.value ? Number(form.df.value) : null,
+            critMod: Number.isFinite(crit) ? Math.round(crit) : 0,
             label: form.label.value?.trim() ?? ""
           };
         }
@@ -90,14 +96,21 @@ export class CnS5QuickRoll {
    * @param {object} options
    * @returns {Promise<ChatMessage>}
    */
-  static async roll({ chance, df = null, label = "" }) {
+  static async roll({ chance, df = null, critMod = 0, label = "" }) {
     // With a Difficulty Factor the chance is clamped to its band and the
     // surplus becomes a Crit Die modifier, exactly as a skill check does.
     // Without one, the number given is the number to roll under.
     const banded = df ? clampSuccessChance(chance, df) : null;
     const target = banded ? banded.target : chance;
 
-    const result = await resolveCheck({ target, critMod: banded?.critMod ?? 0 });
+    // A modifier given by hand stacks with whatever the band produced. Plenty
+    // of things in the rules move the Crit Die without touching the chance —
+    // a weapon, a range, a spell — and a free-form roll has no way of knowing
+    // which, so it simply asks.
+    const result = await resolveCheck({
+      target,
+      critMod: (banded?.critMod ?? 0) + critMod
+    });
 
     // Whoever is speaking, if anyone: the selected token, else the user's own
     // character. A roll made by a Gamemaster with nothing selected simply has
@@ -118,10 +131,13 @@ export class CnS5QuickRoll {
       overflow: banded?.overflow ?? 0,
       shortfall: banded?.shortfall ?? 0,
       breakdown: [
-        {
-          label: game.i18n.localize("CNS5.Quick.chance"),
-          value: `${chance}`
-        }
+        { label: game.i18n.localize("CNS5.Quick.chance"), value: `${chance}` },
+        ...(critMod
+          ? [{
+              label: game.i18n.localize("CNS5.Quick.critMod"),
+              value: `${critMod > 0 ? "+" : ""}${critMod}`
+            }]
+          : [])
       ]
     });
   }

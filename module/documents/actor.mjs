@@ -35,6 +35,37 @@ export class CnS5Actor extends Actor {
   /* -------------------------------------------- */
 
   /**
+   * Set a new actor's token up sensibly.
+   *
+   * Body and Fatigue are what a token wants to show, so they are chosen here
+   * rather than through the system manifest's legacy keys. Those set the bars
+   * invisibly: the token configuration showed nothing chosen while the bars
+   * filled anyway, which is impossible to correct because there is nothing on
+   * screen to correct.
+   *
+   * @inheritDoc
+   */
+  async _preCreate(data, options, user) {
+    const allowed = await super._preCreate(data, options, user);
+    if (allowed === false) return false;
+
+    // Only where the creator has expressed no preference of their own.
+    if (data.prototypeToken?.bar1 || data.prototypeToken?.bar2) return;
+
+    this.updateSource({
+      prototypeToken: {
+        bar1: { attribute: "body" },
+        bar2: { attribute: "fatigue" },
+        displayName: CONST.TOKEN_DISPLAY_MODES.OWNER_HOVER,
+        displayBars: CONST.TOKEN_DISPLAY_MODES.OWNER_HOVER,
+        actorLink: this.type === "character"
+      }
+    });
+  }
+
+  /* -------------------------------------------- */
+
+  /**
    * Data available to roll formulae, including initiative.
    * @inheritDoc
    */
@@ -343,7 +374,16 @@ export class CnS5Actor extends Actor {
     // the armour over that part which stops it — and whether a given piece
     // reaches that far is a question in its own right, since a hauberk covers
     // the knee only seven times in ten.
-    const struck = area === "none" ? "chest" : area;
+    // The aimed shot table treats an arm as one thing while armour is fitted to
+    // it in two pieces, so where the named area is divided a die settles which
+    // part the blow found.
+    let struck = area === "none" ? "chest" : area;
+    let subdivisionRoll = null;
+    if (CNS5.areaSubdivisions[struck]) {
+      subdivisionRoll = await new Roll(CNS5.areaSubdivisions[struck].die).evaluate();
+      struck = CNS5.subdivideArea(struck, subdivisionRoll.total);
+    }
+
     const worn = target
       ? await armourAt(target, struck, weapon.system.damageType)
       : { absorption: 0, pieces: [], missed: [] };
@@ -417,6 +457,7 @@ export class CnS5Actor extends Actor {
         : null,
       hitLocation: struck,
       hitLocationLabel: game.i18n.localize(`CNS5.TargetArea.${struck}`),
+      subdivisionRoll: subdivisionRoll?.total ?? null,
       armourPieces: worn.pieces.map((p) => p.name),
       // A piece that covers the part only partly and did not meet the blow is
       // worth naming: it explains an absorption lower than the sheet suggests.

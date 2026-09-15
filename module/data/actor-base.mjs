@@ -51,13 +51,21 @@ export class CnS5ActorBase extends foundry.abstract.TypeDataModel {
       )
     );
 
+    // `max` is declared even though it is worked out afresh every time the
+    // actor is prepared. Foundry decides which attributes can be a token bar by
+    // walking the *schema* for a value-and-maximum pair, not by looking at the
+    // prepared data — so a maximum that only ever appears after preparation
+    // makes the attribute a bare value, and the bar shows a numerator with no
+    // denominator behind it.
     schema.body = new fields.SchemaField({
       value: new fields.NumberField({ required: true, integer: true, initial: 10 }),
+      max: new fields.NumberField({ required: true, integer: true, initial: 10 }),
       bonus: new fields.NumberField({ required: true, integer: true, initial: 0 })
     });
 
     schema.fatigue = new fields.SchemaField({
       value: new fields.NumberField({ required: true, integer: true, initial: 10 }),
+      max: new fields.NumberField({ required: true, integer: true, initial: 10 }),
       bonus: new fields.NumberField({ required: true, integer: true, initial: 0 })
     });
 

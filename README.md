@@ -579,10 +579,30 @@ so the two cannot drift apart. Leave it out and the number typed in is simply
 the number to roll under, which is what someone improvising a check usually
 means.
 
+It also asks for a Crit Die modifier. Plenty of things move that die without
+touching the chance — a weapon, a range, a spell — and a free-form roll cannot
+know which, so it asks rather than guessing. Anything produced by naming a
+Difficulty Factor is added to it.
+
 There is also a keybinding, deliberately unbound: a system claiming a key
 uninvited is a nuisance to anyone who had it bound to something else. Bind it
 under Configure Controls. From a macro it is `game.cns5.quickRoll()`, which
 takes `{ chance, df }` to skip the prompt.
+
+## Tokens
+
+Body and Fatigue are declared with a maximum in the schema even though the
+maximum is worked out afresh on every preparation. Foundry decides which
+attributes can be a token bar by walking the *schema* for a value-and-maximum
+pair, not by looking at the prepared data, so a maximum that appears only after
+preparation makes the attribute a bare value — and the bar fills its numerator
+with nothing behind it.
+
+The bars are set on the prototype token when an actor is created rather than
+through the manifest's `primaryTokenAttribute`. Those keys set a token's bars
+invisibly: the token configuration showed nothing chosen while the bars filled
+anyway, which cannot be corrected because there is nothing on screen to correct.
+A creator who has already chosen their own bars is left alone.
 
 ## Dice
 
@@ -675,6 +695,15 @@ occurs, roll a 1D10 with 01-07 falling on the armour rather than the unprotected
 part of the leg". So a partly covered part carries a chance, the die is rolled
 on the blow, and the piece either meets it or does not. The chat card names what
 absorbed and what fell below the hem.
+
+Arms are recorded in halves. The aimed shot table treats an arm as one thing
+while armour is fitted to it in two pieces, so where a blow is aimed at "the
+arm" a d10 settles which half it found — the rulebook uses a d10 for this sort
+of question elsewhere, though it gives no split for the arm, so an even one is
+used. Legs are already named in halves by the table itself. Armour that covers
+"the arms" or "the legs" covers both halves of them: the tables name no piece
+that covers a forearm alone, and a test asserts that no class ever covers half a
+limb.
 
 **Two things are read into the rules here.** Hands are covered from the hauberk
 upward, on the reasoning that armour enclosing a whole arm encloses what is on

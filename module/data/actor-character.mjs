@@ -54,8 +54,11 @@ export class CnS5Character extends CnS5ActorBase {
 
     // Spirit is tracked separately from the SPR attribute: the attribute is the
     // ceiling a character was created with, this is the current standing (p103).
+    // As with Body and Fatigue, the maximum is declared so that Foundry can see
+    // a bar here rather than a bare number.
     schema.spirit = new fields.SchemaField({
-      value: new fields.NumberField({ required: true, integer: true, initial: 0 })
+      value: new fields.NumberField({ required: true, integer: true, initial: 0 }),
+      max: new fields.NumberField({ required: true, integer: true, initial: 0 })
     });
 
     // Magick and Faith are entered by hand for now. Phase 4 derives PMF from the

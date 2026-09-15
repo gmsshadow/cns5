@@ -141,7 +141,10 @@ ok(
 const covers = (cls, area) => CNS5.armourClasses[cls].covers.includes(area);
 
 ok("a doublet covers the chest", covers("lightBody", "chest"), true);
-ok("and the arms", covers("lightBody", "arm"), true);
+/* Armour fitted to "the arms" covers both halves of them: a rerebrace and a
+   vambrace are two pieces, but the tables name neither. */
+ok("and the upper arm", covers("lightBody", "upperArm"), true);
+ok("and the lower", covers("lightBody", "lowerArm"), true);
 ok("but not the groin", covers("lightBody", "groin"), false);
 ok("nor the legs", covers("lightBody", "upperLeg"), false);
 
@@ -149,6 +152,8 @@ ok("a cuirass adds the groin", covers("heavyBody", "groin"), true);
 ok("but still not the legs", covers("heavyBody", "upperLeg"), false);
 
 ok("a hauberk reaches the legs", covers("threeQuarter", "upperLeg"), true);
+ok("and both halves of the arm", 
+   [covers("threeQuarter", "upperArm"), covers("threeQuarter", "lowerArm")], [true, true]);
 ok("and the hands", covers("threeQuarter", "hand"), true);
 ok("but not the feet", covers("threeQuarter", "foot"), false);
 
@@ -190,10 +195,14 @@ ok(
   []
 );
 
-/* The areas are the ones the aimed shot table names, so the two agree. */
+/* Every area the aimed shot table names is either a part of the body or a
+   division that resolves into one. "Arm" is the second sort: the table names it
+   as one thing, and a die settles which half a blow found. */
 ok(
-  "every target area is a body area",
-  Object.keys(CNS5.aimedShotModifiers).filter((a) => a !== "none" && !CNS5.bodyAreas.includes(a)),
+  "every target area resolves to a part of the body",
+  Object.keys(CNS5.aimedShotModifiers).filter(
+    (a) => a !== "none" && !CNS5.bodyAreas.includes(a) && !CNS5.areaSubdivisions[a]
+  ),
   []
 );
 
@@ -226,7 +235,8 @@ const helm18 = { slash: 18, crush: 16, pierce: 16, missile: 16, energy: 16 };
 const knight = CNS5.summariseProtection(wearing(["heavyBody", maille16], ["helmet", helm18]));
 ok("a cuirass and a helm make two rows", knight.length, 2);
 ok("the helm first", knight[0].areas, ["head"]);
-ok("then everything the cuirass covers", knight[1].areas, ["chest", "abdomen", "groin", "arm"]);
+ok("then everything the cuirass covers", knight[1].areas,
+   ["chest", "abdomen", "groin", "upperArm", "lowerArm"]);
 ok("at the cuirass's value", knight[1].values.slash, 16);
 
 /* What the armour does not cover gets no row. A fixed "arms and hands" row
@@ -244,7 +254,7 @@ ok("an unarmoured character has no rows", CNS5.summariseProtection(wearing()).le
 const plate = CNS5.summariseProtection(wearing(["heavyBattle", maille16]));
 ok("full battle armour is one row", plate.length, 1);
 ok("covering everything below the neck", plate[0].areas, [
-  "chest", "abdomen", "groin", "arm", "hand", "upperLeg", "lowerLeg", "foot"
+  "chest", "abdomen", "groin", "upperArm", "lowerArm", "hand", "upperLeg", "lowerLeg", "foot"
 ]);
 
 /* Where two pieces overlap, the values add — that is what layering means. */
@@ -265,6 +275,44 @@ ok(
   []
 );
 ok("and all of them are listed", CNS5.bodyAreas.filter((a) => !CNS5.protectionOrder.includes(a)), []);
+
+/* -- Dividing an area (p263's die, applied to the arm) ---------------------- */
+
+/* The aimed shot table treats an arm as one thing while armour is fitted to it
+   in two pieces, so a die settles which part a blow found. Where both halves
+   are protected alike — which is every class in the tables — the roll changes
+   nothing; where a Gamemaster fits a vambrace alone, it decides. */
+ok("only the arm is divided", Object.keys(CNS5.areaSubdivisions), ["arm"]);
+ok("on a d10", CNS5.areaSubdivisions.arm.die, "1d10");
+ok("evenly", CNS5.areaSubdivisions.arm.parts.map((p) => p.max), [5, 10]);
+
+ok("a one finds the upper arm", CNS5.subdivideArea("arm", 1), "upperArm");
+ok("a five still does", CNS5.subdivideArea("arm", 5), "upperArm");
+ok("a six finds the lower", CNS5.subdivideArea("arm", 6), "lowerArm");
+ok("and a ten does", CNS5.subdivideArea("arm", 10), "lowerArm");
+ok("an undivided area is left alone", CNS5.subdivideArea("chest", 3), "chest");
+ok("as is a leg, which the table already names in halves",
+   CNS5.subdivideArea("upperLeg", 3), "upperLeg");
+
+/* Every part a division names must be a real area, or a blow lands nowhere. */
+ok(
+  "every part of a division is a real area",
+  Object.values(CNS5.areaSubdivisions)
+    .flatMap((s) => s.parts.map((p) => p.area))
+    .filter((a) => !CNS5.bodyAreas.includes(a)),
+  []
+);
+
+/* Every class that covers one half of a limb covers the other: the tables name
+   no piece that covers a forearm alone. */
+const halves = [["upperArm", "lowerArm"], ["upperLeg", "lowerLeg"]];
+const lopsided = [];
+for (const [a, b] of halves) {
+  for (const [name, cls] of Object.entries(CNS5.armourClasses)) {
+    if (cls.covers.includes(a) !== cls.covers.includes(b)) lopsided.push(`${name}: ${a}/${b}`);
+  }
+}
+ok("no class covers half a limb", lopsided, []);
 
 console.log(fails ? `\n${fails} FAILURES` : "\nAll checks passed.");
 process.exit(fails ? 1 : 0);

@@ -724,5 +724,9 @@
   "CNS5.Roll.critFromRange": "The range",
   "CNS5.Roll.critFromStrength": "Strength",
   "CNS5.Roll.critFromBand": "Above or below the band",
-  "CNS5.Roll.critTotal": "Crit Die total"
+  "CNS5.Roll.critTotal": "Crit Die total",
+  "CNS5.Quick.critMod": "Crit Die modifier",
+  "CNS5.Quick.critModHint": "Plenty of things move the Crit Die without touching the chance — a weapon, a range, a spell. A free-form roll cannot know which, so it asks. Anything from naming a Difficulty Factor is added to this.",
+  "CNS5.TargetArea.upperArm": "Upper arm",
+  "CNS5.TargetArea.lowerArm": "Lower arm"
 }

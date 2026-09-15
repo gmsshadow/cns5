@@ -289,7 +289,7 @@
         {{#each protectionRows as |row|}}
         <tr class="cns5-total-row">
             <th scope="row" {{#if row.tooltip}}data-tooltip="{{localize row.tooltip}}"{{/if}}>
-                {{localize row.label}}
+                {{#each row.label}}{{localize this}}{{#unless @last}}, {{/unless}}{{/each}}
             </th>
             <td>{{row.values.slash}}</td>
             <td>{{row.values.crush}}</td>

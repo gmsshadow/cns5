@@ -1432,3 +1432,52 @@ CNS5.coverageOf = function (armour, area) {
   if (!covers.includes(area)) return 0;
   return armour.coverage?.[area] ?? 100;
 };
+
+/**
+ * The order parts of the body are listed in on a sheet: head downwards, as an
+ * illustration of a harness would show them.
+ */
+CNS5.protectionOrder = [
+  "head", "eyes", "neck", "chest", "abdomen", "groin",
+  "arm", "hand", "upperLeg", "lowerLeg", "foot"
+];
+
+/**
+ * Summarise what is worn, for a sheet.
+ *
+ * Armour is fitted over parts of a body, not over "the torso" — the coverage
+ * rules speak of the chest, the abdomen and the groin separately, and there is
+ * no such area as a torso for a cuirass to cover. Listing all eleven parts
+ * against five damage types would be a wall of numbers, so parts that are
+ * protected identically are gathered into one row.
+ *
+ * Gathering by what they are worth rather than by where they are is the point.
+ * A fixed grouping of "arms and hands" would report a cuirass's sixteen against
+ * a bare hand, because a cuirass covers the arm and not what is on the end of
+ * it. Rows built from the figures cannot say that.
+ *
+ * @param {object} byArea  protection per body area
+ * @returns {Array<object>} rows, each naming the parts it speaks for
+ */
+CNS5.summariseProtection = function (byArea) {
+  const types = Object.keys(CNS5.damageTypes);
+  const rows = [];
+
+  for (const area of CNS5.protectionOrder) {
+    const values = byArea[area] ?? {};
+    const signature = types.map((t) => values[t] ?? 0).join("/");
+    const previous = rows.at(-1);
+
+    // A run of parts worth the same is one row; a change starts another.
+    if (previous && previous.signature === signature) previous.areas.push(area);
+    else rows.push({ signature, areas: [area], values });
+  }
+
+  return rows
+    .filter((row) => types.some((t) => (row.values[t] ?? 0) > 0))
+    .map((row) => ({
+      ...row,
+      key: row.areas.join("-"),
+      label: row.areas.map((a) => `CNS5.TargetArea.${a}`)
+    }));
+};

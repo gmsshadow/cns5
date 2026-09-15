@@ -204,5 +204,67 @@ ok("a partly covered one is not", CNS5.coverageOf(hauberk, "upperLeg"), 70);
 ok("an uncovered one is nothing", CNS5.coverageOf(hauberk, "head"), 0);
 ok("and a shield covers nothing worn", CNS5.coverageOf({ covers: [] }, "chest"), 0);
 
+/* -- Summarising what is worn ----------------------------------------------- */
+
+/* Armour is fitted over parts of a body, not over "the torso" — there is no
+   such area for a cuirass to cover, and a sheet that asked for one found
+   nothing. Parts worth the same share a row instead. */
+const zero = () => Object.fromEntries(Object.keys(CNS5.damageTypes).map((k) => [k, 0]));
+function wearing(...pieces) {
+  const byArea = Object.fromEntries(CNS5.bodyAreas.map((a) => [a, zero()]));
+  for (const [cls, absorption] of pieces) {
+    for (const area of CNS5.armourClasses[cls].covers) {
+      for (const type of Object.keys(absorption)) byArea[area][type] += absorption[type];
+    }
+  }
+  return byArea;
+}
+
+const maille16 = { slash: 16, crush: 16, pierce: 16, missile: 16, energy: 16 };
+const helm18 = { slash: 18, crush: 16, pierce: 16, missile: 16, energy: 16 };
+
+const knight = CNS5.summariseProtection(wearing(["heavyBody", maille16], ["helmet", helm18]));
+ok("a cuirass and a helm make two rows", knight.length, 2);
+ok("the helm first", knight[0].areas, ["head"]);
+ok("then everything the cuirass covers", knight[1].areas, ["chest", "abdomen", "groin", "arm"]);
+ok("at the cuirass's value", knight[1].values.slash, 16);
+
+/* What the armour does not cover gets no row. A fixed "arms and hands" row
+   would have claimed sixteen for a bare hand, because a cuirass covers the arm
+   and not what is on the end of it. */
+const named = new Set(knight.flatMap((r) => r.areas));
+ok("bare hands are not listed", named.has("hand"), false);
+ok("nor bare legs", named.has("upperLeg"), false);
+ok("nor a bare throat", named.has("neck"), false);
+
+/* Nothing worn at all makes no rows, rather than a row of noughts. */
+ok("an unarmoured character has no rows", CNS5.summariseProtection(wearing()).length, 0);
+
+/* A suit covering everything below the neck makes one row of it. */
+const plate = CNS5.summariseProtection(wearing(["heavyBattle", maille16]));
+ok("full battle armour is one row", plate.length, 1);
+ok("covering everything below the neck", plate[0].areas, [
+  "chest", "abdomen", "groin", "arm", "hand", "upperLeg", "lowerLeg", "foot"
+]);
+
+/* Where two pieces overlap, the values add — that is what layering means. */
+const layered = CNS5.summariseProtection(
+  wearing(["lightBody", { slash: 4, crush: 5, pierce: 3, missile: 4, energy: 4 }],
+          ["heavyBody", maille16])
+);
+const chest = layered.find((r) => r.areas.includes("chest"));
+const groin = layered.find((r) => r.areas.includes("groin"));
+ok("a doublet under a cuirass adds to the chest", chest.values.slash, 20);
+ok("but the groin has only the cuirass", groin.values.slash, 16);
+ok("so they are told apart", chest.areas.includes("groin"), false);
+
+/* Every area listed must be one the coverage rules know. */
+ok(
+  "every part summarised is a real one",
+  CNS5.protectionOrder.filter((a) => !CNS5.bodyAreas.includes(a)),
+  []
+);
+ok("and all of them are listed", CNS5.bodyAreas.filter((a) => !CNS5.protectionOrder.includes(a)), []);
+
 console.log(fails ? `\n${fails} FAILURES` : "\nAll checks passed.");
 process.exit(fails ? 1 : 0);

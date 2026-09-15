@@ -142,14 +142,20 @@ export class CnS5CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2)
 
     // Protection is shown by location rather than as one total: an unaimed
     // blow strikes the torso, and a helm has no part in stopping it.
+    // Parts protected identically share a row, and a part protected by nothing
+    // gets none. A shield is listed apart, being interposed rather than worn.
+    const shield = system.shieldProtection;
     context.protectionRows = [
-      { key: "body", label: "CNS5.Armour.worn", tooltip: "CNS5.Armour.wornHint" },
-      { key: "head", label: "CNS5.ArmourLocation.head" },
-      { key: "limbs", label: "CNS5.ArmourLocation.limbs" },
-      { key: "shield", label: "CNS5.Armour.shields", tooltip: "CNS5.Armour.shieldHint" }
-    ]
-      .map((row) => ({ ...row, values: system.protectionByLocation[row.key] }))
-      .filter((row) => row.key === "body" || Object.values(row.values).some((v) => v > 0));
+      ...system.protectionSummary,
+      ...(Object.values(shield).some((v) => v > 0)
+        ? [{
+            key: "shield",
+            label: ["CNS5.Armour.shields"],
+            tooltip: "CNS5.Armour.shieldHint",
+            values: shield
+          }]
+        : [])
+    ];
 
     context.rangeKeys = Object.keys(CNS5.spellRanges);
     context.spentMR = context.spells.reduce((total, s) => total + s.system.mr, 0);

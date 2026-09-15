@@ -77,14 +77,20 @@ export class CnS5NPCSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     context.armour = this.actor.items.filter((i) => i.type === "armour").sort(byName);
     context.skills = this.actor.items.filter((i) => i.type === "skill").sort(byName);
 
+    // Parts protected identically share a row, and a part protected by nothing
+    // gets none. A shield is listed apart, being interposed rather than worn.
+    const shield = system.shieldProtection;
     context.protectionRows = [
-      { key: "body", label: "CNS5.Armour.worn", tooltip: "CNS5.Armour.wornHint" },
-      { key: "head", label: "CNS5.ArmourLocation.head" },
-      { key: "limbs", label: "CNS5.ArmourLocation.limbs" },
-      { key: "shield", label: "CNS5.Armour.shields", tooltip: "CNS5.Armour.shieldHint" }
-    ]
-      .map((row) => ({ ...row, values: system.protectionByLocation[row.key] }))
-      .filter((row) => row.key === "body" || Object.values(row.values).some((v) => v > 0));
+      ...system.protectionSummary,
+      ...(Object.values(shield).some((v) => v > 0)
+        ? [{
+            key: "shield",
+            label: ["CNS5.Armour.shields"],
+            tooltip: "CNS5.Armour.shieldHint",
+            values: shield
+          }]
+        : [])
+    ];
 
     context.biographyHTML = await foundry.applications.ux.TextEditor.implementation.enrichHTML(
       system.biography,

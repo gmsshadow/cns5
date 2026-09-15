@@ -129,9 +129,7 @@ export class CnS5ActorBase extends foundry.abstract.TypeDataModel {
     );
 
     const zero = () => Object.fromEntries(Object.keys(CNS5.damageTypes).map((k) => [k, 0]));
-    this.protectionByLocation = Object.fromEntries(
-      Object.keys(CNS5.armourLocations).map((location) => [location, zero()])
-    );
+    this.shieldProtection = zero();
     this.armourWeight = "none";
     this.dodgePenalty = 0;
     this.fatigueToWear = 0;
@@ -165,9 +163,10 @@ export class CnS5ActorBase extends foundry.abstract.TypeDataModel {
       item.system.prepareForActor(this);
       if (!item.system.equipped) continue;
 
-      const where = this.protectionByLocation[item.system.location] ?? this.protectionByLocation.body;
-      for (const key of Object.keys(CNS5.damageTypes)) {
-        where[key] += item.system.absorption[key];
+      if (item.system.location === "shield") {
+        for (const key of Object.keys(CNS5.damageTypes)) {
+          this.shieldProtection[key] += item.system.absorption[key];
+        }
       }
 
       if (item.system.location === "shield") continue;
@@ -179,14 +178,10 @@ export class CnS5ActorBase extends foundry.abstract.TypeDataModel {
       }
     }
 
-    // The torso is where an unaimed blow lands, so that is what `protection`
-    // means unless a location is named.
-    this.protection = this.protectionByLocation.body;
-    this.shieldProtection = this.protectionByLocation.shield;
-
-    // What is worn over each part of the body, which is a finer question than
-    // which of four places a piece hangs on. A cuirass and a hauberk both hang
-    // on the body; only one of them reaches the knee.
+    // What is worn over each part of the body. This is the only record of
+    // protection there is: keeping a second, cruder one keyed to where a piece
+    // hangs meant two figures that could disagree, and the sheet read the one
+    // the damage rules did not.
     this.protectionByArea = Object.fromEntries(
       CNS5.bodyAreas.map((area) => [area, zero()])
     );
@@ -208,6 +203,13 @@ export class CnS5ActorBase extends foundry.abstract.TypeDataModel {
         }
       }
     }
+
+    // An unaimed blow strikes the chest, so that is what `protection` means
+    // where no part is named.
+    this.protection = this.protectionByArea.chest;
+
+    // Gathered for the sheet: parts protected identically share a row.
+    this.protectionSummary = CNS5.summariseProtection(this.protectionByArea);
 
     this.dodgePenalty = CNS5.dodgePenalty[this.armourWeight] ?? 0;
     this.thiefPenalty = CNS5.armourWeights[this.armourWeight]?.thiefPenalty ?? 0;

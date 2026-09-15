@@ -635,10 +635,20 @@ Gamemaster who reads it differently can say so.
 **An unaimed blow strikes the torso.** Hit locations are an optional rule
 attached to critical hits (p282), and the location table gives the chest forty
 results in a hundred on its own, so an ordinary attack is a blow at the body and
-it is the body's armour that stops it. Protection is therefore totalled per
-location rather than in one heap — an earlier version added every worn piece
-together, which armoured a knight's chest with his helmet. Where an aimed shot
-names a part, the armour over that part is what absorbs the blow.
+it is the body's armour that stops it. Where an aimed shot names a part, the armour over that
+part is what absorbs the blow.
+
+Protection is recorded per part of the body and nowhere else. An earlier version
+kept a second, cruder record keyed to where a piece hangs — body, head, limbs —
+and the sheet read that one while the damage rules read the other, so the two
+could disagree and the sheet could ask for a "torso" that no cuirass covers.
+
+On a sheet, parts protected identically share a row. Gathering them by what they
+are worth rather than by where they are is deliberate: a fixed "arms and hands"
+row would report a cuirass's sixteen against a bare hand, because a cuirass
+covers the arm and not what is on the end of it. A knight in a maille cuirass
+and a conical helm reads as two rows — his head, and his chest, abdomen, groin
+and arms — and his bare hands and legs get no row at all.
 
 A landed blow is the weapon's damage, the Strength bonus, the Attacker's Bonus
 and the Crit Die. Armour covering that damage type absorbs what it can, and what

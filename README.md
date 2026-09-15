@@ -653,6 +653,19 @@ extreme and maximum range, where the shot is a matter of how hard it was loosed
 rather than how carefully aimed. A crossbow is indifferent to all of it, the
 windlass having done the work.
 
+### Which way a Crit Die modifier goes
+
+A modifier is applied in the character's favour either way: it *increases* the
+Crit Die of a successful roll and *reduces* that of a failed one (p37). A +5
+therefore takes a success from 8 to 13 and a failure from 8 to 3 — the same
+modifier, making a good roll better and a bad one less bad. Both worked examples
+bear it out: a surgeon's 8 raised to 11 on a success, and a brewer's 4 raised to
+5 on a failure by an unfavourable modifier.
+
+The chat card shows each modifier with the sign it was *applied* with rather
+than the sign it was written with. Printing "+5" beside a die that went down by
+five reads as a fault rather than as the rule, and the card said exactly that.
+
 ### What modifies the Crit Die
 
 Three things do on a shot, and only one on a blow. A melee weapon has a modifier

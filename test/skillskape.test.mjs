@@ -125,5 +125,36 @@ ok("both are worth +10%", CNS5.gentleSkills.map((g) => g.bonus), [10, 10]);
 const known = new Set(skillList.map((s) => s.name));
 ok("and both name a real skill", CNS5.gentleSkills.filter((g) => !known.has(g.name)).map((g) => g.name), []);
 
+/* -- Which way a Crit Die modifier goes (p37) -------------------------------- */
+
+/* "For every 20% or part thereof by which TSC% exceeds Max%, modify the Crit
+   Die roll by 1 in the character's favour – increasing the Crit Die total of a
+   successful roll, reducing the Crit Die total of a failed roll." So the same
+   modifier moves the die in opposite directions depending on the outcome. */
+const critTotal = (raw, modifier, success) => (success ? raw + modifier : raw - modifier);
+
+ok("a favourable modifier raises a success", critTotal(8, 5, true), 13);
+ok("and lowers a failure", critTotal(8, 5, false), 3);
+ok("an unfavourable one lowers a success", critTotal(8, -3, true), 5);
+ok("and raises a failure", critTotal(8, -3, false), 11);
+
+/* Sir Miles's surgeon (p38): a Crit Die of 8 raised by +3 to 11, a Critical
+   Success. */
+ok("the surgeon's roll", critTotal(8, 3, true), 11);
+ok("which is critical", critTotal(8, 3, true) >= 10, true);
+
+/* Thomas the brewer (p38): he fails, and his Crit Die of 4 is "increased by 1
+   to 5" — an unfavourable modifier making a failure worse. */
+ok("the brewer's roll", critTotal(4, -1, false), 5);
+ok("a worse failure than he rolled", critTotal(4, -1, false) > 4, true);
+
+/* The sign as written and the sign as applied differ on a failure, which is
+   what a card must show or a die that went down looks like a fault. */
+const applied = (modifier, success) => modifier * (success ? 1 : -1);
+ok("written and applied agree on a success", applied(5, true), 5);
+ok("and differ on a failure", applied(5, false), -5);
+ok("the applied figure explains the total",
+   8 + applied(5, false), critTotal(8, 5, false));
+
 console.log(fails ? `\n${fails} FAILURES` : "\nAll checks passed.");
 process.exit(fails ? 1 : 0);

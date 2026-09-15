@@ -737,5 +737,6 @@
   "CNS5.Ammunition.damageHint": "This is what the missile contributes. What a shot actually does is looked up for the launcher and the ammunition together, since the same bow does more with a heavier arrow and reaches less far with it.",
   "CNS5.Item.new.ammunition": "New Ammunition",
   "CNS5.Weapon.rangesElsewhere": "Ranges belong to this weapon and its ammunition together, and are looked up when the shot is made.",
-  "CNS5.Missile.assumed": "No ammunition of the right sort is carried, so {ammunition} is assumed. Add some to choose."
+  "CNS5.Missile.assumed": "No ammunition of the right sort is carried, so {ammunition} is assumed. Add some to choose.",
+  "CNS5.Roll.critOnFailure": "The roll failed, so every modifier is applied the other way: a modifier in the character's favour reduces the Crit Die of a failed roll rather than raising it, making the failure less bad (p37)."
 }

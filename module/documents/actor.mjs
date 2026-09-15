@@ -356,6 +356,10 @@ export class CnS5Actor extends Actor {
     // Only a landed blow deals damage. The Crit Die always counts towards it on
     // a hit; what a critical adds on top is a separate d10 that ignores armour
     // and Fatigue alike (p272).
+    // Each modifier is shown with the sign it was applied with, which on a
+    // failed roll is the opposite of the sign it was written with (p37).
+    const critSign = result.critSign;
+
     const landed = exchange.damage;
     // A shot's damage is the pairing's, not the bow's: the table has already
     // added the arrow to it.
@@ -474,17 +478,28 @@ export class CnS5Actor extends Actor {
       cost: game.i18n.format("CNS5.Roll.weaponCost", { ap: weapon.system.ap }),
       // The Crit Die's own workings, which are easy to lose sight of: three
       // things modify it on a shot and only one on a blow.
+      //
+      // Every modifier is shown as it was *applied*, not as it was written.
+      // A favourable modifier increases the Crit Die of a successful roll and
+      // reduces that of a failed one (p37) — so a +5 takes a failure from 8 to
+      // 3. Printing it as "+5" beside a die that went down reads as a fault,
+      // and this card said exactly that.
       critBreakdown: this.#breakdown([
         { label: "CNS5.Roll.critDieRolled", value: result.critRaw },
         {
           label: shot ? "CNS5.Roll.critFromMissile" : "CNS5.Roll.critFromWeapon",
-          value: shot ? shot.ammunitionCrit : weapon.system.critDieModifier,
+          value: (shot ? shot.ammunitionCrit : weapon.system.critDieModifier) * critSign,
           signed: true
         },
-        { label: "CNS5.Roll.critFromRange", value: shot?.rangeCrit ?? 0, signed: true },
-        { label: "CNS5.Roll.critFromStrength", value: shot?.strengthCrit ?? 0, signed: true },
-        { label: "CNS5.Roll.critFromBand", value: critMod, signed: true }
+        { label: "CNS5.Roll.critFromRange", value: (shot?.rangeCrit ?? 0) * critSign, signed: true },
+        {
+          label: "CNS5.Roll.critFromStrength",
+          value: (shot?.strengthCrit ?? 0) * critSign,
+          signed: true
+        },
+        { label: "CNS5.Roll.critFromBand", value: critMod * critSign, signed: true }
       ]),
+      critNote: result.success ? null : "CNS5.Roll.critOnFailure",
       breakdown: this.#breakdown([
         {
           label: "CNS5.Roll.bcsSkilled",

@@ -83,6 +83,13 @@ export async function resolveCheck({ target, critMod = 0, failureCritMod = 0 }) 
   // could take the edge off a roll the rules say is decisive.
   const critical = critTotal >= 10 || crit.total === 10;
 
+  // A modifier is applied in the character's favour either way: it raises the
+  // Crit Die of a successful roll and lowers that of a failed one (p37). Both
+  // forms are reported — the figure as written, and the figure as it actually
+  // moved the die — because showing only the first puts "+5" beside a die that
+  // went down by five, which reads as a fault rather than as the rule.
+  const critSign = success ? 1 : -1;
+
   return {
     rolls: [pair, crit],
     target,
@@ -90,6 +97,8 @@ export async function resolveCheck({ target, critMod = 0, failureCritMod = 0 }) 
     critRaw: crit.total,
     critTotal,
     critMod: applied,
+    critApplied: applied * critSign,
+    critSign,
     success,
     outcome,
     critical,

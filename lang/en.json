@@ -706,7 +706,7 @@
   "CNS5.Missile.range": "Range",
   "CNS5.Missile.damageIs": "{damage} damage",
   "CNS5.Missile.toCritDie": "to the Crit Die",
-  "CNS5.Missile.rangeHint": "Damage and reach belong to the bow and its arrows together, not to either alone, and each bracket carries its own Crit Die modifier.",
+  "CNS5.Missile.rangeHint": "Damage and reach belong to the bow and its arrows together, not to either alone, and each bracket carries its own Crit Die modifier. Where a bracket shows a sum, the first figure is the one printed in the rulebook and the second is what a strong arm adds.",
   "CNS5.Missile.strongArm": "Strength {strength} tells at a distance: the Crit Die is modified by the missile's own row, and extreme and maximum range reach fifty feet further per point above twelve.",
   "CNS5.Missile.shotAt": "{ammunition} at {band} range ({reach}ft)",
   "CNS5.Missile.noProfile": "{weapon} has no entry in the ranges table, so its reach and damage are unknown.",

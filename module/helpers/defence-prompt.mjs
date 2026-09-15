@@ -100,40 +100,56 @@ export async function promptDefence(defender, mode) {
  */
 export async function promptShot(weapon, loadings, shooter) {
   const strength = shooter?.attr?.str?.value ?? 0;
+  const strong = strength >= CNS5.rangedStrengthMinimum;
 
   const options = loadings
     .map(
-      ({ item, profile }) =>
-        `<option value="${item?.id ?? ""}">${item?.name ?? profile.ammunition ?? weapon.name}
+      ({ item, profile }, index) =>
+        `<option value="${index}">${item?.name ?? profile.ammunition ?? weapon.name}
          — ${game.i18n.format("CNS5.Missile.damageIs", { damage: profile.baseDamage })}
          ${item ? ` (${item.system.quantity})` : ""}</option>`
     )
     .join("");
 
-  const first = loadings[0]?.profile;
-  const bands = CNS5.rangeBands
-    .map((band) => {
-      const reach = (first?.ranges?.[band] ?? 0) + CNS5.rangedStrengthBonus(strength, band);
-      const modifier = first?.critModifiers?.[band] ?? 0;
-      return `<option value="${band}">${game.i18n.localize(`CNS5.Range.${band}`)}
-              — ${reach}ft, ${modifier >= 0 ? "+" : ""}${modifier}
-              ${game.i18n.localize("CNS5.Missile.toCritDie")}</option>`;
-    })
-    .join("");
+  /**
+   * The brackets for one loading.
+   *
+   * A bracket is printed in the book and then lengthened by a strong arm, and
+   * the two are shown apart. Adding them silently produced a figure — a short
+   * bow reaching 700 feet — that appears nowhere in the rulebook and cannot be
+   * checked against it.
+   *
+   * @param {object} profile
+   * @returns {string}
+   */
+  const bandOptions = (profile) =>
+    CNS5.rangeBands
+      .map((band) => {
+        const printed = profile?.ranges?.[band] ?? 0;
+        const extra = CNS5.rangedStrengthBonus(strength, band);
+        const modifier = profile?.critModifiers?.[band] ?? 0;
+        const reach = extra ? `${printed} + ${extra} = ${printed + extra}ft` : `${printed}ft`;
+        return `<option value="${band}">${game.i18n.localize(`CNS5.Range.${band}`)}
+                — ${reach}, ${modifier >= 0 ? "+" : ""}${modifier}
+                ${game.i18n.localize("CNS5.Missile.toCritDie")}</option>`;
+      })
+      .join("");
+
+  const choosable = loadings.length > 1 || Boolean(loadings[0]?.item);
 
   const content = `
     <div class="cns5-prompt">
       ${
-        loadings.length > 1 || loadings[0]?.item
+        choosable
           ? `<label for="cns5-ammo">${game.i18n.localize("CNS5.Missile.loadedWith")}</label>
              <select id="cns5-ammo" name="ammunition">${options}</select>`
           : ""
       }
       <label for="cns5-band">${game.i18n.localize("CNS5.Missile.range")}</label>
-      <select id="cns5-band" name="band">${bands}</select>
+      <select id="cns5-band" name="band">${bandOptions(loadings[0]?.profile)}</select>
       <p class="hint">${game.i18n.localize("CNS5.Missile.rangeHint")}</p>
       ${
-        strength >= CNS5.rangedStrengthMinimum
+        strong
           ? `<p class="hint">${game.i18n.format("CNS5.Missile.strongArm", { strength })}</p>`
           : ""
       }
@@ -142,12 +158,37 @@ export async function promptShot(weapon, loadings, shooter) {
   return foundry.applications.api.DialogV2.prompt({
     window: { title: game.i18n.format("CNS5.Missile.title", { weapon: weapon.name }) },
     content,
+
+    /**
+     * Rebuild the brackets when the loading changes.
+     *
+     * The ranges belong to the pairing, so a bow's reach with hunting arrows is
+     * not its reach with armour-piercing ones. Listing the first loading's
+     * brackets and leaving them there meant choosing different arrows changed
+     * the damage and the Crit Die but not the distances.
+     */
+    render: (event, dialog) => {
+      const ammo = dialog.element.querySelector("#cns5-ammo");
+      const bandSelect = dialog.element.querySelector("#cns5-band");
+      if (!ammo || !bandSelect) return;
+
+      ammo.addEventListener("change", () => {
+        const chosen = bandSelect.value;
+        bandSelect.innerHTML = bandOptions(loadings[Number(ammo.value)]?.profile);
+        // Keep the bracket the player had picked, now read off the new loading.
+        bandSelect.value = chosen;
+      });
+    },
+
     ok: {
       label: game.i18n.localize("CNS5.Roll.rollButton"),
-      callback: (event, button) => ({
-        ammunitionId: button.form.elements.ammunition?.value || null,
-        band: button.form.elements.band.value
-      })
+      callback: (event, button) => {
+        const index = Number(button.form.elements.ammunition?.value ?? 0);
+        return {
+          loading: Number.isFinite(index) ? index : 0,
+          band: button.form.elements.band.value
+        };
+      }
     },
     rejectClose: false
   });

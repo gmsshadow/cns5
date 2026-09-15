@@ -180,5 +180,42 @@ ok("a weak arm gains nothing from strength", weak.strengthCrit, 0);
 ok("but still gains the arrow", weak.critMod, -2);
 ok("so strength is worth three here", shot.critMod - weak.critMod, 3);
 
+/* -- What a bracket shows ---------------------------------------------------- */
+
+/* A bracket is printed in the book and then lengthened by a strong arm. Adding
+   the two silently gave a short bow a maximum range of 700 feet, which appears
+   nowhere in the rulebook and cannot be checked against it, so the two are
+   shown apart. */
+const shortBow = find("Short Bow", "Hunting Arrows");
+ok("the printed brackets", CNS5.rangeBands.map((b) => shortBow.ranges[b]), [20, 30, 90, 150, 500]);
+
+const reach = (strength, band) =>
+  shortBow.ranges[band] + CNS5.rangedStrengthBonus(strength, band);
+ok("a weak arm reaches what is printed",
+   CNS5.rangeBands.map((b) => reach(11, b)), [20, 30, 90, 150, 500]);
+ok("Strength 16 reaches further at the far brackets",
+   CNS5.rangeBands.map((b) => reach(16, b)), [20, 30, 90, 350, 700]);
+ok("but not at the near ones", reach(16, "short"), shortBow.ranges.short);
+
+/* The extension is the difference, and it is the same at both far brackets. */
+ok("four points over twelve is two hundred feet",
+   reach(16, "extreme") - shortBow.ranges.extreme, 200);
+ok("the same at maximum", reach(16, "max") - shortBow.ranges.max, 200);
+
+/* -- Brackets follow the loading -------------------------------------------- */
+
+/* The ranges belong to the pairing, so changing the arrow changes the
+   distances as well as the damage. Listing the first loading's brackets and
+   leaving them there meant choosing different arrows changed everything except
+   how far they went. */
+const loadings = ["Hunting Arrows", "War Arrow", "AP Arrow"].map((a) => find("Short Bow", a));
+ok("a short bow's maximum by arrow", loadings.map((p) => p.ranges.max), [500, 400, 180]);
+ok("and its long range", loadings.map((p) => p.ranges.long), [90, 60, 40]);
+ok(
+  "no two loadings of a bow share their brackets",
+  new Set(loadings.map((p) => CNS5.rangeBands.map((b) => p.ranges[b]).join("/"))).size,
+  3
+);
+
 console.log(fails ? `\n${fails} FAILURES` : "\nAll checks passed.");
 process.exit(fails ? 1 : 0);

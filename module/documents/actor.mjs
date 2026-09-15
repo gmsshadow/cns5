@@ -271,8 +271,7 @@ export class CnS5Actor extends Actor {
         const chosen = await promptShot(weapon, loadings, this.system);
         if (chosen === null) return null;
 
-        const loading =
-          loadings.find((l) => l.item?.id === chosen.ammunitionId) ?? loadings[0];
+        const loading = loadings[chosen.loading] ?? loadings[0];
         ammunition = loading.item;
         shot = resolveShot({
           profile: loading.profile,

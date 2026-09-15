@@ -111,6 +111,8 @@ export async function promptShot(weapon, loadings, shooter) {
     )
     .join("");
 
+  const assumed = loadings.length === 1 && loadings[0].assumed;
+
   /**
    * The brackets for one loading.
    *
@@ -135,14 +137,17 @@ export async function promptShot(weapon, loadings, shooter) {
       })
       .join("");
 
-  const choosable = loadings.length > 1 || Boolean(loadings[0]?.item);
-
   const content = `
     <div class="cns5-prompt">
+      <label for="cns5-ammo">${game.i18n.localize("CNS5.Missile.loadedWith")}</label>
+      <select id="cns5-ammo" name="ammunition" ${loadings.length === 1 ? "disabled" : ""}>
+        ${options}
+      </select>
       ${
-        choosable
-          ? `<label for="cns5-ammo">${game.i18n.localize("CNS5.Missile.loadedWith")}</label>
-             <select id="cns5-ammo" name="ammunition">${options}</select>`
+        assumed
+          ? `<p class="hint cns5-hint--bad">${game.i18n.format("CNS5.Missile.assumed", {
+              ammunition: loadings[0].profile.ammunition ?? weapon.name
+            })}</p>`
           : ""
       }
       <label for="cns5-band">${game.i18n.localize("CNS5.Missile.range")}</label>
@@ -183,7 +188,10 @@ export async function promptShot(weapon, loadings, shooter) {
     ok: {
       label: game.i18n.localize("CNS5.Roll.rollButton"),
       callback: (event, button) => {
-        const index = Number(button.form.elements.ammunition?.value ?? 0);
+        // A disabled control submits no value, so a single loading falls back
+        // to its own index rather than to nothing.
+        const raw = button.form.elements.ammunition?.value;
+        const index = raw === undefined || raw === "" ? 0 : Number(raw);
         return {
           loading: Number.isFinite(index) ? index : 0,
           band: button.form.elements.band.value

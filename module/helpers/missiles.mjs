@@ -124,7 +124,8 @@ export async function missileProfile(weapon, ammunition = null) {
  * @returns {Item[]}
  */
 export function availableAmmunition(actor, launcher) {
-  const kind = CNS5.ammunitionKindOf(launcher.name);
+  // What the launcher takes, not what it is.
+  const kind = CNS5.ammunitionFor(launcher.name);
   if (!kind) return [];
 
   // Ammunition is its own kind of item now, so a bow can no longer be loaded

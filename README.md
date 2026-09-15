@@ -670,7 +670,20 @@ takes -4 from the bracket, +3 from his arm and +2 from the arrow, for +1. The
 chat card shows the workings, since a modifier silently going missing is exactly
 what happened here.
 
-Ammunition has its own section on the Core & Combat tab. `test/templates.test.mjs`
+Ammunition appears on the Core & Combat tab, where a shot is made, and among
+the arms on Personal Chattel, where its weight counts against what a character
+can carry.
+
+Asking what a launcher *takes* is a different question from asking what a
+missile *is*, and the two were being answered by the same function. A bow's name
+contains no "arrow", so no ammunition ever matched a bow and every shot fell
+back to the default loading — which is why a quiver of armour-piercing arrows
+made no difference to anything. A crossbow has to be tested for before a bow,
+since its name contains one.
+
+Where nothing of the right sort is carried the shot is still allowed, since
+refusing it would punish anyone not tracking arrows, but the loading is named as
+an assumption rather than passed off as a choice. `test/templates.test.mjs`
 checks that every registered item type is surfaced somewhere on an actor sheet:
 a type that is registered, built into a compendium and created on drop but
 listed nowhere looks exactly like a drop that failed, and there is nothing on

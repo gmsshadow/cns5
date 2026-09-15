@@ -259,5 +259,39 @@ ok("a medium crossbow is an mdm crossbow",
    loaded into a bow by mistake. */
 ok("ammunition kinds", Object.keys(CNS5.ammunitionKinds).sort(), ["arrow", "bolt", "stone"]);
 
+/* -- What a launcher takes --------------------------------------------------- */
+
+/* A different question from what a missile is, and asking the wrong one is
+   silent: a bow's name contains no "arrow", so every shot found no ammunition
+   to match and fell back to the default loading. */
+ok("a short bow takes arrows", CNS5.ammunitionFor("Short Bow"), "arrow");
+ok("a longbow too", CNS5.ammunitionFor("Longbow"), "arrow");
+ok("an elvish longbow too", CNS5.ammunitionFor("Elvish Longbow"), "arrow");
+
+/* A crossbow has to be tested for before a bow, its name containing one. */
+ok("a light crossbow takes bolts", CNS5.ammunitionFor("Light Crossbow"), "bolt");
+ok("a heavy crossbow too", CNS5.ammunitionFor("Heavy Crossbow"), "bolt");
+ok("and not arrows", CNS5.ammunitionFor("Medium Crossbow") === "arrow", false);
+
+ok("a sling takes stones", CNS5.ammunitionFor("Shepherds"), "stone");
+ok("a slingstaff too", CNS5.ammunitionFor("Slingstaff"), "stone");
+ok("a sword takes nothing", CNS5.ammunitionFor("Knights Broadsword"), "");
+
+/* Every launcher in the ranges table must take something, or it can never be
+   loaded and always falls back. */
+const everyLauncher = [...new Set(profiles.filter((p) => !p.thrown).map((p) => p.weapon))];
+ok(
+  "every launcher takes something",
+  everyLauncher.filter((name) => !CNS5.ammunitionFor(name)),
+  []
+);
+
+/* And what each takes must be what its default loading is. */
+const mismatched = profiles
+  .filter((p) => !p.thrown && p.ammunition && p.ammunition !== "Sling stones")
+  .filter((p) => CNS5.ammunitionFor(p.weapon) !== CNS5.ammunitionKindOf(p.ammunition))
+  .map((p) => `${p.weapon} takes ${CNS5.ammunitionFor(p.weapon)} but is loaded with ${p.ammunition}`);
+ok("what a launcher takes is what it is loaded with", mismatched, []);
+
 console.log(fails ? `\n${fails} FAILURES` : "\nAll checks passed.");
 process.exit(fails ? 1 : 0);

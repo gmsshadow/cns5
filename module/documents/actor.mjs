@@ -256,9 +256,12 @@ export class CnS5Actor extends Actor {
           if (profile) loadings.push({ item, profile });
         }
       }
+      // Nothing carried that this launcher takes. The shot is still allowed —
+      // refusing it would punish anyone not tracking arrows — but the loading
+      // is named as an assumption rather than passed off as a choice.
       if (!loadings.length) {
         const profile = await missileProfile(weapon, null);
-        if (profile) loadings.push({ item: null, profile });
+        if (profile) loadings.push({ item: null, profile, assumed: true });
       }
 
       const missiles = await missileData();

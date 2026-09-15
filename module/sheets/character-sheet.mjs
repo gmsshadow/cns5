@@ -213,7 +213,9 @@ export class CnS5CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2)
     const byName = (a, b) => a.name.localeCompare(b.name);
     const groups = [
       { id: "equipment", label: "CNS5.Item.equipment", types: ["equipment"] },
-      { id: "arms", label: "CNS5.Item.arms", types: ["weapon", "armour"] }
+      // Ammunition is gear as much as it is part of a shot: it is carried, it
+      // weighs something, and it counts against what a character can bear.
+      { id: "arms", label: "CNS5.Item.arms", types: ["weapon", "armour", "ammunition"] }
     ];
 
     return groups

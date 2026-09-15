@@ -1558,6 +1558,31 @@ CNS5.ammunitionKinds = {
  * a heavy crossbow ought to accept a light bolt is a question the tables do not
  * answer, and the system does not presume to.
  */
+/**
+ * What a launcher takes.
+ *
+ * This is a different question from what a missile *is*, and asking the wrong
+ * one is silent: a bow's name contains no "arrow", so asking what kind of
+ * missile a Short Bow is returned nothing, no ammunition was ever found to
+ * match it, and every shot fell back to the default loading. Note that a
+ * crossbow must be tested for before a bow, since its name contains one.
+ *
+ * @param {string} name
+ * @returns {string} a key of CNS5.ammunitionKinds
+ */
+CNS5.ammunitionFor = function (name = "") {
+  if (/crossbow|arbalest|arbelest/i.test(name)) return "bolt";
+  if (/bow/i.test(name)) return "arrow";
+  if (/sling|shepherd|staff/i.test(name)) return "stone";
+  return "";
+};
+
+/**
+ * What a missile is.
+ *
+ * @param {string} name
+ * @returns {string} a key of CNS5.ammunitionKinds
+ */
 CNS5.ammunitionKindOf = function (name = "") {
   if (/arrow/i.test(name)) return "arrow";
   if (/bolt|quarrel/i.test(name)) return "bolt";

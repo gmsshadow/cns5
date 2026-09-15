@@ -1,0 +1,634 @@
+{
+  "source": "Chivalry & Sorcery 5th Edition core rules, Table - Missile Ranges and Table - Ranged Strength Modifier to Crit Die, p258",
+  "note": "Each profile is a launcher paired with a kind of ammunition, or a thrown weapon which is its own. The base damage is the pair's together.",
+  "profileCount": 25,
+  "profiles": [
+    {
+      "weapon": "Dart",
+      "ammunition": null,
+      "thrown": true,
+      "baseDamage": 6,
+      "ranges": {
+        "short": 10,
+        "medium": 30,
+        "long": 60,
+        "extreme": 90,
+        "max": 150
+      },
+      "critModifiers": {
+        "short": 0,
+        "medium": 0,
+        "long": -3,
+        "extreme": -7,
+        "max": -10
+      },
+      "page": 258
+    },
+    {
+      "weapon": "Hunting Javelin",
+      "ammunition": null,
+      "thrown": true,
+      "baseDamage": 8,
+      "ranges": {
+        "short": 10,
+        "medium": 30,
+        "long": 60,
+        "extreme": 90,
+        "max": 120
+      },
+      "critModifiers": {
+        "short": 0,
+        "medium": 0,
+        "long": -3,
+        "extreme": -8,
+        "max": -11
+      },
+      "page": 258
+    },
+    {
+      "weapon": "War Javelin",
+      "ammunition": null,
+      "thrown": true,
+      "baseDamage": 9,
+      "ranges": {
+        "short": 10,
+        "medium": 30,
+        "long": 60,
+        "extreme": 90,
+        "max": 120
+      },
+      "critModifiers": {
+        "short": 0,
+        "medium": 0,
+        "long": -3,
+        "extreme": -6,
+        "max": -9
+      },
+      "page": 258
+    },
+    {
+      "weapon": "Pilum",
+      "ammunition": null,
+      "thrown": true,
+      "baseDamage": 10,
+      "ranges": {
+        "short": 10,
+        "medium": 30,
+        "long": 60,
+        "extreme": 90,
+        "max": 120
+      },
+      "critModifiers": {
+        "short": 0,
+        "medium": 0,
+        "long": -3,
+        "extreme": -7,
+        "max": -10
+      },
+      "page": 258
+    },
+    {
+      "weapon": "Thrown Axe",
+      "ammunition": null,
+      "thrown": true,
+      "baseDamage": 8,
+      "ranges": {
+        "short": 10,
+        "medium": 20,
+        "long": 40,
+        "extreme": 60,
+        "max": 90
+      },
+      "critModifiers": {
+        "short": 0,
+        "medium": -1,
+        "long": -3,
+        "extreme": -6,
+        "max": -9
+      },
+      "page": 258
+    },
+    {
+      "weapon": "Thrown Knife",
+      "ammunition": null,
+      "thrown": true,
+      "baseDamage": 1,
+      "ranges": {
+        "short": 5,
+        "medium": 10,
+        "long": 20,
+        "extreme": 30,
+        "max": 40
+      },
+      "critModifiers": {
+        "short": 0,
+        "medium": 0,
+        "long": -1,
+        "extreme": -3,
+        "max": -5
+      },
+      "page": 258
+    },
+    {
+      "weapon": "Short Bow",
+      "ammunition": "Hunting Arrows",
+      "thrown": false,
+      "baseDamage": 9,
+      "ranges": {
+        "short": 20,
+        "medium": 30,
+        "long": 90,
+        "extreme": 150,
+        "max": 500
+      },
+      "critModifiers": {
+        "short": 0,
+        "medium": -3,
+        "long": -7,
+        "extreme": -12,
+        "max": -15
+      },
+      "page": 258
+    },
+    {
+      "weapon": "Short Bow",
+      "ammunition": "War Arrow",
+      "thrown": false,
+      "baseDamage": 10,
+      "ranges": {
+        "short": 10,
+        "medium": 30,
+        "long": 60,
+        "extreme": 100,
+        "max": 400
+      },
+      "critModifiers": {
+        "short": 0,
+        "medium": -2,
+        "long": -4,
+        "extreme": -7,
+        "max": -9
+      },
+      "page": 258
+    },
+    {
+      "weapon": "Short Bow",
+      "ammunition": "AP Arrow",
+      "thrown": false,
+      "baseDamage": 12,
+      "ranges": {
+        "short": 10,
+        "medium": 20,
+        "long": 40,
+        "extreme": 60,
+        "max": 180
+      },
+      "critModifiers": {
+        "short": 0,
+        "medium": -2,
+        "long": -5,
+        "extreme": -7,
+        "max": -10
+      },
+      "page": 258
+    },
+    {
+      "weapon": "Composite. Bow",
+      "ammunition": "Hunting Arrows",
+      "thrown": false,
+      "baseDamage": 12,
+      "ranges": {
+        "short": 20,
+        "medium": 40,
+        "long": 120,
+        "extreme": 300,
+        "max": 700
+      },
+      "critModifiers": {
+        "short": 0,
+        "medium": -4,
+        "long": -9,
+        "extreme": -15,
+        "max": -18
+      },
+      "page": 258
+    },
+    {
+      "weapon": "Composite. Bow",
+      "ammunition": "War Arrow",
+      "thrown": false,
+      "baseDamage": 13,
+      "ranges": {
+        "short": 20,
+        "medium": 40,
+        "long": 90,
+        "extreme": 175,
+        "max": 525
+      },
+      "critModifiers": {
+        "short": 0,
+        "medium": -3,
+        "long": -7,
+        "extreme": -14,
+        "max": -17
+      },
+      "page": 258
+    },
+    {
+      "weapon": "Composite. Bow",
+      "ammunition": "AP Arrow",
+      "thrown": false,
+      "baseDamage": 15,
+      "ranges": {
+        "short": 20,
+        "medium": 40,
+        "long": 80,
+        "extreme": 150,
+        "max": 375
+      },
+      "critModifiers": {
+        "short": 0,
+        "medium": -3,
+        "long": -7,
+        "extreme": -15,
+        "max": -18
+      },
+      "page": 258
+    },
+    {
+      "weapon": "Longbow",
+      "ammunition": "Hunting Arrows",
+      "thrown": false,
+      "baseDamage": 14,
+      "ranges": {
+        "short": 20,
+        "medium": 40,
+        "long": 150,
+        "extreme": 350,
+        "max": 800
+      },
+      "critModifiers": {
+        "short": 0,
+        "medium": -5,
+        "long": -10,
+        "extreme": -16,
+        "max": -20
+      },
+      "page": 258
+    },
+    {
+      "weapon": "Longbow",
+      "ammunition": "War Arrow",
+      "thrown": false,
+      "baseDamage": 15,
+      "ranges": {
+        "short": 20,
+        "medium": 40,
+        "long": 125,
+        "extreme": 250,
+        "max": 600
+      },
+      "critModifiers": {
+        "short": 0,
+        "medium": -4,
+        "long": -8,
+        "extreme": -15,
+        "max": -19
+      },
+      "page": 258
+    },
+    {
+      "weapon": "Longbow",
+      "ammunition": "AP Arrow",
+      "thrown": false,
+      "baseDamage": 17,
+      "ranges": {
+        "short": 20,
+        "medium": 40,
+        "long": 80,
+        "extreme": 175,
+        "max": 450
+      },
+      "critModifiers": {
+        "short": 0,
+        "medium": -7,
+        "long": -8,
+        "extreme": -16,
+        "max": -20
+      },
+      "page": 258
+    },
+    {
+      "weapon": "Elvish Longbow",
+      "ammunition": "Hunting Arrows",
+      "thrown": false,
+      "baseDamage": 14,
+      "ranges": {
+        "short": 20,
+        "medium": 60,
+        "long": 200,
+        "extreme": 450,
+        "max": 900
+      },
+      "critModifiers": {
+        "short": 0,
+        "medium": -5,
+        "long": -10,
+        "extreme": -16,
+        "max": -20
+      },
+      "page": 258
+    },
+    {
+      "weapon": "Elvish Longbow",
+      "ammunition": "War Arrows",
+      "thrown": false,
+      "baseDamage": 15,
+      "ranges": {
+        "short": 20,
+        "medium": 50,
+        "long": 150,
+        "extreme": 250,
+        "max": 600
+      },
+      "critModifiers": {
+        "short": 0,
+        "medium": -4,
+        "long": -8,
+        "extreme": -15,
+        "max": -19
+      },
+      "page": 258
+    },
+    {
+      "weapon": "Elvish Longbow",
+      "ammunition": "AP Arrows",
+      "thrown": false,
+      "baseDamage": 17,
+      "ranges": {
+        "short": 20,
+        "medium": 50,
+        "long": 125,
+        "extreme": 175,
+        "max": 450
+      },
+      "critModifiers": {
+        "short": 0,
+        "medium": -7,
+        "long": -8,
+        "extreme": -16,
+        "max": -20
+      },
+      "page": 258
+    },
+    {
+      "weapon": "Light Crossbow",
+      "ammunition": "Light Crossbow Bolts",
+      "thrown": false,
+      "baseDamage": 10,
+      "ranges": {
+        "short": 20,
+        "medium": 50,
+        "long": 100,
+        "extreme": 200,
+        "max": 600
+      },
+      "critModifiers": {
+        "short": 0,
+        "medium": -2,
+        "long": -5,
+        "extreme": -10,
+        "max": -13
+      },
+      "page": 258
+    },
+    {
+      "weapon": "Mdm. Crossbow",
+      "ammunition": "Medium Crossbow Bolts",
+      "thrown": false,
+      "baseDamage": 12,
+      "ranges": {
+        "short": 20,
+        "medium": 50,
+        "long": 100,
+        "extreme": 200,
+        "max": 900
+      },
+      "critModifiers": {
+        "short": 0,
+        "medium": -2,
+        "long": -3,
+        "extreme": -10,
+        "max": -13
+      },
+      "page": 258
+    },
+    {
+      "weapon": "Heavy Crossbow",
+      "ammunition": "Heavy Crossbow Bolts",
+      "thrown": false,
+      "baseDamage": 18,
+      "ranges": {
+        "short": 20,
+        "medium": 50,
+        "long": 100,
+        "extreme": 200,
+        "max": 1200
+      },
+      "critModifiers": {
+        "short": 0,
+        "medium": -3,
+        "long": -6,
+        "extreme": -12,
+        "max": -18
+      },
+      "page": 258
+    },
+    {
+      "weapon": "Shepherd's Sling",
+      "ammunition": "Sling stones",
+      "thrown": false,
+      "baseDamage": 4,
+      "ranges": {
+        "short": 10,
+        "medium": 20,
+        "long": 40,
+        "extreme": 80,
+        "max": 300
+      },
+      "critModifiers": {
+        "short": 4,
+        "medium": -1,
+        "long": -3,
+        "extreme": -6,
+        "max": -9
+      },
+      "page": 258
+    },
+    {
+      "weapon": "Shepherd's Sling",
+      "ammunition": "Lead Bullets",
+      "thrown": false,
+      "baseDamage": 9,
+      "ranges": {
+        "short": 10,
+        "medium": 20,
+        "long": 40,
+        "extreme": 80,
+        "max": 300
+      },
+      "critModifiers": {
+        "short": 9,
+        "medium": -2,
+        "long": -5,
+        "extreme": -8,
+        "max": -9
+      },
+      "page": 258
+    },
+    {
+      "weapon": "Slingstaff",
+      "ammunition": "Sling stones",
+      "thrown": false,
+      "baseDamage": 4,
+      "ranges": {
+        "short": 10,
+        "medium": 20,
+        "long": 60,
+        "extreme": 150,
+        "max": 600
+      },
+      "critModifiers": {
+        "short": 5,
+        "medium": -1,
+        "long": -3,
+        "extreme": -6,
+        "max": -9
+      },
+      "page": 258
+    },
+    {
+      "weapon": "Slingstaff",
+      "ammunition": "Lead Bullets",
+      "thrown": false,
+      "baseDamage": 9,
+      "ranges": {
+        "short": 10,
+        "medium": 20,
+        "long": 60,
+        "extreme": 150,
+        "max": 600
+      },
+      "critModifiers": {
+        "short": 10,
+        "medium": -2,
+        "long": -5,
+        "extreme": -8,
+        "max": -9
+      },
+      "page": 258
+    }
+  ],
+  "strengthModifiers": [
+    {
+      "ammunition": "Hunting Arrows",
+      "modifiers": {
+        "short": 2,
+        "medium": 2,
+        "long": 1,
+        "extreme": 0,
+        "max": 0
+      }
+    },
+    {
+      "ammunition": "War Arrows",
+      "modifiers": {
+        "short": 3,
+        "medium": 3,
+        "long": 2,
+        "extreme": 2,
+        "max": 1
+      }
+    },
+    {
+      "ammunition": "AP Arrows",
+      "modifiers": {
+        "short": 2,
+        "medium": 2,
+        "long": 2,
+        "extreme": 1,
+        "max": 1
+      }
+    },
+    {
+      "ammunition": "Lt X-Bowbolts",
+      "modifiers": {
+        "short": 0,
+        "medium": 0,
+        "long": 0,
+        "extreme": 0,
+        "max": 0
+      }
+    },
+    {
+      "ammunition": "Mdm X-Bowbolts",
+      "modifiers": {
+        "short": 0,
+        "medium": 0,
+        "long": 0,
+        "extreme": 0,
+        "max": 0
+      }
+    },
+    {
+      "ammunition": "Hvy X-Bowbolts",
+      "modifiers": {
+        "short": 0,
+        "medium": 0,
+        "long": 0,
+        "extreme": 0,
+        "max": 0
+      }
+    },
+    {
+      "ammunition": "Darts",
+      "modifiers": {
+        "short": 2,
+        "medium": 1,
+        "long": 0,
+        "extreme": 0,
+        "max": 0
+      }
+    },
+    {
+      "ammunition": "Hunting Javelins",
+      "modifiers": {
+        "short": 2,
+        "medium": 1,
+        "long": 0,
+        "extreme": 0,
+        "max": 0
+      }
+    },
+    {
+      "ammunition": "War Javelins",
+      "modifiers": {
+        "short": 3,
+        "medium": 1,
+        "long": 1,
+        "extreme": 0,
+        "max": 0
+      }
+    },
+    {
+      "ammunition": "Other Weapons",
+      "modifiers": {
+        "short": 1,
+        "medium": 1,
+        "long": 1,
+        "extreme": 0,
+        "max": 0
+      }
+    }
+  ]
+}

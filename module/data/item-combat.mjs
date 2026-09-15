@@ -18,10 +18,17 @@ export class CnS5Weapon extends CnS5PhysicalItem {
     // A launcher deals no damage itself but adds a bonus to what it looses;
     // ammunition carries the damage. Keeping them apart means a bow and its
     // arrows can each be their own item, as the tables list them.
+    // A thrown weapon is its own ammunition and carries its own ranges, which
+    // is why it is neither a launcher nor what a launcher shoots.
     schema.role = new fields.StringField({
       required: true,
       initial: "melee",
-      choices: ["melee", "launcher", "ammunition"]
+      choices: ["melee", "launcher", "ammunition", "thrown"]
+    });
+
+    // What a launcher shoots, or what kind of missile this is.
+    schema.ammunitionKind = new fields.StringField({
+      required: true, blank: true, initial: ""
     });
 
     schema.damageBonus = new fields.NumberField({ required: true, integer: true, initial: 0 });
@@ -183,10 +190,17 @@ export class CnS5Armour extends CnS5PhysicalItem {
     // A launcher deals no damage itself but adds a bonus to what it looses;
     // ammunition carries the damage. Keeping them apart means a bow and its
     // arrows can each be their own item, as the tables list them.
+    // A thrown weapon is its own ammunition and carries its own ranges, which
+    // is why it is neither a launcher nor what a launcher shoots.
     schema.role = new fields.StringField({
       required: true,
       initial: "melee",
-      choices: ["melee", "launcher", "ammunition"]
+      choices: ["melee", "launcher", "ammunition", "thrown"]
+    });
+
+    // What a launcher shoots, or what kind of missile this is.
+    schema.ammunitionKind = new fields.StringField({
+      required: true, blank: true, initial: ""
     });
 
     schema.damageBonus = new fields.NumberField({ required: true, integer: true, initial: 0 });

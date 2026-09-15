@@ -13,6 +13,8 @@ import {
   promptDefence
 } from "../helpers/defence-prompt.mjs";
 import { armourAt } from "../helpers/defence.mjs";
+import { promptShot } from "../helpers/defence-prompt.mjs";
+import { missileProfile, availableAmmunition, resolveShot } from "../helpers/missiles.mjs";
 
 /**
  * The C&S Actor.
@@ -202,6 +204,47 @@ export class CnS5Actor extends Actor {
 
     const title = game.i18n.format("CNS5.Roll.weaponTitle", { weapon: weapon.name });
 
+    // A shot is a bow and an arrow together, at a distance. None of the three
+    // figures that matter — damage, reach, Crit Die modifier — can be read off
+    // the bow alone, so the loading and the range are settled before anything
+    // else (pp.257-258).
+    const shoots = ["launcher", "thrown"].includes(weapon.system.role);
+    let shot = null;
+    let ammunition = null;
+
+    if (shoots && !skipDialog) {
+      const loadings = [];
+      if (weapon.system.role === "launcher") {
+        for (const item of availableAmmunition(this, weapon)) {
+          const profile = await missileProfile(weapon, item);
+          if (profile) loadings.push({ item, profile });
+        }
+      }
+      if (!loadings.length) {
+        const profile = await missileProfile(weapon, null);
+        if (profile) loadings.push({ item: null, profile });
+      }
+
+      if (!loadings.length) {
+        ui.notifications.warn(
+          game.i18n.format("CNS5.Missile.noProfile", { weapon: weapon.name })
+        );
+      } else {
+        const chosen = await promptShot(weapon, loadings, this.system);
+        if (chosen === null) return null;
+
+        const loading =
+          loadings.find((l) => l.item?.id === chosen.ammunitionId) ?? loadings[0];
+        ammunition = loading.item;
+        shot = resolveShot({
+          profile: loading.profile,
+          band: chosen.band,
+          strength: this.system.attr.str.value,
+          ammunition: ammunition?.name ?? loading.profile.ammunition
+        });
+      }
+    }
+
     // An attack is declared against somebody. The target is whoever this user
     // has targeted on the canvas, which is how Foundry expects it to be said.
     const target = [...game.user.targets][0]?.actor ?? null;
@@ -248,8 +291,9 @@ export class CnS5Actor extends Actor {
 
     const result = await resolveCheck({
       target: chance,
-      // The weapon's own Crit Die modifier stacks with any from the band.
-      critMod: critMod + weapon.system.critDieModifier,
+      // The weapon's own Crit Die modifier stacks with any from the band, and
+      // for a shot with the range and the shooter's strength as well.
+      critMod: critMod + weapon.system.critDieModifier + (shot?.critMod ?? 0),
       failureCritMod: skill ? skill.system.failureCritMod : 0
     });
     result.attackerPsf = weapon.system.psf;
@@ -265,7 +309,10 @@ export class CnS5Actor extends Actor {
     // a hit; what a critical adds on top is a separate d10 that ignores armour
     // and Fatigue alike (p272).
     const landed = exchange.damage;
-    const blow = landed ? weapon.system.damage + result.critTotal : 0;
+    // A shot's damage is the pairing's, not the bow's: the table has already
+    // added the arrow to it.
+    const weaponDamage = shot ? shot.baseDamage : weapon.system.damage;
+    const blow = landed ? weaponDamage + result.critTotal : 0;
 
     // A critical met by an ordinary defence is "reduced to that of a normal
     // attack success" (p270) — the blow lands with its Crit Die and only the
@@ -304,6 +351,11 @@ export class CnS5Actor extends Actor {
     // It is taken here rather than left on the card, because unlike damage it
     // is not conditional on anything and nobody would choose to skip it.
     const defenceFatigue = defence?.fatigueCost ?? basic?.fatigueCost ?? 0;
+    // A missile loosed is a missile gone.
+    if (ammunition && landed !== null && ammunition.system.quantity > 0) {
+      await ammunition.update({ "system.quantity": ammunition.system.quantity - 1 });
+    }
+
     if (target && defenceFatigue > 0) {
       if (target.isOwner) await target.spendFatigue(defenceFatigue);
       else {
@@ -339,6 +391,14 @@ export class CnS5Actor extends Actor {
       split,
       blow,
       absorption,
+      shot,
+      shotLabel: shot
+        ? game.i18n.format("CNS5.Missile.shotAt", {
+            ammunition: ammunition?.name ?? shot.strengthRow,
+            band: game.i18n.localize(`CNS5.Range.${shot.band}`),
+            reach: shot.reach
+          })
+        : null,
       hitLocation: struck,
       hitLocationLabel: game.i18n.localize(`CNS5.TargetArea.${struck}`),
       armourPieces: worn.pieces.map((p) => p.name),

@@ -1481,3 +1481,95 @@ CNS5.summariseProtection = function (byArea) {
       label: row.areas.map((a) => `CNS5.TargetArea.${a}`)
     }));
 };
+
+/* -------------------------------------------- */
+/*  Missiles                                    */
+/*  (p257-258)                                  */
+/* -------------------------------------------- */
+
+/**
+ * The five range brackets, in order.
+ */
+CNS5.rangeBands = ["short", "medium", "long", "extreme", "max"];
+
+/**
+ * What a launcher is loaded with.
+ *
+ * A bow is nothing without an arrow, and the two are not simply added: Table -
+ * Missile Ranges gives a *pairing* its damage and its ranges, and a longbow
+ * shooting war arrows reaches six hundred feet where the same bow shooting
+ * armour-piercing arrows reaches four hundred and fifty. Neither figure belongs
+ * to the bow.
+ *
+ * So ammunition is matched to a launcher by kind, and the pairing is looked up.
+ */
+CNS5.ammunitionKinds = {
+  arrow: "CNS5.Ammunition.arrow",
+  bolt: "CNS5.Ammunition.bolt",
+  stone: "CNS5.Ammunition.stone"
+};
+
+/**
+ * From a weapon's name to what it shoots or is shot from.
+ *
+ * Crossbow bolts are the confusing case. Hunting Bolts carry no crossbow's name
+ * and go in any of them; the Light, Medium and Heavy Crossbow Bolts are each
+ * made for their own weapon. Both are bolts, so both load a crossbow — whether
+ * a heavy crossbow ought to accept a light bolt is a question the tables do not
+ * answer, and the system does not presume to.
+ */
+CNS5.ammunitionKindOf = function (name = "") {
+  if (/arrow/i.test(name)) return "arrow";
+  if (/bolt|quarrel/i.test(name)) return "bolt";
+  if (/bullet|stone|shot/i.test(name)) return "stone";
+  return "";
+};
+
+/**
+ * Strength tells at a distance (p258).
+ *
+ * A character of Strength 12 or better modifies the Crit Die by the amount the
+ * table gives for that missile at that range, and adds fifty feet of range per
+ * point above twelve — but only at extreme and maximum range, where the shot is
+ * a matter of how hard it was loosed rather than how carefully it was aimed.
+ */
+CNS5.rangedStrengthMinimum = 12;
+CNS5.rangedStrengthRangePerPoint = 50;
+CNS5.rangedStrengthRangeBands = ["extreme", "max"];
+
+/**
+ * Match a kind of ammunition to its row of the strength table.
+ *
+ * The two tables name things differently — "Lt X-Bowbolts" against "Light
+ * Crossbow Bolts" — and anything unnamed falls to "Other Weapons", which is
+ * what that row is for.
+ *
+ * @param {string} name
+ * @returns {string} the row's name
+ */
+CNS5.rangedStrengthRow = function (name = "") {
+  if (/ap|armour[- ]?piercing/i.test(name)) return "AP Arrows";
+  if (/war arrow/i.test(name)) return "War Arrows";
+  if (/arrow/i.test(name)) return "Hunting Arrows";
+  if (/light.*bolt|lt.*bolt/i.test(name)) return "Lt X-Bowbolts";
+  if (/medium.*bolt|mdm.*bolt/i.test(name)) return "Mdm X-Bowbolts";
+  if (/heavy.*bolt|hvy.*bolt/i.test(name)) return "Hvy X-Bowbolts";
+  if (/bolt/i.test(name)) return "Lt X-Bowbolts";
+  if (/dart/i.test(name)) return "Darts";
+  if (/war javelin/i.test(name)) return "War Javelins";
+  if (/javelin/i.test(name)) return "Hunting Javelins";
+  return "Other Weapons";
+};
+
+/**
+ * The extra distance a strong arm adds to a bracket.
+ *
+ * @param {number} strength
+ * @param {string} band
+ * @returns {number} feet
+ */
+CNS5.rangedStrengthBonus = function (strength, band) {
+  if (!CNS5.rangedStrengthRangeBands.includes(band)) return 0;
+  const over = (Number(strength) || 0) - CNS5.rangedStrengthMinimum;
+  return over > 0 ? over * CNS5.rangedStrengthRangePerPoint : 0;
+};

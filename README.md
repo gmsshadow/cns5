@@ -600,6 +600,44 @@ decides for themselves. Nothing in the system depends on the module: setting an
 appearance on a roll is inert without it, and the registration happens on a hook
 that never fires when it is absent.
 
+## Missiles
+
+Table - Missile Ranges (p258) is a table of *pairings*, not of weapons. A bow's
+damage, its reach and its Crit Die modifier all belong to the bow and its arrows
+together: a longbow shooting hunting arrows does 14 and reaches eight hundred
+feet, the same bow shooting armour-piercing arrows does 17 and reaches four
+hundred and fifty. None of those figures is a property of the bow, which is why
+an earlier version treating each row as a weapon could not express any of it.
+
+**Twenty-five profiles** are extracted, each a launcher with a kind of
+ammunition or a thrown weapon with itself. Loosing a launcher asks what it is
+loaded with — from the ammunition actually carried — and at what range, then
+looks up the pairing. A missile loosed is decremented.
+
+A weapon now has a **part in a shot**: melee, launcher, ammunition, or thrown. A
+thrown weapon is its own ammunition and keeps its own ranges, which is what
+distinguishes a javelin from an arrow.
+
+**Strength tells at a distance** (p258). A character of Strength 12 or better
+modifies the Crit Die by the amount the table gives for that missile at that
+range, and reaches fifty feet further per point above twelve — but only at
+extreme and maximum range, where the shot is a matter of how hard it was loosed
+rather than how carefully aimed. A crossbow is indifferent to all of it, the
+windlass having done the work.
+
+The book's own example settles the arithmetic: Edward at Strength 15 with a
+longbow and war arrows takes -4 from the bracket and +3 from his arm, for -1.
+
+### What the tables leave open
+
+Hunting Bolts name no crossbow and the others each name their own, so it is not
+said whether a heavy crossbow will take a light bolt. Anything that is a bolt
+loads anything that takes bolts, and the question is left where the rules left
+it.
+
+Sling stones are nowhere given as an item. The ranges table prints a profile for
+a sling with no ammunition named, which is taken to be stones.
+
 ## Damage
 
 ## Armour coverage

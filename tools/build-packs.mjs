@@ -115,8 +115,11 @@ function toWeapon(row, name = row.name) {
   const blank = { short: 0, medium: 0, long: 0, extreme: 0, max: 0 };
   const skill = weaponSkill({ name: row.name, group: row.group, role: row.role });
 
+  const role = missileRole(row);
+
   return document("weapon", name, "icons/svg/sword.svg", {
-    role: row.role,
+    role,
+    ammunitionKind: CNS5.ammunitionKindOf(row.name),
     weightClass: row.weightClass,
     damageType: row.damageType,
     baseDamage: row.baseDamage ?? 0,
@@ -639,6 +642,57 @@ function toShield(row) {
 
 /* -------------------------------------------- */
 
+const missiles = JSON.parse(await readFile(path.join(DATA, "missiles.json"), "utf8"));
+
+/**
+ * Settle what a missile weapon is from the ranges table rather than from the
+ * type code beside it.
+ *
+ * The code column decides a weapon's weight, not its part in a shot, and
+ * reading a role out of it got two things wrong: a sling carries a weight code
+ * and was taken for ammunition, while a quiver carries none and was taken for a
+ * launcher. The ranges table names which things shoot and which are shot, so it
+ * settles it.
+ */
+const normaliseName = (name = "") => {
+  const stripped = name
+    .toLowerCase()
+    .replace(/\bmdm\b\.?/g, "medium")
+    .replace(/[^a-z0-9]/g, "");
+
+  // The weapon list calls the shepherd's sling simply "Shepherds", and the
+  // ranges table calls a war dart a "Dart". Both are the same thing under two
+  // names, so they are brought together rather than left to miss each other.
+  if (stripped.startsWith("shepherd")) return "shepherdssling";
+  if (/dart/.test(stripped)) return "dart";
+  return stripped;
+};
+
+const launchers = new Set(
+  missiles.profiles.filter((p) => !p.thrown).map((p) => normaliseName(p.weapon))
+);
+const thrownWeapons = new Set(
+  missiles.profiles.filter((p) => p.thrown).map((p) => normaliseName(p.weapon))
+);
+const ammunitionNames = new Set(
+  missiles.profiles.map((p) => normaliseName(p.ammunition ?? "")).filter(Boolean)
+);
+
+/**
+ * @param {object} row
+ * @returns {string} melee, launcher, ammunition or thrown
+ */
+function missileRole(row) {
+  const name = normaliseName(row.name);
+  if (launchers.has(name)) return "launcher";
+  if (thrownWeapons.has(name)) return "thrown";
+  if (ammunitionNames.has(name)) return "ammunition";
+
+  // Arrows and bolts the ranges table does not name are still ammunition.
+  if (CNS5.ammunitionKindOf(row.name) && row.role !== "melee") return "ammunition";
+  return row.role === "melee" && row.missile ? "thrown" : row.role;
+}
+
 const skills = JSON.parse(await readFile(path.join(DATA, "skills.json"), "utf8"));
 const shieldData = JSON.parse(await readFile(path.join(DATA, "shields.json"), "utf8"));
 const traits = JSON.parse(await readFile(path.join(DATA, "traits.json"), "utf8"));
@@ -670,7 +724,26 @@ function disambiguate(rows) {
 }
 
 await build("skills", skills.skills.map(toSkill));
-await build("weapons", disambiguate(gear.weapons));
+/* A quiver is a container rather than a weapon, whatever table it was printed
+ * in, so it ships as equipment. */
+const isQuiver = (row) => /^(arrow|bolt quiver|quiver)$/i.test(row.name.trim());
+
+function toQuiver(row) {
+  return document("equipment", /quiver/i.test(row.name) ? row.name : "Arrow Quiver",
+    "icons/svg/item-bag.svg", {
+      quantity: 1,
+      bundle: 1,
+      weight: row.weight ?? 0,
+      cost: row.cost ?? 0,
+      location: "",
+      carried: true,
+      equipped: false,
+      reference: `p${row.page} — holds twenty`,
+      description: ""
+    });
+}
+
+await build("weapons", disambiguate(gear.weapons.filter((row) => !isQuiver(row))));
 /**
  * Build the armour pack from the pieces, falling back to bare types for the two
  * absorption rows that no piece covers.
@@ -709,6 +782,7 @@ await build("armour", [...buildArmour(), ...shieldData.shields.map(toShield)]);
 await build("acts-of-faith", faith.acts.map(toActOfFaith));
 await build("bestiary", bestiary.creatures.map(toCreature));
 await build("talents", traits.talents.map(toTalent));
+await build("equipment", gear.weapons.filter(isQuiver).map(toQuiver));
 
 /* Deficiencies, the small additional table, and the phobias all become flaws;
  * only their kind differs.

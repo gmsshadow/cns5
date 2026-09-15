@@ -82,3 +82,73 @@ export async function promptDefence(defender, mode) {
     rejectClose: false
   });
 }
+
+
+/* -------------------------------------------- */
+
+/**
+ * Ask what a launcher is loaded with and how far the shot is.
+ *
+ * Both belong to the shot rather than to the bow: Table - Missile Ranges gives
+ * a pairing its damage and its brackets, and until the arrow and the distance
+ * are known there is nothing to look up.
+ *
+ * @param {Item} weapon
+ * @param {Array<{item: Item, profile: object}>} loadings
+ * @param {object} shooter  the shooter's system data
+ * @returns {Promise<{ammunitionId: string|null, band: string}|null>}
+ */
+export async function promptShot(weapon, loadings, shooter) {
+  const strength = shooter?.attr?.str?.value ?? 0;
+
+  const options = loadings
+    .map(
+      ({ item, profile }) =>
+        `<option value="${item?.id ?? ""}">${item?.name ?? profile.ammunition ?? weapon.name}
+         — ${game.i18n.format("CNS5.Missile.damageIs", { damage: profile.baseDamage })}
+         ${item ? ` (${item.system.quantity})` : ""}</option>`
+    )
+    .join("");
+
+  const first = loadings[0]?.profile;
+  const bands = CNS5.rangeBands
+    .map((band) => {
+      const reach = (first?.ranges?.[band] ?? 0) + CNS5.rangedStrengthBonus(strength, band);
+      const modifier = first?.critModifiers?.[band] ?? 0;
+      return `<option value="${band}">${game.i18n.localize(`CNS5.Range.${band}`)}
+              — ${reach}ft, ${modifier >= 0 ? "+" : ""}${modifier}
+              ${game.i18n.localize("CNS5.Missile.toCritDie")}</option>`;
+    })
+    .join("");
+
+  const content = `
+    <div class="cns5-prompt">
+      ${
+        loadings.length > 1 || loadings[0]?.item
+          ? `<label for="cns5-ammo">${game.i18n.localize("CNS5.Missile.loadedWith")}</label>
+             <select id="cns5-ammo" name="ammunition">${options}</select>`
+          : ""
+      }
+      <label for="cns5-band">${game.i18n.localize("CNS5.Missile.range")}</label>
+      <select id="cns5-band" name="band">${bands}</select>
+      <p class="hint">${game.i18n.localize("CNS5.Missile.rangeHint")}</p>
+      ${
+        strength >= CNS5.rangedStrengthMinimum
+          ? `<p class="hint">${game.i18n.format("CNS5.Missile.strongArm", { strength })}</p>`
+          : ""
+      }
+    </div>`;
+
+  return foundry.applications.api.DialogV2.prompt({
+    window: { title: game.i18n.format("CNS5.Missile.title", { weapon: weapon.name }) },
+    content,
+    ok: {
+      label: game.i18n.localize("CNS5.Roll.rollButton"),
+      callback: (event, button) => ({
+        ammunitionId: button.form.elements.ammunition?.value || null,
+        band: button.form.elements.band.value
+      })
+    },
+    rejectClose: false
+  });
+}

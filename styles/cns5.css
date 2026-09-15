@@ -1351,3 +1351,13 @@
     outline: 2px solid #f2ede1;
     outline-offset: 1px;
 }
+
+/* A heading inside the breakdown, separating the Crit Die's workings from the
+   chance's. Both are lists of modifiers and would otherwise run together. */
+.cns5-check__subheading {
+    margin: 0.35rem 0 0.1rem;
+    font-size: 0.78rem;
+    font-variant: small-caps;
+    letter-spacing: 0.04em;
+    opacity: 0.8;
+}

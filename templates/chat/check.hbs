@@ -115,6 +115,18 @@
         {{#if unskilled}}
         <p class="cns5-hint cns5-hint--bad">{{localize "CNS5.Roll.unskilledNote"}}</p>
         {{/if}}
+
+        {{#if critBreakdown}}
+        <p class="cns5-check__subheading">{{localize "CNS5.Roll.critDie"}}</p>
+        <ul>
+            {{#each critBreakdown}}
+            <li><span>{{label}}</span><span>{{value}}</span></li>
+            {{/each}}
+            <li class="is-total">
+                <span>{{localize "CNS5.Roll.critTotal"}}</span><span>{{../critTotal}}</span>
+            </li>
+        </ul>
+        {{/if}}
     </details>
     {{/if}}
 </div>

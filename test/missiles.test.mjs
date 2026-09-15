@@ -117,5 +117,68 @@ ok("a hunting bolt too", CNS5.ammunitionKindOf("Hunting Bolts"), "bolt");
 ok("a bullet is shot from a sling", CNS5.ammunitionKindOf("Lead Bullets"), "stone");
 ok("a bow shoots arrows", CNS5.ammunitionKindOf("Longbow"), "");
 
+/* -- What modifies the Crit Die ---------------------------------------------- */
+
+/* Three things do on a shot, and only one on a blow. Every bow in the table has
+   a Crit Die modifier of nothing — the head does the work — so taking the
+   launcher's figure and ignoring the arrow's lost every missile between one and
+   two on the die. */
+const { resolveShot } = await import(path.join(ROOT, "module", "helpers", "missiles.mjs"));
+
+const gear = JSON.parse(await readFile(path.join(ROOT, "data", "gear.json"), "utf8")).weapons;
+const named = (name) => gear.find((w) => w.name === name);
+
+ok("no bow modifies the die", 
+   ["Short Bow", "Composite Bow", "Longbow", "Elvish Longbow"]
+     .map((n) => named(n).critDieModifier)
+     .filter((v) => v !== 0),
+   []);
+ok("nor any crossbow",
+   ["Light Crossbow", "Medium Crossbow", "Heavy Crossbow"]
+     .map((n) => named(n).critDieModifier)
+     .filter((v) => v !== 0),
+   []);
+
+/* The arrows and bolts do. */
+ok("hunting arrows", named("Hunting Arrows").critDieModifier, 2);
+ok("war arrows", named("War Arrows").critDieModifier, 2);
+ok("a heavy crossbow bolt", named("Heavy Crossbow Bolts").critDieModifier, 2);
+ok("a lead bullet", named("Lead Bullets").critDieModifier, 2);
+ok("a hunting bolt does not", named("Hunting Bolts").critDieModifier, 0);
+
+/* Melee weapons carry their own. */
+ok("a broadsword", named("Knights Broadsword").critDieModifier, 1);
+ok("a halberd", named("Halberd").critDieModifier, 2);
+ok("a dagger does not", named("Dagger").critDieModifier, 0);
+
+/* Edward again, with the arrow counted this time: the bracket takes four, his
+   arm gives three back, and the war arrow two more. */
+const shot = resolveShot({
+  profile: find("Longbow", "War Arrow"),
+  band: "medium",
+  strength: 15,
+  ammunition: "War Arrows",
+  ammunitionCrit: named("War Arrows").critDieModifier,
+  strengthModifiers
+});
+ok("the bracket", shot.rangeCrit, -4);
+ok("his strength", shot.strengthCrit, 3);
+ok("the arrow", shot.ammunitionCrit, 2);
+ok("and the three together", shot.critMod, 1);
+
+/* A weak archer with the same bow and arrows fares worse, and the difference is
+   exactly the strength row. */
+const weak = resolveShot({
+  profile: find("Longbow", "War Arrow"),
+  band: "medium",
+  strength: 10,
+  ammunition: "War Arrows",
+  ammunitionCrit: 2,
+  strengthModifiers
+});
+ok("a weak arm gains nothing from strength", weak.strengthCrit, 0);
+ok("but still gains the arrow", weak.critMod, -2);
+ok("so strength is worth three here", shot.critMod - weak.critMod, 3);
+
 console.log(fails ? `\n${fails} FAILURES` : "\nAll checks passed.");
 process.exit(fails ? 1 : 0);

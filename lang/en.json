@@ -717,5 +717,12 @@
   "CNS5.Weapon.role.melee": "Melee weapon",
   "CNS5.Weapon.role.launcher": "Launcher",
   "CNS5.Weapon.role.ammunition": "Ammunition",
-  "CNS5.Weapon.role.thrown": "Thrown"
+  "CNS5.Weapon.role.thrown": "Thrown",
+  "CNS5.Roll.critDieRolled": "Rolled",
+  "CNS5.Roll.critFromWeapon": "The weapon",
+  "CNS5.Roll.critFromMissile": "The missile",
+  "CNS5.Roll.critFromRange": "The range",
+  "CNS5.Roll.critFromStrength": "Strength",
+  "CNS5.Roll.critFromBand": "Above or below the band",
+  "CNS5.Roll.critTotal": "Crit Die total"
 }

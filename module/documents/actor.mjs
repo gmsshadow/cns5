@@ -14,7 +14,12 @@ import {
 } from "../helpers/defence-prompt.mjs";
 import { armourAt } from "../helpers/defence.mjs";
 import { promptShot } from "../helpers/defence-prompt.mjs";
-import { missileProfile, availableAmmunition, resolveShot } from "../helpers/missiles.mjs";
+import {
+  missileProfile,
+  availableAmmunition,
+  resolveShot,
+  missileData
+} from "../helpers/missiles.mjs";
 
 /**
  * The C&S Actor.
@@ -225,6 +230,8 @@ export class CnS5Actor extends Actor {
         if (profile) loadings.push({ item: null, profile });
       }
 
+      const missiles = await missileData();
+
       if (!loadings.length) {
         ui.notifications.warn(
           game.i18n.format("CNS5.Missile.noProfile", { weapon: weapon.name })
@@ -240,7 +247,12 @@ export class CnS5Actor extends Actor {
           profile: loading.profile,
           band: chosen.band,
           strength: this.system.attr.str.value,
-          ammunition: ammunition?.name ?? loading.profile.ammunition
+          ammunition: ammunition?.name ?? loading.profile.ammunition,
+          // The head does the work. A bow's own Crit Die modifier is nothing in
+          // every row of the table; the arrow's is what tells, and dropping it
+          // lost every missile between one and two on the die.
+          ammunitionCrit: ammunition?.system.critDieModifier ?? 0,
+          strengthModifiers: missiles.strengthModifiers
         });
       }
     }
@@ -289,11 +301,14 @@ export class CnS5Actor extends Actor {
     const unclamped = base + situational;
     const { target: chance, critMod, overflow, shortfall } = clampSuccessChance(unclamped, df);
 
+    // A shot's Crit Die modifiers are gathered by the shot itself, the
+    // ammunition's among them, so the launcher's is not added twice.
+    const weaponCrit = shot ? shot.critMod : weapon.system.critDieModifier;
+
     const result = await resolveCheck({
       target: chance,
-      // The weapon's own Crit Die modifier stacks with any from the band, and
-      // for a shot with the range and the shooter's strength as well.
-      critMod: critMod + weapon.system.critDieModifier + (shot?.critMod ?? 0),
+      // The weapon's own Crit Die modifier stacks with any from the band.
+      critMod: critMod + weaponCrit,
       failureCritMod: skill ? skill.system.failureCritMod : 0
     });
     result.attackerPsf = weapon.system.psf;
@@ -392,6 +407,7 @@ export class CnS5Actor extends Actor {
       blow,
       absorption,
       shot,
+      weaponCrit,
       shotLabel: shot
         ? game.i18n.format("CNS5.Missile.shotAt", {
             ammunition: ammunition?.name ?? shot.strengthRow,
@@ -413,6 +429,19 @@ export class CnS5Actor extends Actor {
       defenceFatigue,
       targetArea: area === "none" ? null : game.i18n.localize(aimed.label),
       cost: game.i18n.format("CNS5.Roll.weaponCost", { ap: weapon.system.ap }),
+      // The Crit Die's own workings, which are easy to lose sight of: three
+      // things modify it on a shot and only one on a blow.
+      critBreakdown: this.#breakdown([
+        { label: "CNS5.Roll.critDieRolled", value: result.critRaw },
+        {
+          label: shot ? "CNS5.Roll.critFromMissile" : "CNS5.Roll.critFromWeapon",
+          value: shot ? shot.ammunitionCrit : weapon.system.critDieModifier,
+          signed: true
+        },
+        { label: "CNS5.Roll.critFromRange", value: shot?.rangeCrit ?? 0, signed: true },
+        { label: "CNS5.Roll.critFromStrength", value: shot?.strengthCrit ?? 0, signed: true },
+        { label: "CNS5.Roll.critFromBand", value: critMod, signed: true }
+      ]),
       breakdown: this.#breakdown([
         {
           label: "CNS5.Roll.bcsSkilled",

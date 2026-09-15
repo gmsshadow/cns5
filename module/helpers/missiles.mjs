@@ -121,13 +121,24 @@ export function availableAmmunition(actor, launcher) {
  * @param {string} options.ammunition  what is loaded, for the strength table
  * @returns {object}
  */
-export function resolveShot({ profile, band, strength, ammunition }) {
-  const data = profiles;
+export function resolveShot({
+  profile,
+  band,
+  strength,
+  ammunition,
+  ammunitionCrit = 0,
+  strengthModifiers = null
+}) {
+  // The table is passed in rather than read from module state. Reading it from
+  // whatever a previous call happened to have loaded meant the function was
+  // silently wrong anywhere the load had not run, and gave a strong archer no
+  // bonus at all.
+  const table = strengthModifiers ?? profiles?.strengthModifiers ?? [];
   const row = CNS5.rangedStrengthRow(ammunition ?? profile.ammunition ?? profile.weapon);
   const strong = (Number(strength) || 0) >= CNS5.rangedStrengthMinimum;
 
   const strengthCrit = strong
-    ? data?.strengthModifiers?.find((s) => s.ammunition === row)?.modifiers?.[band] ?? 0
+    ? table.find((s) => s.ammunition === row)?.modifiers?.[band] ?? 0
     : 0;
 
   const rangeCrit = profile.critModifiers[band] ?? 0;
@@ -141,10 +152,12 @@ export function resolveShot({ profile, band, strength, ammunition }) {
     reach: distance + extra,
     rangeCrit,
     strengthCrit,
+    ammunitionCrit,
     strengthRow: row,
-    // The two modifiers meet on the same die, which is what makes a strong
-    // archer at long range so much better than a weak one.
-    critMod: rangeCrit + strengthCrit,
+    // Three modifiers meet on the same die: what the missile is made for, how
+    // far it has flown, and how hard it was loosed. That is what makes a strong
+    // archer with war arrows so much better than a weak one with hunting ones.
+    critMod: rangeCrit + strengthCrit + ammunitionCrit,
     baseDamage: profile.baseDamage
   };
 }

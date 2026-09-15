@@ -625,8 +625,22 @@ extreme and maximum range, where the shot is a matter of how hard it was loosed
 rather than how carefully aimed. A crossbow is indifferent to all of it, the
 windlass having done the work.
 
-The book's own example settles the arithmetic: Edward at Strength 15 with a
-longbow and war arrows takes -4 from the bracket and +3 from his arm, for -1.
+### What modifies the Crit Die
+
+Three things do on a shot, and only one on a blow. A melee weapon has a modifier
+of its own — a broadsword +1, a halberd +2 — and it is added to the die.
+
+For a shot it is the missile's modifier that tells, not the launcher's: every
+bow and crossbow in the table modifies the die by nothing, while an arrow gives
++2 and a heavy bolt the same. Taking the launcher's figure and ignoring the
+arrow's therefore lost every missile between one and two on the die, which is
+the difference between a critical and an ordinary hit on two results in ten.
+
+So a shot gathers the missile's modifier, the range bracket's, and the shooter's
+strength. Edward at Strength 15 with a longbow and war arrows at medium range
+takes -4 from the bracket, +3 from his arm and +2 from the arrow, for +1. The
+chat card shows the workings, since a modifier silently going missing is exactly
+what happened here.
 
 ### What the tables leave open
 

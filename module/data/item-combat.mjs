@@ -204,6 +204,22 @@ export class CnS5Armour extends CnS5PhysicalItem {
       choices: Object.keys(CNS5.armourWeights)
     });
 
+    // Which class of armour this is, from which its coverage follows.
+    schema.armourClass = new fields.StringField({ required: true, blank: true, initial: "" });
+
+    // The parts of the body it protects. Kept on the item rather than looked up
+    // from the class, so a Gamemaster can fit a suit that covers something odd
+    // without inventing a class for it.
+    schema.covers = new fields.ArrayField(
+      new fields.StringField({ required: true, blank: false }),
+      { required: true, initial: [] }
+    );
+
+    // Where a piece covers an area only partly — a hauberk reaches the knees,
+    // so a leg hit meets it seven times in ten — the chance is recorded per
+    // area. Anything absent is covered outright.
+    schema.coverage = new fields.ObjectField({ required: true, initial: {} });
+
     schema.absorption = new fields.SchemaField(
       Object.fromEntries(
         Object.keys(CNS5.damageTypes).map((key) => [

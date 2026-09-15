@@ -20,6 +20,26 @@ export class CnS5ItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     form: { submitOnChange: true }
   };
 
+  /* -------------------------------------------- */
+
+  /** @override */
+  _onRender(context, options) {
+    super._onRender(context, options);
+    if (!this.isEditable) return;
+
+    // The coverage boxes stand for entries in an array rather than for named
+    // fields, so they are written by hand rather than through the form.
+    for (const box of this.element.querySelectorAll("[data-cns5-covers]")) {
+      box.addEventListener("change", async (event) => {
+        const area = event.currentTarget.dataset.cns5Covers;
+        const covers = new Set(this.item.system.covers ?? []);
+        if (event.currentTarget.checked) covers.add(area);
+        else covers.delete(area);
+        await this.item.update({ "system.covers": [...covers] });
+      });
+    }
+  }
+
   /** Body template per item type. */
   static BODIES = {
     weapon: "systems/cns5/templates/item/weapon-body.hbs",
@@ -56,6 +76,14 @@ export class CnS5ItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     context.armourLocations = this.#choices(CNS5.armourLocations, this.item.system.location);
     context.flawKinds = this.#choices(CNS5.flawKinds, this.item.system.kind);
     context.phobiaSeverities = this.#choices(CNS5.phobiaSeverities, this.item.system.severity);
+
+    // Which parts this piece protects, and how surely.
+    context.coverage = CNS5.bodyAreas.map((key) => ({
+      key,
+      label: `CNS5.TargetArea.${key}`,
+      covered: (this.item.system.covers ?? []).includes(key),
+      chance: this.item.system.coverage?.[key] ?? null
+    }));
 
     context.combatActions = [
       { value: "", label: "CNS5.Weapon.apAuto", selected: !this.item.system.apAction },

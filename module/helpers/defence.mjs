@@ -246,3 +246,44 @@ export async function checkShield(shield, damage, damageType) {
   const roll = await new Roll("1d100").evaluate();
   return { overwhelmed: true, chance: raised, roll: roll.total, broken: roll.total <= raised };
 }
+
+/* -------------------------------------------- */
+
+/**
+ * Work out what armour meets a blow at a given part of the body.
+ *
+ * Coverage is not always certain. A hauberk reaches the knees, so "if a leg hit
+ * occurs, roll a 1D10 with 01-07 falling on the armour rather than the
+ * unprotected part of the leg" (p263). Where a piece covers an area only
+ * partly, the die is rolled here and the piece either meets the blow or does
+ * not — there is no averaging, because a hit that misses the hem is unarmoured
+ * rather than seven-tenths armoured.
+ *
+ * @param {Actor} target
+ * @param {string} area        one of CNS5.bodyAreas
+ * @param {string} damageType
+ * @returns {Promise<{absorption: number, pieces: Array, missed: Array}>}
+ */
+export async function armourAt(target, area, damageType) {
+  const covering = target?.system?.coverageByArea?.[area] ?? [];
+  const pieces = [];
+  const missed = [];
+
+  for (const entry of covering) {
+    if (entry.chance >= 100) {
+      pieces.push(entry);
+      continue;
+    }
+
+    const roll = await new Roll("1d100").evaluate();
+    if (roll.total <= entry.chance) pieces.push({ ...entry, roll: roll.total });
+    else missed.push({ ...entry, roll: roll.total });
+  }
+
+  const absorption = pieces.reduce(
+    (total, entry) => total + (entry.item.system.absorption?.[damageType] ?? 0),
+    0
+  );
+
+  return { absorption, pieces, missed };
+}

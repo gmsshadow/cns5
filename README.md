@@ -602,6 +602,44 @@ that never fires when it is absent.
 
 ## Damage
 
+## Armour coverage
+
+Armour protects the parts of a body it is fitted over, and the parts are the
+ones Table - Aimed Shot Modifiers names (p272), so coverage and called shots
+speak the same language. What each class protects is stated in the prose beside
+its table rather than in the table itself:
+
+| Class | Covers |
+| --- | --- |
+| Light body armour (p261) | chest, abdomen, arms — "but not the groin or legs" |
+| Heavy body armour (p262) | as above, and the groin |
+| Three-quarter battle armour (p263) | "the entire body below the neck and to the knees" |
+| Heavy battle armour (p263) | field and cavalry plate: everything below the neck |
+| Super heavy battle armour (p263) | "full mail fitted from head to foot" |
+| Helmets (p261) | the head; an enclosed helm the face, a visored one the throat, a hood or coif the neck |
+
+A hauberk reaching only to the knees is not a matter of averages: "if a leg hit
+occurs, roll a 1D10 with 01-07 falling on the armour rather than the unprotected
+part of the leg". So a partly covered part carries a chance, the die is rolled
+on the blow, and the piece either meets it or does not. The chat card names what
+absorbed and what fell below the hem.
+
+**Two things are read into the rules here.** Hands are covered from the hauberk
+upward, on the reasoning that armour enclosing a whole arm encloses what is on
+the end of it, and the same for feet where the legs are covered — the tables
+list no gauntlets or sabatons, so the alternative is bare hands inside a suit of
+plate. And a tunic or doublet is taken to leave the hands bare, being a garment
+rather than a harness. Coverage is recorded on each item and editable, so a
+Gamemaster who reads it differently can say so.
+
+**An unaimed blow strikes the torso.** Hit locations are an optional rule
+attached to critical hits (p282), and the location table gives the chest forty
+results in a hundred on its own, so an ordinary attack is a blow at the body and
+it is the body's armour that stops it. Protection is therefore totalled per
+location rather than in one heap — an earlier version added every worn piece
+together, which armoured a knight's chest with his helmet. Where an aimed shot
+names a part, the armour over that part is what absorbs the blow.
+
 A landed blow is the weapon's damage, the Strength bonus, the Attacker's Bonus
 and the Crit Die. Armour covering that damage type absorbs what it can, and what
 gets through comes off Fatigue Points until they are gone and off Body

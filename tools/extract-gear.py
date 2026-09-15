@@ -380,31 +380,43 @@ def extract_armour(pdf):
 
 # page index, vertical band, horizontal band, column header positions, whether a
 # Fatigue-to-wear and a weight-modifier column are present, and where it is worn.
+# Each table is a class of armour, and the class is what decides coverage: the
+# book states what each protects in the prose beside its table rather than in
+# the table itself.
+#
+#   helmet        the head, and for later helms the eyes and throat too
+#   lightBody     "the arms, chest, back and abdomen, but not the groin or
+#                 legs" (p261)
+#   heavyBody     "the arms, chest, back, abdomen and groin" (p262)
+#   threeQuarter  a hauberk, "the entire body below the neck and to the knees";
+#                 a leg hit falls on the armour on 01-07 of a d10 (p263)
+#   heavyBattle   field and cavalry plate, full battle armour (p263)
+#   superHeavy    "full mail fitted from head to foot" (p263)
 PIECE_TABLES = [
     dict(page=260, top=280, bottom=470, left=70, right=385,
          cols=[78, 132, 216, 258, 288, 330, 354],
          fields=["type", "name", "dates", "fp", "production", "weight", "cost"],
-         location="head"),
+         location="head", armourClass="helmet"),
     dict(page=260, top=586, bottom=720, left=320, right=575,
          cols=[354, 414, 450, 486, 504, 546],
          fields=["name", "fp", "production", "weight", "cost", "weightMod"],
-         location="body"),
+         location="body", armourClass="lightBody"),
     dict(page=261, top=262, bottom=400, left=300, right=560,
          cols=[336, 390, 432, 468, 486, 522],
          fields=["name", "fp", "production", "weight", "cost", "weightMod"],
-         location="body"),
+         location="body", armourClass="heavyBody"),
     dict(page=262, top=108, bottom=200, left=320, right=575,
          cols=[354, 408, 444, 474, 504, 540],
          fields=["name", "fp", "production", "weight", "cost", "weightMod"],
-         location="body"),
+         location="body", armourClass="superHeavy"),
     dict(page=262, top=218, bottom=400, left=70, right=320,
          cols=[96, 162, 204, 240, 258, 294],
          fields=["name", "fp", "production", "weight", "cost", "weightMod"],
-         location="body"),
+         location="body", armourClass="threeQuarter"),
     dict(page=262, top=485, bottom=580, left=70, right=320,
          cols=[84, 156, 186, 222, 252, 288],
          fields=["name", "fp", "production", "weight", "cost", "weightMod"],
-         location="body"),
+         location="body", armourClass="heavyBattle"),
 ]
 
 def words_in(page, spec):
@@ -505,6 +517,7 @@ def extract_armour_pieces(pdf):
             pieces.append({
                 "name": name,
                 "location": spec["location"],
+                "armourClass": spec["armourClass"],
                 "fpToWear": abs(fp) if fp is not None else 0,
                 "weight": weight,
                 "cost": int(cost),

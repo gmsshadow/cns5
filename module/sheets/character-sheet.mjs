@@ -140,6 +140,17 @@ export class CnS5CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2)
       context.flaws.reduce((total, f) => total + (f.system.pcBonus ?? 0), 0) -
       context.talents.reduce((total, t) => total + (t.system.pcCost ?? 0), 0);
 
+    // Protection is shown by location rather than as one total: an unaimed
+    // blow strikes the torso, and a helm has no part in stopping it.
+    context.protectionRows = [
+      { key: "body", label: "CNS5.Armour.worn", tooltip: "CNS5.Armour.wornHint" },
+      { key: "head", label: "CNS5.ArmourLocation.head" },
+      { key: "limbs", label: "CNS5.ArmourLocation.limbs" },
+      { key: "shield", label: "CNS5.Armour.shields", tooltip: "CNS5.Armour.shieldHint" }
+    ]
+      .map((row) => ({ ...row, values: system.protectionByLocation[row.key] }))
+      .filter((row) => row.key === "body" || Object.values(row.values).some((v) => v > 0));
+
     context.rangeKeys = Object.keys(CNS5.spellRanges);
     context.spentMR = context.spells.reduce((total, s) => total + s.system.mr, 0);
 

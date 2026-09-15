@@ -38,6 +38,20 @@
 </div>
 
 <fieldset class="cns5-fieldset">
+    <legend>{{localize "CNS5.Armour.covers"}}</legend>
+    <p class="cns5-hint">{{localize "CNS5.Armour.coversHint"}}</p>
+    <div class="cns5-checks">
+        {{#each coverage as |area|}}
+        <label class="cns5-checkbox">
+            <input type="checkbox" data-cns5-covers="{{area.key}}" {{checked area.covered}}
+                   {{#unless @root.editable}}disabled{{/unless}}>
+            <span>{{localize area.label}}{{#if area.chance}} ({{area.chance}}%){{/if}}</span>
+        </label>
+        {{/each}}
+    </div>
+</fieldset>
+
+<fieldset class="cns5-fieldset">
     <legend>{{localize "CNS5.Armour.absorption"}}</legend>
     <div class="cns5-grid cns5-grid--five">
         {{#each system.absorption as |value key|}}

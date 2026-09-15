@@ -1950,6 +1950,7 @@
     {
       "name": "Quilted Hood",
       "location": "head",
+      "armourClass": "helmet",
       "fpToWear": 0,
       "weight": 1.0,
       "cost": 4,
@@ -1961,6 +1962,7 @@
     {
       "name": "Leather Hood",
       "location": "head",
+      "armourClass": "helmet",
       "fpToWear": 0,
       "weight": 1.0,
       "cost": 16,
@@ -1972,6 +1974,7 @@
     {
       "name": "Maille Coif",
       "location": "head",
+      "armourClass": "helmet",
       "fpToWear": 0,
       "weight": 3.0,
       "cost": 43,
@@ -1983,6 +1986,7 @@
     {
       "name": "Cuirbolli Helm",
       "location": "head",
+      "armourClass": "helmet",
       "fpToWear": 0,
       "weight": 2.0,
       "cost": 35,
@@ -1994,6 +1998,7 @@
     {
       "name": "Composite Helm",
       "location": "head",
+      "armourClass": "helmet",
       "fpToWear": 0,
       "weight": 3.0,
       "cost": 55,
@@ -2005,6 +2010,7 @@
     {
       "name": "Conical Helm",
       "location": "head",
+      "armourClass": "helmet",
       "fpToWear": 0,
       "weight": 4.0,
       "cost": 72,
@@ -2016,6 +2022,7 @@
     {
       "name": "Open Bascinet",
       "location": "head",
+      "armourClass": "helmet",
       "fpToWear": 0,
       "weight": 7.0,
       "cost": 120,
@@ -2027,6 +2034,7 @@
     {
       "name": "Pot Helm",
       "location": "head",
+      "armourClass": "helmet",
       "fpToWear": 1,
       "weight": 3.5,
       "cost": 144,
@@ -2038,6 +2046,7 @@
     {
       "name": "Great Helm",
       "location": "head",
+      "armourClass": "helmet",
       "fpToWear": 1,
       "weight": 5.5,
       "cost": 165,
@@ -2049,6 +2058,7 @@
     {
       "name": "Visored Helm",
       "location": "head",
+      "armourClass": "helmet",
       "fpToWear": 1,
       "weight": 5.5,
       "cost": 192,
@@ -2060,6 +2070,7 @@
     {
       "name": "Jousting Helm",
       "location": "head",
+      "armourClass": "helmet",
       "fpToWear": 2,
       "weight": 11.5,
       "cost": 240,
@@ -2071,6 +2082,7 @@
     {
       "name": "Quilt Surcoat",
       "location": "body",
+      "armourClass": "lightBody",
       "fpToWear": 0,
       "weight": 5.0,
       "cost": 48,
@@ -2082,6 +2094,7 @@
     {
       "name": "Leather/Fur Tunic",
       "location": "body",
+      "armourClass": "lightBody",
       "fpToWear": 0,
       "weight": 3.5,
       "cost": 36,
@@ -2093,6 +2106,7 @@
     {
       "name": "Arming Doublet",
       "location": "body",
+      "armourClass": "lightBody",
       "fpToWear": 0,
       "weight": 8.5,
       "cost": 48,
@@ -2104,6 +2118,7 @@
     {
       "name": "Cuirbolli Cuirass",
       "location": "body",
+      "armourClass": "lightBody",
       "fpToWear": 1,
       "weight": 9.0,
       "cost": 144,
@@ -2115,6 +2130,7 @@
     {
       "name": "Reinf. Cuirbolli",
       "location": "body",
+      "armourClass": "heavyBody",
       "fpToWear": 2,
       "weight": 19.0,
       "cost": 360,
@@ -2126,6 +2142,7 @@
     {
       "name": "Scalemail",
       "location": "body",
+      "armourClass": "heavyBody",
       "fpToWear": 2,
       "weight": 21.0,
       "cost": 480,
@@ -2137,6 +2154,7 @@
     {
       "name": "Brigandine",
       "location": "body",
+      "armourClass": "heavyBody",
       "fpToWear": 2,
       "weight": 13.0,
       "cost": 240,
@@ -2148,6 +2166,7 @@
     {
       "name": "Maille Cuirass",
       "location": "body",
+      "armourClass": "heavyBody",
       "fpToWear": 2,
       "weight": 23.0,
       "cost": 960,
@@ -2159,6 +2178,7 @@
     {
       "name": "Platemail Cuirass",
       "location": "body",
+      "armourClass": "heavyBody",
       "fpToWear": 2,
       "weight": 24.0,
       "cost": 1200,
@@ -2170,6 +2190,7 @@
     {
       "name": "Plate Cuirass",
       "location": "body",
+      "armourClass": "heavyBody",
       "fpToWear": 2,
       "weight": 20.0,
       "cost": 1800,
@@ -2181,6 +2202,7 @@
     {
       "name": "Maille",
       "location": "body",
+      "armourClass": "superHeavy",
       "fpToWear": 3,
       "weight": 36.0,
       "cost": 1536,
@@ -2192,6 +2214,7 @@
     {
       "name": "Platemail",
       "location": "body",
+      "armourClass": "superHeavy",
       "fpToWear": 4,
       "weight": 45.0,
       "cost": 2400,
@@ -2203,6 +2226,7 @@
     {
       "name": "Late Cav. Plate",
       "location": "body",
+      "armourClass": "superHeavy",
       "fpToWear": 5,
       "weight": 66.0,
       "cost": 3600,
@@ -2214,6 +2238,7 @@
     {
       "name": "Jousting Armour",
       "location": "body",
+      "armourClass": "superHeavy",
       "fpToWear": 5,
       "weight": 97.0,
       "cost": 4800,
@@ -2225,6 +2250,7 @@
     {
       "name": "Scalemail Hauberk",
       "location": "body",
+      "armourClass": "threeQuarter",
       "fpToWear": 3,
       "weight": 45.0,
       "cost": 1440,
@@ -2236,6 +2262,7 @@
     {
       "name": "Maille Hauberk",
       "location": "body",
+      "armourClass": "threeQuarter",
       "fpToWear": 3,
       "weight": 49.0,
       "cost": 1584,
@@ -2247,6 +2274,7 @@
     {
       "name": "Field Plate",
       "location": "body",
+      "armourClass": "heavyBattle",
       "fpToWear": 4,
       "weight": 40.0,
       "cost": 2400,
@@ -2258,6 +2286,7 @@
     {
       "name": "Cavalry Plate",
       "location": "body",
+      "armourClass": "heavyBattle",
       "fpToWear": 5,
       "weight": 55.0,
       "cost": 3000,

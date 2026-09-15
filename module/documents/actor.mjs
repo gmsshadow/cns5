@@ -12,6 +12,7 @@ import {
   resolveExchange,
   promptDefence
 } from "../helpers/defence-prompt.mjs";
+import { armourAt } from "../helpers/defence.mjs";
 
 /**
  * The C&S Actor.
@@ -276,7 +277,15 @@ export class CnS5Actor extends Actor {
       result.rolls.push(bonusRoll);
     }
 
-    const absorption = target?.system?.protection?.[weapon.system.damageType] ?? 0;
+    // An unaimed blow strikes the chest. Where a target area was named, it is
+    // the armour over that part which stops it — and whether a given piece
+    // reaches that far is a question in its own right, since a hauberk covers
+    // the knee only seven times in ten.
+    const struck = area === "none" ? "chest" : area;
+    const worn = target
+      ? await armourAt(target, struck, weapon.system.damageType)
+      : { absorption: 0, pieces: [], missed: [] };
+    const absorption = worn.absorption;
     const split = landed
       ? CNS5.applyDamage({
           damage: blow,
@@ -330,6 +339,12 @@ export class CnS5Actor extends Actor {
       split,
       blow,
       absorption,
+      hitLocation: struck,
+      hitLocationLabel: game.i18n.localize(`CNS5.TargetArea.${struck}`),
+      armourPieces: worn.pieces.map((p) => p.name),
+      // A piece that covers the part only partly and did not meet the blow is
+      // worth naming: it explains an absorption lower than the sheet suggests.
+      armourMissed: worn.missed.map((p) => `${p.name} (${p.roll} > ${p.chance})`),
       bonusDamage: bonusRoll?.total ?? 0,
       criticalHit,
       fumble,

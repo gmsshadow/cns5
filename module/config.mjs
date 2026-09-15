@@ -1320,3 +1320,115 @@ CNS5.diceColorsets = [
     material: "metal"
   }
 ];
+
+/* -------------------------------------------- */
+/*  Where a blow lands                          */
+/* -------------------------------------------- */
+
+/**
+ * The torso, unless a location is named.
+ *
+ * Hit locations are an optional rule attached to critical hits (p282), and the
+ * location table gives the chest forty results in a hundred on its own. An
+ * ordinary attack is a blow at the body, and it is the body's armour that
+ * stops it.
+ */
+CNS5.defaultHitLocation = "body";
+
+/**
+ * Where an aimed shot strikes, for the areas that are not the torso. Used to
+ * pick which worn armour absorbs the blow.
+ */
+CNS5.targetAreaLocations = {
+  none: "body",
+  chest: "body",
+  abdomen: "body",
+  groin: "body",
+  arm: "limbs",
+  hand: "limbs",
+  upperLeg: "limbs",
+  lowerLeg: "limbs",
+  foot: "limbs",
+  head: "head",
+  neck: "head",
+  eyes: "head"
+};
+
+/* -------------------------------------------- */
+/*  Armour coverage                             */
+/* -------------------------------------------- */
+
+/**
+ * The parts of a body that can be struck, taken from Table - Aimed Shot
+ * Modifiers (p272) so that coverage and called shots speak the same language.
+ * Back is not in that table — a blow to the back is a blow to the chest as far
+ * as the armour tables are concerned — so it is not separated here either.
+ */
+CNS5.bodyAreas = [
+  "head", "eyes", "neck", "chest", "abdomen", "groin",
+  "arm", "hand", "upperLeg", "lowerLeg", "foot"
+];
+
+/**
+ * What each class of armour protects.
+ *
+ * The book states this in the prose beside each table rather than in the table
+ * itself:
+ *
+ *   - light body armour gives "protection to the arms, chest, back and
+ *     abdomen, but not to the groin or legs" (p261);
+ *   - heavy body armour "protects the arms, chest, back, abdomen and groin"
+ *     (p262);
+ *   - a hauberk protects "the entire body below the neck and to the knees", and
+ *     "if a leg hit occurs, roll a 1D10 with 01-07 falling on the armour rather
+ *     than the unprotected part of the leg" (p263);
+ *   - full mail "is fitted from head to foot" (p263).
+ *
+ * Two things are read into it. Hands are covered from the hauberk upwards, on
+ * the reasoning that armour enclosing the whole arm encloses what is on the end
+ * of it, and the same for feet where the legs are covered — the tables list no
+ * gauntlets or sabatons separately, so the alternative is bare hands inside a
+ * suit of plate. And a tunic or doublet is taken to leave the hands bare, being
+ * a garment rather than a harness.
+ */
+CNS5.armourClasses = {
+  helmet: { label: "CNS5.ArmourClass.helmet", covers: ["head"] },
+  coif: { label: "CNS5.ArmourClass.coif", covers: ["head", "neck"] },
+  enclosedHelm: { label: "CNS5.ArmourClass.enclosedHelm", covers: ["head", "eyes"] },
+  visoredHelm: { label: "CNS5.ArmourClass.visoredHelm", covers: ["head", "eyes", "neck"] },
+  lightBody: { label: "CNS5.ArmourClass.lightBody", covers: ["chest", "abdomen", "arm"] },
+  heavyBody: {
+    label: "CNS5.ArmourClass.heavyBody",
+    covers: ["chest", "abdomen", "groin", "arm"]
+  },
+  threeQuarter: {
+    label: "CNS5.ArmourClass.threeQuarter",
+    covers: ["chest", "abdomen", "groin", "arm", "hand", "upperLeg", "lowerLeg"],
+    // A leg hit falls on the armour seven times in ten.
+    partial: { upperLeg: 70, lowerLeg: 70 }
+  },
+  heavyBattle: {
+    label: "CNS5.ArmourClass.heavyBattle",
+    covers: ["chest", "abdomen", "groin", "arm", "hand", "upperLeg", "lowerLeg", "foot"]
+  },
+  superHeavy: {
+    label: "CNS5.ArmourClass.superHeavy",
+    covers: [
+      "neck", "chest", "abdomen", "groin",
+      "arm", "hand", "upperLeg", "lowerLeg", "foot"
+    ]
+  }
+};
+
+/**
+ * Whether a piece of armour covers a given area, and how surely.
+ *
+ * @param {object} armour  an armour item's system data
+ * @param {string} area    one of CNS5.bodyAreas
+ * @returns {number} the percentage chance the blow meets it, 0 to 100
+ */
+CNS5.coverageOf = function (armour, area) {
+  const covers = armour?.covers ?? [];
+  if (!covers.includes(area)) return 0;
+  return armour.coverage?.[area] ?? 100;
+};

@@ -193,6 +193,26 @@ function absorptionFor(row, byType) {
  * @param {string} [name]
  * @returns {object}
  */
+/**
+ * Which class of helmet a piece is.
+ *
+ * "All helmets before the full pot helm were open-faced", and "helms before
+ * visored helms required a hood or a coif to protect the neck and throat" while
+ * "visored helms come with a full plate gorge to protect the neck" (p261). So
+ * an open helm leaves the face bare, a pot or great helm encloses it, a visored
+ * helm guards the throat as well, and a hood or coif covers the neck but not
+ * the face.
+ *
+ * @param {string} name
+ * @returns {string}
+ */
+function helmetClass(name) {
+  if (/hood|coif|headgear/i.test(name)) return "coif";
+  if (/visored|jousting/i.test(name)) return "visoredHelm";
+  if (/pot helm|great helm/i.test(name)) return "enclosedHelm";
+  return "helmet";
+}
+
 function toArmourPiece(row, byType, name = row.name) {
   const { typeName, type } = absorptionFor(row, byType);
   const blank = { slash: 0, crush: 0, pierce: 0, missile: 0, energy: 0 };
@@ -202,10 +222,20 @@ function toArmourPiece(row, byType, name = row.name) {
   else references.push("no absorption row in the rulebook");
   if (row.costAtLeast) references.push("cost is a minimum");
 
+  // Coverage follows from the class, which follows from the table the piece was
+  // printed in — except for helmets, where the name says how much of the face
+  // and throat it encloses.
+  const armourClass =
+    row.armourClass === "helmet" ? helmetClass(row.name) : row.armourClass;
+  const coverage = CNS5.armourClasses[armourClass] ?? { covers: [] };
+
   return document("armour", name, "icons/svg/shield.svg", {
     location: row.location,
     weightClass: type?.weightClass ?? "light",
     armourType: typeName,
+    armourClass,
+    covers: coverage.covers,
+    coverage: coverage.partial ?? {},
     absorption: type ? type.absorption : blank,
     fpToWear: row.fpToWear,
     weightModifier: row.weightModifier,
@@ -231,10 +261,17 @@ function toArmourPiece(row, byType, name = row.name) {
  * @returns {object}
  */
 function toArmourType(row) {
+  // An absorption row with no piece behind it: the location is all that is
+  // known of what it covers.
+  const fallback = row.location === "head" ? "helmet" : "lightBody";
+
   return document("armour", row.name, "icons/svg/shield.svg", {
     location: row.location,
     weightClass: row.weightClass,
     armourType: row.name,
+    armourClass: fallback,
+    covers: CNS5.armourClasses[fallback].covers,
+    coverage: {},
     absorption: row.absorption,
     fpToWear: 0,
     weightModifier: 0,
@@ -579,6 +616,10 @@ function toShield(row) {
     location: "shield",
     weightClass: buckler ? "light" : "heavy",
     defenceWeight,
+    // A shield is interposed rather than worn, so it covers nothing on its own.
+    armourClass: "",
+    covers: [],
+    coverage: {},
     armourType: row.name,
     absorption: row.absorption,
     blockBonus: row.blockBonus,

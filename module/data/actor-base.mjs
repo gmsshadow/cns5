@@ -110,9 +110,16 @@ export class CnS5ActorBase extends foundry.abstract.TypeDataModel {
    * Resolve weapons against their combat skills, and total the protection from
    * everything currently worn.
    *
-   * Shields are summed separately because they are interposed by an active
-   * defence rather than worn: a shield only absorbs when the defender succeeds
-   * at a shield block, so adding it to worn protection would overstate it.
+   * Protection is totalled per location, not in one heap. An ordinary attack
+   * strikes the torso — hit locations are an optional rule for critical hits
+   * (p282) and the location table puts the chest at forty per cent on its own —
+   * so `protection` is the body total, and a helm protects the head alone. The
+   * first version of this added every worn piece together, which armoured a
+   * knight's chest with his helmet.
+   *
+   * Shields are apart again, because they are interposed by an active defence
+   * rather than worn: a shield only absorbs when its bearer wins a block, so
+   * folding it into worn protection would overstate it.
    */
   #prepareCombat() {
     const skills = new Map(
@@ -122,8 +129,9 @@ export class CnS5ActorBase extends foundry.abstract.TypeDataModel {
     );
 
     const zero = () => Object.fromEntries(Object.keys(CNS5.damageTypes).map((k) => [k, 0]));
-    this.protection = zero();
-    this.shieldProtection = zero();
+    this.protectionByLocation = Object.fromEntries(
+      Object.keys(CNS5.armourLocations).map((location) => [location, zero()])
+    );
     this.armourWeight = "none";
     this.dodgePenalty = 0;
     this.fatigueToWear = 0;
@@ -157,9 +165,9 @@ export class CnS5ActorBase extends foundry.abstract.TypeDataModel {
       item.system.prepareForActor(this);
       if (!item.system.equipped) continue;
 
-      const target = item.system.location === "shield" ? this.shieldProtection : this.protection;
+      const where = this.protectionByLocation[item.system.location] ?? this.protectionByLocation.body;
       for (const key of Object.keys(CNS5.damageTypes)) {
-        target[key] += item.system.absorption[key];
+        where[key] += item.system.absorption[key];
       }
 
       if (item.system.location === "shield") continue;
@@ -168,6 +176,36 @@ export class CnS5ActorBase extends foundry.abstract.TypeDataModel {
       if (rank > heaviest) {
         heaviest = rank;
         this.armourWeight = item.system.weightClass;
+      }
+    }
+
+    // The torso is where an unaimed blow lands, so that is what `protection`
+    // means unless a location is named.
+    this.protection = this.protectionByLocation.body;
+    this.shieldProtection = this.protectionByLocation.shield;
+
+    // What is worn over each part of the body, which is a finer question than
+    // which of four places a piece hangs on. A cuirass and a hauberk both hang
+    // on the body; only one of them reaches the knee.
+    this.protectionByArea = Object.fromEntries(
+      CNS5.bodyAreas.map((area) => [area, zero()])
+    );
+    this.coverageByArea = Object.fromEntries(CNS5.bodyAreas.map((area) => [area, []]));
+
+    for (const item of this.parent.items) {
+      if (item.type !== "armour" || !item.system.equipped) continue;
+      if (item.system.location === "shield") continue;
+
+      for (const area of CNS5.bodyAreas) {
+        const chance = CNS5.coverageOf(item.system, area);
+        if (!chance) continue;
+
+        this.coverageByArea[area].push({ name: item.name, chance, item });
+        // Partial coverage is settled on the blow, not here, so the totals hold
+        // what would absorb if it landed on the armour.
+        for (const key of Object.keys(CNS5.damageTypes)) {
+          this.protectionByArea[area][key] += item.system.absorption[key];
+        }
       }
     }
 

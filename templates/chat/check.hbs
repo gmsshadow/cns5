@@ -51,7 +51,7 @@
         </li>
         {{#if absorption}}
         <li>
-            <span>{{localize "CNS5.Damage.absorbed"}}</span>
+            <span>{{localize "CNS5.Damage.absorbed"}}{{#if hitLocationLabel}} ({{hitLocationLabel}}){{/if}}</span>
             <span>-{{split.absorbed}}</span>
         </li>
         {{/if}}

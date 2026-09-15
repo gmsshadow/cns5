@@ -159,6 +159,56 @@ for (const file of suites) {
 }
 ok("every test suite can fail the build", toothless, []);
 
+/* -------------------------------------------- */
+
+/* Every kind of item has to be visible somewhere on an actor, or it can be
+   dragged onto a character and simply vanish — which looks exactly like a drop
+   that failed. Ammunition did this: the type was registered, the compendium
+   built, the item created, and nothing on the sheet ever listed it. */
+const manifest = JSON.parse(await readFile(path.join(ROOT, "system.json"), "utf8"));
+const itemTypes = Object.keys(manifest.documentTypes.Item);
+
+const actorTemplates = await walk(path.join(ROOT, "templates", "actor"), ".hbs");
+let actorMarkup = "";
+for (const file of actorTemplates) actorMarkup += await readFile(file, "utf8");
+
+const sheetFiles = await walk(path.join(ROOT, "module", "sheets"), ".mjs");
+let sheetCode = "";
+for (const file of sheetFiles) sheetCode += await readFile(file, "utf8");
+
+const invisible = itemTypes.filter(
+  (type) =>
+    !actorMarkup.includes(`data-type="${type}"`) &&
+    !sheetCode.includes(`"${type}"`)
+);
+ok("every item type is surfaced on an actor sheet", invisible, []);
+
+/* And every kind has a sheet body, or opening one shows an empty frame. The
+   map is read from the sheet rather than guessed from the type name, since the
+   files are named as words and the types as identifiers. */
+const sheetSource = await readFile(
+  path.join(ROOT, "module", "sheets", "item-sheet.mjs"),
+  "utf8"
+);
+const mapped = new Set(
+  [...sheetSource.matchAll(/^\s*(\w+):\s*"systems\/cns5\/templates\/item\/[^"]+"/gm)]
+    .map((m) => m[1])
+);
+// The skill sheet is an application of its own rather than a body partial.
+mapped.add("skill");
+
+ok("every item type has a sheet body", itemTypes.filter((t) => !mapped.has(t)), []);
+
+const bodyFiles = [];
+for (const m of sheetSource.matchAll(/"systems\/cns5\/(templates\/item\/[^"]+)"/g)) {
+  try {
+    await readFile(path.join(ROOT, m[1]), "utf8");
+  } catch {
+    bodyFiles.push(m[1]);
+  }
+}
+ok("and every body it names exists", bodyFiles, []);
+
 console.log(`\n${partPaths.size} parts checked`);
 console.log(fails ? `${fails} FAILURES` : "All checks passed.");
 process.exit(fails ? 1 : 0);

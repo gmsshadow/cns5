@@ -162,6 +162,54 @@
 
     <section class="cns5-skills">
         <h3 class="cns5-skills__heading">
+            {{localize "CNS5.Ammunition.heading"}}
+            <button type="button" class="cns5-add" data-action="createItem" data-type="ammunition">
+                {{localize "CNS5.Item.add"}}
+            </button>
+        </h3>
+        {{#if ammunition.length}}
+        <table class="cns5-skills__table">
+            <thead>
+            <tr>
+                <th scope="col" class="cns5-skills__name">{{localize "CNS5.Ammunition.heading"}}</th>
+                <th scope="col">{{localize "CNS5.Item.quantity"}}</th>
+                <th scope="col">{{localize "CNS5.Weapon.damage"}}</th>
+                <th scope="col">{{localize "CNS5.Weapon.critShort"}}</th>
+                <th scope="col">{{localize "CNS5.Weapon.bash"}}</th>
+                <th scope="col"><span class="cns5-visually-hidden">{{localize "CNS5.Skill.controls"}}</span></th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#each ammunition as |shot|}}
+            <tr class="{{#if shot.system.spent}}is-unskilled{{/if}}">
+                <th scope="row">
+                    {{shot.name}}
+                    <span class="cns5-tag cns5-tag--origin">{{localize shot.system.kindLabel}}</span>
+                </th>
+                <td class="cns5-skills__readout cns5-skills__readout--total">{{shot.system.quantity}}</td>
+                <td class="cns5-skills__readout">{{shot.system.baseDamage}}</td>
+                <td class="cns5-skills__readout">{{cns5Signed shot.system.critDieModifier}}</td>
+                <td class="cns5-skills__readout">{{shot.system.bash}}</td>
+                <td class="cns5-skills__controls">
+                    <button type="button" data-action="editItem" data-item-id="{{shot.id}}">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                    </button>
+                    <button type="button" data-action="deleteItem" data-item-id="{{shot.id}}">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+            {{/each}}
+            </tbody>
+        </table>
+        <p class="cns5-hint">{{localize "CNS5.Ammunition.hint"}}</p>
+        {{else}}
+        <p class="cns5-hint">{{localize "CNS5.Ammunition.none"}}</p>
+        {{/if}}
+    </section>
+
+    <section class="cns5-skills">
+        <h3 class="cns5-skills__heading">
             {{localize "CNS5.Combat.armour"}}
             <button type="button" class="cns5-add" data-action="createItem" data-type="armour">
                 {{localize "CNS5.Item.add"}}

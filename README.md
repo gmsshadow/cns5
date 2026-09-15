@@ -670,6 +670,12 @@ takes -4 from the bracket, +3 from his arm and +2 from the arrow, for +1. The
 chat card shows the workings, since a modifier silently going missing is exactly
 what happened here.
 
+Ammunition has its own section on the Core & Combat tab. `test/templates.test.mjs`
+checks that every registered item type is surfaced somewhere on an actor sheet:
+a type that is registered, built into a compendium and created on drop but
+listed nowhere looks exactly like a drop that failed, and there is nothing on
+screen to suggest otherwise.
+
 ### Names that differ between the tables
 
 The weapon list and the ranges table do not always agree: a Throwing Knife

@@ -33,6 +33,9 @@
     {{#each skillGroups as |group|}}
     <section class="cns5-skills">
         <h3 class="cns5-skills__heading">{{localize group.label}}</h3>
+        {{#if group.hint}}
+        <p class="cns5-hint">{{localize group.hint}}</p>
+        {{/if}}
         <table class="cns5-skills__table">
             <thead>
             <tr>
@@ -58,6 +61,12 @@
                             data-tooltip="{{localize 'CNS5.Roll.skillTooltip'}}">
                         {{skill.name}}
                     </button>
+                    {{#if group.untrained}}
+                    <span class="cns5-tag cns5-tag--origin"
+                          data-tooltip="{{localize 'CNS5.Skill.categoryOnceLearnt'}}">
+                        {{localize (concat "CNS5.SkillCategory." skill.system.category)}}
+                    </span>
+                    {{/if}}
                     {{#unless (eq skill.system.origin "chosen")}}
                     <span class="cns5-tag cns5-tag--origin"
                           data-tooltip="{{localize 'CNS5.Skill.originHint'}}">

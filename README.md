@@ -505,6 +505,26 @@ heading. Those twelve were read from the book by hand and recorded in
 answer. Six of them require training: Winemaking, Glassblowing & Glazing, both
 Own Language skills, Sailmaking & Rigging and Garrotting.
 
+### Skills without basic knowledge
+
+They are listed in a section of their own on the Skills tab rather than mixed
+into Secondary, because they roll on a different line of the table and a sheet
+that files them beside skills the character actually has reads as though they
+have them.
+
+The flag stays a flag rather than becoming a fourth category, because the two
+answer different questions. Basic knowledge decides *which chance* is rolled —
+the Unskilled column of Table - Difficulty Factors rather than the Skilled one.
+Category decides *what the Personal Skill Factor is adjusted by* — +10 for a
+vocational skill, nothing for a Secondary, -10 for a hobby. They are
+independent: a skill a vocation lists as Primary is Primary whether or not Level
+0 has been paid for yet, and that is exactly what a player wants to know when
+deciding what to buy next. Made a category, the information would have to be
+thrown away and then guessed at again on purchase.
+
+So the untrained section shows each skill's category as a tag: what it will be
+worth once basic knowledge is bought.
+
 ## Skill categories
 
 There are three, and only three: Primary, Secondary and Tertiary.

@@ -253,7 +253,10 @@ export class CnS5CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2)
 
     for (const category of CNS5.skillCategoryOrder) {
       const inCategory = skills.filter(
-        (s) => s.system.kind !== "competency" && s.system.category === category
+        (s) =>
+          s.system.kind !== "competency" &&
+          s.system.known &&
+          s.system.category === category
       );
       if (inCategory.length) {
         groups.push({
@@ -262,6 +265,26 @@ export class CnS5CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2)
           skills: inCategory
         });
       }
+    }
+
+    // Skills without basic knowledge stand apart, whatever category they would
+    // fall into once learnt. They roll on a different line of the table — the
+    // Unskilled chance rather than the Skilled one — and mixing them in with
+    // skills the character actually has makes a sheet that reads as though they
+    // do. The category is kept on each rather than replaced by this grouping,
+    // because it says what the skill will be worth once it is bought, which is
+    // exactly what a player is deciding when they look at this list.
+    const untrained = skills.filter(
+      (s) => s.system.kind !== "competency" && !s.system.known
+    );
+    if (untrained.length) {
+      groups.push({
+        id: "untrained",
+        label: "CNS5.Skill.untrained",
+        hint: "CNS5.Skill.untrainedHint",
+        untrained: true,
+        skills: untrained
+      });
     }
 
     return groups;

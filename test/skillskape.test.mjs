@@ -156,5 +156,35 @@ ok("and differ on a failure", applied(5, false), -5);
 ok("the applied figure explains the total",
    8 + applied(5, false), critTotal(8, 5, false));
 
+/* -- Basic knowledge and category are different questions -------------------- */
+
+/* Whether a character has basic knowledge decides which line of Table -
+   Difficulty Factors they roll on. Which category a skill falls into decides
+   what its PSF is adjusted by. The two are independent: a skill can be listed
+   as Primary for a vocation and still not yet be bought at Level 0, and a
+   character can have basic knowledge in something that is only a hobby. */
+const chance = (df, known) =>
+  known ? CNS5.difficultyFactors[df].skilled : CNS5.difficultyFactors[df].unskilled;
+
+ok("basic knowledge changes the chance", [chance(3, false), chance(3, true)], [30, 40]);
+ok("at every Difficulty Factor",
+   Object.keys(CNS5.difficultyFactors).filter(
+     (df) => CNS5.difficultyFactors[df].skilled <= CNS5.difficultyFactors[df].unskilled
+   ),
+   []);
+
+/* Category adjusts the PSF instead, and does so whether or not the skill is
+   known — which is why folding one into the other would lose something. A
+   Primary skill not yet bought is still going to be worth +10 once it is. */
+ok("category adjusts the skill factor",
+   CNS5.skillCategoryOrder.map((c) => CNS5.skillCategories[c].psf), [10, 0, -10]);
+ok("and the three categories are unchanged by any of this",
+   Object.keys(CNS5.skillCategories).sort(), ["primary", "secondary", "tertiary"]);
+
+/* The two combine rather than replacing each other: a known Primary skill at
+   Difficulty Factor 3 starts from 40 and gains 10. */
+ok("a known primary skill", chance(3, true) + CNS5.skillCategories.primary.psf, 50);
+ok("the same skill unknown gains nothing for category", chance(3, false), 30);
+
 console.log(fails ? `\n${fails} FAILURES` : "\nAll checks passed.");
 process.exit(fails ? 1 : 0);

@@ -1,5 +1,6 @@
 import { CNS5 } from "../config.mjs";
 import { CnS5CreationWizard } from "../apps/creation-wizard.mjs";
+import { CnS5UnskilledAttempt } from "../apps/unskilled.mjs";
 
 const { HandlebarsApplicationMixin, DialogV2 } = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
@@ -36,7 +37,8 @@ export class CnS5CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2)
       deleteItem: CnS5CharacterSheet.#onDeleteItem,
       toggleEquipped: CnS5CharacterSheet.#onToggleEquipped,
       toggleCarried: CnS5CharacterSheet.#onToggleCarried,
-      openWizard: CnS5CharacterSheet.#onOpenWizard
+      openWizard: CnS5CharacterSheet.#onOpenWizard,
+      attemptUnskilled: CnS5CharacterSheet.#onAttemptUnskilled
     }
   };
 
@@ -327,6 +329,16 @@ export class CnS5CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2)
     const item = this.actor.items.get(input.dataset.itemId);
     if (!item) return;
     await item.update({ "system.level": Math.max(0, Number(input.value) || 0) });
+  }
+
+  /* -------------------------------------------- */
+
+  /**
+   * Attempt a skill the character never learnt.
+   * @this {CnS5CharacterSheet}
+   */
+  static async #onAttemptUnskilled() {
+    await CnS5UnskilledAttempt.prompt(this.actor);
   }
 
   /* -------------------------------------------- */

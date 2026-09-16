@@ -141,7 +141,7 @@
   "CNS5.Skill.known": "Basic knowledge",
   "CNS5.Skill.mastered": "Mastered (+10%)",
   "CNS5.Skill.sunsign": "Sunsign skill (+10%)",
-  "CNS5.Skill.trainingRequired": "Training required [TR]",
+  "CNS5.Skill.trainingRequired": "{skill} cannot be attempted without training. The rulebook marks it [TR].",
   "CNS5.Skill.otherMod": "Other modifier",
   "CNS5.Skill.resistedBy": "Resisted by",
   "CNS5.Skill.reference": "Reference",
@@ -747,5 +747,13 @@
   "CNS5.Throw.throw": "Throw it",
   "CNS5.Throw.strikeHint": "In the hand: {damage} damage, using {skill}.",
   "CNS5.Throw.throwHint": "Thrown: {damage} damage, using {skill}, at the ranges the table gives it.",
-  "CNS5.Roll.thrown": "Thrown"
+  "CNS5.Roll.thrown": "Thrown",
+  "CNS5.Roll.unskilledTitle": "{skill}, untrained",
+  "CNS5.Roll.unskilledSubtitle": "DF {df} {difficulty}, unskilled, needing {target}% or under",
+  "CNS5.Roll.attributes": "Attributes",
+  "CNS5.Skill.attemptUnskilled": "Attempt untrained",
+  "CNS5.Skill.attemptHint": "Some skills can be attempted without ever having learnt them, at the Unskilled chance for their Difficulty Factor. Those the rulebook marks [TR] cannot, and are not offered.",
+  "CNS5.Skill.chooseSkill": "Which skill?",
+  "CNS5.Skill.noCompendium": "The skills compendium is not available.",
+  "CNS5.Skill.nothingToAttempt": "There is nothing left to attempt untrained: every skill that allows it is already known."
 }

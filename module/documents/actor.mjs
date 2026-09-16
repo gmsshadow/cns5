@@ -727,6 +727,84 @@ export class CnS5Actor extends Actor {
   /* -------------------------------------------- */
 
   /**
+   * Attempt a skill the character does not have.
+   *
+   * "Some skills cannot be attempted unless the character has basic knowledge
+   * of the skill" (p33) — which means the rest can. A character with no
+   * Swimming skill can still try to swim, at the Unskilled BCS of its
+   * Difficulty Factor rather than the Skilled one, with no bonus for level or
+   * category, and a failed attempt worsens the Crit Die by two.
+   *
+   * Nothing is added to the sheet. A skill a character does not have is not
+   * something they own, and a list of every skill they might one day attempt
+   * would be the whole book.
+   *
+   * @param {object} skill   a row from the skills compendium
+   * @param {object} [options]
+   * @returns {Promise<ChatMessage|null>}
+   */
+  async attemptUnskilled(skill, { modifier = 0, skipDialog = false } = {}) {
+    if (skill.trainingRequired) {
+      ui.notifications.warn(
+        game.i18n.format("CNS5.Skill.trainingRequired", { skill: skill.name })
+      );
+      return null;
+    }
+
+    const band = CNS5.difficultyFactors[skill.df];
+    if (!band) return null;
+
+    const title = game.i18n.format("CNS5.Roll.unskilledTitle", { skill: skill.name });
+
+    let situational = modifier;
+    if (!skipDialog) {
+      const prompted = await promptModifier(title);
+      if (prompted === null) return null;
+      situational += prompted.modifier;
+    }
+
+    // Attributes are the character's whether or not they have been trained, so
+    // their bonuses apply. What does not is anything that comes from knowing
+    // the skill: no level, no category, no mastery.
+    const attributeBonus = (skill.attributes ?? []).reduce(
+      (total, key) => total + (this.system.attr[key]?.bonus ?? 0),
+      0
+    );
+
+    const unclamped = band.unskilled + attributeBonus + situational;
+    const { target, critMod, overflow, shortfall } = clampSuccessChance(unclamped, skill.df);
+
+    const result = await resolveCheck({
+      target,
+      critMod,
+      // A failed attempt at something never learnt goes worse than a failure by
+      // someone who knows the work (p38).
+      failureCritMod: -2
+    });
+
+    return checkToMessage(this, {
+      ...result,
+      title,
+      subtitle: game.i18n.format("CNS5.Roll.unskilledSubtitle", {
+        df: skill.df,
+        difficulty: game.i18n.localize(`CNS5.Difficulty.${skill.df}`),
+        target
+      }),
+      unclamped,
+      overflow,
+      shortfall,
+      unskilled: true,
+      breakdown: this.#breakdown([
+        { label: "CNS5.Roll.bcsUnskilled", value: band.unskilled },
+        { label: "CNS5.Roll.attributes", value: attributeBonus, signed: true },
+        { label: "CNS5.Roll.situational", value: situational, signed: true }
+      ])
+    });
+  }
+
+  /* -------------------------------------------- */
+
+  /**
    * Spend Fatigue Points, as an active defence does.
    *
    * @param {number} points

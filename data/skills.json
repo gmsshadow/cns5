@@ -1,6 +1,6 @@
 {
   "source": "Chivalry & Sorcery 5th Edition core rules, skills list, pp.147-148",
-  "note": "Mechanical data only: name, difficulty factor, attribute pair, rulebook group and page reference. No description text is reproduced.",
+  "note": "Mechanical data only: name, difficulty factor, attribute pair, rulebook group and page reference. No description text is reproduced. The [TR] marker, meaning training is required before the skill can be attempted at all (p33), is read from each skill's description rather than from the list, where it does not appear. Twelve descriptions could not be located by name, because the list and the description word them differently; those twelve were read from the book by hand and are flagged trainingVerified.",
   "count": 248,
   "skills": [
     {
@@ -12,7 +12,8 @@
         "str",
         "wis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Fruit Crops",
@@ -23,7 +24,8 @@
         "int",
         "wis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Vegetable Crops",
@@ -34,7 +36,8 @@
         "wis",
         "wis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Viniculture",
@@ -45,7 +48,8 @@
         "int",
         "wis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Animal Riding – Camel",
@@ -56,7 +60,8 @@
         "str",
         "dis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Animal Riding – Donkey",
@@ -67,7 +72,8 @@
         "str",
         "dis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Animal Riding - Exotic Animal",
@@ -78,7 +84,8 @@
         "str",
         "dis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Animal Riding Horse / Pony / Mule",
@@ -89,7 +96,8 @@
         "str",
         "dis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Animal Riding Mythical / Legendary Beast",
@@ -100,7 +108,8 @@
         "str",
         "dis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Animal Training",
@@ -111,7 +120,8 @@
         "bv",
         "dis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": true
     },
     {
       "name": "Bee Keeping",
@@ -122,7 +132,8 @@
         "int",
         "wis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Cattle Herding",
@@ -133,7 +144,8 @@
         "int",
         "wis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Dog Breeding",
@@ -144,7 +156,8 @@
         "int",
         "wis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Drover",
@@ -155,7 +168,8 @@
         "int",
         "wis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Horse Breeding",
@@ -166,7 +180,8 @@
         "int",
         "wis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Pig Raising",
@@ -177,7 +192,8 @@
         "int",
         "wis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Poultry Raising",
@@ -188,7 +204,8 @@
         "int",
         "wis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Running a Dairy",
@@ -199,7 +216,8 @@
         "int",
         "wis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Sheep Herding",
@@ -210,7 +228,8 @@
         "int",
         "wis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Veterinary Medicine",
@@ -221,7 +240,8 @@
         "int",
         "wis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Veterinary Surgeon",
@@ -232,7 +252,8 @@
         "int",
         "dex"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Acting: Costume & Makeup",
@@ -243,7 +264,8 @@
         "int",
         "dis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Acting: Performance",
@@ -254,7 +276,8 @@
         "bv",
         "dis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Acting: Ventriloquism",
@@ -265,7 +288,8 @@
         "bv",
         "dex"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Bagpipes",
@@ -276,7 +300,8 @@
         "dex",
         "con"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": true
     },
     {
       "name": "Calligraphy & Illumination",
@@ -287,7 +312,8 @@
         "dex",
         "dis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": true
     },
     {
       "name": "Dancing: Court Dancing",
@@ -298,7 +324,8 @@
         "agl",
         "dis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Dancing: Folk Dance",
@@ -309,7 +336,8 @@
         "agl",
         "dis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Drums",
@@ -320,7 +348,8 @@
         "str",
         "dis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Flutes",
@@ -331,7 +360,8 @@
         "dex",
         "con"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Horns",
@@ -342,7 +372,8 @@
         "dex",
         "con"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Juggling",
@@ -353,7 +384,8 @@
         "agl",
         "agl"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Painting & Sketching",
@@ -364,7 +396,8 @@
         "dex",
         "dex"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Poetic Composition",
@@ -375,7 +408,8 @@
         "int",
         "wis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Poetic Recitation",
@@ -386,7 +420,8 @@
         "bv",
         "con"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Sculpting",
@@ -397,7 +432,8 @@
         "dex",
         "dis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Singing",
@@ -408,7 +444,8 @@
         "bv",
         "con"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Sleight of Hand",
@@ -419,7 +456,8 @@
         "dex",
         "int"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Storytelling",
@@ -430,7 +468,8 @@
         "bv",
         "int"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Strings",
@@ -441,7 +480,8 @@
         "dex",
         "dis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Boxing",
@@ -452,7 +492,8 @@
         "str",
         "agl"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Climbing",
@@ -463,7 +504,8 @@
         "str",
         "con"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Conditioning",
@@ -471,7 +513,8 @@
       "reference": "157",
       "df": 5,
       "attributes": [],
-      "kind": "competency"
+      "kind": "competency",
+      "trainingRequired": true
     },
     {
       "name": "Endurance",
@@ -479,7 +522,8 @@
       "reference": "157",
       "df": 4,
       "attributes": [],
-      "kind": "competency"
+      "kind": "competency",
+      "trainingRequired": true
     },
     {
       "name": "Jumping",
@@ -487,7 +531,8 @@
       "reference": "158",
       "df": 3,
       "attributes": [],
-      "kind": "competency"
+      "kind": "competency",
+      "trainingRequired": true
     },
     {
       "name": "Lifting",
@@ -495,7 +540,8 @@
       "reference": "158",
       "df": 3,
       "attributes": [],
-      "kind": "competency"
+      "kind": "competency",
+      "trainingRequired": true
     },
     {
       "name": "Stamina",
@@ -506,7 +552,8 @@
         "str",
         "con"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Swimming",
@@ -517,7 +564,8 @@
         "str",
         "con"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": true
     },
     {
       "name": "Wrestling",
@@ -528,7 +576,8 @@
         "str",
         "agl"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Bargaining",
@@ -539,7 +588,8 @@
         "bv",
         "cha"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Begging",
@@ -550,7 +600,8 @@
         "bv",
         "cha"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Charm",
@@ -561,7 +612,8 @@
         "app",
         "cha"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Con",
@@ -572,7 +624,9 @@
         "cha",
         "wis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false,
+      "trainingVerified": true
     },
     {
       "name": "Diplomacy & Politics",
@@ -583,7 +637,8 @@
         "bv",
         "wis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Intimidation",
@@ -594,7 +649,8 @@
         "fer",
         "cha"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Leadership",
@@ -605,7 +661,8 @@
         "bv",
         "cha"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Oratory",
@@ -616,7 +673,8 @@
         "bv",
         "cha"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Archery",
@@ -627,7 +685,8 @@
         "dex",
         "wis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Axes",
@@ -638,7 +697,8 @@
         "str",
         "str"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Battlefield Tactics",
@@ -649,7 +709,8 @@
         "int",
         "wis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Brawling",
@@ -660,7 +721,8 @@
         "str",
         "agl"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Cavalry Lances",
@@ -671,7 +733,8 @@
         "str",
         "dis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Chivalric Great Blow",
@@ -679,7 +742,8 @@
       "reference": "165",
       "df": 5,
       "attributes": [],
-      "kind": "competency"
+      "kind": "competency",
+      "trainingRequired": true
     },
     {
       "name": "Dodge",
@@ -690,7 +754,8 @@
         "agl",
         "wis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Fighting Staves",
@@ -701,7 +766,8 @@
         "str",
         "agl"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Flails",
@@ -712,7 +778,8 @@
         "str",
         "dis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Great Swords",
@@ -723,7 +790,8 @@
         "str",
         "str"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Horse Archery",
@@ -734,7 +802,8 @@
         "agl",
         "agl"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Hurling Axes",
@@ -745,7 +814,8 @@
         "str",
         "agl"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": true
     },
     {
       "name": "Hurling Javelins",
@@ -756,7 +826,8 @@
         "str",
         "agl"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Knife & Dagger Fighting",
@@ -767,7 +838,8 @@
         "dex",
         "agl"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Maces, Hammers & Clubs",
@@ -778,7 +850,8 @@
         "str",
         "str"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Mounted Combat",
@@ -789,7 +862,8 @@
         "agl",
         "agl"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Polearms",
@@ -800,7 +874,8 @@
         "str",
         "dis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Riding a Warhorse",
@@ -811,7 +886,8 @@
         "agl",
         "dis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Shield Play Light / Heavy",
@@ -822,7 +898,8 @@
         "str",
         "agl"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Short Swords",
@@ -833,7 +910,8 @@
         "str",
         "agl"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": true
     },
     {
       "name": "Slashing Swords",
@@ -844,7 +922,8 @@
         "str",
         "agl"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Slings",
@@ -855,7 +934,8 @@
         "agl",
         "wis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Spears",
@@ -866,7 +946,8 @@
         "str",
         "dis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Throwing Knives & Daggers",
@@ -877,7 +958,8 @@
         "agl",
         "wis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Throwing Objects",
@@ -888,7 +970,8 @@
         "agl",
         "wis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Two Weapon Fighting",
@@ -896,7 +979,9 @@
       "reference": "168",
       "df": 7,
       "attributes": [],
-      "kind": "competency"
+      "kind": "competency",
+      "trainingRequired": false,
+      "trainingVerified": true
     },
     {
       "name": "Wearing Battle Armour",
@@ -904,7 +989,8 @@
       "reference": "168",
       "df": 5,
       "attributes": [],
-      "kind": "competency"
+      "kind": "competency",
+      "trainingRequired": false
     },
     {
       "name": "Wearing Heavy Armour",
@@ -912,7 +998,8 @@
       "reference": "168",
       "df": 4,
       "attributes": [],
-      "kind": "competency"
+      "kind": "competency",
+      "trainingRequired": false
     },
     {
       "name": "Wearing Light Armour",
@@ -920,7 +1007,8 @@
       "reference": "167",
       "df": 3,
       "attributes": [],
-      "kind": "competency"
+      "kind": "competency",
+      "trainingRequired": false
     },
     {
       "name": "Brewing",
@@ -931,7 +1019,8 @@
         "int",
         "wis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Cooking",
@@ -942,7 +1031,8 @@
         "int",
         "wis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Winemaking",
@@ -953,7 +1043,9 @@
         "int",
         "wis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": true,
+      "trainingVerified": true
     },
     {
       "name": "Basketwork",
@@ -964,7 +1056,8 @@
         "dex",
         "dis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Blacksmithing",
@@ -975,7 +1068,8 @@
         "str",
         "con"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Bone, Horn & Ivory work",
@@ -986,7 +1080,8 @@
         "dex",
         "dis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Bowery & Fletching",
@@ -997,7 +1092,8 @@
         "int",
         "dex"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Carpentry",
@@ -1008,7 +1104,8 @@
         "str",
         "dex"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Cartwright & Wheelwright",
@@ -1019,7 +1116,8 @@
         "int",
         "dex"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": true
     },
     {
       "name": "Chandler",
@@ -1030,7 +1128,8 @@
         "int",
         "wis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Charcoal Burning",
@@ -1041,7 +1140,8 @@
         "int",
         "wis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Cooper",
@@ -1052,7 +1152,8 @@
         "str",
         "dex"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": true
     },
     {
       "name": "Cord & Rope Making",
@@ -1063,7 +1164,8 @@
         "str",
         "dex"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Dyeing",
@@ -1074,7 +1176,8 @@
         "int",
         "wis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": true
     },
     {
       "name": "Fashioning Arrowheads",
@@ -1085,7 +1188,8 @@
         "str",
         "dex"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Glassblowing & Glazing",
@@ -1096,7 +1200,9 @@
         "dex",
         "con"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": true,
+      "trainingVerified": true
     },
     {
       "name": "Gold & Silversmithing",
@@ -1107,7 +1213,8 @@
         "dis",
         "dex"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Lapidary (Gemcutting)",
@@ -1118,7 +1225,8 @@
         "dis",
         "dex"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": true
     },
     {
       "name": "Leatherworking & Tanning",
@@ -1129,7 +1237,9 @@
         "con",
         "dex"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false,
+      "trainingVerified": true
     },
     {
       "name": "Masonry & Stone Cutting",
@@ -1140,7 +1250,8 @@
         "str",
         "con"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Mining & Tunnelling",
@@ -1151,7 +1262,8 @@
         "str",
         "con"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Paper & Ink Making",
@@ -1162,7 +1274,8 @@
         "int",
         "dex"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": true
     },
     {
       "name": "Perfumery",
@@ -1173,7 +1286,8 @@
         "int",
         "dex"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": true
     },
     {
       "name": "Pottery",
@@ -1184,7 +1298,8 @@
         "int",
         "dex"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Seal Making & Engraving",
@@ -1195,7 +1310,8 @@
         "int",
         "dex"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": true
     },
     {
       "name": "Sewing, Embroidery & Knitting",
@@ -1206,7 +1322,8 @@
         "dex",
         "int"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Smelting & Casting",
@@ -1217,7 +1334,8 @@
         "str",
         "con"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Spinning & Weaving",
@@ -1228,7 +1346,8 @@
         "dex",
         "int"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Sulphur & Saltpetre Making",
@@ -1239,7 +1358,8 @@
         "int",
         "wis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": true
     },
     {
       "name": "Tailoring",
@@ -1250,7 +1370,8 @@
         "dex",
         "int"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": true
     },
     {
       "name": "Thatching",
@@ -1261,7 +1382,8 @@
         "agl",
         "wis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Tinkering",
@@ -1272,7 +1394,8 @@
         "int",
         "dex"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": true
     },
     {
       "name": "Weaponsmithing & Armoury",
@@ -1283,7 +1406,8 @@
         "str",
         "con"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Ancient Language - Spoken",
@@ -1294,7 +1418,8 @@
         "int",
         "bv"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": true
     },
     {
       "name": "Ancient Language - Read / Write",
@@ -1305,7 +1430,8 @@
         "int",
         "dex"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": true
     },
     {
       "name": "Beast Tongues—Read / Write",
@@ -1316,7 +1442,8 @@
         "int",
         "dex"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Beast Tongues—Spoken",
@@ -1327,7 +1454,8 @@
         "int",
         "bv"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Common Tongue— Spoken",
@@ -1338,7 +1466,8 @@
         "int",
         "bv"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Common Tongue Read / Write",
@@ -1349,7 +1478,8 @@
         "int",
         "dex"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Dwarven Tongue Read / Write",
@@ -1360,7 +1490,8 @@
         "int",
         "dex"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Dwarven Tongue—Spoken",
@@ -1371,7 +1502,8 @@
         "int",
         "bv"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Elven Tongue—Read / Write",
@@ -1382,7 +1514,8 @@
         "int",
         "dex"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Elven Tongue—Spoken",
@@ -1393,7 +1526,8 @@
         "int",
         "bv"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Foreign Language Read/Write",
@@ -1404,7 +1538,8 @@
         "int",
         "dex"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Foreign Language-Spoken",
@@ -1415,7 +1550,8 @@
         "int",
         "bv"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Mage Speech-Read / Write",
@@ -1426,7 +1562,8 @@
         "int",
         "dex"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": true
     },
     {
       "name": "Mage Speech-Spoken",
@@ -1437,7 +1574,8 @@
         "int",
         "bv"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": true
     },
     {
       "name": "Monster Tongues Read / Write",
@@ -1448,7 +1586,8 @@
         "int",
         "dex"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Monster Tongues—Spoken",
@@ -1459,7 +1598,8 @@
         "int",
         "bv"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Own Language—Read/Write",
@@ -1470,7 +1610,9 @@
         "int",
         "dex"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": true,
+      "trainingVerified": true
     },
     {
       "name": "Own Language—Spoken",
@@ -1481,7 +1623,9 @@
         "int",
         "bv"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": true,
+      "trainingVerified": true
     },
     {
       "name": "Ancient Local Geography",
@@ -1492,7 +1636,8 @@
         "int",
         "int"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": true
     },
     {
       "name": "Ancient Regional/ National Geography",
@@ -1503,7 +1648,8 @@
         "int",
         "int"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": true
     },
     {
       "name": "Ancient world Geography",
@@ -1514,7 +1660,8 @@
         "int",
         "int"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": true
     },
     {
       "name": "Astronomical Lore",
@@ -1525,7 +1672,8 @@
         "int",
         "wis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Bestiary Lore",
@@ -1536,7 +1684,8 @@
         "int",
         "wis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Cartography",
@@ -1547,7 +1696,8 @@
         "int",
         "wis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Finance",
@@ -1558,7 +1708,8 @@
         "int",
         "wis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Geological Lore",
@@ -1569,7 +1720,8 @@
         "int",
         "wis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": true
     },
     {
       "name": "Local Geography",
@@ -1580,7 +1732,8 @@
         "int",
         "int"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Local History & Legend",
@@ -1591,7 +1744,8 @@
         "int",
         "int"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": true
     },
     {
       "name": "Regional & National Geography",
@@ -1602,7 +1756,8 @@
         "int",
         "int"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Regional/National History & Legend",
@@ -1613,7 +1768,8 @@
         "int",
         "int"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": true
     },
     {
       "name": "World Geography",
@@ -1624,7 +1780,8 @@
         "int",
         "int"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": true
     },
     {
       "name": "World History & Legend",
@@ -1635,7 +1792,8 @@
         "int",
         "int"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": true
     },
     {
       "name": "Accurate Counting",
@@ -1643,7 +1801,8 @@
       "reference": "186",
       "df": 1,
       "attributes": [],
-      "kind": "competency"
+      "kind": "competency",
+      "trainingRequired": true
     },
     {
       "name": "Architecture & Engineering",
@@ -1654,7 +1813,8 @@
         "int",
         "wis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": true
     },
     {
       "name": "Arithmetic & Mathematics",
@@ -1665,7 +1825,8 @@
         "int",
         "wis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": true
     },
     {
       "name": "Arcane Magick",
@@ -1676,7 +1837,8 @@
         "int",
         "con"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Artefact Lore",
@@ -1687,7 +1849,8 @@
         "int",
         "int"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Basic Magick – Air",
@@ -1698,7 +1861,8 @@
         "int",
         "agl"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Basic Magick – Earth",
@@ -1709,7 +1873,8 @@
         "int",
         "con"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Basic Magick – Fire",
@@ -1720,7 +1885,8 @@
         "int",
         "con"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Basic Magick – Water",
@@ -1731,7 +1897,8 @@
         "int",
         "agl"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Command Magick",
@@ -1742,7 +1909,8 @@
         "int",
         "bv"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Conjuration Mode of Magick",
@@ -1753,7 +1921,8 @@
         "int",
         "con"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Demonology",
@@ -1764,7 +1933,8 @@
         "int",
         "int"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Divination Magick",
@@ -1775,7 +1945,8 @@
         "wis",
         "int"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": true
     },
     {
       "name": "Divination Mode of Magick",
@@ -1786,7 +1957,8 @@
         "wis",
         "int"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Druidic Priest Mode",
@@ -1795,7 +1967,8 @@
       "df": 7,
       "attributes": [],
       "kind": "skill",
-      "attributeNote": "Various"
+      "attributeNote": "Various",
+      "trainingRequired": false
     },
     {
       "name": "Elementalist Magus Mode of Magick",
@@ -1806,7 +1979,8 @@
         "int",
         "con"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Enchantment Mode of Magick",
@@ -1817,7 +1991,8 @@
         "int",
         "bv"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Faerie Lore",
@@ -1828,7 +2003,8 @@
         "int",
         "int"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Hex Master Mode of Magick",
@@ -1839,7 +2015,8 @@
         "int",
         "dis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Illusion Magick",
@@ -1850,7 +2027,8 @@
         "int",
         "wis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Interpret the Omens",
@@ -1861,7 +2039,8 @@
         "wis",
         "dis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": true
     },
     {
       "name": "Laws of Magick",
@@ -1872,7 +2051,8 @@
         "int",
         "int"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Lore of Correspondences",
@@ -1883,7 +2063,8 @@
         "int",
         "int"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": true
     },
     {
       "name": "Lore of the Dead",
@@ -1894,7 +2075,8 @@
         "int",
         "int"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Magickal & Enchanted Races Lore",
@@ -1905,7 +2087,8 @@
         "int",
         "int"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Magickal Beast Lore",
@@ -1916,7 +2099,8 @@
         "int",
         "int"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Necromantic Mode of Magick",
@@ -1927,7 +2111,8 @@
         "int",
         "dis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Plant Magick",
@@ -1938,7 +2123,8 @@
         "int",
         "dis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Power Word Mode of Magick",
@@ -1949,7 +2135,8 @@
         "int",
         "bv"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Ritual Preperations",
@@ -1960,7 +2147,8 @@
         "int",
         "wis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": true
     },
     {
       "name": "Shamanic Priest Mode",
@@ -1971,7 +2159,8 @@
         "con",
         "spr"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Spell Enhancement",
@@ -1982,7 +2171,8 @@
         "dis",
         "dis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": true
     },
     {
       "name": "Spell Research",
@@ -1993,7 +2183,8 @@
         "int",
         "int"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": true
     },
     {
       "name": "Summoning Magick",
@@ -2004,7 +2195,8 @@
         "int",
         "con"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Thaumaturgy Mode of Magick",
@@ -2015,7 +2207,8 @@
         "int",
         "wis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Transcendental Magick",
@@ -2026,7 +2219,8 @@
         "int",
         "dis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Transmutation Magick",
@@ -2037,7 +2231,8 @@
         "int",
         "con"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Wards Magick",
@@ -2048,7 +2243,8 @@
         "int",
         "con"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Witchcraft Priest Mode",
@@ -2059,7 +2255,8 @@
         "int",
         "spr"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Word of Guard",
@@ -2070,7 +2267,8 @@
         "int",
         "bv"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": true
     },
     {
       "name": "Chirurgery",
@@ -2081,7 +2279,8 @@
         "int",
         "dex"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": true
     },
     {
       "name": "First Aid",
@@ -2092,7 +2291,8 @@
         "int",
         "wis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": true
     },
     {
       "name": "Herbalism",
@@ -2103,7 +2303,8 @@
         "int",
         "wis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Pharmacology & Medicine",
@@ -2114,7 +2315,8 @@
         "int",
         "wis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": true
     },
     {
       "name": "Debate",
@@ -2125,7 +2327,9 @@
         "int",
         "wis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false,
+      "trainingVerified": true
     },
     {
       "name": "Faith",
@@ -2136,7 +2340,9 @@
         "spr",
         "spr"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false,
+      "trainingVerified": true
     },
     {
       "name": "Law",
@@ -2147,7 +2353,9 @@
         "int",
         "dis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false,
+      "trainingVerified": true
     },
     {
       "name": "Theology of (“Religion”)",
@@ -2158,7 +2366,8 @@
         "int",
         "dis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Concentration",
@@ -2169,7 +2378,8 @@
         "dis",
         "dis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": true
     },
     {
       "name": "Meditation",
@@ -2180,7 +2390,8 @@
         "dis",
         "dis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": true
     },
     {
       "name": "Riddling",
@@ -2191,7 +2402,8 @@
         "dis",
         "dis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Willpower",
@@ -2202,7 +2414,8 @@
         "dis",
         "wis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Chess",
@@ -2213,7 +2426,8 @@
         "int",
         "int"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Courtly Love",
@@ -2224,7 +2438,8 @@
         "cha",
         "wis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Courtly Manners",
@@ -2235,7 +2450,8 @@
         "int",
         "dis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Heraldry",
@@ -2246,7 +2462,8 @@
         "int",
         "wis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": true
     },
     {
       "name": "Blending into Surroundings",
@@ -2257,7 +2474,8 @@
         "wis",
         "agl"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Calm & Attract Animals",
@@ -2268,7 +2486,8 @@
         "bv",
         "dis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": true
     },
     {
       "name": "Covering tracks",
@@ -2279,7 +2498,8 @@
         "int",
         "agl"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Detecting Snares",
@@ -2290,7 +2510,8 @@
         "wis",
         "int"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Finding Direction",
@@ -2301,7 +2522,8 @@
         "wis",
         "int"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Finding One’s Location",
@@ -2312,7 +2534,8 @@
         "wis",
         "agl"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Finding Water",
@@ -2323,7 +2546,8 @@
         "wis",
         "agl"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Fishing",
@@ -2334,7 +2558,8 @@
         "wis",
         "agl"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Foraging for wild foods",
@@ -2345,7 +2570,8 @@
         "wis",
         "int"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Forester’s Stealth",
@@ -2356,7 +2582,8 @@
         "wis",
         "agl"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Intentions of Animals",
@@ -2367,7 +2594,8 @@
         "int",
         "wis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Setting & Disarming Traps",
@@ -2378,7 +2606,8 @@
         "int",
         "agl"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Tracking Prey",
@@ -2389,7 +2618,8 @@
         "agl",
         "wis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Alertness Sound",
@@ -2398,7 +2628,8 @@
       "df": 7,
       "attributes": [],
       "kind": "skill",
-      "attributeNote": "N/A"
+      "attributeNote": "N/A",
+      "trainingRequired": false
     },
     {
       "name": "Alertness: Sight",
@@ -2407,7 +2638,8 @@
       "df": 7,
       "attributes": [],
       "kind": "skill",
-      "attributeNote": "N/A"
+      "attributeNote": "N/A",
+      "trainingRequired": false
     },
     {
       "name": "Detect Lie",
@@ -2418,7 +2650,8 @@
         "wis",
         "int"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Lip Reading",
@@ -2429,7 +2662,8 @@
         "wis",
         "int"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Read Character",
@@ -2440,7 +2674,8 @@
         "wis",
         "int"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Fisherman",
@@ -2451,7 +2686,8 @@
         "str",
         "con"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Mariner",
@@ -2462,7 +2698,8 @@
         "str",
         "con"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": true
     },
     {
       "name": "Piloting & Navigation",
@@ -2473,7 +2710,8 @@
         "int",
         "wis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": true
     },
     {
       "name": "Sailing Small Boats",
@@ -2484,7 +2722,8 @@
         "str",
         "agl"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": true
     },
     {
       "name": "Sailmaking & Rigging",
@@ -2495,7 +2734,9 @@
         "int",
         "wis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": true,
+      "trainingVerified": true
     },
     {
       "name": "Shipbuilder Maritime Architecture",
@@ -2506,7 +2747,8 @@
         "int",
         "wis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": true
     },
     {
       "name": "Ships Carpenter",
@@ -2517,7 +2759,8 @@
         "str",
         "agl"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Administer Poisons & Drugs",
@@ -2528,7 +2771,8 @@
         "int",
         "dis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Backstabbing",
@@ -2539,7 +2783,8 @@
         "int",
         "agl"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Concealing & Finding",
@@ -2550,7 +2795,8 @@
         "wis",
         "int"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Detecting Mantraps",
@@ -2561,7 +2807,8 @@
         "wis",
         "int"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Detecting Thievery",
@@ -2572,7 +2819,8 @@
         "wis",
         "agl"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Disguises",
@@ -2583,7 +2831,8 @@
         "wis",
         "int"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Evaluating Goods",
@@ -2594,7 +2843,8 @@
         "int",
         "wis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Garrotting",
@@ -2605,7 +2855,9 @@
         "str",
         "agl"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": true,
+      "trainingVerified": true
     },
     {
       "name": "Hearing Rumours",
@@ -2616,7 +2868,8 @@
         "dis",
         "dis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Mugging",
@@ -2627,7 +2880,8 @@
         "str",
         "str"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Picking Locks",
@@ -2638,7 +2892,8 @@
         "int",
         "dex"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Picking Pockets & Cutting Purses",
@@ -2649,7 +2904,8 @@
         "int",
         "dex"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Setting & Disarming Mantraps",
@@ -2660,7 +2916,8 @@
         "int",
         "dex"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Skulking in Shadows",
@@ -2671,7 +2928,8 @@
         "agl",
         "dis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Stealth of Thieves & Assassins",
@@ -2682,7 +2940,8 @@
         "agl",
         "dis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     },
     {
       "name": "Streetwise",
@@ -2693,7 +2952,8 @@
         "int",
         "wis"
       ],
-      "kind": "skill"
+      "kind": "skill",
+      "trainingRequired": false
     }
   ]
 }

@@ -79,6 +79,58 @@ ok(
 
 ok("no description text is shipped", "description" in skills[0], false);
 
+/* -- Skills that cannot be attempted untrained (p33) ------------------------ */
+
+/* "Some skills cannot be attempted unless the character has basic knowledge of
+   the skill" — and which they are is marked [TR] in each skill's description
+   rather than anywhere in the list, which is why it was never read. */
+const trained = skills.filter((s) => s.trainingRequired);
+ok("skills needing training", trained.length, 60);
+ok("which is a minority of them", trained.length < skills.length / 2, true);
+
+/* Twelve descriptions cannot be found by name, because the list and the
+   description word them differently — five kinds of Animal Riding share one
+   heading. Those were read from the book by hand rather than assumed, and none
+   is left unchecked. */
+const verified = skills.filter((s) => s.trainingVerified);
+ok("answered by hand", verified.length, 12);
+ok("nothing left unchecked", skills.filter((s) => s.trainingUnchecked).length, 0);
+ok(
+  "the six of them that need training",
+  verified.filter((s) => s.trainingRequired).map((s) => s.name).sort(),
+  [
+    "Garrotting", "Glassblowing & Glazing", "Own Language\u2014Read/Write",
+    "Own Language\u2014Spoken", "Sailmaking & Rigging", "Winemaking"
+  ]
+);
+
+/* A handful checked by hand against the book. */
+const needsTraining = (name) => skills.find((s) => s.name === name)?.trainingRequired;
+ok("swimming must be taught", needsTraining("Swimming"), true);
+ok("so must hurling axes", needsTraining("Hurling Axes"), true);
+ok("and jumping", needsTraining("Jumping"), true);
+ok("and animal training", needsTraining("Animal Training"), true);
+
+/* Anything not marked can be attempted, which is the whole point of the
+   Unskilled column of Table - Difficulty Factors. */
+const attemptable = skills.filter((s) => !s.trainingRequired);
+ok("most skills can be attempted untrained", attemptable.length, 188);
+ok(
+  "and every one has a Difficulty Factor to attempt it at",
+  attemptable.filter((s) => !CNS5.difficultyFactors[s.df]).map((s) => s.name),
+  []
+);
+
+/* Every Difficulty Factor has an unskilled chance, even where it is nothing. */
+ok(
+  "every Difficulty Factor has an unskilled chance",
+  Object.values(CNS5.difficultyFactors).filter((b) => b.unskilled === undefined).length,
+  0
+);
+ok("a very simple task untrained", CNS5.difficultyFactors[1].unskilled, 50);
+ok("against sixty once taught", CNS5.difficultyFactors[1].skilled, 60);
+ok("an impossible one untrained", CNS5.difficultyFactors[10].unskilled, 0);
+
 console.log(`\n${skills.length} skills across ${new Set(skills.map((s) => s.category)).size} groups`);
 console.log(fails ? `${fails} FAILURES` : "All checks passed.");
 process.exit(fails ? 1 : 0);

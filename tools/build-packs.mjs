@@ -89,7 +89,9 @@ function toSkill(row) {
       level: 0,
       mastered: false,
       sunsign: false,
-      trainingRequired: false,
+      // Some skills cannot be attempted without basic knowledge (p33); those
+      // are marked [TR] in their descriptions.
+      trainingRequired: Boolean(row.trainingRequired),
       otherMod: 0,
       attributeNote: row.attributeNote ?? "",
       resistedBy: "",

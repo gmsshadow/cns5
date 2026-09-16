@@ -476,6 +476,35 @@ with all of that would have been longer than the table and harder to check, so
 those five rows are written out in `tools/extract-traits.py` with the reasoning
 beside them.
 
+## Attempting a skill untrained
+
+"Some skills cannot be attempted unless the character has basic knowledge of the
+skill" (p33) — which means the rest can. A character who has never learnt to
+swim can still try, at the **Unskilled** chance for the skill's Difficulty
+Factor rather than the Skilled one, with the attribute bonuses that are theirs
+either way but nothing for level, category or mastery, and a failed attempt
+worsens the Crit Die by two.
+
+The machinery for that was already there: a skill held at Level 0 uses the
+Skilled chance with no bonus, and one marked unknown uses the Unskilled chance.
+What was missing was any way to attempt a skill that is not on the sheet at all
+— and nothing is added to the sheet when you do. A skill a character does not
+have is not something they own, and listing every skill they might one day
+attempt would be listing the whole book. The button is on the Skills tab.
+
+**Which skills forbid it** is marked `[TR]` — training required — in each
+skill's *description*, not anywhere in the skill list, which is why it had never
+been read. It is now extracted by finding each skill's description from its
+cited page and looking for the marker: **60 of the 248** require training, and
+they are not offered for an untrained attempt.
+
+Twelve of those descriptions cannot be found by name, because the list and the
+description word them differently — five kinds of Animal Riding share one
+heading. Those twelve were read from the book by hand and recorded in
+`tools/extract-skills.py`, so that re-running the extraction does not lose the
+answer. Six of them require training: Winemaking, Glassblowing & Glazing, both
+Own Language skills, Sailmaking & Rigging and Garrotting.
+
 ## Skill categories
 
 There are three, and only three: Primary, Secondary and Tertiary.

@@ -135,7 +135,93 @@ def extract():
     return entries
 
 
+# Twelve skills whose descriptions the search below cannot locate, because the
+# list and the description word them differently. Read from the book by hand and
+# recorded here so that re-running the extraction does not lose the answer.
+VERIFIED_TRAINING = {
+    "Winemaking": True,
+    "Glassblowing & Glazing": True,
+    "Own Language\u2014Read/Write": True,
+    "Own Language\u2014Spoken": True,
+    "Sailmaking & Rigging": True,
+    "Garrotting": True,
+    "Con": False,
+    "Two Weapon Fighting": False,
+    "Leatherworking & Tanning": False,
+    "Debate": False,
+    "Faith": False,
+    "Law": False,
+}
+
+
+def mark_training_required(pdf, skills):
+    """Find which skills cannot be attempted without basic knowledge.
+
+    "Some skills cannot be attempted unless the character has basic knowledge of
+    the skill" (p33), and the skills that cannot are marked [TR] — for training
+    required — in their descriptions rather than in the list. So each skill's
+    cited page is read and the marker looked for after its heading.
+
+    A name in the list is not always the heading in the description: five kinds
+    of Animal Riding share one heading, and several names carry a dash or an
+    ampersand the heading does not. Progressively shorter forms of the name are
+    tried until one is found.
+    """
+    text = {}
+    for pno in range(140, 240):
+        if pno < len(pdf.pages):
+            text[pno + 1] = re.sub(r"\s+", " ", pdf.pages[pno].extract_text() or "")
+
+    def stems(name):
+        base = re.split(r"[\u2013\-/(]", name)[0].strip()
+        words = base.split()
+        out = [name.strip(), base]
+        if len(words) > 2:
+            out.append(" ".join(words[:2]))
+        if words:
+            out.append(words[0])
+        return [s for s in dict.fromkeys(out) if len(s) > 3]
+
+    unlocated = []
+    for skill in skills:
+        ref = int(skill["reference"])
+        window = " ".join(text.get(p, "") for p in (ref, ref + 1))
+
+        found = None
+        for stem in stems(skill["name"]):
+            m = re.search(re.escape(stem), window, re.I)
+            if m:
+                found = m
+                break
+
+        if not found:
+            # Answered by hand where the description could not be found, and
+            # left flagged where it has not been.
+            if skill["name"] in VERIFIED_TRAINING:
+                skill["trainingRequired"] = VERIFIED_TRAINING[skill["name"]]
+                skill["trainingVerified"] = True
+            else:
+                unlocated.append(skill["name"])
+                skill["trainingRequired"] = False
+                skill["trainingUnchecked"] = True
+            continue
+
+        # The marker sits among the skill's own headings, within a few lines.
+        skill["trainingRequired"] = "[TR]" in window[found.end():found.end() + 400]
+
+    return unlocated
+
+
 if __name__ == "__main__":
     data = extract()
-    print(f"extracted {len(data)} entries", file=sys.stderr)
+
+    with pdfplumber.open(PDF) as pdf:
+        unlocated = mark_training_required(pdf, data)
+
+    required = sum(1 for s in data if s.get("trainingRequired"))
+    print(f"extracted {len(data)} entries  training required {required}  "
+          f"description not located {len(unlocated)}", file=sys.stderr)
+    if unlocated:
+        print(f"  unchecked: {', '.join(unlocated)}", file=sys.stderr)
+
     json.dump(data, sys.stdout, indent=2, ensure_ascii=False)

@@ -18,12 +18,14 @@ export class CnS5Weapon extends CnS5PhysicalItem {
     // A launcher deals no damage itself but adds a bonus to what it looses;
     // ammunition carries the damage. Keeping them apart means a bow and its
     // arrows can each be their own item, as the tables list them.
-    // A thrown weapon is its own ammunition and carries its own ranges, which
-    // is why it is neither a launcher nor what a launcher shoots.
+    // Throwing is an action, not a role. A weapon is held in the hand, shoots
+    // something, or is shot; whether the thing in the hand can also be thrown
+    // is asked when it is used, because the rules give a War Axe both a melee
+    // profile and a thrown one and no way to own only half of it.
     schema.role = new fields.StringField({
       required: true,
       initial: "melee",
-      choices: ["melee", "launcher", "ammunition", "thrown"]
+      choices: ["melee", "launcher", "ammunition"]
     });
 
     // What a launcher shoots, or what kind of missile this is.
@@ -98,6 +100,21 @@ export class CnS5Weapon extends CnS5PhysicalItem {
    * @param {object} actorSystem  the parent actor's prepared system data
    * @param {Item|null} skillItem the linked combat skill, if the character has it
    */
+  /**
+   * Bring older data up to date.
+   *
+   * "Thrown" was briefly a role of its own, which meant a pilum could be hurled
+   * but not thrust with — half of what the weapon tables give it.
+   *
+   * @inheritDoc
+   */
+  static migrateData(source) {
+    if (source.role === "thrown") source.role = "melee";
+    return super.migrateData(source);
+  }
+
+  /* -------------------------------------------- */
+
   prepareForActor(actorSystem, skillItem) {
     const isLight = CNS5.weaponWeights[this.weightClass]?.light ?? false;
 
@@ -179,12 +196,14 @@ export class CnS5Armour extends CnS5PhysicalItem {
     // A launcher deals no damage itself but adds a bonus to what it looses;
     // ammunition carries the damage. Keeping them apart means a bow and its
     // arrows can each be their own item, as the tables list them.
-    // A thrown weapon is its own ammunition and carries its own ranges, which
-    // is why it is neither a launcher nor what a launcher shoots.
+    // Throwing is an action, not a role. A weapon is held in the hand, shoots
+    // something, or is shot; whether the thing in the hand can also be thrown
+    // is asked when it is used, because the rules give a War Axe both a melee
+    // profile and a thrown one and no way to own only half of it.
     schema.role = new fields.StringField({
       required: true,
       initial: "melee",
-      choices: ["melee", "launcher", "ammunition", "thrown"]
+      choices: ["melee", "launcher", "ammunition"]
     });
 
     // What a launcher shoots, or what kind of missile this is.

@@ -63,6 +63,12 @@ function normalise(name = "") {
 
 /** Names that differ between the weapon list and the ranges table. */
 const ALIASES = [
+  // A hunting spear is what the ranges table calls a hunting javelin, and a war
+  // axe is what it calls a thrown axe: the table names the act, the weapon list
+  // names the thing.
+  [/^huntingspear/, "huntingjavelin"],
+  [/^waraxe$/, "thrownaxe"],
+  [/^(knife|dagger|dirk|poignard|skean)/, "thrownknife"],
   [/^throw(ing|n)knives?$/, "thrownknife"],
   [/^throw(ing|n)axe/, "thrownaxe"],
   [/pilum/, "pilum"],

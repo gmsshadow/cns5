@@ -13,7 +13,7 @@ import {
   promptDefence
 } from "../helpers/defence-prompt.mjs";
 import { armourAt } from "../helpers/defence.mjs";
-import { promptShot } from "../helpers/defence-prompt.mjs";
+import { promptShot, promptThrow } from "../helpers/defence-prompt.mjs";
 import {
   missileProfile,
   availableAmmunition,
@@ -225,11 +225,43 @@ export class CnS5Actor extends Actor {
       throw new Error(`CnS5 | No weapon item ${itemId} on ${this.name}`);
     }
 
-    const skill = weapon.system.skillItem;
+
+    const title = game.i18n.format("CNS5.Roll.weaponTitle", { weapon: weapon.name });
+
+    // A shot is a bow and an arrow together, at a distance. None of the three
+    // figures that matter — damage, reach, Crit Die modifier — can be read off
+    // the bow alone, so the loading and the range are settled before anything
+    // else (pp.257-258).
+    // A weapon in the hand may be thrown if the ranges table gives it a
+    // profile. That is asked rather than assumed: a War Axe is a weapon to
+    // swing that can also be hurled, and owning only half of it was the fault
+    // of treating "thrown" as a kind of weapon.
+    const thrownProfile =
+      weapon.system.role === "melee" ? await missileProfile(weapon, null) : null;
+    const canThrow = Boolean(thrownProfile?.thrown);
+
+    let throwing = false;
+    if (canThrow && !skipDialog) {
+      const choice = await promptThrow(weapon, thrownProfile);
+      if (choice === null) return null;
+      throwing = choice === "throw";
+    }
+
+    // Which skill applies depends on what the character is doing. A War Axe is
+    // swung with Axes and hurled with Hurling Axes — different Difficulty
+    // Factors, different attributes, and a prerequisite relationship between
+    // them — so the skill cannot be settled until the choice is made.
+    const hurlingName = throwing ? CNS5.hurlingSkillFor(weapon.name) : "";
+    const skill = throwing
+      ? this.items.find(
+          (i) => i.type === "skill" && i.name.toLowerCase() === hurlingName.toLowerCase()
+        ) ?? null
+      : weapon.system.skillItem;
+
     if (!skill && !weapon.system.natural) {
-      // Name the skill that is missing, or say plainly that none is set. The
-      // old message quoted an empty string, which read as nonsense.
-      const wanted = weapon.system.resolvedSkill || weapon.system.skill;
+      const wanted = throwing
+        ? hurlingName
+        : weapon.system.resolvedSkill || weapon.system.skill;
       ui.notifications.warn(
         wanted
           ? game.i18n.format("CNS5.Weapon.noSkill", { weapon: weapon.name, skill: wanted })
@@ -238,19 +270,15 @@ export class CnS5Actor extends Actor {
       return null;
     }
 
-    const title = game.i18n.format("CNS5.Roll.weaponTitle", { weapon: weapon.name });
-
-    // A shot is a bow and an arrow together, at a distance. None of the three
-    // figures that matter — damage, reach, Crit Die modifier — can be read off
-    // the bow alone, so the loading and the range are settled before anything
-    // else (pp.257-258).
-    const shoots = ["launcher", "thrown"].includes(weapon.system.role);
+    const shoots = weapon.system.role === "launcher" || throwing;
     let shot = null;
     let ammunition = null;
 
     if (shoots && !skipDialog) {
       const loadings = [];
-      if (weapon.system.role === "launcher") {
+      // A thrown weapon is its own ammunition, so there is nothing to choose.
+      if (throwing && thrownProfile) loadings.push({ item: null, profile: thrownProfile });
+      else if (weapon.system.role === "launcher") {
         for (const item of availableAmmunition(this, weapon)) {
           const profile = await missileProfile(weapon, item);
           if (profile) loadings.push({ item, profile });

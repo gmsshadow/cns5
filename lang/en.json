@@ -740,5 +740,12 @@
   "CNS5.Missile.assumed": "No ammunition of the right sort is carried, so {ammunition} is assumed. Add some to choose.",
   "CNS5.Roll.critOnFailure": "The roll failed, so every modifier is applied the other way: a modifier in the character's favour reduces the Crit Die of a failed roll rather than raising it, making the failure less bad (p37).",
   "CNS5.Missile.toHit": "to hit",
-  "CNS5.Roll.rangePenalty": "Range"
+  "CNS5.Roll.rangePenalty": "Range",
+  "CNS5.Throw.title": "{weapon}",
+  "CNS5.Throw.prompt": "Is the {weapon} being used in the hand, or thrown?",
+  "CNS5.Throw.strike": "Strike with it",
+  "CNS5.Throw.throw": "Throw it",
+  "CNS5.Throw.strikeHint": "In the hand: {damage} damage, using {skill}.",
+  "CNS5.Throw.throwHint": "Thrown: {damage} damage, using {skill}, at the ranges the table gives it.",
+  "CNS5.Roll.thrown": "Thrown"
 }

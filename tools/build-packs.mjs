@@ -700,9 +700,6 @@ const normaliseName = (name = "") => {
 const launchers = new Set(
   missiles.profiles.filter((p) => !p.thrown).map((p) => normaliseName(p.weapon))
 );
-const thrownWeapons = new Set(
-  missiles.profiles.filter((p) => p.thrown).map((p) => normaliseName(p.weapon))
-);
 const ammunitionNames = new Set(
   missiles.profiles.map((p) => normaliseName(p.ammunition ?? "")).filter(Boolean)
 );
@@ -714,12 +711,16 @@ const ammunitionNames = new Set(
 function missileRole(row) {
   const name = normaliseName(row.name);
   if (launchers.has(name)) return "launcher";
-  if (thrownWeapons.has(name)) return "thrown";
   if (ammunitionNames.has(name)) return "ammunition";
 
   // Arrows and bolts the ranges table does not name are still ammunition.
-  if (CNS5.ammunitionKindOf(row.name) && row.role !== "melee") return "ammunition";
-  return row.role === "melee" && row.missile ? "thrown" : row.role;
+  if (CNS5.ammunitionKindOf(row.name)) return "ammunition";
+
+  // Throwing is an action rather than a kind of weapon. There is no throwing
+  // axe to buy because what a character throws is the War Axe already on their
+  // belt, so everything else is simply a weapon held in the hand, and whether
+  // it can be thrown is asked when it is used.
+  return "melee";
 }
 
 const skills = JSON.parse(await readFile(path.join(DATA, "skills.json"), "utf8"));

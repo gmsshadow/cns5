@@ -207,3 +207,54 @@ export async function promptShot(weapon, loadings, shooter, penalties = {}) {
     rejectClose: false
   });
 }
+
+/* -------------------------------------------- */
+
+/**
+ * Ask whether a weapon is being swung or thrown.
+ *
+ * Throwing is an action rather than a kind of weapon: a War Axe is a weapon to
+ * swing that can also be hurled, and the rules give it a profile for each. So
+ * the question is put when the weapon is used rather than settled when it is
+ * bought, and both answers show what they are worth — the two differ in damage,
+ * in skill and in Difficulty Factor.
+ *
+ * @param {Item} weapon
+ * @param {object} profile  the thrown profile from the ranges table
+ * @returns {Promise<"strike"|"throw"|null>} null if dismissed
+ */
+export async function promptThrow(weapon, profile) {
+  const hurling = CNS5.hurlingSkillFor(weapon.name);
+
+  const content = `
+    <div class="cns5-prompt">
+      <p>${game.i18n.format("CNS5.Throw.prompt", { weapon: weapon.name })}</p>
+      <p class="hint">${game.i18n.format("CNS5.Throw.strikeHint", {
+        damage: weapon.system.damage,
+        skill: weapon.system.resolvedSkill || weapon.system.skill || "—"
+      })}</p>
+      <p class="hint">${game.i18n.format("CNS5.Throw.throwHint", {
+        damage: profile.baseDamage,
+        skill: hurling || "—"
+      })}</p>
+    </div>`;
+
+  return foundry.applications.api.DialogV2.wait({
+    window: { title: game.i18n.format("CNS5.Throw.title", { weapon: weapon.name }) },
+    content,
+    buttons: [
+      {
+        action: "strike",
+        label: game.i18n.localize("CNS5.Throw.strike"),
+        default: true,
+        callback: () => "strike"
+      },
+      {
+        action: "throw",
+        label: game.i18n.localize("CNS5.Throw.throw"),
+        callback: () => "throw"
+      }
+    ],
+    rejectClose: false
+  });
+}

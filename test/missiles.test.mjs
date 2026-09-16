@@ -360,5 +360,70 @@ ok(
   true
 );
 
+/* -- Throwing is an action, not a kind of weapon ----------------------------- */
+
+/* There is no throwing axe to buy because what a character throws is the War
+   Axe already on their belt. The ranges table names the act — "Thrown Axe" —
+   and the weapon list names the thing. Treating thrown as a role meant a pilum
+   could be hurled but not thrust with, which is half of what its row gives it. */
+const thrownProfiles = new Set(profiles.filter((p) => p.thrown).map((p) => p.weapon));
+ok("what the ranges table says can be thrown", [...thrownProfiles].sort(), [
+  "Dart", "Hunting Javelin", "Pilum", "Thrown Axe", "Thrown Knife", "War Javelin"
+]);
+
+/* Each of those has to reach a weapon somebody can actually own. */
+const ownable = ["War Axe", "Knife", "Dagger", "Roman Pilum", "War Javelin", "Hunting Spear"];
+ok(
+  "every throwable weapon finds its profile",
+  ownable.filter((name) => {
+    const key = normaliseForTest(name);
+    return !profiles.some((p) => p.thrown && normaliseForTest(p.weapon) === key);
+  }),
+  []
+);
+
+/* Thrown damage is its own figure, usually larger than the melee one — which is
+   the whole reason the profile exists. */
+const thrownDamage = (name) =>
+  profiles.find((p) => p.thrown && normaliseForTest(p.weapon) === normaliseForTest(name))
+    ?.baseDamage;
+ok("a war axe thrown", thrownDamage("War Axe"), 8);
+ok("a pilum thrown", thrownDamage("Roman Pilum"), 10);
+ok("a war javelin thrown", thrownDamage("War Javelin"), 9);
+ok("a hunting spear thrown", thrownDamage("Hunting Spear"), 8);
+
+const meleeDamage = (n) => named(n).baseDamage;
+ok("a war axe swung is worth less", meleeDamage("War Axe") < thrownDamage("War Axe"), true);
+ok("and a pilum too", meleeDamage("Roman Pilum") < thrownDamage("Roman Pilum"), true);
+
+/* Throwing uses a different skill from striking, with a different Difficulty
+   Factor — an axe is swung with Axes at DF 4 and hurled with Hurling Axes at
+   DF 3, and picking the wrong one is not a small error. */
+ok("an axe is hurled with", CNS5.hurlingSkillFor("War Axe"), "Hurling Axes");
+ok("a javelin with", CNS5.hurlingSkillFor("War Javelin"), "Hurling Javelins");
+ok("a pilum with the same", CNS5.hurlingSkillFor("Roman Pilum"), "Hurling Javelins");
+ok("a spear with the same again", CNS5.hurlingSkillFor("Hunting Spear"), "Hurling Javelins");
+ok("a knife with", CNS5.hurlingSkillFor("Dagger"), "Throwing Knives & Daggers");
+ok("a dart with", CNS5.hurlingSkillFor("War Darts"), "Throwing Objects");
+
+/* A polearm is not a throwing axe however its name reads. */
+ok("a pole axe cannot be hurled as an axe", CNS5.hurlingSkillFor("Pole Axe"), "");
+ok("nor can a sword be thrown at all", CNS5.hurlingSkillFor("Knights Broadsword"), "");
+
+/* Every hurling skill named has to exist in the skill list. */
+const skillNames = new Set(
+  JSON.parse(await readFile(path.join(ROOT, "data", "skills.json"), "utf8")).skills.map(
+    (s) => s.name
+  )
+);
+ok(
+  "every hurling skill exists",
+  ownable
+    .concat("War Darts")
+    .map((n) => CNS5.hurlingSkillFor(n))
+    .filter((skill) => skill && !skillNames.has(skill)),
+  []
+);
+
 console.log(fails ? `\n${fails} FAILURES` : "\nAll checks passed.");
 process.exit(fails ? 1 : 0);

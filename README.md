@@ -642,9 +642,25 @@ ammunition or a thrown weapon with itself. Loosing a launcher asks what it is
 loaded with — from the ammunition actually carried — and at what range, then
 looks up the pairing. A missile loosed is decremented.
 
-A weapon now has a **part in a shot**: melee, launcher, ammunition, or thrown. A
-thrown weapon is its own ammunition and keeps its own ranges, which is what
-distinguishes a javelin from an arrow.
+### Throwing is an action, not a kind of weapon
+
+There is no throwing axe to buy because what a character throws is the War Axe
+already on their belt. The ranges table names the act — "Thrown Axe", "Thrown
+Knife" — while the weapon list names the thing, and the two are matched up. The
+same holds for a knife, a pilum, a war javelin and a hunting spear, which the
+ranges table calls a hunting javelin.
+
+So a weapon has one of three parts to play — held in the hand, shoots something,
+or is shot — and anything with a thrown profile asks which is meant when it is
+used. An earlier version made "thrown" a role of its own, which meant a pilum
+could be hurled but not thrust with: half of what its row in the weapon table
+gives it.
+
+Both answers change more than the ranges. Thrown damage is its own figure and
+usually the larger — a War Axe does 5 in the hand and 8 thrown — and the skill
+differs too: an axe is swung with **Axes** at Difficulty Factor 4 and hurled
+with **Hurling Axes** at Difficulty Factor 3, whose prerequisite is Axes. The
+prompt shows what each is worth before the choice is made.
 
 **Strength tells at a distance** (p258). A character of Strength 12 or better
 modifies the Crit Die by the amount the table gives for that missile at that

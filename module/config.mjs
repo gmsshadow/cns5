@@ -1559,6 +1559,27 @@ CNS5.ammunitionKinds = {
  * answer, and the system does not presume to.
  */
 /**
+ * The skill a weapon is thrown with.
+ *
+ * Throwing is an action, not a kind of weapon. There is no throwing axe to buy
+ * because what a character throws is the War Axe already on their belt, and the
+ * rules give that its own skill — Hurling Axes (p165), whose prerequisite is
+ * Axes, the skill it is swung with. The two are different skills with different
+ * Difficulty Factors and different attributes, so which one applies depends on
+ * what the character is doing rather than on what they are holding.
+ *
+ * @param {string} name
+ * @returns {string} the skill's name, or empty if it cannot be thrown
+ */
+CNS5.hurlingSkillFor = function (name = "") {
+  if (/axe/i.test(name) && !/pole ?axe/i.test(name)) return "Hurling Axes";
+  if (/javelin|pilum|spear/i.test(name)) return "Hurling Javelins";
+  if (/knife|knives|dagger|dirk|poignard|skean/i.test(name)) return "Throwing Knives & Daggers";
+  if (/dart/i.test(name)) return "Throwing Objects";
+  return "";
+};
+
+/**
  * What a launcher takes.
  *
  * This is a different question from what a missile *is*, and asking the wrong

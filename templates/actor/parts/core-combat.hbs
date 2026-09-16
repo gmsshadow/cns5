@@ -50,7 +50,17 @@
             </span>
         </div>
         <div class="cns5-vitals__pair">
-            <span class="cns5-vitals__label">{{localize "CNS5.Vitals.fatigue"}}</span>
+            <span class="cns5-vitals__label">{{localize "CNS5.Condition.label"}}</span>
+        <span class="cns5-vitals__figures">
+            <output class="cns5-vitals__max cns5-condition is-{{system.condition.state}}"
+                    data-tooltip="{{localize 'CNS5.Condition.hint'}}">
+                {{localize (concat "CNS5.Condition." system.condition.state)}}{{#unless (eq system.condition.state "standing")}} ({{system.condition.margin}}){{/unless}}
+            </output>
+        </span>
+    </div>
+
+    <div class="cns5-vitals__pair">
+        <span class="cns5-vitals__label">{{localize "CNS5.Vitals.fatigue"}}</span>
             <span class="cns5-vitals__figures">
                 <input type="number" name="system.fatigue.value" value="{{system.fatigue.value}}"
                        {{#unless editable}}disabled{{/unless}}>

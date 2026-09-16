@@ -832,11 +832,58 @@ export class CnS5Actor extends Actor {
   async applyDamage(split) {
     if (!split) return this;
 
-    return this.update({
+    const before = this.system.condition.state;
+
+    await this.update({
       "system.fatigue.value": Math.max(0, this.system.fatigue.value - split.fatigueLost),
-      // Body is allowed below zero: a character is unconscious at nought and
-      // dead at negative Constitution (p282).
+      // Body is deliberately allowed below zero. The distance below it is the
+      // whole of what decides whether a character lives (p282), so flooring it
+      // would throw away the only figure that matters.
       "system.body.value": this.system.body.value - split.bodyLost
+    });
+
+    await this.#announceCondition(before);
+    return this;
+  }
+
+  /* -------------------------------------------- */
+
+  /**
+   * Say when a character falls or dies, and mark the token.
+   *
+   * A wound that takes someone below zero is the most consequential thing that
+   * happens in a fight, and it is a number quietly changing on a sheet nobody
+   * may be looking at. So it is announced, once, at the moment it happens —
+   * not repeated for every blow that lands on a man already down.
+   *
+   * @param {string} before  the state before the blow
+   */
+  async #announceCondition(before) {
+    const after = this.system.condition.state;
+    if (after === before) return;
+
+    const effect = { unconscious: "unconscious", dead: "dead" }[after];
+    if (effect && CONFIG.statusEffects.some((e) => e.id === effect)) {
+      // Mark the token, so a fight can be read from the canvas.
+      await this.toggleStatusEffect(effect, { active: true });
+    }
+    if (before === "unconscious" && after === "standing") {
+      await this.toggleStatusEffect("unconscious", { active: false });
+    }
+
+    if (after === "standing") return;
+
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: this }),
+      content: `<p class="cns5-condition is-${after}">${game.i18n.format(
+        after === "dead" ? "CNS5.Condition.died" : "CNS5.Condition.fell",
+        {
+          name: this.name,
+          body: this.system.body.value,
+          margin: this.system.condition.margin,
+          deathAt: this.system.condition.deathAt
+        }
+      )}</p>`
     });
   }
 

@@ -911,6 +911,23 @@ The same table doubles as the count of blows under the alternative combat system
 on that page. That system is not implemented; the figures are the same either
 way.
 
+### Falling and dying
+
+"Once a character reaches zero body he slips into unconsciousness... When the
+character's Body Points reach a negative figure equal to the level of the
+character's Constitution, the character is dead" (p282).
+
+So the margin between falling and dying is the character's own Constitution: a
+man of 18 survives a wound that kills a man of 6. Body is deliberately not
+floored at zero, because the distance below it is the only thing that decides
+the question.
+
+Both sheets show the condition beside Body, with the life remaining in
+brackets once a character is down. Crossing either line is announced to chat and
+marks the token with Foundry's own unconscious or dead status — once, at the
+moment it happens, not again for every blow that lands on a man already down.
+Healing back above zero clears it.
+
 ### Not automated
 
 Shield breakage is not rolled. `checkShield` in `helpers/defence.mjs` implements

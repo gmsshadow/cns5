@@ -1361,3 +1361,27 @@
     letter-spacing: 0.04em;
     opacity: 0.8;
 }
+
+/* --------------------------------------------------------------------------
+   Falling and dying
+   -------------------------------------------------------------------------- */
+
+/* A character who is down or dead is the most consequential thing on a sheet,
+   so it is marked rather than left as another figure among figures. */
+.cns5-condition.is-standing {
+    color: var(--cns-verdigris);
+}
+
+.cns5-condition.is-unconscious {
+    color: var(--cns-gilt);
+    font-weight: 700;
+}
+
+.cns5-condition.is-dead {
+    color: var(--cns-oxblood);
+    font-weight: 700;
+}
+
+.cns5-condition {
+    font-family: var(--cns-serif, Georgia, serif);
+}

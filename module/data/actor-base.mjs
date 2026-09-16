@@ -219,6 +219,11 @@ export class CnS5ActorBase extends foundry.abstract.TypeDataModel {
     // Gathered for the sheet: parts protected identically share a row.
     this.protectionSummary = CNS5.summariseProtection(this.protectionByArea);
 
+    // Falling and dying. The margin between the two is the character's own
+    // Constitution (p282), so a hardy man has further to go before a wound
+    // that knocked him down finishes him.
+    this.condition = CNS5.vitalState(this.body.value, this.attr.con.value);
+
     this.dodgePenalty = CNS5.dodgePenalty[this.armourWeight] ?? 0;
     this.thiefPenalty = CNS5.armourWeights[this.armourWeight]?.thiefPenalty ?? 0;
 

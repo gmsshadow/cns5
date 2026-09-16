@@ -1659,3 +1659,48 @@ CNS5.rangedStrengthBonus = function (strength, band) {
   const over = (Number(strength) || 0) - CNS5.rangedStrengthMinimum;
   return over > 0 ? over * CNS5.rangedStrengthRangePerPoint : 0;
 };
+
+/* -------------------------------------------- */
+/*  Falling and dying                           */
+/* -------------------------------------------- */
+
+/**
+ * What Body Points mean once they run out (p282).
+ *
+ * "Once a character reaches zero body he slips into unconsciousness. A
+ * character can suffer damage that places his body into negative figures, but
+ * once this happens death may rapidly follow. When the character's Body Points
+ * reach a negative figure equal to the level of the character's Constitution,
+ * the character is dead."
+ *
+ * So the margin between falling and dying is the character's own Constitution:
+ * a hardy man has further to go. Body is deliberately allowed below zero rather
+ * than floored there, because the distance below zero is the whole of what
+ * decides the question.
+ */
+CNS5.deathThreshold = function (constitution) {
+  return -(Number(constitution) || 0);
+};
+
+/**
+ * Work out what state a character is in.
+ *
+ * @param {number} body          current Body Points
+ * @param {number} constitution  the character's Constitution
+ * @returns {{state: string, dying: boolean, margin: number, deathAt: number}}
+ */
+CNS5.vitalState = function (body, constitution) {
+  const deathAt = CNS5.deathThreshold(constitution);
+  const value = Number(body) || 0;
+
+  const state = value <= deathAt ? "dead" : value <= 0 ? "unconscious" : "standing";
+
+  return {
+    state,
+    // How much further a character can be hurt before dying.
+    margin: Math.max(0, value - deathAt),
+    deathAt,
+    dying: state === "unconscious",
+    dead: state === "dead"
+  };
+};

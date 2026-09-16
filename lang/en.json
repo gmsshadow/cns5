@@ -758,5 +758,13 @@
   "CNS5.Skill.nothingToAttempt": "There is nothing left to attempt untrained: every skill that allows it is already known.",
   "CNS5.Skill.untrained": "Without basic knowledge",
   "CNS5.Skill.untrainedHint": "These roll at the Unskilled chance for their Difficulty Factor, gain nothing for level or category, and worsen the Crit Die by two on a failure. Buying basic knowledge moves a skill into its own category.",
-  "CNS5.Skill.categoryOnceLearnt": "What this skill will be worth once basic knowledge is bought."
+  "CNS5.Skill.categoryOnceLearnt": "What this skill will be worth once basic knowledge is bought.",
+  "CNS5.Condition.fell": "{name} is down at {body} Body, and dies at {deathAt}: {margin} points of life left.",
+  "CNS5.Condition.died": "{name} is dead, at {body} Body against a Constitution that allowed {deathAt}.",
+  "CNS5.Condition.standing": "Standing",
+  "CNS5.Condition.unconscious": "Unconscious",
+  "CNS5.Condition.dead": "Dead",
+  "CNS5.Condition.label": "Condition",
+  "CNS5.Condition.marginLabel": "Life remaining",
+  "CNS5.Condition.hint": "A character is unconscious at nought Body and dead at a negative figure equal to their Constitution (p282), so the margin between falling and dying is their own hardiness."
 }

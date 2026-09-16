@@ -666,6 +666,20 @@ The chat card shows each modifier with the sign it was *applied* with rather
 than the sign it was written with. Printing "+5" beside a die that went down by
 five reads as a fault rather than as the rule, and the card said exactly that.
 
+### Distance costs a shot its chance
+
+Nothing for short range, -5% at medium, -10% at long, -20% at extreme and -30%
+at maximum. The row sits *above* the band names rather than among the columns of
+Table - Missile Ranges, which is how it came to be missed: the table proper is
+read from the row of headings downwards, and this line is above them. Without it
+every shot was made at its short-range chance however far away the target stood.
+
+It is a separate thing from the Crit Die modifier for range, and easily confused
+with it. At extreme range a longbow with war arrows is -20% to hit and -15 on
+the die: the first is the same for every weapon in the game, the second belongs
+to that pairing alone. The range picker shows both, since the chance is what a
+player is choosing between.
+
 ### What modifies the Crit Die
 
 Three things do on a shot, and only one on a blow. A melee weapon has a modifier

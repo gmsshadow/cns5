@@ -98,7 +98,7 @@ export async function promptDefence(defender, mode) {
  * @param {object} shooter  the shooter's system data
  * @returns {Promise<{ammunitionId: string|null, band: string}|null>}
  */
-export async function promptShot(weapon, loadings, shooter) {
+export async function promptShot(weapon, loadings, shooter, penalties = {}) {
   const strength = shooter?.attr?.str?.value ?? 0;
   const strong = strength >= CNS5.rangedStrengthMinimum;
 
@@ -131,8 +131,14 @@ export async function promptShot(weapon, loadings, shooter) {
         const extra = CNS5.rangedStrengthBonus(strength, band);
         const modifier = profile?.critModifiers?.[band] ?? 0;
         const reach = extra ? `${printed} + ${extra} = ${printed + extra}ft` : `${printed}ft`;
+
+        // Distance costs a shot its chance as well as its Crit Die, and the
+        // chance is what a player is choosing between, so it is shown first.
+        const penalty = penalties[band] ?? 0;
+        const toHit = penalty ? `${penalty}% ${game.i18n.localize("CNS5.Missile.toHit")}, ` : "";
+
         return `<option value="${band}">${game.i18n.localize(`CNS5.Range.${band}`)}
-                — ${reach}, ${modifier >= 0 ? "+" : ""}${modifier}
+                — ${reach}, ${toHit}${modifier >= 0 ? "+" : ""}${modifier}
                 ${game.i18n.localize("CNS5.Missile.toCritDie")}</option>`;
       })
       .join("");

@@ -293,5 +293,72 @@ const mismatched = profiles
   .map((p) => `${p.weapon} takes ${CNS5.ammunitionFor(p.weapon)} but is loaded with ${p.ammunition}`);
 ok("what a launcher takes is what it is loaded with", mismatched, []);
 
+/* -- Distance costs a shot its chance (p258) --------------------------------- */
+
+/* The TSC% Modifier row sits above the band names rather than among the
+   columns, which is how it came to be missed: the table proper was read from
+   the row of headings downwards and this line is above them. Without it every
+   shot was made at its short-range chance however far away the target stood. */
+const { rangePenalties } = data;
+
+ok("short range costs nothing", rangePenalties.short, 0);
+ok("medium costs five", rangePenalties.medium, -5);
+ok("long costs ten", rangePenalties.long, -10);
+ok("extreme costs twenty", rangePenalties.extreme, -20);
+ok("maximum costs thirty", rangePenalties.max, -30);
+
+ok("every band has a penalty",
+   CNS5.rangeBands.filter((b) => rangePenalties[b] === undefined), []);
+ok("and none of them is a bonus",
+   CNS5.rangeBands.filter((b) => rangePenalties[b] > 0), []);
+ok("they only get worse with distance",
+   CNS5.rangeBands
+     .map((b) => rangePenalties[b])
+     .filter((v, i, all) => i > 0 && v > all[i - 1]),
+   []);
+
+/* A shot reports the penalty so it can be added to the chance. */
+const far = resolveShot({
+  profile: find("Longbow", "War Arrow"),
+  band: "extreme",
+  strength: 10,
+  ammunition: "War Arrows",
+  rangePenalties
+});
+ok("an extreme shot is twenty per cent harder", far.tscModifier, -20);
+
+const near = resolveShot({
+  profile: find("Longbow", "War Arrow"),
+  band: "short",
+  strength: 10,
+  ammunition: "War Arrows",
+  rangePenalties
+});
+ok("a close one is not", near.tscModifier, 0);
+
+/* The chance penalty and the Crit Die modifier are separate things and must not
+   be confused. At extreme range a longbow with war arrows is -20% to hit and
+   -15 on the die: the first is the same for every weapon, the second is the
+   pairing's own. */
+ok("the two are different figures", [far.tscModifier, far.rangeCrit], [-20, -15]);
+ok(
+  "the chance penalty is the same whatever is shot",
+  ["Short Bow", "Longbow", "Heavy Crossbow"].map(
+    (w) =>
+      resolveShot({ profile: find(w), band: "extreme", strength: 10, rangePenalties })
+        .tscModifier
+  ),
+  [-20, -20, -20]
+);
+ok(
+  "while the Crit Die modifier is not",
+  new Set(
+    ["Short Bow", "Longbow", "Heavy Crossbow"].map(
+      (w) => resolveShot({ profile: find(w), band: "extreme", strength: 10, rangePenalties }).rangeCrit
+    )
+  ).size > 1,
+  true
+);
+
 console.log(fails ? `\n${fails} FAILURES` : "\nAll checks passed.");
 process.exit(fails ? 1 : 0);

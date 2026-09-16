@@ -630,5 +630,12 @@
         "max": 0
       }
     }
-  ]
+  ],
+  "rangePenalties": {
+    "short": 0,
+    "medium": -5,
+    "long": -10,
+    "extreme": -20,
+    "max": -30
+  }
 }

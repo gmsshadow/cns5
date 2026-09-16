@@ -125,6 +125,27 @@ def extract_profiles(pdf):
     return profiles
 
 
+def extract_range_penalties(pdf):
+    """The TSC% Modifier row above Table - Missile Ranges (p258).
+
+    It sits above the band names rather than among the columns, which is how it
+    came to be missed: the table proper was read from the row of headings
+    downwards, and this line is above them. Shooting further is harder, and
+    without it every shot was made at its short-range chance however far away
+    the target stood.
+    """
+    page = pdf.pages[PAGE]
+    for row in rows_of(page, 60, 520, 0, 100):
+        text = " ".join(w["text"] for w in row)
+        if "TSC%" not in text:
+            continue
+
+        values = [int(m) for m in re.findall(r"(-?\d+)%", text)]
+        if len(values) == len(BANDS):
+            return dict(zip(BANDS, values))
+    return {}
+
+
 def extract_strength_modifiers(pdf):
     """Table - Ranged Strength Modifier to Crit Die (p258).
 
@@ -151,8 +172,10 @@ if __name__ == "__main__":
     with pdfplumber.open(PDF) as pdf:
         profiles = extract_profiles(pdf)
         strength = extract_strength_modifiers(pdf)
+        penalties = extract_range_penalties(pdf)
 
-    print(f"profiles {len(profiles)}  strength rows {len(strength)}", file=sys.stderr)
+    print(f"profiles {len(profiles)}  strength rows {len(strength)}  "
+          f"range penalties {penalties}", file=sys.stderr)
     json.dump(
         {
             "source": "Chivalry & Sorcery 5th Edition core rules, Table - Missile Ranges and "
@@ -162,6 +185,7 @@ if __name__ == "__main__":
             "profileCount": len(profiles),
             "profiles": profiles,
             "strengthModifiers": strength,
+            "rangePenalties": penalties,
         },
         sys.stdout,
         indent=2,

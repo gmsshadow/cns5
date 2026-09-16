@@ -154,7 +154,8 @@ export function resolveShot({
   strength,
   ammunition,
   ammunitionCrit = 0,
-  strengthModifiers = null
+  strengthModifiers = null,
+  rangePenalties = null
 }) {
   // The table is passed in rather than read from module state. Reading it from
   // whatever a previous call happened to have loaded meant the function was
@@ -168,12 +169,20 @@ export function resolveShot({
     ? table.find((s) => s.ammunition === row)?.modifiers?.[band] ?? 0
     : 0;
 
+  // Shooting further is harder. The penalty is printed above the table rather
+  // than among its columns (p258), which is how it came to be missed: nothing
+  // in a row says it, and every shot was made at its short-range chance however
+  // far away the target stood.
+  const penalties = rangePenalties ?? profiles?.rangePenalties ?? {};
+  const tscModifier = penalties[band] ?? 0;
+
   const rangeCrit = profile.critModifiers[band] ?? 0;
   const distance = profile.ranges[band] ?? 0;
   const extra = strong ? CNS5.rangedStrengthBonus(strength, band) : 0;
 
   return {
     band,
+    tscModifier,
     distance,
     extraDistance: extra,
     reach: distance + extra,

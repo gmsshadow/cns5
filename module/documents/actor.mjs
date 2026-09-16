@@ -271,7 +271,7 @@ export class CnS5Actor extends Actor {
           game.i18n.format("CNS5.Missile.noProfile", { weapon: weapon.name })
         );
       } else {
-        const chosen = await promptShot(weapon, loadings, this.system);
+        const chosen = await promptShot(weapon, loadings, this.system, missiles.rangePenalties);
         if (chosen === null) return null;
 
         const loading = loadings[chosen.loading] ?? loadings[0];
@@ -285,7 +285,8 @@ export class CnS5Actor extends Actor {
           // every row of the table; the arrow's is what tells, and dropping it
           // lost every missile between one and two on the die.
           ammunitionCrit: ammunition?.system.critDieModifier ?? 0,
-          strengthModifiers: missiles.strengthModifiers
+          strengthModifiers: missiles.strengthModifiers,
+          rangePenalties: missiles.rangePenalties
         });
       }
     }
@@ -308,6 +309,9 @@ export class CnS5Actor extends Actor {
     // player picks a target area.
     const aimed = CNS5.aimedShotModifiers[area] ?? CNS5.aimedShotModifiers.none;
     situational += aimed.modifier;
+
+    // Distance costs a shot its chance as well as its Crit Die (p258).
+    situational += shot?.tscModifier ?? 0;
 
     // The target declares how they are defending before the attack is rolled
     // (p270). Without a target there is nobody to ask.
@@ -507,10 +511,12 @@ export class CnS5Actor extends Actor {
         },
         { label: "CNS5.Roll.psf", value: weapon.system.psf, signed: true },
         { label: "CNS5.Roll.aimedShot", value: aimed.modifier, signed: true },
+        { label: "CNS5.Roll.rangePenalty", value: shot?.tscModifier ?? 0, signed: true },
         { label: "CNS5.Roll.defended", value: basic?.modifier ?? 0, signed: true },
         {
           label: "CNS5.Roll.situational",
-          value: situational - aimed.modifier - (basic?.modifier ?? 0),
+          value:
+            situational - aimed.modifier - (basic?.modifier ?? 0) - (shot?.tscModifier ?? 0),
           signed: true
         },
         { label: "CNS5.Weapon.baseDamage", value: weapon.system.baseDamage },

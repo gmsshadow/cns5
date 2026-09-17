@@ -803,6 +803,59 @@ in any crossbow, so a crossbow loaded with them falls back to its own row.
 Sling stones are nowhere given as an item. The ranges table prints a profile for
 a sling with no ammunition named, which is taken to be stones.
 
+## Targeting a spell
+
+Casting a spell and targeting it are separate acts (p296). Casting makes the
+pattern; targeting carries it through the Shadow World to where it is wanted,
+and it is targeting that everything in the way interferes with. The roll the
+system makes is the targeting one.
+
+A caster's Mode of Magick chance is reduced by the target's own resistance, by
+whatever stands between them, and by the distance; adjusted for how either is
+moving; and raised by half again if the target wants the spell. Three tables
+drive it:
+
+- **Target's Magick Resistance** — what a target resists by for being what it
+  is. A man resists nothing, a wood elf ten, a clan dwarf twenty, a Lich forty.
+  It is read from the target's race, most particular answer first, so a Wood Elf
+  is not mistaken for an Elf; anything the table does not name resists nothing
+  and says so rather than guessing.
+- **Targeting Movement Penalty** — as often a bonus. A target standing still and
+  in view is +10%, one charging the caster likewise; a caster on the move is
+  -10%.
+- **Targeting Modifiers for Obstacles** — foliage -10% through lead -25%, and
+  **True Lead, which no spell passes at all**. That one is reported rather than
+  added: rolling against a very small number would say "unlikely" where the
+  rules say "never".
+
+A physical effect may be **dodged** by a target who is fully alert and at least
+fifty feet away, their Dodge PSF% coming off the caster. One closer than that
+has no time.
+
+### What a spell costs
+
+Fatigue, "or if exhausted, Body Points" (p296) — so a caster with nothing left
+pays out of their own substance, and the system will take them below zero and
+announce it like any other wound. The cost is taken whether or not the targeting
+found its mark.
+
+Three things multiply it, and they apply together:
+
+| | |
+| --- | --- |
+| Low mana | doubled |
+| High mana, or the Shadow World | halved, rounding up |
+| From a scroll or book | halved |
+| From a device, by a Mage | a quarter, and a charge |
+| From a device, by anyone else | halved, and a charge |
+| Extending the range by half again | doubled |
+
+So a scroll read in a high mana place costs a quarter of what memory costs in a
+low one. The Shadow World also gives +10% to any Mode of Magick.
+
+**Casting through a Focus is listed but not implemented**: what it costs is
+settled under the making of Magickal Items, which is a chapter of its own.
+
 ## Damage
 
 ## Armour coverage

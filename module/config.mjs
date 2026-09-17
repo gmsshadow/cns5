@@ -1808,3 +1808,82 @@ CNS5.advantageRestricted = ["twoHanded", "polearm"];
  * optional rule, and the one that makes a lucky blow catastrophic.
  */
 CNS5.criticalBonusExplodes = "1d10x10";
+
+/* -------------------------------------------- */
+/*  Targeting a spell                           */
+/*  (pp.296-298)                                */
+/* -------------------------------------------- */
+
+/**
+ * The mana of a place, and what it costs to draw on (p296).
+ *
+ * "In an average Mana level environment the costs to perform Magick are as
+ * indicated for the spell. In a low Mana environment the Fatigue costs are
+ * doubled... In a high Mana environment the Fatigue costs are halved. The
+ * Shadow World... is considered to be a High Mana environment and gives a bonus
+ * of +10% to any Method of Magick or Mode of Magick TSC%."
+ */
+CNS5.manaLevels = {
+  low: { label: "CNS5.Mana.low", fatigue: 2, tsc: 0 },
+  average: { label: "CNS5.Mana.average", fatigue: 1, tsc: 0 },
+  high: { label: "CNS5.Mana.high", fatigue: 0.5, tsc: 0 },
+  shadow: { label: "CNS5.Mana.shadow", fatigue: 0.5, tsc: 10 }
+};
+
+/**
+ * Where the casting comes from, and what that does to its cost (p297).
+ *
+ * A spell read from a page costs half what one held in the head does, and a
+ * device does much of the work itself — a quarter of the cost for a Mage who
+ * knows what he is doing with it, half for anyone else, and a charge either
+ * way. A Focus is listed because it belongs here, though what it costs is
+ * settled under the making of Magickal Items and is not yet implemented.
+ */
+CNS5.castingSources = {
+  memory: { label: "CNS5.Casting.memory", fatigue: 1, charge: false },
+  scroll: { label: "CNS5.Casting.scroll", fatigue: 0.5, charge: false },
+  deviceMage: { label: "CNS5.Casting.deviceMage", fatigue: 0.25, charge: true },
+  deviceOther: { label: "CNS5.Casting.deviceOther", fatigue: 0.5, charge: true },
+  focus: { label: "CNS5.Casting.focus", fatigue: 1, charge: false, unimplemented: true }
+};
+
+/**
+ * Doubling the Fatigue spent extends a spell's reach by half again (p296).
+ */
+CNS5.rangeExtension = { fatigue: 2, distance: 1.5 };
+
+/**
+ * A target who wants the spell is far easier to reach (p296).
+ */
+CNS5.willingTargetBonus = 50;
+
+/**
+ * A physical effect may be dodged, but only by someone who can see it coming
+ * and has room to move: "the target needs to be fully alert... and a minimum of
+ * 50 feet from the caster" (p296). Their Dodge PSF comes off the caster.
+ */
+CNS5.spellDodgeMinimumDistance = 50;
+
+/**
+ * What a spell costs to cast, given where it is drawn from and where it is
+ * being cast.
+ *
+ * The Fatigue is rounded up, as the rules say of a halved cost, and the two
+ * multipliers apply together: a scroll read in a high mana place costs a
+ * quarter of what memory costs in a low one.
+ *
+ * @param {object} options
+ * @returns {{fatigue: number, extended: boolean, charge: boolean}}
+ */
+CNS5.spellCost = function ({ base = 0, mana = "average", source = "memory", extendRange = false }) {
+  const place = CNS5.manaLevels[mana] ?? CNS5.manaLevels.average;
+  const from = CNS5.castingSources[source] ?? CNS5.castingSources.memory;
+  const extension = extendRange ? CNS5.rangeExtension.fatigue : 1;
+
+  return {
+    fatigue: Math.ceil(base * place.fatigue * from.fatigue * extension),
+    extended: extendRange,
+    charge: from.charge,
+    tscBonus: place.tsc
+  };
+};

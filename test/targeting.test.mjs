@@ -1,0 +1,135 @@
+/**
+ * Targeting a spell (pp.296-298).
+ *
+ * Casting a spell and targeting it are separate acts. These are the modifiers
+ * that bear on the second.
+ */
+
+import { readFile } from "node:fs/promises";
+import { fileURLToPath } from "node:url";
+import path from "node:path";
+
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const { CNS5 } = await import(path.join(ROOT, "module", "config.mjs"));
+const { resolveTargeting, intrinsicResistance } = await import(
+  path.join(ROOT, "module", "helpers", "targeting.mjs")
+);
+const tables = JSON.parse(await readFile(path.join(ROOT, "data", "magick.json"), "utf8"));
+
+let fails = 0;
+const ok = (label, got, want) => {
+  const pass = JSON.stringify(got) === JSON.stringify(want);
+  if (!pass) fails++;
+  console.log(`${pass ? "PASS" : "FAIL"}  ${label}: got ${JSON.stringify(got)}, want ${JSON.stringify(want)}`);
+};
+
+const { targetResistance, movement, obstacles } = tables;
+
+/* -- What a target resists by (p297) ----------------------------------------- */
+
+ok("kinds of target", Object.keys(targetResistance).length, 22);
+ok("a man resists nothing", targetResistance.Human, 0);
+ok("a wood elf a little", targetResistance["Wood Elf"], 10);
+ok("a clan dwarf more", targetResistance["Dwarf, Clan"], 20);
+ok("a noble dwarf more again", targetResistance["Dwarf, Noble"], 25);
+ok("a lich most of all", targetResistance.Lich, 40);
+ok("a spectre nearly as much", targetResistance["Spectre, Phantom"], 30);
+
+/* A large animal resists nothing while a small one resists a great deal, which
+   reads oddly until you consider what a spell has to find. */
+ok("a large animal", targetResistance["Large Animal"], 0);
+ok("a small one", targetResistance["Small Animal"], 25);
+ok("and a thing that does not think", targetResistance["Non-sentient"], 0);
+
+/* Matching is by what the target is, most particular answer first — otherwise
+   a Wood Elf would be read as an Elf and resist the wrong amount. */
+const of = (race) => intrinsicResistance({ system: { details: { race } } }, targetResistance);
+ok("a wood elf is not a true elf", of("Wood Elf").value, 10);
+ok("a true elf is not a wood elf", of("True Elf").value, 20);
+ok("a noble dwarf is not a clan dwarf", of("Dwarf, Noble").value, 25);
+ok("something unlisted resists nothing", of("Goblin").value, 0);
+ok("and is honest about not knowing", of("Goblin").matched, null);
+ok("nothing at all resists nothing", of("").value, 0);
+
+/* -- Movement (p297) --------------------------------------------------------- */
+
+const move = (id) => movement.find((m) => m.id === id)?.modifier;
+ok("a caster on the move is hampered", move("casterMoving"), -10);
+ok("a target standing still is easier", move("targetStill"), 10);
+ok("one moving is harder", move("targetMoving30"), -5);
+ok("one running harder still", move("targetMoving100"), -15);
+ok("and one charging you is easiest of all", move("targetAdvancing"), 10);
+ok("five entries", movement.length, 5);
+
+/* -- Obstacles (p298) -------------------------------------------------------- */
+
+const block = (id) => obstacles.find((o) => o.id === id);
+ok("ten entries", obstacles.length, 10);
+ok("foliage", block("foliage").modifier, -10);
+ok("fog or fire", block("dust").modifier, -15);
+ok("water or rock", block("water").modifier, -20);
+ok("lead", block("lead").modifier, -25);
+ok("invisibility", block("invisible").modifier, -25);
+
+/* True Lead is not a penalty but a wall, and must not be treated as a number. */
+ok("True Lead stops a spell outright", block("trueLead").impenetrable, true);
+ok("and carries no modifier to add", block("trueLead").modifier, null);
+ok("nothing else is impenetrable", obstacles.filter((o) => o.impenetrable).length, 1);
+
+/* -- Putting it together ------------------------------------------------------ */
+
+const shot = (options) => resolveTargeting({ tables, ...options });
+
+ok("an unobstructed spell at short range is the caster's own chance",
+   shot({ modeTsc: 72 }).total, 72);
+ok("a clan dwarf takes twenty off it",
+   shot({ modeTsc: 72, resistance: 20 }).total, 52);
+ok("long range ten more", shot({ modeTsc: 72, resistance: 20, range: "long" }).total, 42);
+ok("foliage ten more again",
+   shot({ modeTsc: 72, resistance: 20, range: "long", obstacles: ["foliage"] }).total, 32);
+
+/* A willing target is worth more than everything else put together. */
+ok("a willing target", CNS5.willingTargetBonus, 50);
+ok("which is decisive", shot({ modeTsc: 30, resistance: 20, willing: true }).total, 60);
+
+/* A dodge comes off as the dodger's skill, not as a flat figure. */
+ok("a dodge of 24", shot({ modeTsc: 72, dodgePsf: 24 }).total, 48);
+ok("the minimum distance to attempt one", CNS5.spellDodgeMinimumDistance, 50);
+
+/* The Shadow World is both a high mana place and a help in itself. */
+ok("its bonus", shot({ modeTsc: 72, manaBonus: 10 }).total, 82);
+
+/* True Lead is reported rather than added. */
+const walled = shot({ modeTsc: 90, obstacles: ["trueLead"] });
+ok("a walled spell is marked", walled.impenetrable, true);
+ok("and says what stopped it", walled.impenetrableBy.includes("True Lead"), true);
+
+/* -- What a spell costs (p296-297) -------------------------------------------- */
+
+const cost = (options) => CNS5.spellCost({ base: 7, ...options }).fatigue;
+ok("in an average place", cost({}), 7);
+ok("in a low mana one, doubled", cost({ mana: "low" }), 14);
+ok("in a high mana one, halved and rounded up", cost({ mana: "high" }), 4);
+ok("the Shadow World is a high mana place", cost({ mana: "shadow" }), 4);
+ok("and gives a bonus besides", CNS5.manaLevels.shadow.tsc, 10);
+
+ok("from a scroll, half", cost({ source: "scroll" }), 4);
+ok("from a device by a mage, a quarter", cost({ source: "deviceMage" }), 2);
+ok("from a device by anyone else, half", cost({ source: "deviceOther" }), 4);
+ok("a device is spent either way",
+   [CNS5.castingSources.deviceMage.charge, CNS5.castingSources.deviceOther.charge],
+   [true, true]);
+
+/* The multipliers apply together, which is what makes a scroll in a high mana
+   place so cheap and memory in a low one so dear. */
+ok("a scroll in a high mana place", cost({ mana: "high", source: "scroll" }), 2);
+ok("memory in a low one", cost({ mana: "low", source: "memory" }), 14);
+ok("reaching further doubles it again", cost({ extendRange: true }), 14);
+ok("and doubling a doubled cost", cost({ mana: "low", extendRange: true }), 28);
+
+/* Rounding is up, as the rules say of a halved cost. */
+ok("an odd cost halved rounds up", CNS5.spellCost({ base: 5, mana: "high" }).fatigue, 3);
+ok("and quartered too", CNS5.spellCost({ base: 5, source: "deviceMage" }).fatigue, 2);
+
+console.log(fails ? `\n${fails} FAILURES` : "\nAll checks passed.");
+process.exit(fails ? 1 : 0);

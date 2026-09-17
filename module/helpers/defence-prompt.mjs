@@ -258,3 +258,143 @@ export async function promptThrow(weapon, profile) {
     rejectClose: false
   });
 }
+
+/* -------------------------------------------- */
+
+/**
+ * Ask how a spell is being cast and what stands in its way.
+ *
+ * Everything here bears on targeting rather than on casting, and most of it is
+ * ordinarily nothing: a caster standing still, throwing a spell at someone in
+ * plain view at close range, answers none of these questions. So the dialog
+ * opens with the two that always matter — where the mana is and where the spell
+ * is being read from — and lists the rest as boxes to tick.
+ *
+ * @param {Item} spell
+ * @param {object} options
+ * @returns {Promise<object|null>} null if dismissed
+ */
+export async function promptTargeting(spell, { tables, resistance, targetName }) {
+  const boxes = (list, name) =>
+    list
+      .map(
+        (entry) => `
+        <label class="cns5-checkbox">
+          <input type="checkbox" name="${name}" value="${entry.id}">
+          <span>${entry.label}
+            <span class="cns5-hint">${
+              entry.impenetrable
+                ? game.i18n.localize("CNS5.Targeting.impenetrable")
+                : `${entry.modifier > 0 ? "+" : ""}${entry.modifier}%`
+            }</span>
+          </span>
+        </label>`
+      )
+      .join("");
+
+  const choices = (source, selected) =>
+    Object.entries(source)
+      .map(
+        ([key, entry]) =>
+          `<option value="${key}" ${key === selected ? "selected" : ""}>${game.i18n.localize(
+            entry.label
+          )}</option>`
+      )
+      .join("");
+
+  const content = `
+    <div class="cns5-prompt">
+      <div class="cns5-grid cns5-grid--two">
+        <label class="cns5-field">
+          <span>${game.i18n.localize("CNS5.Targeting.mana")}</span>
+          <select name="mana">${choices(CNS5.manaLevels, "average")}</select>
+        </label>
+        <label class="cns5-field">
+          <span>${game.i18n.localize("CNS5.Targeting.source")}</span>
+          <select name="source">${choices(CNS5.castingSources, "memory")}</select>
+        </label>
+        <label class="cns5-field">
+          <span>${game.i18n.localize("CNS5.Targeting.range")}</span>
+          <select name="range">
+            ${Object.keys(CNS5.spellRanges)
+              .map(
+                (key) =>
+                  `<option value="${key}">${game.i18n.localize(`CNS5.Range.${key}`)}
+                   (${CNS5.spellRanges[key].modifier}%)</option>`
+              )
+              .join("")}
+          </select>
+        </label>
+        <label class="cns5-field">
+          <span>${game.i18n.localize("CNS5.Targeting.dodge")}</span>
+          <input type="number" name="dodgePsf" value="0" min="0">
+        </label>
+      </div>
+
+      ${
+        targetName
+          ? `<p class="hint">${game.i18n.format("CNS5.Targeting.resists", {
+              name: targetName,
+              mr: resistance.value,
+              matched: resistance.matched ?? game.i18n.localize("CNS5.Targeting.unknownKind")
+            })}</p>`
+          : `<label class="cns5-field">
+               <span>${game.i18n.localize("CNS5.Targeting.resistance")}</span>
+               <input type="number" name="resistance" value="0" min="0">
+             </label>`
+      }
+
+      <label class="cns5-checkbox">
+        <input type="checkbox" name="willing">
+        <span>${game.i18n.format("CNS5.Targeting.willing", {
+          bonus: CNS5.willingTargetBonus
+        })}</span>
+      </label>
+      <label class="cns5-checkbox">
+        <input type="checkbox" name="extendRange">
+        <span>${game.i18n.localize("CNS5.Targeting.extend")}</span>
+      </label>
+
+      <p class="cns5-check__subheading">${game.i18n.localize("CNS5.Targeting.movement")}</p>
+      ${boxes(tables.movement, "movement")}
+
+      <p class="cns5-check__subheading">${game.i18n.localize("CNS5.Targeting.obstacles")}</p>
+      ${boxes(tables.obstacles, "obstacles")}
+
+      <label class="cns5-field">
+        <span>${game.i18n.localize("CNS5.Roll.situational")}</span>
+        <input type="number" name="situational" value="0">
+      </label>
+      <p class="hint">${game.i18n.localize("CNS5.Targeting.dodgeHint")}</p>
+    </div>`;
+
+  return foundry.applications.api.DialogV2.prompt({
+    window: { title: game.i18n.format("CNS5.Targeting.title", { spell: spell.name }) },
+    content,
+    position: { width: 520 },
+    ok: {
+      label: game.i18n.localize("CNS5.Roll.rollButton"),
+      callback: (event, button) => {
+        const form = button.form;
+        const ticked = (name) =>
+          [...form.querySelectorAll(`[name="${name}"]:checked`)].map((b) => b.value);
+
+        return {
+          mana: form.elements.mana.value,
+          source: form.elements.source.value,
+          range: form.elements.range.value,
+          dodgePsf: Math.max(0, Number(form.elements.dodgePsf.value) || 0),
+          resistance: form.elements.resistance
+            ? Math.max(0, Number(form.elements.resistance.value) || 0)
+            : null,
+          willing: form.elements.willing.checked,
+          extendRange: form.elements.extendRange.checked,
+          movement: ticked("movement"),
+          obstacles: ticked("obstacles"),
+          situational: Number(form.elements.situational.value) || 0
+        };
+      }
+    },
+    rejectClose: false
+  });
+}

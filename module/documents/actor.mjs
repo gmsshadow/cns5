@@ -13,7 +13,8 @@ import {
   promptDefence
 } from "../helpers/defence-prompt.mjs";
 import { armourAt } from "../helpers/defence.mjs";
-import { promptShot, promptThrow } from "../helpers/defence-prompt.mjs";
+import { promptShot, promptThrow, promptTargeting } from "../helpers/defence-prompt.mjs";
+import { magickTables, intrinsicResistance, resolveTargeting } from "../helpers/targeting.mjs";
 import {
   missileProfile,
   availableAmmunition,
@@ -581,7 +582,13 @@ export class CnS5Actor extends Actor {
     }
 
     const title = game.i18n.format("CNS5.Roll.spellTitle", { spell: spell.name });
-    const band = CNS5.spellRanges[range] ?? CNS5.spellRanges.short;
+
+    // Casting a spell and targeting it are separate acts (p296). The roll made
+    // here is the targeting one: everything between the caster and the target
+    // bears on it, and none of it bears on the casting.
+    const tables = await magickTables();
+    const target = [...game.user.targets][0]?.actor ?? null;
+    const resistance = intrinsicResistance(target, tables.targetResistance);
 
     let situational = modifier;
     if (!skipDialog) {
@@ -590,32 +597,97 @@ export class CnS5Actor extends Actor {
       situational += prompted.modifier;
     }
 
-    const unclamped =
-      mode.system.tsc + band.modifier + spell.system.otherModifier + situational;
-    const { target, critMod, overflow, shortfall } = clampSuccessChance(unclamped, mode.system.df);
+    let declared = {
+      mana: "average",
+      source: "memory",
+      range,
+      dodgePsf: 0,
+      resistance: null,
+      willing: false,
+      extendRange: false,
+      movement: [],
+      obstacles: [],
+      situational: 0
+    };
 
-    const result = await resolveCheck({ target, critMod });
+    if (!skipDialog) {
+      const answered = await promptTargeting(spell, {
+        tables,
+        resistance,
+        targetName: target?.name ?? null
+      });
+      if (answered === null) return null;
+      declared = answered;
+    }
+
+    const cost = CNS5.spellCost({
+      base: spell.system.fpToCast,
+      mana: declared.mana,
+      source: declared.source,
+      extendRange: declared.extendRange
+    });
+
+    const targeting = resolveTargeting({
+      modeTsc: mode.system.tsc,
+      resistance: declared.resistance ?? resistance.value,
+      range: declared.range,
+      movement: declared.movement,
+      obstacles: declared.obstacles,
+      willing: declared.willing,
+      dodgePsf: declared.dodgePsf,
+      manaBonus: cost.tscBonus,
+      situational: situational + declared.situational + spell.system.otherModifier,
+      tables
+    });
+
+    // True Lead is not a penalty but a wall: "No penetration". Rolling against
+    // a very small number would say "unlikely" where the rules say "never".
+    if (targeting.impenetrable) {
+      ui.notifications.warn(
+        game.i18n.format("CNS5.Targeting.blocked", { obstacle: targeting.impenetrableBy })
+      );
+      return null;
+    }
+
+    const unclamped = targeting.total;
+    const { target: chance, critMod, overflow, shortfall } = clampSuccessChance(
+      unclamped,
+      mode.system.df
+    );
+
+    const result = await resolveCheck({ target: chance, critMod });
+
+    // Tapping the Metaphysical Current costs Fatigue, "or if exhausted, Body
+    // Points" (p296) — whether or not the targeting found its mark.
+    await this.spendMagickCost(cost.fatigue);
 
     return checkToMessage(this, {
       ...result,
       title,
       subtitle: game.i18n.format("CNS5.Roll.spellSubtitle", {
-        range: game.i18n.localize(band.label),
-        target
+        range: game.i18n.localize(CNS5.spellRanges[declared.range].label),
+        target: chance
       }),
       unclamped,
       overflow,
       shortfall,
+      targetName: target?.name ?? null,
       cost: game.i18n.format("CNS5.Roll.spellCost", {
-        fp: spell.system.fpToCast,
+        fp: cost.fatigue,
         ap: spell.system.apToCast
       }),
+      spellCost: cost,
       breakdown: this.#breakdown([
         { label: "CNS5.Roll.bcsSkilled", value: mode.system.bcs },
         { label: "CNS5.Roll.psf", value: mode.system.psf, signed: true },
-        { label: "CNS5.Roll.rangeBand", value: band.modifier, signed: true },
-        { label: "CNS5.Spell.otherModifier", value: spell.system.otherModifier, signed: true },
-        { label: "CNS5.Roll.situational", value: situational, signed: true }
+        { label: "CNS5.Targeting.resistance", value: -targeting.resistance, signed: true },
+        { label: "CNS5.Roll.rangeBand", value: targeting.rangeModifier, signed: true },
+        { label: "CNS5.Targeting.movement", value: targeting.movementTotal, signed: true },
+        { label: "CNS5.Targeting.obstacles", value: targeting.obstacleTotal, signed: true },
+        { label: "CNS5.Targeting.willingShort", value: targeting.willingBonus, signed: true },
+        { label: "CNS5.Targeting.dodge", value: -targeting.dodgePsf, signed: true },
+        { label: "CNS5.Mana.bonus", value: targeting.manaBonus, signed: true },
+        { label: "CNS5.Roll.situational", value: targeting.situational, signed: true }
       ])
     });
   }
@@ -800,6 +872,35 @@ export class CnS5Actor extends Actor {
         { label: "CNS5.Roll.situational", value: situational, signed: true }
       ])
     });
+  }
+
+  /* -------------------------------------------- */
+
+  /**
+   * Pay for a spell.
+   *
+   * "This costs the Mage Fatigue Points (FP), or if exhausted, Body Points"
+   * (p296) — so a caster with nothing left in reserve pays out of their own
+   * substance, which is how a desperate mage kills himself casting.
+   *
+   * @param {number} fatigue
+   * @returns {Promise<{fromFatigue: number, fromBody: number}>}
+   */
+  async spendMagickCost(fatigue) {
+    if (!(fatigue > 0)) return { fromFatigue: 0, fromBody: 0 };
+
+    const available = Math.max(0, this.system.fatigue.value);
+    const fromFatigue = Math.min(fatigue, available);
+    const fromBody = fatigue - fromFatigue;
+
+    const before = this.system.condition.state;
+    await this.update({
+      "system.fatigue.value": available - fromFatigue,
+      "system.body.value": this.system.body.value - fromBody
+    });
+    await this.#announceCondition(before);
+
+    return { fromFatigue, fromBody };
   }
 
   /* -------------------------------------------- */

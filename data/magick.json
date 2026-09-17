@@ -1,0 +1,108 @@
+{
+  "source": "Chivalry & Sorcery 5th Edition core rules, pp.296-298",
+  "note": "Targeting modifiers only. A target's Magick Resistance is subtracted from the caster's Mode of Magick chance; the others are added as printed.",
+  "targetResistance": {
+    "Human": 0,
+    "Haeflin": 15,
+    "Dwarf, Clan": 20,
+    "Dwarf, Noble": 25,
+    "Wood Elf": 10,
+    "Noble Elf": 15,
+    "True Elf": 20,
+    "Lycanthrope": 15,
+    "Skeleton": 10,
+    "Zombie": 10,
+    "Death": 15,
+    "Ghoul": 10,
+    "Wight": 25,
+    "Wraith": 25,
+    "Ghost": 25,
+    "Spectre, Phantom": 30,
+    "Vampire": 10,
+    "Mummy": 20,
+    "Lich": 40,
+    "Small Animal": 25,
+    "Large Animal": 0,
+    "Non-sentient": 0
+  },
+  "movement": [
+    {
+      "id": "casterMoving",
+      "label": "Caster is moving faster than 10 feet per turn",
+      "modifier": -10
+    },
+    {
+      "id": "targetStill",
+      "label": "Target is stationary and in view",
+      "modifier": 10
+    },
+    {
+      "id": "targetMoving30",
+      "label": "Target is moving faster than 30 feet per turn",
+      "modifier": -5
+    },
+    {
+      "id": "targetMoving100",
+      "label": "Target is moving faster than 100 feet per turn",
+      "modifier": -15
+    },
+    {
+      "id": "targetAdvancing",
+      "label": "Target is advancing toward spell caster",
+      "modifier": 10
+    }
+  ],
+  "obstacles": [
+    {
+      "id": "invisible",
+      "label": "Target invisible but generally located",
+      "modifier": -25
+    },
+    {
+      "id": "foliage",
+      "label": "Target obscured by foliage or partial cover",
+      "modifier": -10
+    },
+    {
+      "id": "reflection",
+      "label": "Target seen in a mirror or pond reflection",
+      "modifier": -10
+    },
+    {
+      "id": "dust",
+      "label": "Target behind wall of dust, spray, fog, fire, light or darkness",
+      "modifier": -15
+    },
+    {
+      "id": "water",
+      "label": "Target behind wall of water, ice, rock or metal",
+      "modifier": -20
+    },
+    {
+      "id": "lead",
+      "label": "Target behind wall of lead",
+      "modifier": -25
+    },
+    {
+      "id": "trueLead",
+      "label": "Target behind wall of True Lead",
+      "modifier": null,
+      "impenetrable": true
+    },
+    {
+      "id": "dwarvish",
+      "label": "Target clad in full armour of Dwarvish Steel",
+      "modifier": -10
+    },
+    {
+      "id": "enchantedDwarvish",
+      "label": "Target clad in full armour of Enchanted Dwarvish Steel",
+      "modifier": -20
+    },
+    {
+      "id": "scried",
+      "label": "Target by Astrology, Divination or a scrying device",
+      "modifier": -20
+    }
+  ]
+}

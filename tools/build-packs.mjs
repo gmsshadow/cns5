@@ -401,7 +401,8 @@ function toSpell(row, byName, name = row.name) {
     castingTime: plain(row.casting ?? parent?.casting),
     duration: plain(row.duration),
     prerequisite: plain(row.prerequisite ?? parent?.prerequisite),
-    ranges: { short: plain(row.range ?? parent?.range), long: "", max: "" },
+    // The table's figure is the maximum; the other brackets follow from it.
+    rangeText: plain(row.range ?? parent?.range),
     otherModifier: 0,
     learnt: true,
     reference: references.join(" — "),

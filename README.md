@@ -832,6 +832,33 @@ A physical effect may be **dodged** by a target who is fully alert and at least
 fifty feet away, their Dodge PSF% coming off the caster. One closer than that
 has no time.
 
+### Ranges and durations
+
+The spell tables print **one** figure for range and it is the *maximum*. Short
+range is a tenth of it and long range a half (p296), so both are worked out
+rather than entered — the sheet used to offer three boxes and leave two of them
+empty, which asked the player for something the rules derive.
+
+Nearly every figure is a quantity multiplied by the caster's Magick Level:
+`10' x ML`, `3 min x ML`, `1 mile x ML`. Some add a fixed part (`5' + 1' per
+ML`), some count down (`60 seconds - (5 x ML)`), and a few grow shorter with
+skill (`60 min / ML`). All of those are read and worked out, in feet or seconds,
+against the caster's own level — so a spell's reach changes as its caster
+improves, which is why it cannot be stored.
+
+Three things are not figures and are not treated as failures to read one:
+
+- **Words** — Touch, Self, Instant, Permanent, Until Dispelled. A spell cast by
+  touch has no range in feet and never will, so it is carried through as what it
+  is rather than turned into a nought.
+- **Named unknowns** — `10' x ML x Density`, `15 seconds x Volume`. The term is
+  named and nothing is invented for it.
+- **Instructions** — "Concentration", "Until Destroyed", "Per Type of Fire".
+  Shown as printed.
+
+Every one of the 313 printed ranges resolves to one of those. Durations are less
+tractable: a couple of dozen are instructions rather than quantities.
+
 ### What a spell costs
 
 Fatigue, "or if exhausted, Body Points" (p296) — so a caster with nothing left

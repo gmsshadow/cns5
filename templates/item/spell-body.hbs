@@ -54,16 +54,26 @@
 
 <fieldset class="cns5-fieldset">
     <legend>{{localize "CNS5.Spell.ranges"}}</legend>
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Spell.maxRange"}}</span>
+        <input type="text" name="system.rangeText" value="{{system.rangeText}}"
+               placeholder="10’ x ML" {{#unless editable}}disabled{{/unless}}>
+    </label>
     <p class="cns5-hint">{{localize "CNS5.Spell.rangeHint"}}</p>
-    <div class="cns5-grid cns5-grid--three">
-        {{#each system.ranges as |value key|}}
-        <label class="cns5-field">
-            <span>{{localize (concat "CNS5.SpellRange." key)}}</span>
-            <input type="text" name="system.ranges.{{key}}" value="{{value}}"
-                   {{#unless @root.editable}}disabled{{/unless}}>
-        </label>
-        {{/each}}
-    </div>
+
+    {{#if system.rangeLabels}}
+    <dl class="cns5-derived">
+        <div><dt>{{localize "CNS5.Range.short"}}</dt><dd>{{system.rangeLabels.short}}</dd></div>
+        <div><dt>{{localize "CNS5.Range.long"}}</dt><dd>{{system.rangeLabels.long}}</dd></div>
+        <div><dt>{{localize "CNS5.Range.max"}}</dt><dd>{{system.rangeLabels.max}}</dd></div>
+    </dl>
+    {{else if system.parsedRange.unknown}}
+    <p class="cns5-hint cns5-hint--bad">
+        {{localize "CNS5.Spell.rangeUnknown"}} {{system.parsedRange.unknown}}.
+    </p>
+    {{else if system.parsedRange.label}}
+    <p class="cns5-hint">{{localize system.parsedRange.label}}</p>
+    {{/if}}
 </fieldset>
 
 <div class="cns5-grid cns5-grid--two">

@@ -464,6 +464,14 @@ CNS5.magickTraditions = {
 };
 
 /** Spell range bands and their targeting penalties (character sheet, p599). */
+/**
+ * What share of a spell's maximum range each bracket is (p296).
+ *
+ * The figure the spell tables print is the maximum; the other two follow from
+ * it, which is why a sheet should not ask for them.
+ */
+CNS5.spellRangeShare = { short: 0.1, long: 0.5, max: 1 };
+
 CNS5.spellRanges = {
   short: { label: "CNS5.SpellRange.short", modifier: 0 },
   long: { label: "CNS5.SpellRange.long", modifier: -10 },

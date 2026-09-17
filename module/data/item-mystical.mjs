@@ -1,4 +1,10 @@
 import { CNS5 } from "../config.mjs";
+import {
+  parseMagnitude,
+  spellRangeBands,
+  evaluateMagnitude,
+  describeMagnitude
+} from "../helpers/magnitude.mjs";
 
 const fields = foundry.data.fields;
 
@@ -32,14 +38,18 @@ export class CnS5Spell extends foundry.abstract.TypeDataModel {
       fatigueNote: new fields.StringField({ required: true, blank: true, initial: "" }),
 
       castingTime: new fields.StringField({ required: true, blank: true, initial: "" }),
+
+      // The maximum range as the spell table prints it: "10' x ML", "Touch",
+      // "1 mile x ML". Short and long ranges are worked out from it.
+      rangeText: new fields.StringField({ required: true, blank: true, initial: "" }),
       duration: new fields.StringField({ required: true, blank: true, initial: "" }),
       prerequisite: new fields.StringField({ required: true, blank: true, initial: "" }),
 
-      ranges: new fields.SchemaField({
-        short: new fields.StringField({ required: true, blank: true, initial: "" }),
-        long: new fields.StringField({ required: true, blank: true, initial: "" }),
-        max: new fields.StringField({ required: true, blank: true, initial: "" })
-      }),
+      // No range fields. The spell tables print one figure and it is the
+      // *maximum*: "Short Range (10% of Max Range), Long Range (50% of Max
+      // Range), Maximal Range" (p296). The other two follow from it and from
+      // the caster's Magick Level, so asking for them in three boxes asked for
+      // something the rules derive — and left two of them empty.
 
       otherModifier: new fields.NumberField({ required: true, integer: true, initial: 0 }),
       learnt: new fields.BooleanField({ required: true, initial: true }),
@@ -56,8 +66,38 @@ export class CnS5Spell extends foundry.abstract.TypeDataModel {
    * @param {object} actorSystem
    * @param {Item|null} modeItem  the Mode of Magick skill, if the caster has it
    */
+  /**
+   * Read the printed range and duration once, whether or not anyone is casting
+   * this. A spell sitting in a compendium can still say what it is worth.
+   * @inheritDoc
+   */
+  prepareDerivedData() {
+    super.prepareDerivedData?.();
+    this.parsedRange = parseMagnitude(this.rangeText, "distance");
+    this.parsedDuration = parseMagnitude(this.duration, "time");
+  }
+
+  /* -------------------------------------------- */
+
   prepareForActor(actorSystem, modeItem) {
     this.modeItem = modeItem ?? null;
+
+    // A spell's reach depends on who is casting it, so the brackets are worked
+    // out here rather than stored: the maximum is what the table prints, and
+    // short and long are a tenth and a half of it (p296).
+    const level = actorSystem.magick?.level ?? 1;
+    this.rangeBands = spellRangeBands(this.parsedRange, level);
+    this.rangeLabels = this.rangeBands
+      ? {
+          short: describeMagnitude(this.rangeBands.short, "distance"),
+          long: describeMagnitude(this.rangeBands.long, "distance"),
+          max: describeMagnitude(this.rangeBands.max, "distance")
+        }
+      : null;
+
+    const seconds = evaluateMagnitude(this.parsedDuration, level);
+    this.durationLabel =
+      seconds === null ? this.duration : describeMagnitude(seconds, "time");
     this.modeMissing = !modeItem;
     this.methodModifier = modeItem?.system.psf ?? 0;
 

@@ -131,5 +131,80 @@ ok("and doubling a doubled cost", cost({ mana: "low", extendRange: true }), 28);
 ok("an odd cost halved rounds up", CNS5.spellCost({ base: 5, mana: "high" }).fatigue, 3);
 ok("and quartered too", CNS5.spellCost({ base: 5, source: "deviceMage" }).fatigue, 2);
 
+/* -- Reading the ranges and durations the tables print ----------------------- */
+
+const { parseMagnitude, evaluateMagnitude, spellRangeBands, describeMagnitude } =
+  await import(path.join(ROOT, "module", "helpers", "magnitude.mjs"));
+
+const spells = JSON.parse(await readFile(path.join(ROOT, "data", "spells.json"), "utf8")).spells;
+
+/* The figure the tables print is the maximum; short is a tenth of it and long a
+   half (p296). A sheet asking for all three was asking for something derived. */
+ok("the shares", [CNS5.spellRangeShare.short, CNS5.spellRangeShare.long], [0.1, 0.5]);
+
+const bands = spellRangeBands(parseMagnitude("10’ x ML", "distance"), 6);
+ok("a sixth-level mage's reach", bands.max, 60);
+ok("his short range", bands.short, 6);
+ok("and his long", bands.long, 30);
+
+/* It scales with the caster, which is the whole reason it cannot be stored. */
+ok("a first-level mage reaches less",
+   spellRangeBands(parseMagnitude("10’ x ML", "distance"), 1).max, 10);
+ok("a twentieth-level one far more",
+   spellRangeBands(parseMagnitude("10’ x ML", "distance"), 20).max, 200);
+
+/* Units are read as printed and reduced to feet or seconds. */
+const feet = (text, ml = 1) => evaluateMagnitude(parseMagnitude(text, "distance"), ml);
+ok("a mile", feet("1 mile x ML"), 5280);
+ok("a quarter of one", feet("1/4 mile x ML"), 1320);
+ok("a fixed part and a scaling one", feet("5’ + 1’ per ML", 6), 11);
+ok("a bare quantity", feet("5’"), 5);
+
+const seconds = (text, ml = 1) => evaluateMagnitude(parseMagnitude(text, "time"), ml);
+ok("a quarter minute a level", seconds("15 seconds x ML", 4), 60);
+ok("a day a level", seconds("1 day x ML", 2), 172_800);
+ok("one that shortens with skill", seconds("60 min / ML", 4), 900);
+ok("and one that counts down", seconds("60 seconds - (5 x ML)", 4), 40);
+
+/* Words are not failures to read. A spell cast by touch has no range in feet
+   and never will, so it is carried through as what it is. */
+ok("touch is a word", parseMagnitude("Touch", "distance").kind, "word");
+ok("as is self", parseMagnitude("Self", "distance").kind, "word");
+ok("and instant", parseMagnitude("Instant", "time").kind, "word");
+ok("a word has no figure", evaluateMagnitude(parseMagnitude("Touch", "distance"), 10), null);
+ok("and neither has a dash", parseMagnitude("-", "distance").kind, "none");
+
+/* A term the Gamemaster must supply is named rather than guessed at. */
+const density = parseMagnitude("10’ x ML x Density", "distance");
+ok("an unknown term is named", density.unknown, "Density");
+ok("and nothing is invented for it", evaluateMagnitude(density, 6), null);
+
+/* A trailing r marks a radius: the shape of the effect, not its size. */
+const area = parseMagnitude("20’ r", "distance");
+ok("a radius is noted", area.radius, true);
+ok("and still has a size", evaluateMagnitude(area, 1), 20);
+
+/* Across the whole compendium, every range resolves to something — a figure, a
+   word, a named unknown, or nothing at all. None is left unreadable. */
+const unreadableRanges = spells
+  .map((s) => parseMagnitude(s.range, "distance"))
+  .filter((p) => p.kind === "asPrinted");
+ok("every printed range is read", unreadableRanges.map((p) => p.raw), []);
+
+/* Durations are less tractable: a couple of dozen say things like
+   "Concentration" or "Until Destroyed", which are instructions rather than
+   quantities and are shown as printed. */
+const asPrinted = spells
+  .map((s) => parseMagnitude(s.duration, "time"))
+  .filter((p) => p.kind === "asPrinted");
+ok("most durations are read", asPrinted.length < spells.length / 10, true);
+
+/* Putting figures back into words. */
+ok("a short distance", describeMagnitude(60, "distance"), "60 ft");
+ok("a long one", describeMagnitude(10_560, "distance"), "2 miles");
+ok("a moment", describeMagnitude(45, "time"), "45 seconds");
+ok("a while", describeMagnitude(900, "time"), "15 minutes");
+ok("a day", describeMagnitude(86_400, "time"), "1 day");
+
 console.log(fails ? `\n${fails} FAILURES` : "\nAll checks passed.");
 process.exit(fails ? 1 : 0);

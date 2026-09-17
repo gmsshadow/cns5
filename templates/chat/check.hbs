@@ -66,6 +66,12 @@
             <span>{{localize "CNS5.Damage.toBody"}}</span>
             <span>{{split.bodyLost}}</span>
         </li>
+        {{#if split.bypassedFatigue}}
+        <li class="is-critical">
+            <span>{{localize (concat "CNS5.Damage.bypassed." split.bypassedFatigue)}}</span>
+            <span></span>
+        </li>
+        {{/if}}
         {{#if bonusDamage}}
         <li class="is-critical">
             <span>{{localize "CNS5.Damage.bonus"}}</span>
@@ -79,6 +85,19 @@
         {{localize "CNS5.Damage.apply"}}
     </button>
     {{/if}}
+    {{/if}}
+    {{/if}}
+
+    {{#if advantage}}
+    <p class="cns5-check__advantage">
+        {{localize "CNS5.Advantage.label"}}: {{localize advantage.label}}
+        {{#if advantage.bonus}}{{localize "CNS5.Advantage.bonus" bonus=advantage.bonus}}{{/if}}{{#if advantage.cost}}, {{localize "CNS5.Advantage.costs" cost=advantage.cost}}{{/if}}.
+    </p>
+    {{#if advantage.opposedByStrength}}
+    <p class="cns5-hint">{{localize "CNS5.Advantage.disarmNote" penalty=advantage.penalty}}</p>
+    {{/if}}
+    {{#if advantage.restricted}}
+    <p class="cns5-hint">{{localize "CNS5.Advantage.restricted"}}</p>
     {{/if}}
     {{/if}}
 

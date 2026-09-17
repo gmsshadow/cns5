@@ -239,6 +239,25 @@ function registerSettings() {
     default: true
   });
 
+  // Two optional rules from p281, both of which make wounds more dangerous.
+  game.settings.register("cns5", "bruisingRule", {
+    name: "CNS5.Settings.bruising.name",
+    hint: "CNS5.Settings.bruising.hint",
+    scope: "world",
+    config: true,
+    type: Boolean,
+    default: false
+  });
+
+  game.settings.register("cns5", "explodingCritical", {
+    name: "CNS5.Settings.exploding.name",
+    hint: "CNS5.Settings.exploding.hint",
+    scope: "world",
+    config: true,
+    type: Boolean,
+    default: false
+  });
+
   // Basic combat folds the defence into the attacker's chance; advanced rolls
   // for it separately and reads the pair (p270).
   game.settings.register("cns5", "defenceMode", {

@@ -33,14 +33,50 @@ ok("the goblin's Fatigue is spent", goblin.fatigueLost, 15);
 ok("and fifteen comes off Body", goblin.bodyLost, 15);
 ok("eight of which is the bonus die", goblin.bodyFromBonus, 8);
 
-/* -- What a critical bypasses, and what it does not ------------------------ */
+/* -- What a critical bypasses ---------------------------------------------- */
 
-/* Only the bonus die ignores armour. The rest of a critical blow is absorbed
-   and soaked by Fatigue like any other. */
-const critical = apply({ damage: 20, bonus: 6, absorption: 8, fatigue: 30 });
+/* "A hit that is a Critical Success, where the adjusted Crit Die is 10 or
+   higher, has all of the damage, not absorbed by the shield or armour taken off
+   the Body of the character" (p281). Fatigue takes none of it — an earlier
+   reading had only the extra die bypassing Fatigue, which understated a
+   critical by however much Fatigue the target had left. */
+const critical = apply({ damage: 20, bonus: 6, absorption: 8, fatigue: 30, critical: true });
 ok("armour still stops its share of a critical", critical.absorbed, 8);
-ok("Fatigue still takes what got through", critical.fatigueLost, 12);
-ok("and only the bonus reaches Body", critical.bodyLost, 6);
+ok("but Fatigue takes none of it", critical.fatigueLost, 0);
+ok("and the whole blow reaches the Body", critical.bodyLost, 18);
+ok("the extra die among it", critical.bodyFromBonus, 6);
+ok("and the card can say why", critical.bypassedFatigue, "critical");
+
+/* An ordinary hit is unchanged: armour, then Fatigue, then Body. */
+const ordinary = apply({ damage: 20, absorption: 8, fatigue: 30 });
+ok("an ordinary blow still goes to Fatigue first", ordinary.fatigueLost, 12);
+ok("and leaves the Body alone", ordinary.bodyLost, 0);
+
+/* Armour is the one thing a critical does not ignore. */
+ok(
+  "a critical against heavy armour still loses what it absorbs",
+  apply({ damage: 10, absorption: 16, fatigue: 20, critical: true }).throughArmour,
+  0
+);
+
+/* -- Bruising, an optional rule (p281) -------------------------------------- */
+
+/* "Any damage after armour absorption that exceeds a character's Constitution
+   reduces Body rather than Fatigue. This represents the Body's ability to
+   absorb some damage in the form of bruising." */
+const withinCon = apply({ damage: 12, absorption: 2, fatigue: 30, constitution: 14, bruising: true });
+ok("a blow within Constitution is bruising", withinCon.fatigueLost, 10);
+ok("and reaches no Body", withinCon.bodyLost, 0);
+
+const beyondCon = apply({ damage: 22, absorption: 2, fatigue: 30, constitution: 14, bruising: true });
+ok("a blow beyond it is more than bruising", beyondCon.fatigueLost, 0);
+ok("and all of it reaches the Body", beyondCon.bodyLost, 20);
+ok("with a reason to show", beyondCon.bypassedFatigue, "bruising");
+
+/* The rule is optional, so without it the same blow behaves as before. */
+const unruled = apply({ damage: 22, absorption: 2, fatigue: 30, constitution: 14 });
+ok("without the rule Fatigue takes it", unruled.fatigueLost, 20);
+ok("and the Body none", unruled.bodyLost, 0);
 
 /* An ordinary blow with no critical touches Body only once Fatigue is gone. */
 ok("a blow smaller than Fatigue leaves Body alone",

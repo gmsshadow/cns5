@@ -1206,12 +1206,36 @@ CNS5.opportuneAttackModifier = -20;
  * @param {number} options.fatigue    the target's Fatigue Points
  * @returns {object} what each pool loses
  */
-CNS5.applyDamage = function ({ damage = 0, bonus = 0, absorption = 0, fatigue = 0 }) {
+CNS5.applyDamage = function ({
+  damage = 0,
+  bonus = 0,
+  absorption = 0,
+  fatigue = 0,
+  critical = false,
+  constitution = 0,
+  bruising = false
+}) {
   const absorbed = Math.min(damage, absorption);
   const throughArmour = Math.max(0, damage - absorbed);
 
-  // Fatigue takes the blow first and Body takes the remainder.
-  const fromFatigue = Math.min(throughArmour, Math.max(0, fatigue));
+  // A Critical Success puts the whole blow on the Body: "a hit that is a
+  // Critical Success... has all of the damage, not absorbed by the shield or
+  // armour taken off the Body of the character" (p281). Fatigue takes none of
+  // it. An earlier reading had only the extra die bypassing Fatigue, which
+  // understated a critical by however much Fatigue the target had left.
+  //
+  // The optional bruising rule does something similar for an ordinary blow:
+  // anything past the target's Constitution is more than bruising can absorb
+  // and goes to the Body instead (p281).
+  let fromFatigue;
+  if (critical) {
+    fromFatigue = 0;
+  } else if (bruising && throughArmour > constitution) {
+    fromFatigue = 0;
+  } else {
+    fromFatigue = Math.min(throughArmour, Math.max(0, fatigue));
+  }
+
   const toBodyFromBlow = throughArmour - fromFatigue;
 
   return {
@@ -1221,6 +1245,8 @@ CNS5.applyDamage = function ({ damage = 0, bonus = 0, absorption = 0, fatigue = 
     // The critical's bonus die ignores armour and Fatigue alike.
     bodyLost: toBodyFromBlow + bonus,
     bodyFromBonus: bonus,
+    // Why Fatigue was spared, for a card that must explain itself.
+    bypassedFatigue: critical ? "critical" : fromFatigue === 0 && throughArmour > 0 ? "bruising" : null,
     total: throughArmour + bonus
   };
 };
@@ -1704,3 +1730,81 @@ CNS5.vitalState = function (body, constitution) {
     dead: state === "dead"
   };
 };
+
+/* -------------------------------------------- */
+/*  Combat advantages                           */
+/* -------------------------------------------- */
+
+/**
+ * Table - Combat Advantages (p280): what a follow-up costs in Fatigue.
+ *
+ * A defence that succeeds against a failed attack hands the defender an
+ * advantage, and taking it up costs Fatigue by the weight of what they use.
+ */
+CNS5.combatAdvantageCost = {
+  natural: 0,
+  light: 1,
+  medium: 2,
+  heavy: 3,
+  twoHanded: 4,
+  polearm: 4
+};
+
+/**
+ * How a weapon's weight class maps onto that table.
+ */
+CNS5.advantageWeightOf = {
+  naturalLight: "natural",
+  naturalMedium: "natural",
+  naturalHeavy: "natural",
+  light: "light",
+  medium: "medium",
+  heavy: "heavy",
+  twoHanded: "twoHanded"
+};
+
+/**
+ * What a defence entitles its maker to (p280-281).
+ *
+ * An ordinary success lets the defender attack in turn if they are next in
+ * line. A Critical Success does more, and what it does depends on what was
+ * interposed: a shield may be bashed with the opponent's balance lost, a dodge
+ * leaves the attacker open to any weapon, and a parry may be turned into a
+ * disarm — against which the attacker must make a Strength roll penalised by
+ * the defender's own skill.
+ */
+CNS5.combatAdvantages = {
+  shieldBlock: {
+    label: "CNS5.Advantage.shieldBash",
+    bonus: 10,
+    skill: "shield",
+    criticalOnly: true
+  },
+  dodge: {
+    label: "CNS5.Advantage.openings",
+    bonus: 10,
+    skill: "weapon",
+    criticalOnly: true
+  },
+  weaponParry: {
+    label: "CNS5.Advantage.disarm",
+    bonus: 0,
+    skill: "weapon",
+    criticalOnly: true,
+    // The attacker rolls Strength against the defender's skill to keep hold of
+    // the weapon, rather than the defender rolling to take it.
+    opposedByStrength: true
+  }
+};
+
+/** A two-handed weapon or polearm may only counter-attack under conditions. */
+CNS5.advantageRestricted = ["twoHanded", "polearm"];
+
+/**
+ * Damage on a Critical Success, and whether the extra die explodes.
+ *
+ * "If the character rolls a 10 on the additional 1D10, then the 1D10 can be
+ * re-rolled and the new result added to the previous total" (p281) — an
+ * optional rule, and the one that makes a lucky blow catastrophic.
+ */
+CNS5.criticalBonusExplodes = "1d10x10";

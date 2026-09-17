@@ -1385,3 +1385,11 @@
 .cns5-condition {
     font-family: var(--cns-serif, Georgia, serif);
 }
+
+/* What a successful defence against a failed attack buys its maker. */
+.cns5-check__advantage {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--cns-check-accent);
+}

@@ -849,6 +849,49 @@ export class CnS5Actor extends Actor {
   /* -------------------------------------------- */
 
   /**
+   * What a combat advantage entitles its holder to (p280-281).
+   *
+   * An ordinary success lets the defender attack in turn if they are next in
+   * line, which needs nothing from the system. A Critical Success does more,
+   * and what it does depends on what was interposed — so the card says which,
+   * and what it costs, and leaves the taking of it to the player.
+   *
+   * @param {Actor|null} defender
+   * @param {object|null} defence
+   * @returns {object|null}
+   */
+  #describeAdvantage(defender, defence) {
+    if (!defender || !defence) return null;
+
+    const entry = CNS5.combatAdvantages[defence.defence];
+    const plain = { label: "CNS5.Advantage.attackInTurn", bonus: 0, cost: 0 };
+    if (!entry) return plain;
+
+    // Only a Critical Success buys the better follow-ups.
+    if (entry.criticalOnly && !defence.critical) return plain;
+
+    const item = defence.itemName
+      ? defender.items.find((i) => i.name === defence.itemName)
+      : null;
+    const weight = item?.system?.defenceWeight ?? item?.system?.weightClass ?? "medium";
+    const band = CNS5.advantageWeightOf[weight] ?? weight;
+
+    return {
+      label: entry.label,
+      bonus: entry.bonus,
+      cost: CNS5.combatAdvantageCost[band] ?? 0,
+      opposedByStrength: Boolean(entry.opposedByStrength),
+      // A disarm is resisted by the attacker's Strength at a penalty equal to
+      // the defender's own skill, so the figure they must beat is worth naming.
+      penalty: entry.opposedByStrength ? -(defence.psf ?? 0) : 0,
+      restricted: CNS5.advantageRestricted.includes(band)
+    };
+  }
+
+  /* -------------------------------------------- */
+
+
+  /**
    * Say when a character falls or dies, and mark the token.
    *
    * A wound that takes someone below zero is the most consequential thing that

@@ -283,5 +283,47 @@ const bare = { name: "Bare", items: Object.assign([], { find: () => undefined, f
 ok("nothing to interpose is no defence", basicDefence(bare, "passive").modifier, 0);
 ok("and is marked unusable", defenceSkill(bare, "weaponParry").usable, false);
 
+/* -- Table - Combat Advantages (p280) ---------------------------------------- */
+
+/* A defence that succeeds against a failed attack hands its maker an advantage,
+   and taking it up costs Fatigue by the weight of what is used. */
+ok("a natural weapon costs nothing", CNS5.combatAdvantageCost.natural, 0);
+ok("a light weapon or shield", CNS5.combatAdvantageCost.light, 1);
+ok("a medium one", CNS5.combatAdvantageCost.medium, 2);
+ok("a heavy one", CNS5.combatAdvantageCost.heavy, 3);
+ok("a two-handed weapon", CNS5.combatAdvantageCost.twoHanded, 4);
+ok("and a polearm the same", CNS5.combatAdvantageCost.polearm, 4);
+
+/* Every weapon weight must reach a row of that table. */
+ok(
+  "every weapon weight has an advantage cost",
+  Object.keys(CNS5.weaponWeights).filter(
+    (w) => CNS5.combatAdvantageCost[CNS5.advantageWeightOf[w]] === undefined
+  ),
+  []
+);
+ok("a natural weapon of any size is free",
+   ["naturalLight", "naturalMedium", "naturalHeavy"].map((w) => CNS5.advantageWeightOf[w]),
+   ["natural", "natural", "natural"]);
+
+/* What the advantage is worth depends on what earned it (p280-281). */
+ok("a shield block buys a bash", CNS5.combatAdvantages.shieldBlock.label, "CNS5.Advantage.shieldBash");
+ok("at ten per cent", CNS5.combatAdvantages.shieldBlock.bonus, 10);
+ok("a dodge leaves the attacker open", CNS5.combatAdvantages.dodge.bonus, 10);
+ok("a parry buys a disarm instead", CNS5.combatAdvantages.weaponParry.label, "CNS5.Advantage.disarm");
+ok("which carries no bonus of its own", CNS5.combatAdvantages.weaponParry.bonus, 0);
+ok("being resisted by Strength", CNS5.combatAdvantages.weaponParry.opposedByStrength, true);
+
+/* All three want a Critical Success; an ordinary one only lets the defender
+   attack in turn, which needs nothing from the system. */
+ok(
+  "every named advantage wants a critical",
+  Object.values(CNS5.combatAdvantages).filter((a) => !a.criticalOnly),
+  []
+);
+
+/* Two-handed weapons and polearms are restricted in counter-attack. */
+ok("what is restricted", CNS5.advantageRestricted.sort(), ["polearm", "twoHanded"]);
+
 console.log(fails ? `\n${fails} FAILURES` : "\nAll checks passed.");
 process.exit(fails ? 1 : 0);

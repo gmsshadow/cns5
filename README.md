@@ -867,11 +867,16 @@ and the Crit Die. Armour covering that damage type absorbs what it can, and what
 gets through comes off Fatigue Points until they are gone and off Body
 thereafter.
 
-A Critical Success adds a further d10, and that die behaves quite differently:
-it "is directly removed from the target's Body", ignoring the armour and
-whatever Fatigue the target has left. **That is the whole of what a critical
-bypasses.** The rest of the blow is absorbed and soaked up as usual — a common
-misreading, and the worked example on p287 settles it.
+**A Critical Success puts the whole blow on the Body.** "A hit that is a
+Critical Success, where the adjusted Crit Die is 10 or higher, has all of the
+damage, not absorbed by the shield or armour taken off the Body of the
+character. In addition to this, a further 1D10 is rolled which is damage that is
+also ignored by any armour defences" (p281). Fatigue absorbs none of it. Armour
+is the one thing a critical does not ignore.
+
+An earlier version of this system had only the extra die bypassing Fatigue,
+which understated every critical hit by however much Fatigue the target had
+left — often the greater part of the blow.
 
 The attack card shows the split — the blow, what the armour stopped, what came
 off each pool — and an Apply button that takes it. The button carries what each
@@ -927,6 +932,41 @@ brackets once a character is down. Crossing either line is announced to chat and
 marks the token with Foundry's own unconscious or dead status — once, at the
 moment it happens, not again for every blow that lands on a man already down.
 Healing back above zero clears it.
+
+### Optional rules from p281
+
+Both are world settings, both off by default, and both make wounds more
+dangerous.
+
+**Wounds beyond a character's Constitution reach the Body** — damage past the
+armour that exceeds the target's Constitution comes off Body rather than
+Fatigue, "the Body's ability to absorb some damage in the form of bruising"
+having a limit.
+
+**A critical's extra die explodes** — a ten on the d10 a Critical Success rolls
+is re-rolled and added, and again on another ten. This is what makes a lucky
+blow catastrophic rather than merely bad.
+
+### Combat advantages
+
+A defence that succeeds against a failed attack hands its maker an advantage.
+An ordinary success lets them attack in turn if they are next in line, which
+needs nothing from the system. A Critical Success buys more, and what it buys
+depends on what was interposed (p280-281):
+
+- a **shield block** may be turned into a shield bash at +10% Shield Play;
+- a **dodge** leaves the attacker off balance, for +10% with any weapon;
+- a **weapon parry** may be turned into a **disarm**, against which the attacker
+  must make a Strength roll penalised by the defender's own skill.
+
+Taking it up costs Fatigue by the weight of what is used, from Table - Combat
+Advantages: nothing for a natural weapon, one for a light weapon or shield, two
+for a medium, three for a heavy, four for a two-handed weapon or polearm — and
+those last two may only counter-attack under the conditions the table gives.
+
+The card says which advantage was earned, what it is worth and what it costs.
+The follow-up itself is the player's to declare rather than something rolled for
+them, since it is a fresh attack with its own target and its own modifiers.
 
 ### Not automated
 

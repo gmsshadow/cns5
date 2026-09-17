@@ -397,14 +397,24 @@ book against itself had turned up.
   `div`s now, and `test/lang.test.mjs` fails the build if any template opens a
   form again.
 - **Compendium spells could not be cast**, for the same reason weapons could not
-  be rolled: every spell shipped with an empty `mode`. Thirteen of the twenty
-  spell groups have a Mode of Magick skill of nearly the same name — note the en
-  dashes in the four elemental ones, which the spell tables write as spaces — and
-  those 279 spells now name it. The other 34 fall back to whatever Mode the
-  caster works in, which is the right answer for the Common Method and Common
-  Elemental groups and a serviceable one for Healing, the two Eldritch groups,
-  Portals to the Shadow World and Shadow Monsters, none of which has a skill
-  that plainly corresponds.
+  be rolled: every spell shipped with no school named. Thirteen of the twenty
+  spell groups have a Method of Magick skill of nearly the same name — note the
+  en dashes in the four elemental ones, which the spell tables write as spaces —
+  and those 279 spells now name it.
+- **A Mode is not a Method.** A Mode of Magick is the tradition a mage was
+  trained in — Hex Master, Thaumaturgy, Conjuration. A Method is a school —
+  Arcane Magick, Command Magick, Basic Magick – Fire — and the casting roll is
+  made against a school. The 34 spells belonging to no school in particular fell
+  back to the caster's *Mode*, which fetched the wrong skill with the wrong
+  Difficulty Factor and the wrong Personal Skill Factor; and since a target
+  resists by that same figure, the wrong save as well.
+
+  Those spells are cast "with whatever Method the caster has", so the caster's
+  own skills are consulted instead. One Method is no choice at all and is used
+  without asking; several is a choice the rules leave to the caster, and the
+  roll asks. The field on a spell is still called `mode` — renaming it is a
+  schema change with a migration behind it, and was deliberately not bundled
+  into a bug fix.
 - **Acts of Faith rolled at 1%.** The tables print no success chance, so
   compendium entries ship with none, and rolling clamped to the 1% floor —
   a roll that looked as though it worked and always failed. Attempting an Act

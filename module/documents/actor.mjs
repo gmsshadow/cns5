@@ -13,7 +13,12 @@ import {
   promptDefence
 } from "../helpers/defence-prompt.mjs";
 import { armourAt } from "../helpers/defence.mjs";
-import { promptShot, promptThrow, promptTargeting } from "../helpers/defence-prompt.mjs";
+import {
+  promptShot,
+  promptThrow,
+  promptTargeting,
+  promptMethod
+} from "../helpers/defence-prompt.mjs";
 import { magickTables, intrinsicResistance, resolveTargeting } from "../helpers/targeting.mjs";
 import {
   missileProfile,
@@ -570,7 +575,18 @@ export class CnS5Actor extends Actor {
       throw new Error(`CnS5 | No spell item ${itemId} on ${this.name}`);
     }
 
-    const mode = spell.system.modeItem;
+    // Where the spell's group settles no Method and the caster knows several,
+    // the choice is theirs. Asking is the only honest answer: picking the best
+    // one would decide a matter the rules leave to the caster.
+    let mode = spell.system.modeItem;
+    if (!mode && spell.system.methodChoices?.length > 1 && !skipDialog) {
+      const chosen = await promptMethod(spell, spell.system.methodChoices);
+      if (chosen === null) return null;
+      mode = this.items.find(
+        (i) => i.type === "skill" && i.name.toLowerCase() === chosen.toLowerCase()
+      );
+    }
+
     if (!mode) {
       const wanted = spell.system.resolvedMode || spell.system.mode;
       ui.notifications.warn(

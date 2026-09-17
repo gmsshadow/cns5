@@ -209,7 +209,21 @@ export class CnS5Character extends CnS5ActorBase {
         // A spell with no Mode named on it falls back to the one its group
         // implies, and failing that to whatever Mode the caster works in — so a
         // spell dragged in from the compendium is castable straight away.
-        const wanted = CNS5.spellMode(item.system, this.magick.mode);
+        // What the spell itself says, or what its group implies. Where neither
+        // settles it — the Common Method spells, Healing, the Eldritch groups —
+        // the caster's own Methods are consulted, because those spells are cast
+        // "with whatever Method the caster has".
+        let wanted = CNS5.spellMethod(item.system);
+        const known = CNS5.knownMethods([...this.parent.items]);
+
+        if (!wanted) {
+          // One Method is no choice at all; several is the caster's to make, so
+          // the candidates are carried and the roll asks.
+          if (known.length === 1) wanted = known[0].name;
+          item.system.methodChoices = known.map((s) => s.name);
+        } else {
+          item.system.methodChoices = [];
+        }
         item.system.resolvedMode = wanted;
         item.system.prepareForActor(this, skills.get(wanted.toLowerCase()) ?? null);
       } else if (["actOfFaith", "religion", "talent"].includes(item.type)) {

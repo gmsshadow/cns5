@@ -424,3 +424,42 @@ export async function promptTargeting(spell, { tables, resistance, targetName })
     rejectClose: false
   });
 }
+
+/* -------------------------------------------- */
+
+/**
+ * Ask which Method of Magick a spell is being cast with.
+ *
+ * A few spells belong to no school in particular — the Common Method spells,
+ * Healing, the Eldritch groups — and are cast with whatever Method the caster
+ * has. A caster with one has no decision to make and is never asked; a caster
+ * with several is, because the rules leave it to them and the Methods differ in
+ * Difficulty Factor and in chance.
+ *
+ * @param {Item} spell
+ * @param {string[]} choices
+ * @returns {Promise<string|null>} null if dismissed
+ */
+export async function promptMethod(spell, choices) {
+  const options = choices
+    .map((name) => `<option value="${name}">${name}</option>`)
+    .join("");
+
+  const content = `
+    <div class="cns5-prompt">
+      <p>${game.i18n.format("CNS5.Spell.methodPrompt", { spell: spell.name })}</p>
+      <label for="cns5-method">${game.i18n.localize("CNS5.Spell.method")}</label>
+      <select id="cns5-method" name="method">${options}</select>
+      <p class="hint">${game.i18n.localize("CNS5.Spell.methodHint")}</p>
+    </div>`;
+
+  return foundry.applications.api.DialogV2.prompt({
+    window: { title: game.i18n.format("CNS5.Spell.methodTitle", { spell: spell.name }) },
+    content,
+    ok: {
+      label: game.i18n.localize("CNS5.Roll.rollButton"),
+      callback: (event, button) => button.form.elements.method.value
+    },
+    rejectClose: false
+  });
+}

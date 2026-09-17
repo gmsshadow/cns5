@@ -837,5 +837,9 @@
   "CNS5.Save.label": "Save",
   "CNS5.Spell.resisted": "Offers the target a save",
   "CNS5.Spell.resistedHint": "Left unset, this follows the rule of thumb: spells that charm, command, lure, frighten, hold, confuse, panic or make one hallucinate. Each spell's own description says how it may be resisted, so a Gamemaster may set it either way.",
-  "CNS5.Save.hint": "These lower what the target needs to throw the spell off, and apply only to a spell that offers a save. Meditation is spent once: the enhancement is a one-shot."
+  "CNS5.Save.hint": "These lower what the target needs to throw the spell off, and apply only to a spell that offers a save. Meditation is spent once: the enhancement is a one-shot.",
+  "CNS5.Spell.methodTitle": "Casting {spell}",
+  "CNS5.Spell.methodPrompt": "{spell} belongs to no school in particular. Which Method of Magick is it cast with?",
+  "CNS5.Spell.method": "Method of Magick",
+  "CNS5.Spell.methodHint": "A Method is a school — Arcane Magick, Command Magick, Basic Magick – Fire. It is not the same as a Mode of Magick, which is the tradition a mage was trained in, and the casting roll is made against the school."
 }

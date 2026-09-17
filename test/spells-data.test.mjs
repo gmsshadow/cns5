@@ -148,12 +148,40 @@ ok(
   279
 );
 
-/* A spell with an explicit Mode keeps it; otherwise the group decides; only
-   then does the caster's Mode apply. */
-ok("an explicit Mode wins", CNS5.spellMode({ mode: "Hex Master Mode of Magick", group: "Command Magick" }, "Arcane Magick"), "Hex Master Mode of Magick");
-ok("otherwise the group decides", CNS5.spellMode({ mode: "", group: "Basic Magick Fire" }, "Arcane Magick"), "Basic Magick – Fire");
-ok("and failing that the caster's own", CNS5.spellMode({ mode: "", group: "Healing Spells" }, "Arcane Magick"), "Arcane Magick");
-ok("with nothing at all it stays empty", CNS5.spellMode({ mode: "", group: "Healing Spells" }, ""), "");
+/* A spell with an explicit Method keeps it; otherwise its group decides.
+   Where neither settles it the answer is nothing — and emphatically not the
+   caster's Mode of Magick, which is a tradition rather than a school. Feeding
+   one in where the other belongs fetched the wrong skill, with the wrong
+   Difficulty Factor and the wrong chance. */
+ok("an explicit Method wins",
+   CNS5.spellMethod({ mode: "Illusion Magick", group: "Command Magick" }), "Illusion Magick");
+ok("otherwise the group decides",
+   CNS5.spellMethod({ mode: "", group: "Basic Magick Fire" }), "Basic Magick – Fire");
+ok("and failing that, nothing",
+   CNS5.spellMethod({ mode: "", group: "Healing Spells" }), "");
+
+/* The Methods are the schools a caster rolls against, and there are thirteen of
+   them. A Mode is not among them. */
+ok("how many Methods there are", CNS5.methodNames.length, 13);
+ok("a Mode is not a Method",
+   CNS5.methodNames.filter((n) => /Mode/.test(n)), []);
+ok("every mapped group resolves to one",
+   Object.values(CNS5.spellGroupModes).filter((m) => !CNS5.methodNames.includes(m)), []);
+
+/* What a caster knows is read from their own skills, best first — so a spell
+   belonging to no school is cast with something they actually have. */
+const skill = (name, tsc) => ({ type: "skill", name, system: { tsc } });
+const known = CNS5.knownMethods([
+  skill("Arcane Magick", 55),
+  skill("Command Magick", 70),
+  skill("Axes", 40),
+  skill("Hex Master Mode of Magick", 80)
+]);
+ok("only Methods are counted", known.map((s) => s.name), ["Command Magick", "Arcane Magick"]);
+ok("a Mode is not one of them", known.some((s) => /Mode/.test(s.name)), false);
+ok("nor is a weapon skill", known.some((s) => s.name === "Axes"), false);
+ok("and the best comes first", known[0].name, "Command Magick");
+ok("a caster with none knows none", CNS5.knownMethods([skill("Axes", 40)]).length, 0);
 
 ok("no description text is shipped", "description" in spells[0], false);
 

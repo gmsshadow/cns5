@@ -913,8 +913,48 @@ CNS5.spellGroupModes = {
  *                              spell's group implies none
  * @returns {string}
  */
-CNS5.spellMode = function (spell, casterMode = "") {
-  return spell.mode || CNS5.spellGroupModes[spell.group] || casterMode || "";
+/**
+ * The Methods of Magick a spell can be cast with — the schools, not the
+ * traditions. These are the values the group mapping above resolves to, and
+ * they are the skills a caster rolls when casting.
+ */
+CNS5.methodNames = [...new Set(Object.values(CNS5.spellGroupModes))];
+
+/**
+ * Which Method of Magick a spell is cast with.
+ *
+ * The spell's own field first, then what its group implies. Where neither
+ * settles it, the answer is *not* the caster's Mode of Magick: a Mode is a
+ * tradition — Hex Master, Thaumaturgy — and a Method is a school, and the
+ * casting roll is made against a school. Using one where the other belongs
+ * fetched the wrong skill, with the wrong Difficulty Factor and the wrong
+ * Personal Skill Factor, and now the wrong figure for the target to resist.
+ *
+ * So it returns nothing, and the caster's own Methods are consulted instead.
+ *
+ * @param {object} spell  a spell's system data
+ * @returns {string} the Method's name, or empty where the spell does not say
+ */
+CNS5.spellMethod = function (spell) {
+  return spell.mode || CNS5.spellGroupModes[spell.group] || "";
+};
+
+/**
+ * The Methods of Magick a character actually knows.
+ *
+ * Common Method Spells are cast "with whatever Method the caster has", which is
+ * only answerable by looking at what they have. A caster with one Method has no
+ * decision to make; a caster with several does, and it is theirs rather than
+ * the system's.
+ *
+ * @param {Item[]} skills
+ * @returns {Item[]} sorted by chance, best first
+ */
+CNS5.knownMethods = function (skills) {
+  const names = new Set(CNS5.methodNames.map((n) => n.toLowerCase()));
+  return skills
+    .filter((s) => s.type === "skill" && names.has(s.name.toLowerCase()))
+    .sort((a, b) => (b.system.tsc ?? 0) - (a.system.tsc ?? 0));
 };
 
 /* -------------------------------------------- */

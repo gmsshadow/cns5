@@ -38,6 +38,14 @@
         {{localize "CNS5.Defence.fatigueSpent"}}: {{defenceFatigue}}
     </p>
     {{/if}}
+    {{#if saveLabel}}
+    <p class="cns5-check__exchange">{{saveLabel}}</p>
+    {{#if saveCertain}}
+    <p class="cns5-hint">{{saveCertain}}</p>
+    {{/if}}
+    {{else if offersSave}}
+    <p class="cns5-hint">{{localize "CNS5.Save.none"}}</p>
+    {{/if}}
     {{#if exchangeLabel}}
     <p class="cns5-check__exchange">{{exchangeLabel}}</p>
     {{/if}}

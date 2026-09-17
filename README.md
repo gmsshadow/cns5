@@ -859,6 +859,36 @@ Three things are not figures and are not treated as failures to read one:
 Every one of the 313 printed ranges resolves to one of those. Durations are less
 tractable: a couple of dozen are instructions rather than quantities.
 
+### Resisting a spell
+
+A spell that reaches its target may still be thrown off by them, where the spell
+is one that works on the mind. **Willpower TSC% less the caster's Method of
+Magick PSF%** (p300), rolled by the target after a successful targeting.
+
+The two bounds are checked against the **unmodified** die, which is what keeps a
+save from ever being hopeless or certain: 01-05 always resists whatever the
+odds, and 96+ never does. A target with a save of nothing left can still shrug
+off the strongest mage one time in twenty.
+
+**Which spells offer one** is prose in each spell's description rather than a
+column in any table, so the system follows the book's own rule of thumb —
+anything that charms, commands, lures, frightens, holds, confuses, panics or
+makes one hallucinate — and lets a Gamemaster set it either way on the spell.
+That catches 84 of the 313: every Command Magick spell and every Illusion, plus
+a handful elsewhere. Commanding an *element* is excepted: "Create / Command Air"
+reads as a command spell and is nothing of the sort.
+
+**What lowers a save** is the caster's doing and is asked with the targeting: a
+presence of Appearance or Bardic Voice above 14 (-5% per 2 points, rounded up),
+mantra gestures (-5%), dancing or chanting (-5%), smokes and essences (-10%),
+and days spent meditating (-1% a day to a maximum of -25%, spent once).
+
+**A note on the two resistances.** A target's *Magick Resistance* — what it
+resists by for being a dwarf or a Lich — is subtracted from the caster's
+targeting chance and has nothing to do with this. The save is a separate roll
+made afterwards by the target themselves. They are called different things here
+for that reason.
+
 ### What a spell costs
 
 Fatigue, "or if exhausted, Body Points" (p296) — so a caster with nothing left

@@ -1895,3 +1895,147 @@ CNS5.spellCost = function ({ base = 0, mana = "average", source = "memory", exte
     tscBonus: place.tsc
   };
 };
+
+/* -------------------------------------------- */
+/*  Resisting a spell                           */
+/*  (pp.300-301)                                */
+/* -------------------------------------------- */
+
+/**
+ * "To make a Resisted Roll, the target must make a Willpower TSC% - Caster's
+ * Method of Magick PSF%. An unmodified 1D100 roll of between 01-05% is always a
+ * success, and an unmodified die roll of 96%+ is always a failure" (p300).
+ *
+ * The two bounds are on the *unmodified* die, so no amount of skill on either
+ * side closes the door entirely: the weakest will sometimes shrug off the
+ * strongest mage, and the strongest will sometimes fail against a cantrip.
+ */
+CNS5.resistanceAlwaysSucceeds = 5;
+CNS5.resistanceAlwaysFails = 96;
+
+/**
+ * What may be resisted.
+ *
+ * "Some spells, essentially those affecting mind, like Charms or Illusions, may
+ * be resisted by the target... As a rule of thumb, the Gamemaster should allow a
+ * Resisted Roll to any living creature targeted by a spell effect which affects
+ * mind, by trying to charm, command, lure, frighten, hold, confuse, panic, or
+ * hallucinate its target" (p300).
+ *
+ * Each spell says how it may be resisted, which is prose rather than data — so
+ * the groups and the words below are the rule of thumb, and a spell carries its
+ * own flag that a Gamemaster can set either way.
+ */
+CNS5.resistableGroups = [
+  "Command Magick",
+  "Illusions Spells",
+  "Shadow Monsters",
+  "Eldritch Servants"
+];
+
+CNS5.resistableWords = /charm|command|lure|fear|frighten|terror|hold|confuse|panic|hallucinat|sleep|suggest|dominat|compel|forget|befuddl/i;
+
+/**
+ * Whether a spell offers its target a Resisted Roll.
+ *
+ * @param {object} spell  a spell's system data, plus its name
+ * @returns {boolean}
+ */
+/**
+ * Commanding an element is not commanding a mind. "Create / Command Air" reads
+ * as a command spell and is nothing of the sort, so the elements are excepted
+ * before the words are looked at.
+ */
+CNS5.elementalCommand = /command\s*(air|earth|fire|water|the elements?)/i;
+
+CNS5.isResistable = function (spell) {
+  if (spell.resisted === true) return true;
+  if (spell.resisted === false) return false;
+
+  const name = spell.name ?? "";
+  if (CNS5.resistableGroups.includes(spell.group)) return true;
+  if (CNS5.elementalCommand.test(name)) return false;
+  return CNS5.resistableWords.test(name);
+};
+
+/**
+ * What lowers a target's save (pp.300-301).
+ *
+ * A caster of great presence is harder to refuse; gestures, chants and smokes
+ * all tell; and days of meditation tell most of all, though only once.
+ */
+CNS5.saveReductions = {
+  presence: {
+    label: "CNS5.Save.presence",
+    // "-5% for every 2 points the Attribute is over 14 (rounded up)", where the
+    // attribute is the caster's second, being Appearance or Bardic Voice.
+    from: (value) => (value > 14 ? -5 * Math.ceil((value - 14) / 2) : 0)
+  },
+  mantra: { label: "CNS5.Save.mantra", modifier: -5 },
+  dancing: { label: "CNS5.Save.dancing", modifier: -5 },
+  smokes: { label: "CNS5.Save.smokes", modifier: -10 },
+  meditation: {
+    label: "CNS5.Save.meditation",
+    // "-1% per day spent meditating on the spell, to a maximum of -25%", and
+    // spent once: the enhancement is a one-shot.
+    perDay: -1,
+    maximum: -25
+  }
+};
+
+/**
+ * Work out a target's chance to resist.
+ *
+ * @param {object} options
+ * @returns {object}
+ */
+CNS5.resistanceChance = function ({
+  willpowerTsc = 0,
+  casterPsf = 0,
+  presence = 0,
+  mantra = false,
+  dancing = false,
+  smokes = false,
+  meditationDays = 0,
+  situational = 0
+}) {
+  const parts = [];
+  const add = (label, value) => {
+    if (value) parts.push({ label, value });
+    return value;
+  };
+
+  let total = willpowerTsc;
+  total += add("CNS5.Save.casterSkill", -casterPsf);
+  total += add(CNS5.saveReductions.presence.label, CNS5.saveReductions.presence.from(presence));
+  total += add(CNS5.saveReductions.mantra.label, mantra ? CNS5.saveReductions.mantra.modifier : 0);
+  total += add(CNS5.saveReductions.dancing.label, dancing ? CNS5.saveReductions.dancing.modifier : 0);
+  total += add(CNS5.saveReductions.smokes.label, smokes ? CNS5.saveReductions.smokes.modifier : 0);
+  total += add(
+    CNS5.saveReductions.meditation.label,
+    Math.max(
+      CNS5.saveReductions.meditation.maximum,
+      CNS5.saveReductions.meditation.perDay * Math.max(0, meditationDays)
+    )
+  );
+  total += add("CNS5.Roll.situational", situational);
+
+  return { chance: total, parts };
+};
+
+/**
+ * Read a resistance roll.
+ *
+ * The bounds are checked against the raw die rather than the modified total,
+ * because that is what the rule says and it is the whole of what makes a save
+ * never quite hopeless.
+ *
+ * @param {number} roll    the unmodified d100
+ * @param {number} chance  what the target needed
+ * @returns {{resisted: boolean, certain: string|null}}
+ */
+CNS5.readResistance = function (roll, chance) {
+  if (roll <= CNS5.resistanceAlwaysSucceeds) return { resisted: true, certain: "always" };
+  if (roll >= CNS5.resistanceAlwaysFails) return { resisted: false, certain: "never" };
+  return { resisted: roll <= chance, certain: null };
+};

@@ -366,6 +366,25 @@ export async function promptTargeting(spell, { tables, resistance, targetName })
         <input type="number" name="situational" value="0">
       </label>
       <p class="hint">${game.i18n.localize("CNS5.Targeting.dodgeHint")}</p>
+
+      <p class="cns5-check__subheading">${game.i18n.localize("CNS5.Save.label")}</p>
+      <p class="hint">${game.i18n.localize("CNS5.Save.hint")}</p>
+      <label class="cns5-checkbox">
+        <input type="checkbox" name="mantra">
+        <span>${game.i18n.localize("CNS5.Save.mantra")} (-5%)</span>
+      </label>
+      <label class="cns5-checkbox">
+        <input type="checkbox" name="dancing">
+        <span>${game.i18n.localize("CNS5.Save.dancing")} (-5%)</span>
+      </label>
+      <label class="cns5-checkbox">
+        <input type="checkbox" name="smokes">
+        <span>${game.i18n.localize("CNS5.Save.smokes")} (-10%)</span>
+      </label>
+      <label class="cns5-field">
+        <span>${game.i18n.localize("CNS5.Save.meditation")}</span>
+        <input type="number" name="meditationDays" value="0" min="0" max="25">
+      </label>
     </div>`;
 
   return foundry.applications.api.DialogV2.prompt({
@@ -391,7 +410,14 @@ export async function promptTargeting(spell, { tables, resistance, targetName })
           extendRange: form.elements.extendRange.checked,
           movement: ticked("movement"),
           obstacles: ticked("obstacles"),
-          situational: Number(form.elements.situational.value) || 0
+          situational: Number(form.elements.situational.value) || 0,
+          // What the caster does to make the spell harder to shrug off.
+          saveReductions: {
+            mantra: form.elements.mantra.checked,
+            dancing: form.elements.dancing.checked,
+            smokes: form.elements.smokes.checked,
+            meditationDays: Math.max(0, Number(form.elements.meditationDays.value) || 0)
+          }
         };
       }
     },

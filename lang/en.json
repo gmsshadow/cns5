@@ -822,5 +822,20 @@
   "CNS5.Magnitude.tillCast": "Until the spell is cast.",
   "CNS5.Magnitude.fuel": "As long as there is fuel.",
   "CNS5.Magnitude.special": "As the spell's own description gives it.",
-  "CNS5.Magnitude.variable": "Variable."
+  "CNS5.Magnitude.variable": "Variable.",
+  "CNS5.Save.resisted": "{name} throws it off — {roll} against {chance}%.",
+  "CNS5.Save.failed": "{name} cannot resist it — {roll} against {chance}%.",
+  "CNS5.Save.always": "A roll of five or under always resists, whatever the odds.",
+  "CNS5.Save.never": "A roll of ninety-six or over never resists, whatever the odds.",
+  "CNS5.Save.none": "This spell allows a save, but the target has no Willpower skill to make one with.",
+  "CNS5.Save.casterSkill": "The caster's skill in the school",
+  "CNS5.Save.presence": "The caster's presence",
+  "CNS5.Save.mantra": "Mantra gestures",
+  "CNS5.Save.dancing": "Dancing or chanting",
+  "CNS5.Save.smokes": "Smokes, fogs or essences",
+  "CNS5.Save.meditation": "Days spent meditating",
+  "CNS5.Save.label": "Save",
+  "CNS5.Spell.resisted": "Offers the target a save",
+  "CNS5.Spell.resistedHint": "Left unset, this follows the rule of thumb: spells that charm, command, lure, frighten, hold, confuse, panic or make one hallucinate. Each spell's own description says how it may be resisted, so a Gamemaster may set it either way.",
+  "CNS5.Save.hint": "These lower what the target needs to throw the spell off, and apply only to a spell that offers a save. Meditation is spent once: the enhancement is a one-shot."
 }

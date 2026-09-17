@@ -42,6 +42,12 @@ export class CnS5Spell extends foundry.abstract.TypeDataModel {
       // The maximum range as the spell table prints it: "10' x ML", "Touch",
       // "1 mile x ML". Short and long ranges are worked out from it.
       rangeText: new fields.StringField({ required: true, blank: true, initial: "" }),
+
+      // Whether the target may resist. Left unset, it follows the rule of thumb
+      // — spells that charm, command, frighten or confuse — because each spell's
+      // own description says how it may be resisted and that is prose, not
+      // data. A Gamemaster can set it either way.
+      resisted: new fields.BooleanField({ required: false, nullable: true, initial: null }),
       duration: new fields.StringField({ required: true, blank: true, initial: "" }),
       prerequisite: new fields.StringField({ required: true, blank: true, initial: "" }),
 
@@ -75,6 +81,7 @@ export class CnS5Spell extends foundry.abstract.TypeDataModel {
     super.prepareDerivedData?.();
     this.parsedRange = parseMagnitude(this.rangeText, "distance");
     this.parsedDuration = parseMagnitude(this.duration, "time");
+    this.resistable = CNS5.isResistable({ ...this, name: this.parent?.name });
   }
 
   /* -------------------------------------------- */

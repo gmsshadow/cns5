@@ -661,6 +661,24 @@ export class CnS5Actor extends Actor {
     // Points" (p296) — whether or not the targeting found its mark.
     await this.spendMagickCost(cost.fatigue);
 
+    // A spell that reaches its target may still be thrown off by them, where
+    // the spell is one that works on the mind (p300). The caster's skill in the
+    // school is what the target contends against.
+    // Named a save rather than a resistance: the target's *Magick Resistance*
+    // is a different thing entirely, and it has already been subtracted above.
+    let save = null;
+    if (result.success && target && spell.system.resistable) {
+      save = await target.resistSpell({
+        casterPsf: mode.system.psf,
+        presence: Math.max(
+          this.system.attr.app?.value ?? 0,
+          this.system.attr.bv?.value ?? 0
+        ),
+        reductions: declared.saveReductions ?? {}
+      });
+      if (save) result.rolls.push(...save.rolls);
+    }
+
     return checkToMessage(this, {
       ...result,
       title,
@@ -677,6 +695,16 @@ export class CnS5Actor extends Actor {
         ap: spell.system.apToCast
       }),
       spellCost: cost,
+      save,
+      saveLabel: save
+        ? game.i18n.format(save.resisted ? "CNS5.Save.resisted" : "CNS5.Save.failed", {
+            name: target.name,
+            roll: save.roll,
+            chance: save.chance
+          })
+        : null,
+      saveCertain: save?.certain ? game.i18n.localize(`CNS5.Save.${save.certain}`) : null,
+      offersSave: Boolean(target && spell.system.resistable),
       breakdown: this.#breakdown([
         { label: "CNS5.Roll.bcsSkilled", value: mode.system.bcs },
         { label: "CNS5.Roll.psf", value: mode.system.psf, signed: true },
@@ -872,6 +900,48 @@ export class CnS5Actor extends Actor {
         { label: "CNS5.Roll.situational", value: situational, signed: true }
       ])
     });
+  }
+
+  /* -------------------------------------------- */
+
+  /**
+   * Resist a spell cast at this character (p300).
+   *
+   * "To make a Resisted Roll, the target must make a Willpower TSC% - Caster's
+   * Method of Magick PSF%." The Method of Magick is the school the spell
+   * belongs to — Command Magick, Illusion Magick — not the caster's tradition.
+   *
+   * The two bounds are checked against the unmodified die, which is what keeps
+   * a save from ever being hopeless: the weakest will sometimes shrug off the
+   * strongest mage, and the strongest will sometimes fail against a cantrip.
+   *
+   * @param {object} options
+   * @returns {Promise<object|null>} null where this character cannot resist
+   */
+  async resistSpell({ casterPsf = 0, presence = 0, reductions = {} } = {}) {
+    const willpower = this.items.find(
+      (i) => i.type === "skill" && i.name.toLowerCase() === "willpower"
+    );
+    if (!willpower) return null;
+
+    const { chance, parts } = CNS5.resistanceChance({
+      willpowerTsc: willpower.system.tsc,
+      casterPsf,
+      presence,
+      ...reductions
+    });
+
+    const roll = await new Roll("1d100").evaluate();
+    const outcome = CNS5.readResistance(roll.total, chance);
+
+    return {
+      ...outcome,
+      roll: roll.total,
+      rolls: [roll],
+      chance,
+      parts,
+      skillName: willpower.name
+    };
   }
 
   /* -------------------------------------------- */

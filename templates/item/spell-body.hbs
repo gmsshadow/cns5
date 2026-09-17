@@ -40,6 +40,15 @@
     </label>
 </div>
 
+<div class="cns5-checks">
+    <label class="cns5-checkbox">
+        <input type="checkbox" name="system.resisted" {{checked system.resistable}}
+               {{#unless editable}}disabled{{/unless}}>
+        <span>{{localize "CNS5.Spell.resisted"}}</span>
+    </label>
+</div>
+<p class="cns5-hint">{{localize "CNS5.Spell.resistedHint"}}</p>
+
 <label class="cns5-field">
     <span>{{localize "CNS5.Spell.prerequisite"}}</span>
     <input type="text" name="system.prerequisite" value="{{system.prerequisite}}"

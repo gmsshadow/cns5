@@ -7,8 +7,8 @@ import { CNS5 } from "../config.mjs";
  * pattern; targeting carries it through the Shadow World to where it is wanted,
  * and it is targeting that everything in the way interferes with.
  *
- * The caster's chance is their Mode of Magick, less the target's own
- * resistance, less whatever stands between them, adjusted for how either is
+ * The caster's chance is their Method of Magick — the school, not the
+ * tradition — less the target's own resistance, less whatever stands between them, adjusted for how either is
  * moving and how far apart they are — and raised by half again if the target
  * wants the spell.
  */
@@ -62,7 +62,7 @@ export function intrinsicResistance(target, resistance) {
  * @returns {object} the parts, and what they come to
  */
 export function resolveTargeting({
-  modeTsc = 0,
+  methodTsc = 0,
   resistance = 0,
   range = "short",
   movement = [],
@@ -90,7 +90,7 @@ export function resolveTargeting({
   const obstacleTotal = blocks.reduce((sum, entry) => sum + (entry.modifier ?? 0), 0);
 
   const total =
-    modeTsc -
+    methodTsc -
     resistance +
     band.modifier +
     movementTotal +
@@ -103,7 +103,7 @@ export function resolveTargeting({
   return {
     impenetrable: Boolean(impenetrable),
     impenetrableBy: impenetrable?.label ?? null,
-    modeTsc,
+    methodTsc,
     resistance,
     rangeModifier: band.modifier,
     movement: moves,

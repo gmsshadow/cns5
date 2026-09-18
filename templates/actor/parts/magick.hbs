@@ -50,32 +50,42 @@
                 <th scope="col">{{localize "CNS5.Spell.mrShort"}}</th>
                 <th scope="col">{{localize "CNS5.Spell.fpShort"}}</th>
                 <th scope="col">{{localize "CNS5.Spell.apShort"}}</th>
-                <th scope="col">{{localize "CNS5.SpellRange.short"}}</th>
-                <th scope="col">{{localize "CNS5.SpellRange.long"}}</th>
-                <th scope="col">{{localize "CNS5.SpellRange.max"}}</th>
+                <th scope="col">{{localize "CNS5.Skill.tscShort"}}</th>
+                <th scope="col">{{localize "CNS5.Spell.reach"}}</th>
+                <th scope="col">{{localize "CNS5.Spell.lasts"}}</th>
                 <th scope="col"><span class="cns5-visually-hidden">{{localize "CNS5.Skill.controls"}}</span></th>
             </tr>
             </thead>
             <tbody>
             {{#each spells as |spell|}}
-            <tr class="{{#if spell.system.modeMissing}}is-unskilled{{/if}}">
+            <tr class="{{#if spell.system.methodMissing}}is-unskilled{{/if}}">
                 <th scope="row">
-                    <button type="button" class="cns5-skills__roll" data-action="editItem"
-                            data-item-id="{{spell.id}}">{{spell.name}}</button>
+                    <button type="button" class="cns5-skills__roll" data-action="rollSpell"
+                            data-item-id="{{spell.id}}"
+                            data-tooltip="{{localize 'CNS5.Roll.spellTooltip'}}">{{spell.name}}</button>
+                    {{#if spell.system.resistable}}
+                    <span class="cns5-tag" data-tooltip="{{localize 'CNS5.Save.offered'}}">
+                        {{localize "CNS5.Save.label"}}
+                    </span>
+                    {{/if}}
                 </th>
                 <td class="cns5-skills__readout">{{spell.system.mr}}</td>
                 <td class="cns5-skills__readout">{{spell.system.fpToCast}}</td>
                 <td class="cns5-skills__readout">{{spell.system.apToCast}}</td>
-                {{#each ../rangeKeys as |range|}}
-                <td class="cns5-skills__readout">
-                    <button type="button" class="cns5-skills__roll" data-action="rollSpell"
-                            data-item-id="{{spell.id}}" data-range="{{range}}"
-                            data-tooltip="{{localize 'CNS5.Roll.spellTooltip'}}">
-                        {{cns5Percent (lookup spell.system.targets range)}}
-                    </button>
+                <td class="cns5-skills__readout cns5-skills__readout--total"
+                    data-tooltip="{{localize 'CNS5.Spell.baseChanceHint'}}">
+                    {{cns5Percent spell.system.baseChance}}
                 </td>
-                {{/each}}
+                <td class="cns5-skills__readout">
+                    {{#if spell.system.rangeLabels}}{{spell.system.rangeLabels.max}}
+                    {{else}}{{spell.system.rangeText}}{{/if}}
+                </td>
+                <td class="cns5-skills__readout">{{spell.system.durationLabel}}</td>
                 <td class="cns5-skills__controls">
+                    <button type="button" data-action="editItem" data-item-id="{{spell.id}}"
+                            data-tooltip="{{localize 'CNS5.Item.edit'}}">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                    </button>
                     <button type="button" data-action="deleteItem" data-item-id="{{spell.id}}"
                             data-tooltip="{{localize 'CNS5.Item.delete'}}">
                         <i class="fa-solid fa-trash"></i>

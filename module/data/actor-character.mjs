@@ -224,6 +224,8 @@ export class CnS5Character extends CnS5ActorBase {
         } else {
           item.system.methodChoices = [];
         }
+        // Written under the stored name, which is `mode`; everything that
+        // reads it does so through `resolvedMethod`, the right word for it.
         item.system.resolvedMode = wanted;
         item.system.prepareForActor(this, skills.get(wanted.toLowerCase()) ?? null);
       } else if (["actOfFaith", "religion", "talent"].includes(item.type)) {

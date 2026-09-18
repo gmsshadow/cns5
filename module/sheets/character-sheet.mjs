@@ -160,7 +160,6 @@ export class CnS5CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2)
         : [])
     ];
 
-    context.rangeKeys = Object.keys(CNS5.spellRanges);
     context.spentMR = context.spells.reduce((total, s) => total + s.system.mr, 0);
 
     context.currency = Object.entries(CNS5.currency).map(([key, coin]) => ({

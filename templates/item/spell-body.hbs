@@ -1,8 +1,11 @@
 <div class="cns5-grid cns5-grid--four">
     <label class="cns5-field">
-        <span>{{localize "CNS5.Spell.mode"}}</span>
-        <input type="text" name="system.mode" value="{{system.mode}}"
-               placeholder="{{localize 'CNS5.Spell.modePlaceholder'}}"
+        <span>{{localize "CNS5.Spell.methodLabel"}}</span>
+        <!-- The stored field is named `mode`; it holds a Method. The input
+             must address it by its real name, so this one place keeps the old
+             word. Everything that reads it uses `method`. -->
+        <input type="text" name="system.mode" value="{{system.method}}"
+               placeholder="{{localize 'CNS5.Spell.methodPlaceholder'}}"
                {{#unless editable}}disabled{{/unless}}>
     </label>
     <label class="cns5-field">
@@ -101,14 +104,17 @@
 {{#if onActor}}
 <section class="cns5-readout">
     <h3>{{localize "CNS5.Spell.targeting"}}</h3>
-    {{#if system.modeMissing}}
-    <p class="cns5-hint cns5-hint--bad">{{localize "CNS5.Spell.modeMissing"}}</p>
+    {{#if system.methodMissing}}
+    <p class="cns5-hint cns5-hint--bad">{{localize "CNS5.Spell.methodMissing"}}</p>
     {{else}}
     <dl class="cns5-derived">
-        <div><dt>{{localize "CNS5.SpellRange.short"}}</dt><dd>{{cns5Percent system.targets.short}}</dd></div>
-        <div><dt>{{localize "CNS5.SpellRange.long"}}</dt><dd>{{cns5Percent system.targets.long}}</dd></div>
-        <div><dt>{{localize "CNS5.SpellRange.max"}}</dt><dd>{{cns5Percent system.targets.max}}</dd></div>
+        <div>
+            <dt>{{localize "CNS5.Spell.baseChance"}}</dt>
+            <dd>{{cns5Percent system.baseChance}}</dd>
+        </div>
+        <div><dt>{{localize "CNS5.Spell.lasts"}}</dt><dd>{{system.durationLabel}}</dd></div>
     </dl>
+    <p class="cns5-hint">{{localize "CNS5.Spell.baseChanceHint"}}</p>
     {{/if}}
 </section>
 {{/if}}

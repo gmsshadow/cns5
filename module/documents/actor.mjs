@@ -578,21 +578,22 @@ export class CnS5Actor extends Actor {
     // Where the spell's group settles no Method and the caster knows several,
     // the choice is theirs. Asking is the only honest answer: picking the best
     // one would decide a matter the rules leave to the caster.
-    let mode = spell.system.modeItem;
-    if (!mode && spell.system.methodChoices?.length > 1 && !skipDialog) {
+    // Read by its right name: a Method is the school, not the tradition.
+    let method = spell.system.methodItem;
+    if (!method && spell.system.methodChoices?.length > 1 && !skipDialog) {
       const chosen = await promptMethod(spell, spell.system.methodChoices);
       if (chosen === null) return null;
-      mode = this.items.find(
+      method = this.items.find(
         (i) => i.type === "skill" && i.name.toLowerCase() === chosen.toLowerCase()
       );
     }
 
-    if (!mode) {
-      const wanted = spell.system.resolvedMode || spell.system.mode;
+    if (!method) {
+      const wanted = spell.system.resolvedMethod || spell.system.method;
       ui.notifications.warn(
         wanted
-          ? game.i18n.format("CNS5.Spell.noMode", { spell: spell.name, mode: wanted })
-          : game.i18n.format("CNS5.Spell.noModeSet", { spell: spell.name })
+          ? game.i18n.format("CNS5.Spell.noMethod", { spell: spell.name, method: wanted })
+          : game.i18n.format("CNS5.Spell.noMethodSet", { spell: spell.name })
       );
       return null;
     }
@@ -644,7 +645,7 @@ export class CnS5Actor extends Actor {
     });
 
     const targeting = resolveTargeting({
-      modeTsc: mode.system.tsc,
+      methodTsc: method.system.tsc,
       resistance: declared.resistance ?? resistance.value,
       range: declared.range,
       movement: declared.movement,
@@ -668,7 +669,7 @@ export class CnS5Actor extends Actor {
     const unclamped = targeting.total;
     const { target: chance, critMod, overflow, shortfall } = clampSuccessChance(
       unclamped,
-      mode.system.df
+      method.system.df
     );
 
     const result = await resolveCheck({ target: chance, critMod });
@@ -685,7 +686,7 @@ export class CnS5Actor extends Actor {
     let save = null;
     if (result.success && target && spell.system.resistable) {
       save = await target.resistSpell({
-        casterPsf: mode.system.psf,
+        casterPsf: method.system.psf,
         presence: Math.max(
           this.system.attr.app?.value ?? 0,
           this.system.attr.bv?.value ?? 0
@@ -722,8 +723,8 @@ export class CnS5Actor extends Actor {
       saveCertain: save?.certain ? game.i18n.localize(`CNS5.Save.${save.certain}`) : null,
       offersSave: Boolean(target && spell.system.resistable),
       breakdown: this.#breakdown([
-        { label: "CNS5.Roll.bcsSkilled", value: mode.system.bcs },
-        { label: "CNS5.Roll.psf", value: mode.system.psf, signed: true },
+        { label: "CNS5.Roll.bcsSkilled", value: method.system.bcs },
+        { label: "CNS5.Roll.psf", value: method.system.psf, signed: true },
         { label: "CNS5.Targeting.resistance", value: -targeting.resistance, signed: true },
         { label: "CNS5.Roll.rangeBand", value: targeting.rangeModifier, signed: true },
         { label: "CNS5.Targeting.movement", value: targeting.movementTotal, signed: true },

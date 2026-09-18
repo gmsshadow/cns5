@@ -19,7 +19,14 @@ const fields = foundry.data.fields;
 export class CnS5Spell extends foundry.abstract.TypeDataModel {
   static defineSchema() {
     return {
-      // The Mode of Magick this spell belongs to, matched by skill name.
+      // The school this spell belongs to, matched by skill name.
+      //
+      // Named `mode` for want of a rename. It holds a *Method* of Magick — a
+      // school, such as Command Magick or Basic Magick – Fire — and not a Mode,
+      // which is the tradition a mage was trained in. The two are different
+      // skills with different Difficulty Factors, and calling one by the other's
+      // name has already caused one bug: the casting roll reached for the
+      // tradition where the school belonged. Read it through `method` below.
       mode: new fields.StringField({ required: true, blank: true, initial: "" }),
 
       // The rulebook's own grouping — Basic Magick Air, Command Magick,
@@ -77,6 +84,48 @@ export class CnS5Spell extends foundry.abstract.TypeDataModel {
    * this. A spell sitting in a compendium can still say what it is worth.
    * @inheritDoc
    */
+  /**
+   * The Method of Magick this spell is cast with: the school, not the
+   * tradition.
+   *
+   * The stored field is still called `mode`, which is the wrong word for what
+   * it holds. Renaming it means a schema change and a migration, so instead
+   * everything written from here on reads it by its right name and the old one
+   * is left alone underneath.
+   *
+   * @returns {string}
+   */
+  get method() {
+    return this.mode;
+  }
+
+  /**
+   * The skill that Method resolves to on the caster, or null.
+   * @returns {Item|null}
+   */
+  get methodItem() {
+    return this.modeItem ?? null;
+  }
+
+  /**
+   * The Method actually used, once the caster's own schools have been
+   * consulted for a spell belonging to none in particular.
+   * @returns {string}
+   */
+  get resolvedMethod() {
+    return this.resolvedMode ?? "";
+  }
+
+  /**
+   * Whether the Method this spell names cannot be found on the caster.
+   * @returns {boolean}
+   */
+  get methodMissing() {
+    return Boolean(this.modeMissing);
+  }
+
+  /* -------------------------------------------- */
+
   prepareDerivedData() {
     super.prepareDerivedData?.();
     this.parsedRange = parseMagnitude(this.rangeText, "distance");
@@ -108,13 +157,16 @@ export class CnS5Spell extends foundry.abstract.TypeDataModel {
     this.modeMissing = !modeItem;
     this.methodModifier = modeItem?.system.psf ?? 0;
 
-    const base = modeItem?.system.target ?? 0;
-    this.targets = Object.fromEntries(
-      Object.entries(CNS5.spellRanges).map(([key, band]) => [
-        key,
-        Math.max(0, base + band.modifier + this.otherModifier)
-      ])
-    );
+    // The chance before anything in the way is counted: the caster's skill in
+    // the school, and the spell's own modifier.
+    //
+    // There used to be three of these, one per range band, printed as the
+    // buttons that cast the spell. They predate targeting and took no account
+    // of the target's own resistance, of movement, of obstacles or of the mana
+    // of the place — so they were three numbers that were right only against an
+    // unresisting target standing in the open. One honest figure is better than
+    // three misleading ones, and the roll settles the rest.
+    this.baseChance = Math.max(0, (modeItem?.system.target ?? 0) + this.otherModifier);
   }
 }
 

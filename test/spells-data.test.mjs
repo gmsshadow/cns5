@@ -183,6 +183,47 @@ ok("nor is a weapon skill", known.some((s) => s.name === "Axes"), false);
 ok("and the best comes first", known[0].name, "Command Magick");
 ok("a caster with none knows none", CNS5.knownMethods([skill("Axes", 40)]).length, 0);
 
+/* -- Reading the school by its right name ------------------------------------ */
+
+/* The stored field is called `mode` and holds a Method — a school, not the
+   tradition a mage was trained in. Renaming it means a schema change and a
+   migration, so instead it is read through getters named for what it actually
+   holds, and the wrong word survives only where the schema forces it.
+   
+   The data models import Foundry's own globals and cannot be loaded here, so
+   the source is read instead. That is enough to catch the getters being removed
+   or pointed at the wrong field, which is what would let the two drift apart. */
+const mystical = await readFile(
+  path.join(ROOT, "module", "data", "item-mystical.mjs"),
+  "utf8"
+);
+
+const aliases = [
+  ["method", "this.mode"],
+  ["methodItem", "this.modeItem"],
+  ["resolvedMethod", "this.resolvedMode"],
+  ["methodMissing", "this.modeMissing"]
+];
+
+const wrong = aliases.filter(([name, stored]) => {
+  const m = new RegExp(`get ${name}\\(\\)\\s*{[^}]*}`, "s").exec(mystical);
+  return !m || !m[0].includes(stored);
+});
+ok("every right-named reader returns the field it stands for", wrong.map(([n]) => n), []);
+
+/* Only the schema and the form input may still say "mode" of a spell: one
+   declares the field, the other addresses it. Anything else reading it by the
+   wrong name is the confusion coming back. */
+const readers = [
+  await readFile(path.join(ROOT, "module", "documents", "actor.mjs"), "utf8"),
+  await readFile(path.join(ROOT, "module", "data", "actor-character.mjs"), "utf8")
+];
+const stray = [];
+for (const source of readers) {
+  for (const m of source.matchAll(/spell\.system\.(mode\w*)/g)) stray.push(m[1]);
+}
+ok("nothing reads a spell's school by the old name", stray, []);
+
 ok("no description text is shipped", "description" in spells[0], false);
 
 console.log(

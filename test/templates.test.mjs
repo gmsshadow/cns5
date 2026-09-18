@@ -209,6 +209,36 @@ for (const m of sheetSource.matchAll(/"systems\/cns5\/(templates\/item\/[^"]+)"/
 }
 ok("and every body it names exists", bodyFiles, []);
 
+/* -------------------------------------------- */
+
+/* A row's name is what a player clicks to use the thing. Where a thing can be
+   rolled, its name rolls it and editing is a button among the controls — the
+   magick tab once had this the other way round, so clicking a spell opened its
+   editor and casting meant finding one of three small numbers further along.
+
+   Stated as what each rollable list must do, rather than as what no list may:
+   plenty of rows have nothing to roll, and their names rightly open an editor. */
+const rollable = [
+  ["parts/magick.hbs", "rollSpell"],
+  ["parts/core-combat.hbs", "rollWeapon"],
+  ["parts/skills.hbs", "rollSkill"],
+  ["parts/faith.hbs", "rollActOfFaith"]
+];
+
+const notRollable = [];
+for (const [file, action] of rollable) {
+  const text = await readFile(path.join(ROOT, "templates", "actor", file), "utf8");
+  // The name cell of a row, and the first button inside it.
+  const cells = [...text.matchAll(/<th scope="row">([\s\S]*?)<\/th>/g)];
+  const rolls = cells.some((cell) => {
+    const first = /<button[^>]*data-action="(\w+)"/.exec(cell[1]);
+    return first?.[1] === action;
+  });
+  if (!rolls) notRollable.push(`${file} should roll ${action} from a row's name`);
+}
+ok("every rollable list rolls from the name", notRollable, []);
+
+
 console.log(`\n${partPaths.size} parts checked`);
 console.log(fails ? `${fails} FAILURES` : "All checks passed.");
 process.exit(fails ? 1 : 0);

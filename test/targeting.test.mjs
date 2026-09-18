@@ -81,26 +81,26 @@ ok("nothing else is impenetrable", obstacles.filter((o) => o.impenetrable).lengt
 const shot = (options) => resolveTargeting({ tables, ...options });
 
 ok("an unobstructed spell at short range is the caster's own chance",
-   shot({ modeTsc: 72 }).total, 72);
+   shot({ methodTsc: 72 }).total, 72);
 ok("a clan dwarf takes twenty off it",
-   shot({ modeTsc: 72, resistance: 20 }).total, 52);
-ok("long range ten more", shot({ modeTsc: 72, resistance: 20, range: "long" }).total, 42);
+   shot({ methodTsc: 72, resistance: 20 }).total, 52);
+ok("long range ten more", shot({ methodTsc: 72, resistance: 20, range: "long" }).total, 42);
 ok("foliage ten more again",
-   shot({ modeTsc: 72, resistance: 20, range: "long", obstacles: ["foliage"] }).total, 32);
+   shot({ methodTsc: 72, resistance: 20, range: "long", obstacles: ["foliage"] }).total, 32);
 
 /* A willing target is worth more than everything else put together. */
 ok("a willing target", CNS5.willingTargetBonus, 50);
-ok("which is decisive", shot({ modeTsc: 30, resistance: 20, willing: true }).total, 60);
+ok("which is decisive", shot({ methodTsc: 30, resistance: 20, willing: true }).total, 60);
 
 /* A dodge comes off as the dodger's skill, not as a flat figure. */
-ok("a dodge of 24", shot({ modeTsc: 72, dodgePsf: 24 }).total, 48);
+ok("a dodge of 24", shot({ methodTsc: 72, dodgePsf: 24 }).total, 48);
 ok("the minimum distance to attempt one", CNS5.spellDodgeMinimumDistance, 50);
 
 /* The Shadow World is both a high mana place and a help in itself. */
-ok("its bonus", shot({ modeTsc: 72, manaBonus: 10 }).total, 82);
+ok("its bonus", shot({ methodTsc: 72, manaBonus: 10 }).total, 82);
 
 /* True Lead is reported rather than added. */
-const walled = shot({ modeTsc: 90, obstacles: ["trueLead"] });
+const walled = shot({ methodTsc: 90, obstacles: ["trueLead"] });
 ok("a walled spell is marked", walled.impenetrable, true);
 ok("and says what stopped it", walled.impenetrableBy.includes("True Lead"), true);
 

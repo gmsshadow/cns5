@@ -412,9 +412,19 @@ book against itself had turned up.
   Those spells are cast "with whatever Method the caster has", so the caster's
   own skills are consulted instead. One Method is no choice at all and is used
   without asking; several is a choice the rules leave to the caster, and the
-  roll asks. The field on a spell is still called `mode` — renaming it is a
-  schema change with a migration behind it, and was deliberately not bundled
-  into a bug fix.
+  roll asks.
+
+  The stored field on a spell is still called `mode`, but nothing reads it by
+  that name any more: `method`, `methodItem`, `resolvedMethod` and
+  `methodMissing` stand over it and are what the rest of the system uses. The
+  old word survives in exactly two places — the schema that declares the field,
+  and the form input that addresses it — and both are commented as deliberate.
+  A test reads the source to check each getter still returns the field it
+  stands for, and that nothing else reads a spell's school by the wrong name.
+
+  Renaming the field itself remains a schema change with a migration behind it,
+  and buys nothing further now that the confusion has been removed from
+  everywhere it could do harm.
 - **Acts of Faith rolled at 1%.** The tables print no success chance, so
   compendium entries ship with none, and rolling clamped to the 1% floor —
   a roll that looked as though it worked and always failed. Attempting an Act
@@ -868,6 +878,23 @@ Three things are not figures and are not treated as failures to read one:
 
 Every one of the 313 printed ranges resolves to one of those. Durations are less
 tractable: a couple of dozen are instructions rather than quantities.
+
+### Casting one from the sheet
+
+Clicking a spell's name casts it, as clicking a weapon's name attacks with it
+and a skill's name rolls it. Editing is a button among the controls. The magick
+tab used to have this the other way round: the name opened the editor, and
+casting meant finding one of three small numbers further along the row.
+
+Those three numbers are gone. They were the chance at short, long and maximal
+range, and they predated targeting — taking no account of the target's own
+resistance, of movement, of obstacles or of the mana of the place. They were
+right only against an unresisting target standing in the open. In their place is
+one figure, the caster's chance in that school before anything is counted, and
+the range at which it is cast is chosen when it is cast.
+
+A spell that offers its target a save is marked in the list, so a caster can see
+before casting whether there is one to come.
 
 ### Resisting a spell
 

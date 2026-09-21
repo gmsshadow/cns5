@@ -896,6 +896,14 @@ the range at which it is cast is chosen when it is cast.
 A spell that offers its target a save is marked in the list, so a caster can see
 before casting whether there is one to come.
 
+The same gesture now means the same thing on every tab. A row's name **rolls**
+the thing where there is something to roll — a weapon, a spell, a skill, an Act
+of Faith — and **opens** it where there is not. Two lists disagreed: an armour
+piece's name equipped and unequipped it, silently changing what the character
+was protected by; and an ammunition row's name was plain text that did nothing
+at all when clicked, with nothing to say why. Equipping is a control among the
+others now, as carrying already was on the Personal Chattel tab.
+
 ### Resisting a spell
 
 A spell that reaches its target may still be thrown off by them, where the spell

@@ -238,6 +238,23 @@ for (const [file, action] of rollable) {
 }
 ok("every rollable list rolls from the name", notRollable, []);
 
+/* And every row's name does *something*. An ammunition row's name was plain
+   text: clicking it did nothing at all, with nothing to say why. A name that
+   cannot be rolled opens its item, which is the next most useful thing and what
+   the other lists do. */
+const actorTemplateFiles = await walk(path.join(ROOT, "templates", "actor"), ".hbs");
+const inert = [];
+for (const file of actorTemplateFiles) {
+  const text = await readFile(file, "utf8");
+  for (const cell of text.matchAll(/<th scope="row">([\s\S]*?)<\/th>/g)) {
+    const named = /\{\{(\w+)\.name\}\}/.exec(cell[1]);
+    if (named && !/<button[^>]*data-action=/.test(cell[1])) {
+      inert.push(`${path.relative(ROOT, file)}: ${named[1]}`);
+    }
+  }
+}
+ok("no row's name is inert", inert, []);
+
 
 console.log(`\n${partPaths.size} parts checked`);
 console.log(fails ? `${fails} FAILURES` : "All checks passed.");

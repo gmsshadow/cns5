@@ -193,7 +193,9 @@
             {{#each ammunition as |shot|}}
             <tr class="{{#if shot.system.spent}}is-unskilled{{/if}}">
                 <th scope="row">
-                    {{shot.name}}
+                    <button type="button" class="cns5-skills__roll" data-action="editItem"
+                            data-item-id="{{shot.id}}"
+                            data-tooltip="{{localize 'CNS5.Item.edit'}}">{{shot.name}}</button>
                     <span class="cns5-tag cns5-tag--origin">{{localize shot.system.kindLabel}}</span>
                 </th>
                 <td class="cns5-skills__readout cns5-skills__readout--total">{{shot.system.quantity}}</td>
@@ -243,9 +245,9 @@
             {{#each armour as |piece|}}
             <tr class="{{#unless piece.system.equipped}}is-unskilled{{/unless}}">
                 <th scope="row">
-                    <button type="button" class="cns5-skills__roll" data-action="toggleEquipped"
+                    <button type="button" class="cns5-skills__roll" data-action="editItem"
                             data-item-id="{{piece.id}}"
-                            data-tooltip="{{localize 'CNS5.Item.toggleEquipped'}}">
+                            data-tooltip="{{localize 'CNS5.Item.edit'}}">
                         {{piece.name}}
                     </button>
                     <span class="cns5-tag">{{localize (concat "CNS5.ArmourLocation." piece.system.location)}}</span>
@@ -257,6 +259,10 @@
                 <td class="cns5-skills__readout">{{piece.system.absorption.energy}}</td>
                 <td class="cns5-skills__readout">{{piece.system.damageTaken}}</td>
                 <td class="cns5-skills__controls">
+                    <button type="button" data-action="toggleEquipped" data-item-id="{{piece.id}}"
+                            data-tooltip="{{localize 'CNS5.Item.toggleEquipped'}}">
+                        <i class="fa-solid {{#if piece.system.equipped}}fa-shield{{else}}fa-shield-slash{{/if}}"></i>
+                    </button>
                     <button type="button" data-action="editItem" data-item-id="{{piece.id}}"
                             data-tooltip="{{localize 'CNS5.Item.edit'}}">
                         <i class="fa-solid fa-pen-to-square"></i>

@@ -305,8 +305,12 @@ export async function promptTargeting(
       )
       .join("");
 
+  // Scrolled rather than left to grow. Everything that bears on targeting is
+  // asked here — the mana, the range, movement, obstacles, the save — and at
+  // full length it pushed the Roll button off the bottom of the screen. The
+  // button is in the dialog's own footer, outside this, so it stays in view.
   const content = `
-    <div class="cns5-prompt">
+    <div class="cns5-prompt cns5-prompt--scroll">
       <div class="cns5-grid cns5-grid--two">
         <label class="cns5-field">
           <span>${game.i18n.localize("CNS5.Targeting.mana")}</span>

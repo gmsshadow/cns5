@@ -848,6 +848,10 @@ drive it:
   added: rolling against a very small number would say "unlikely" where the
   rules say "never".
 
+The targeting dialog asks a great deal, so its questions scroll within a capped
+height and the Roll button, in the dialog's own footer, stays in view. At full
+length it had pushed the button off the bottom of the screen.
+
 A physical effect may be **dodged** by a target who is fully alert and at least
 fifty feet away, their Dodge PSF% coming off the caster. One closer than that
 has no time.

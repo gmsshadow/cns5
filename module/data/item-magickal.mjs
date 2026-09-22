@@ -114,6 +114,16 @@ export class CnS5MagickalItem extends CnS5PhysicalItem {
     // A Focus stores spells by their Magick Resistance rather than by count.
     if (this.kind === "focus") {
       this.storedMrCapacity = (this.gradeData?.storedMrPerMl ?? 0) * this.makerMl;
+
+      // How it lightens a casting, in words for the sheet.
+      const cut = this.gradeData?.fatigue ?? {};
+      this.fatigueLabel = cut.subtract
+        ? "CNS5.Focus.fatigueLess2"
+        : cut.multiply === 0.5
+          ? "CNS5.Focus.fatigueHalved"
+          : cut.multiply === 0.25
+            ? "CNS5.Focus.fatigueQuartered"
+            : "";
     }
 
     const heldMrs = this.spells.map((s) => s.mr);

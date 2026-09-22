@@ -1049,6 +1049,14 @@ the spending of 1 charge" — and a Focus *does* hold spells: each grade "can st
 3 x ML (… 7, 13) in Spell MR's, which can be cast for the cost of 1 charge per
 Spell MR" (pp.304-305).
 
+**On the sheet**, the Magick tab has a section for each: **Known Spells**, then
+**Foci**, **Devices** and **Scrolls**. They are one item type underneath, with a
+Kind that decides which section an item appears in — a dropdown rather than
+boxes to tick, since an item is one kind and never two. Shown together in one
+table they read alike, although they are used differently: a Focus shows what it
+adds to a casting, a Device its maker's skill and its charges, a Scroll whether it
+has been read. Each section's Add button makes an item of its own kind.
+
 **A Grimoire is not a spell book.** In this rulebook (p307) it is a reference on
 one particular demon — pages of research towards summoning and binding it, worth
 +50% to the user's PSF and +1 to the Crit Die against that demon. Spell books are

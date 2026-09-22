@@ -136,9 +136,15 @@ export class CnS5CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2)
       .sort((a, b) => Number(b.system.primary) - Number(a.system.primary) || byName(a, b));
 
     context.ammunition = this.actor.items.filter((i) => i.type === "ammunition").sort(byName);
-    context.magickalItems = this.actor.items
-      .filter((i) => i.type === "magickalItem")
-      .sort(byName);
+    // One item type, shown by kind: they are used differently enough to want
+    // different columns, which is what made them all read alike in one table.
+    const magickal = this.actor.items.filter((i) => i.type === "magickalItem").sort(byName);
+    context.foci = magickal.filter((i) => i.system.kind === "focus");
+    context.devices = magickal.filter((i) => i.system.kind === "device");
+    // Unread scrolls first: a crumbled one is kept for the record, not for use.
+    context.scrolls = magickal
+      .filter((i) => i.system.kind === "scroll")
+      .sort((a, b) => Number(a.system.discharged) - Number(b.system.discharged));
     context.talents = this.actor.items.filter((i) => i.type === "talent").sort(byName);
     context.flaws = this.actor.items.filter((i) => i.type === "flaw").sort(byName);
 
@@ -489,9 +495,17 @@ export class CnS5CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2)
     const type = target.dataset.type;
     if (!type) return;
 
-    const [item] = await this.actor.createEmbeddedDocuments("Item", [
-      { name: game.i18n.localize(`CNS5.Item.new.${type}`), type }
-    ]);
+    // A magickal item is one type of three kinds, each with a section of its
+    // own; the button under Scrolls should make a scroll, not a Device that has
+    // then to be changed into one.
+    const kind = target.dataset.kind;
+    const data = {
+      name: game.i18n.localize(kind ? `CNS5.Item.new.${kind}` : `CNS5.Item.new.${type}`),
+      type
+    };
+    if (kind) data.system = { kind };
+
+    const [item] = await this.actor.createEmbeddedDocuments("Item", [data]);
     item?.sheet.render({ force: true });
   }
 

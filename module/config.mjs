@@ -1889,10 +1889,14 @@ CNS5.manaLevels = {
  */
 CNS5.castingSources = {
   memory: { label: "CNS5.Casting.memory", fatigue: 1, charge: false },
-  scroll: { label: "CNS5.Casting.scroll", fatigue: 0.5, charge: false },
-  deviceMage: { label: "CNS5.Casting.deviceMage", fatigue: 0.25, charge: true },
-  deviceOther: { label: "CNS5.Casting.deviceOther", fatigue: 0.5, charge: true }
+  scroll: { label: "CNS5.Casting.scroll", fatigue: 0.5, charge: false }
 };
+
+// Devices are not listed here either. A spell is not read from a Device by the
+// bearer's own skill: a Device casts with the skill of the mage who made it,
+// and its spells need not be ones the bearer knows at all. So it is cast from
+// the Device itself rather than from the bearer's list of spells, and costs
+// are worked out by CNS5.deviceFatigue below.
 
 // A Focus is not listed here. It is not a thing a spell is read *from* but an
 // aid a spell is cast *through*, used alongside memory, so it is offered as a
@@ -2362,6 +2366,32 @@ CNS5.deviceGrades = {
     maxSpellMr: Infinity,
     chargesPerMl: 21
   }
+};
+
+/**
+ * What activating a spell in a Device costs (p297): "½ normal FP (round up) for
+ * Non-mages, or ¼ for Mages plus the spending of 1 charge".
+ */
+CNS5.deviceFatigueShare = { mage: 0.25, other: 0.5 };
+
+/**
+ * "If part of the target was used as one of the Material Components then the
+ * spell gains a bonus of +15% to Targeting TSC%" (p301).
+ */
+CNS5.materialComponentBonus = 15;
+
+/**
+ * What a spell cast through a Device costs its bearer.
+ *
+ * @param {number} fp      the spell's cost from memory
+ * @param {boolean} isMage
+ * @param {string} mana
+ * @returns {number}
+ */
+CNS5.deviceFatigue = function (fp, isMage, mana = "average") {
+  const share = isMage ? CNS5.deviceFatigueShare.mage : CNS5.deviceFatigueShare.other;
+  const place = CNS5.manaLevels[mana] ?? CNS5.manaLevels.average;
+  return Math.ceil((Number(fp) || 0) * share * place.fatigue);
 };
 
 /**

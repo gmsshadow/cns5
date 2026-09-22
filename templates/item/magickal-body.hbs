@@ -22,6 +22,27 @@
 </div>
 <p class="cns5-hint">{{localize "CNS5.Magickal.makerHint"}}</p>
 
+{{#if (eq system.kind "device")}}
+<div class="cns5-grid cns5-grid--three">
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Device.makerTsc"}}</span>
+        <input type="number" name="system.makerTsc" value="{{system.makerTsc}}" min="0"
+               {{#unless editable}}disabled{{/unless}}>
+    </label>
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Device.makerPsf"}}</span>
+        <input type="number" name="system.makerPsf" value="{{system.makerPsf}}" min="0"
+               {{#unless editable}}disabled{{/unless}}>
+    </label>
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Device.makerDf"}}</span>
+        <input type="number" name="system.makerDf" value="{{system.makerDf}}" min="1" max="10"
+               {{#unless editable}}disabled{{/unless}}>
+    </label>
+</div>
+<p class="cns5-hint">{{localize "CNS5.Device.makerSkillHint"}}</p>
+{{/if}}
+
 <div class="cns5-grid cns5-grid--two">
     <label class="cns5-field">
         <span>{{localize "CNS5.Magickal.charges"}}</span>
@@ -55,8 +76,16 @@
     <legend>{{localize "CNS5.Device.holds"}}</legend>
     {{#if system.spells.length}}
     <ul class="cns5-list">
-        {{#each system.spells}}
-        <li>{{name}} <span class="cns5-hint">MR {{mr}}</span></li>
+        {{#each system.spells as |held index|}}
+        <li>
+            {{held.name}} <span class="cns5-hint">MR {{held.mr}}, {{held.fp}} FP</span>
+            {{#if @root.editable}}
+            <button type="button" class="cns5-inline-remove" data-action="removeHeldSpell"
+                    data-index="{{index}}" data-tooltip="{{localize 'CNS5.Device.remove'}}">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            {{/if}}
+        </li>
         {{/each}}
     </ul>
     <p class="cns5-hint">{{localize "CNS5.Device.totalMr"}} {{system.heldMr}}</p>
@@ -66,6 +95,7 @@
     {{#unless system.accepts.allowed}}
     <p class="cns5-hint cns5-hint--bad">{{localize system.accepts.reason}}</p>
     {{/unless}}
+    <p class="cns5-drop-zone" data-cns5-spell-drop>{{localize "CNS5.Device.dropHint"}}</p>
     <p class="cns5-hint">{{localize "CNS5.Device.hint"}}</p>
 </fieldset>
 {{/if}}

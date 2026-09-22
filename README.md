@@ -1020,6 +1020,33 @@ easy to get backwards; a Greater any number, totalling twenty-one times its
 maker's Magick Level. The item sheet says when the spells placed in one break
 those limits.
 
+**A Device casts with its maker's skill, not its bearer's.** "The basic
+chance of casting the spell through a Magickal device is equal to the Method of
+Magick TSC% of the Magick User who [made it]", its targeting uses that same
+figure, and a victim's save is measured against the maker's PSF% (p301). The
+spells in it need not be ones the bearer knows. That is why a man with no magick
+in him can carry a wand and use it — and why casting from a device is started
+from the device, on the Magick tab, rather than from the bearer's own list of
+spells.
+
+An earlier version offered "from a device" as a casting source in the spell
+dialog, which assumed the bearer's own skill and merely cheapened the cost. It
+also never spent a charge: the dialog said "and a charge", and the item's
+charges never moved. Both are gone.
+
+So the maker's Method TSC%, PSF% and Difficulty Factor are recorded on the
+device when it is made — the Methods run from DF 4 to 6, so the last is his own
+figure rather than one to assume. What the *bearer* brings is the Fatigue: a
+quarter of the spell's cost for a mage and half for anyone else (p297), and a
+charge either way, spent whether or not the spell found its mark. Meditation
+cannot improve a device's aim nor lower a save against it; a part of the target
+used in its making gives +15% to targeting.
+
+A device is filled by dropping spells onto its sheet. Each carries its Magick
+Resistance, its cost and its reach with it, since the bearer cannot be asked.
+Breaking the grade's limits is warned of rather than refused — a Gamemaster may
+know better.
+
 **Charges follow the maker, not the bearer.** A Device made by a mage of Magick
 Level 6 holds the charges a Level 6 mage gives it whoever carries it later, so
 the maker's level is recorded on the item. The p303 table says a Greater Device

@@ -17,8 +17,23 @@ export class CnS5ItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     classes: ["cns5", "sheet", "item"],
     position: { width: 520, height: "auto" },
     window: { resizable: true },
+    actions: {
+      removeHeldSpell: CnS5ItemSheet.#onRemoveHeldSpell
+    },
     form: { submitOnChange: true }
   };
+
+  /* -------------------------------------------- */
+
+  /**
+   * Take a spell out of a Device.
+   * @this {CnS5ItemSheet}
+   */
+  static async #onRemoveHeldSpell(event, target) {
+    const index = Number(target.dataset.index);
+    const spells = this.item.system.spells.filter((_, i) => i !== index);
+    await this.item.update({ "system.spells": spells });
+  }
 
   /* -------------------------------------------- */
 
@@ -26,6 +41,48 @@ export class CnS5ItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
   _onRender(context, options) {
     super._onRender(context, options);
     if (!this.isEditable) return;
+
+    // A Device is filled by dropping spells onto it. Each carries what the
+    // Device needs to cast it — its Magick Resistance, its cost, its reach —
+    // since the bearer need not know the spell and so cannot be asked.
+    const zone = this.element.querySelector("[data-cns5-spell-drop]");
+    if (zone) {
+      zone.addEventListener("dragover", (event) => event.preventDefault());
+      zone.addEventListener("drop", async (event) => {
+        event.preventDefault();
+        const data = foundry.applications.ux.TextEditor.implementation.getDragEventData(event);
+        if (data?.type !== "Item") return;
+
+        const dropped = await Item.implementation.fromDropData(data);
+        if (dropped?.type !== "spell") {
+          ui.notifications.warn(game.i18n.localize("CNS5.Device.onlySpells"));
+          return;
+        }
+
+        const spells = [
+          ...this.item.system.spells,
+          {
+            name: dropped.name,
+            mr: dropped.system.mr ?? 0,
+            fp: dropped.system.fpToCast ?? 0,
+            ap: dropped.system.apToCast ?? 0,
+            rangeText: dropped.system.rangeText ?? "",
+            resisted: dropped.system.resisted ?? null
+          }
+        ];
+
+        // Warn rather than refuse: a Gamemaster may know better, and the sheet
+        // says plainly when the grade's limits are broken.
+        const verdict = CNS5.deviceAccepts(
+          this.item.system.grade,
+          spells.map((sp) => sp.mr),
+          this.item.system.makerMl
+        );
+        if (!verdict.allowed) ui.notifications.warn(game.i18n.localize(verdict.reason));
+
+        await this.item.update({ "system.spells": spells });
+      });
+    }
 
     // The coverage boxes stand for entries in an array rather than for named
     // fields, so they are written by hand rather than through the form.

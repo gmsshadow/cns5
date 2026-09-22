@@ -943,6 +943,163 @@ export class CnS5Actor extends Actor {
   /* -------------------------------------------- */
 
   /**
+   * Activate a spell held in a Device (p301).
+   *
+   * A Device casts with the skill of the mage who made it, not of whoever is
+   * holding it: "the basic chance of casting the spell through a Magickal
+   * device is equal to the Method of Magick TSC% of the Magick User who [made
+   * it]", its targeting uses that same figure, and a victim's save is measured
+   * against the maker's PSF%. The spell need not be one the bearer knows —
+   * which is why a man with no magick in him can carry a wand and use it.
+   *
+   * What the bearer does bring is the Fatigue: a quarter of the spell's cost
+   * for a mage and half for anyone else, and a charge either way (p297).
+   *
+   * @param {string} itemId  the Device
+   * @param {number} index   which of its spells
+   * @param {object} [options]
+   * @returns {Promise<ChatMessage|null>}
+   */
+  async castFromDevice(itemId, index, { skipDialog = false } = {}) {
+    const device = this.items.get(itemId);
+    if (!device || device.type !== "magickalItem" || device.system.kind !== "device") {
+      return null;
+    }
+
+    const held = device.system.spells[index];
+    if (!held) return null;
+
+    if (device.system.charges <= 0) {
+      ui.notifications.warn(game.i18n.format("CNS5.Device.spent", { item: device.name }));
+      return null;
+    }
+
+    const title = game.i18n.format("CNS5.Device.castTitle", {
+      spell: held.name,
+      item: device.name
+    });
+
+    const tables = await magickTables();
+    const target = [...game.user.targets][0]?.actor ?? null;
+    const resistance = intrinsicResistance(target, tables.targetResistance);
+
+    // Whether the bearer is a mage decides only what it costs them.
+    const isMage = Boolean(this.system.magick?.mode) || CNS5.knownMethods([...this.items]).length > 0;
+
+    let declared = {
+      mana: "average", range: "short", dodgePsf: 0, resistance: null,
+      willing: false, movement: [], obstacles: [], situational: 0,
+      materialComponent: false, saveReductions: {}
+    };
+
+    if (!skipDialog) {
+      const answered = await promptTargeting(
+        { name: held.name },
+        {
+          tables,
+          resistance,
+          targetName: target?.name ?? null,
+          // "Meditation cannot be used to increase Targeting of a Magickal
+          // device", nor saves reduced by it; and nothing here is the bearer's
+          // own Focus to cast through.
+          fromDevice: true
+        }
+      );
+      if (answered === null) return null;
+      declared = answered;
+    }
+
+    const targeting = resolveTargeting({
+      methodTsc: device.system.makerTsc,
+      resistance: declared.resistance ?? resistance.value,
+      range: declared.range,
+      movement: declared.movement,
+      obstacles: declared.obstacles,
+      willing: declared.willing,
+      dodgePsf: declared.dodgePsf,
+      manaBonus: CNS5.manaLevels[declared.mana]?.tsc ?? 0,
+      // "If part of the target was used as one of the Material Components then
+      // the spell gains a bonus of +15% to Targeting TSC%."
+      situational:
+        declared.situational + (declared.materialComponent ? CNS5.materialComponentBonus : 0),
+      tables
+    });
+
+    if (targeting.impenetrable) {
+      ui.notifications.warn(
+        game.i18n.format("CNS5.Targeting.blocked", { obstacle: targeting.impenetrableBy })
+      );
+      return null;
+    }
+
+    // Held within the bounds of the maker's own Method, since it is his skill
+    // the device casts with.
+    const { target: chance, critMod, overflow, shortfall } = clampSuccessChance(
+      targeting.total,
+      device.system.makerDf
+    );
+    const result = await resolveCheck({ target: chance, critMod });
+
+    // A charge is spent whether or not the spell found its mark: the device
+    // has been discharged either way.
+    const left = device.system.charges - 1;
+    await device.update({ "system.charges": Math.max(0, left) });
+
+    const fatigue = CNS5.deviceFatigue(held.fp, isMage, declared.mana);
+    await this.spendMagickCost(fatigue);
+
+    let save = null;
+    const offersSave = target && CNS5.isResistable({ name: held.name, resisted: held.resisted });
+    if (result.success && offersSave) {
+      save = await target.resistSpell({
+        // The maker's skill, not the bearer's.
+        casterPsf: device.system.makerPsf,
+        presence: this.system.attr.bv?.value ?? 0,
+        // Meditation cannot reduce a save against a device.
+        reductions: { ...declared.saveReductions, meditationDays: 0 }
+      });
+      if (save) result.rolls.push(...save.rolls);
+    }
+
+    return checkToMessage(this, {
+      ...result,
+      title,
+      subtitle: game.i18n.format("CNS5.Device.castSubtitle", {
+        maker: device.system.makerTsc,
+        target: chance
+      }),
+      unclamped: targeting.total,
+      overflow,
+      shortfall,
+      targetName: target?.name ?? null,
+      cost: game.i18n.format("CNS5.Device.costs", { fp: fatigue, left: Math.max(0, left) }),
+      save,
+      saveLabel: save
+        ? game.i18n.format(save.resisted ? "CNS5.Save.resisted" : "CNS5.Save.failed", {
+            name: target.name,
+            roll: save.roll,
+            chance: save.chance
+          })
+        : null,
+      saveCertain: save?.certain ? game.i18n.localize(`CNS5.Save.${save.certain}`) : null,
+      offersSave: Boolean(offersSave),
+      breakdown: this.#breakdown([
+        { label: "CNS5.Device.makerSkill", value: device.system.makerTsc },
+        { label: "CNS5.Targeting.resistance", value: -targeting.resistance, signed: true },
+        { label: "CNS5.Roll.rangeBand", value: targeting.rangeModifier, signed: true },
+        { label: "CNS5.Targeting.movement", value: targeting.movementTotal, signed: true },
+        { label: "CNS5.Targeting.obstacles", value: targeting.obstacleTotal, signed: true },
+        { label: "CNS5.Targeting.willingShort", value: targeting.willingBonus, signed: true },
+        { label: "CNS5.Targeting.dodge", value: -targeting.dodgePsf, signed: true },
+        { label: "CNS5.Mana.bonus", value: targeting.manaBonus, signed: true },
+        { label: "CNS5.Roll.situational", value: targeting.situational, signed: true }
+      ])
+    });
+  }
+
+  /* -------------------------------------------- */
+
+  /**
    * Resist a spell cast at this character (p300).
    *
    * "To make a Resisted Roll, the target must make a Willpower TSC% - Caster's

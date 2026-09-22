@@ -38,7 +38,8 @@ export class CnS5CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2)
       toggleEquipped: CnS5CharacterSheet.#onToggleEquipped,
       toggleCarried: CnS5CharacterSheet.#onToggleCarried,
       openWizard: CnS5CharacterSheet.#onOpenWizard,
-      attemptUnskilled: CnS5CharacterSheet.#onAttemptUnskilled
+      attemptUnskilled: CnS5CharacterSheet.#onAttemptUnskilled,
+      castFromDevice: CnS5CharacterSheet.#onCastFromDevice
     }
   };
 
@@ -355,6 +356,16 @@ export class CnS5CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2)
     const item = this.actor.items.get(input.dataset.itemId);
     if (!item) return;
     await item.update({ "system.level": Math.max(0, Number(input.value) || 0) });
+  }
+
+  /* -------------------------------------------- */
+
+  /**
+   * Activate a spell held in a Device.
+   * @this {CnS5CharacterSheet}
+   */
+  static async #onCastFromDevice(event, target) {
+    await this.actor.castFromDevice(target.dataset.itemId, Number(target.dataset.index));
   }
 
   /* -------------------------------------------- */

@@ -274,7 +274,10 @@ export async function promptThrow(weapon, profile) {
  * @param {object} options
  * @returns {Promise<object|null>} null if dismissed
  */
-export async function promptTargeting(spell, { tables, resistance, targetName, focus = null }) {
+export async function promptTargeting(
+  spell,
+  { tables, resistance, targetName, focus = null, fromDevice = false }
+) {
   const boxes = (list, name) =>
     list
       .map(
@@ -309,10 +312,14 @@ export async function promptTargeting(spell, { tables, resistance, targetName, f
           <span>${game.i18n.localize("CNS5.Targeting.mana")}</span>
           <select name="mana">${choices(CNS5.manaLevels, "average")}</select>
         </label>
-        <label class="cns5-field">
-          <span>${game.i18n.localize("CNS5.Targeting.source")}</span>
-          <select name="source">${choices(CNS5.castingSources, "memory")}</select>
-        </label>
+        ${
+          fromDevice
+            ? ""
+            : `<label class="cns5-field">
+                 <span>${game.i18n.localize("CNS5.Targeting.source")}</span>
+                 <select name="source">${choices(CNS5.castingSources, "memory")}</select>
+               </label>`
+        }
         <label class="cns5-field">
           <span>${game.i18n.localize("CNS5.Targeting.range")}</span>
           <select name="range">
@@ -360,10 +367,19 @@ export async function promptTargeting(spell, { tables, resistance, targetName, f
           bonus: CNS5.willingTargetBonus
         })}</span>
       </label>
-      <label class="cns5-checkbox">
-        <input type="checkbox" name="extendRange">
-        <span>${game.i18n.localize("CNS5.Targeting.extend")}</span>
-      </label>
+      ${
+        fromDevice
+          ? `<label class="cns5-checkbox">
+               <input type="checkbox" name="materialComponent">
+               <span>${game.i18n.format("CNS5.Device.materialComponent", {
+                 bonus: CNS5.materialComponentBonus
+               })}</span>
+             </label>`
+          : `<label class="cns5-checkbox">
+               <input type="checkbox" name="extendRange">
+               <span>${game.i18n.localize("CNS5.Targeting.extend")}</span>
+             </label>`
+      }
 
       <p class="cns5-check__subheading">${game.i18n.localize("CNS5.Targeting.movement")}</p>
       ${boxes(tables.movement, "movement")}
@@ -391,10 +407,14 @@ export async function promptTargeting(spell, { tables, resistance, targetName, f
         <input type="checkbox" name="smokes">
         <span>${game.i18n.localize("CNS5.Save.smokes")} (-10%)</span>
       </label>
-      <label class="cns5-field">
-        <span>${game.i18n.localize("CNS5.Save.meditation")}</span>
-        <input type="number" name="meditationDays" value="0" min="0" max="25">
-      </label>
+      ${
+        fromDevice
+          ? `<p class="hint">${game.i18n.localize("CNS5.Device.noMeditation")}</p>`
+          : `<label class="cns5-field">
+               <span>${game.i18n.localize("CNS5.Save.meditation")}</span>
+               <input type="number" name="meditationDays" value="0" min="0" max="25">
+             </label>`
+      }
     </div>`;
 
   return foundry.applications.api.DialogV2.prompt({
@@ -410,7 +430,7 @@ export async function promptTargeting(spell, { tables, resistance, targetName, f
 
         return {
           mana: form.elements.mana.value,
-          source: form.elements.source.value,
+          source: form.elements.source?.value ?? "memory",
           range: form.elements.range.value,
           dodgePsf: Math.max(0, Number(form.elements.dodgePsf.value) || 0),
           resistance: form.elements.resistance
@@ -418,7 +438,8 @@ export async function promptTargeting(spell, { tables, resistance, targetName, f
             : null,
           willing: form.elements.willing.checked,
           useFocus: Boolean(form.elements.useFocus?.checked),
-          extendRange: form.elements.extendRange.checked,
+          extendRange: Boolean(form.elements.extendRange?.checked),
+          materialComponent: Boolean(form.elements.materialComponent?.checked),
           movement: ticked("movement"),
           obstacles: ticked("obstacles"),
           situational: Number(form.elements.situational.value) || 0,
@@ -427,7 +448,7 @@ export async function promptTargeting(spell, { tables, resistance, targetName, f
             mantra: form.elements.mantra.checked,
             dancing: form.elements.dancing.checked,
             smokes: form.elements.smokes.checked,
-            meditationDays: Math.max(0, Number(form.elements.meditationDays.value) || 0)
+            meditationDays: Math.max(0, Number(form.elements.meditationDays?.value) || 0)
           }
         };
       }

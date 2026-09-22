@@ -143,6 +143,22 @@
                     </button>
                 </td>
             </tr>
+            {{#if (eq thing.system.kind "device")}}
+            {{#if thing.system.spells.length}}
+            <tr class="cns5-subrow">
+                <td colspan="4">
+                    {{#each thing.system.spells as |held index|}}
+                    <button type="button" class="cns5-add" data-action="castFromDevice"
+                            data-item-id="{{thing.id}}" data-index="{{index}}"
+                            {{#if thing.system.spent}}disabled{{/if}}
+                            data-tooltip="{{localize 'CNS5.Device.castTooltip'}}">
+                        {{held.name}}
+                    </button>
+                    {{/each}}
+                </td>
+            </tr>
+            {{/if}}
+            {{/if}}
             {{/each}}
             </tbody>
         </table>

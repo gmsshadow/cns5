@@ -943,48 +943,152 @@ export class CnS5Actor extends Actor {
   /* -------------------------------------------- */
 
   /**
-   * Activate a spell held in a Device (p301).
+   * Cast a spell held in a magickal item (p301).
    *
-   * A Device casts with the skill of the mage who made it, not of whoever is
-   * holding it: "the basic chance of casting the spell through a Magickal
-   * device is equal to the Method of Magick TSC% of the Magick User who [made
-   * it]", its targeting uses that same figure, and a victim's save is measured
-   * against the maker's PSF%. The spell need not be one the bearer knows —
-   * which is why a man with no magick in him can carry a wand and use it.
+   * The item casts with the skill of the mage who made it, not of whoever is
+   * holding it: its chance, its targeting and the target's save are all
+   * measured against the maker's figures. That is why a man with no magick in
+   * him can use a wand or read a scroll.
    *
-   * What the bearer does bring is the Fatigue: a quarter of the spell's cost
-   * for a mage and half for anyone else, and a charge either way (p297).
+   * Before any targeting, the spell has to be got out of the item, and how
+   * depends on what the item is:
    *
-   * @param {string} itemId  the Device
-   * @param {number} index   which of its spells
+   *  - a **Device** activates automatically for a caster who knows the spell at
+   *    MR 0, and otherwise at the maker's chance less 5% a point of the spell's
+   *    Magick Resistance — always so for a non-mage. A success costs one
+   *    charge; a failure costs a charge for every point of Magick Resistance,
+   *    and the spell goes nowhere.
+   *  - a **Scroll** is read at its writer's chance, and crumbles either way.
+   *  - a **Focus** is the mage's own, holding spells he placed in it himself;
+   *    each costs "1 charge per Spell MR".
+   *
+   * Only then is the spell targeted, and only then may its target resist.
+   *
+   * @param {string} itemId
+   * @param {number} index   which spell the item holds
    * @param {object} [options]
    * @returns {Promise<ChatMessage|null>}
    */
   async castFromDevice(itemId, index, { skipDialog = false } = {}) {
-    const device = this.items.get(itemId);
-    if (!device || device.type !== "magickalItem" || device.system.kind !== "device") {
-      return null;
-    }
+    const item = this.items.get(itemId);
+    if (!item || item.type !== "magickalItem") return null;
 
-    const held = device.system.spells[index];
+    const kind = item.system.kind;
+    const held = item.system.spells[index];
     if (!held) return null;
 
-    if (device.system.charges <= 0) {
-      ui.notifications.warn(game.i18n.format("CNS5.Device.spent", { item: device.name }));
+    if (item.system.spent) {
+      ui.notifications.warn(
+        game.i18n.format(kind === "scroll" ? "CNS5.Scroll.spent" : "CNS5.Device.spent", {
+          item: item.name
+        })
+      );
       return null;
     }
 
-    const title = game.i18n.format("CNS5.Device.castTitle", {
-      spell: held.name,
-      item: device.name
-    });
+    // A Focus stores spells at one charge a point of Magick Resistance.
+    if (kind === "focus" && item.system.charges < Math.max(1, held.mr)) {
+      ui.notifications.warn(game.i18n.format("CNS5.Device.spent", { item: item.name }));
+      return null;
+    }
+
+    const title = game.i18n.format("CNS5.Device.castTitle", { spell: held.name, item: item.name });
+    const isMage =
+      Boolean(this.system.magick?.mode) || CNS5.knownMethods([...this.items]).length > 0;
+
+    // Knowing the spell at MR 0 is what lets a Device activate without a roll.
+    // A spell on the sheet is taken as learnt: nothing yet records a spell
+    // learnt only partway, so there is no finer answer to give. A non-mage
+    // never knows it, the penalty applying to them "automatically".
+    const known =
+      isMage &&
+      this.items.some((i) => i.type === "spell" && i.name.toLowerCase() === held.name.toLowerCase());
+
+    const rolls = [];
+    const parts = [];
+
+    /* -- Step 2: getting the spell out of the item -------------------------- */
+
+    let released = true;
+    let chargesSpent = 0;
+    let activation = null;
+
+    if (kind === "device") {
+      activation = CNS5.deviceActivation({ makerTsc: item.system.makerTsc, mr: held.mr, known });
+      if (!activation.automatic) {
+        const { target: need, critMod } = clampSuccessChance(
+          activation.chance,
+          item.system.makerDf
+        );
+        const roll = await resolveCheck({ target: need, critMod });
+        rolls.push(...roll.rolls);
+        released = roll.success;
+        activation.roll = roll.roll;
+        activation.need = need;
+      }
+      chargesSpent = released ? activation.chargesOnSuccess : activation.chargesOnFailure;
+    } else if (kind === "scroll") {
+      // "The basic chance of casting the spell through a Magickal device is
+      // equal to the Method of Magick TSC% of the Magick User who wrote the
+      // scroll... On a failure, the scroll or page is discharged."
+      const { target: need, critMod } = clampSuccessChance(
+        item.system.makerTsc,
+        item.system.makerDf
+      );
+      const roll = await resolveCheck({ target: need, critMod });
+      rolls.push(...roll.rolls);
+      released = roll.success;
+      activation = { automatic: false, roll: roll.roll, need, chance: item.system.makerTsc };
+    } else {
+      chargesSpent = Math.max(1, held.mr);
+    }
+
+    // Spent whatever came of it.
+    if (kind === "scroll") {
+      await item.update({ "system.discharged": true });
+    } else {
+      await item.update({
+        "system.charges": Math.max(0, item.system.charges - chargesSpent)
+      });
+    }
+
+    // What the bearer pays in Fatigue (p297): a quarter for a mage and half for
+    // anyone else from a device; half from a scroll. A spell stored in a Focus
+    // is paid for in charges.
+    const fatigue =
+      kind === "focus"
+        ? 0
+        : kind === "scroll"
+          ? Math.ceil(held.fp * CNS5.castingSources.scroll.fatigue)
+          : CNS5.deviceFatigue(held.fp, isMage);
+    await this.spendMagickCost(fatigue);
+
+    const costLabel = game.i18n.format(
+      kind === "scroll" ? "CNS5.Scroll.costs" : "CNS5.Device.costs",
+      { fp: fatigue, spent: chargesSpent, left: Math.max(0, item.system.charges - chargesSpent) }
+    );
+
+    // A spell that never left the item has nothing to target.
+    if (!released) {
+      return ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({ actor: this }),
+        rolls,
+        content: `<div class="cns5-check">
+          <h3 class="cns5-check__title">${title}</h3>
+          <p class="cns5-check__exchange">${game.i18n.format(
+            kind === "scroll" ? "CNS5.Scroll.failed" : "CNS5.Device.failed",
+            { roll: activation?.roll ?? "—", need: activation?.need ?? "—" }
+          )}</p>
+          <p class="cns5-check__cost">${costLabel}</p>
+        </div>`
+      });
+    }
+
+    /* -- Step 3: targeting ------------------------------------------------- */
 
     const tables = await magickTables();
     const target = [...game.user.targets][0]?.actor ?? null;
     const resistance = intrinsicResistance(target, tables.targetResistance);
-
-    // Whether the bearer is a mage decides only what it costs them.
-    const isMage = Boolean(this.system.magick?.mode) || CNS5.knownMethods([...this.items]).length > 0;
 
     let declared = {
       mana: "average", range: "short", dodgePsf: 0, resistance: null,
@@ -995,22 +1099,14 @@ export class CnS5Actor extends Actor {
     if (!skipDialog) {
       const answered = await promptTargeting(
         { name: held.name },
-        {
-          tables,
-          resistance,
-          targetName: target?.name ?? null,
-          // "Meditation cannot be used to increase Targeting of a Magickal
-          // device", nor saves reduced by it; and nothing here is the bearer's
-          // own Focus to cast through.
-          fromDevice: true
-        }
+        { tables, resistance, targetName: target?.name ?? null, fromDevice: true }
       );
       if (answered === null) return null;
       declared = answered;
     }
 
     const targeting = resolveTargeting({
-      methodTsc: device.system.makerTsc,
+      methodTsc: item.system.makerTsc,
       resistance: declared.resistance ?? resistance.value,
       range: declared.range,
       movement: declared.movement,
@@ -1018,8 +1114,6 @@ export class CnS5Actor extends Actor {
       willing: declared.willing,
       dodgePsf: declared.dodgePsf,
       manaBonus: CNS5.manaLevels[declared.mana]?.tsc ?? 0,
-      // "If part of the target was used as one of the Material Components then
-      // the spell gains a bonus of +15% to Targeting TSC%."
       situational:
         declared.situational + (declared.materialComponent ? CNS5.materialComponentBonus : 0),
       tables
@@ -1032,30 +1126,22 @@ export class CnS5Actor extends Actor {
       return null;
     }
 
-    // Held within the bounds of the maker's own Method, since it is his skill
-    // the device casts with.
     const { target: chance, critMod, overflow, shortfall } = clampSuccessChance(
       targeting.total,
-      device.system.makerDf
+      item.system.makerDf
     );
     const result = await resolveCheck({ target: chance, critMod });
+    result.rolls.unshift(...rolls);
 
-    // A charge is spent whether or not the spell found its mark: the device
-    // has been discharged either way.
-    const left = device.system.charges - 1;
-    await device.update({ "system.charges": Math.max(0, left) });
-
-    const fatigue = CNS5.deviceFatigue(held.fp, isMage, declared.mana);
-    await this.spendMagickCost(fatigue);
+    /* -- Step 4: the save --------------------------------------------------- */
 
     let save = null;
     const offersSave = target && CNS5.isResistable({ name: held.name, resisted: held.resisted });
     if (result.success && offersSave) {
       save = await target.resistSpell({
-        // The maker's skill, not the bearer's.
-        casterPsf: device.system.makerPsf,
+        casterPsf: item.system.makerPsf,
         presence: this.system.attr.bv?.value ?? 0,
-        // Meditation cannot reduce a save against a device.
+        // "Saves cannot be reduced through Meditation and fasting."
         reductions: { ...declared.saveReductions, meditationDays: 0 }
       });
       if (save) result.rolls.push(...save.rolls);
@@ -1065,14 +1151,22 @@ export class CnS5Actor extends Actor {
       ...result,
       title,
       subtitle: game.i18n.format("CNS5.Device.castSubtitle", {
-        maker: device.system.makerTsc,
+        maker: item.system.makerTsc,
         target: chance
       }),
+      activationLabel: activation
+        ? activation.automatic
+          ? game.i18n.localize("CNS5.Device.automatic")
+          : game.i18n.format("CNS5.Device.activated", {
+              roll: activation.roll,
+              need: activation.need
+            })
+        : null,
       unclamped: targeting.total,
       overflow,
       shortfall,
       targetName: target?.name ?? null,
-      cost: game.i18n.format("CNS5.Device.costs", { fp: fatigue, left: Math.max(0, left) }),
+      cost: costLabel,
       save,
       saveLabel: save
         ? game.i18n.format(save.resisted ? "CNS5.Save.resisted" : "CNS5.Save.failed", {
@@ -1084,7 +1178,7 @@ export class CnS5Actor extends Actor {
       saveCertain: save?.certain ? game.i18n.localize(`CNS5.Save.${save.certain}`) : null,
       offersSave: Boolean(offersSave),
       breakdown: this.#breakdown([
-        { label: "CNS5.Device.makerSkill", value: device.system.makerTsc },
+        { label: "CNS5.Device.makerSkill", value: item.system.makerTsc },
         { label: "CNS5.Targeting.resistance", value: -targeting.resistance, signed: true },
         { label: "CNS5.Roll.rangeBand", value: targeting.rangeModifier, signed: true },
         { label: "CNS5.Targeting.movement", value: targeting.movementTotal, signed: true },

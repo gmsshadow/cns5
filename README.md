@@ -1020,6 +1020,41 @@ easy to get backwards; a Greater any number, totalling twenty-one times its
 maker's Magick Level. The item sheet says when the spells placed in one break
 those limits.
 
+**Getting a spell out of an item is a roll of its own**, before any targeting
+(p301), and it differs by kind:
+
+- a **Device** — a wand, a ring, a staff — answers automatically for a caster
+  who knows the spell at MR 0. Otherwise it is the maker's chance less 5% a point
+  of the spell's Magick Resistance, which always applies to a non-mage. A success
+  spends one charge; **a failure spends a charge for every point of Magick
+  Resistance**, and the spell goes nowhere.
+- a **Scroll** is read at its writer's chance, and crumbles either way.
+- a **Focus** holds spells its maker placed in it, at a charge a point of Magick
+  Resistance.
+
+An earlier version made only the targeting roll and spent one charge flat, so a
+wand in untrained hands worked exactly as well as in its maker's. A spell on the
+sheet is taken as learnt to MR 0, since nothing yet records one learnt only
+partway.
+
+**Scrolls** hold exactly one spell, of a band fixed by grade — Simple MR 1-3,
+Lesser 4-7, Greater 8 and over — and are spent the moment they are read. A spent
+scroll is kept, greyed, rather than deleted: something that has just happened at
+the table is worth being able to see. Reading one needs the language at 65% and a
+Read Language roll (p301), which is left to the table.
+
+**Two things that read otherwise but do not.** Devices *do* cost their bearer
+Fatigue — p297 gives "½ normal FP (round up) for Non-mages, or ¼ for Mages plus
+the spending of 1 charge" — and a Focus *does* hold spells: each grade "can store
+3 x ML (… 7, 13) in Spell MR's, which can be cast for the cost of 1 charge per
+Spell MR" (pp.304-305).
+
+**A Grimoire is not a spell book.** In this rulebook (p307) it is a reference on
+one particular demon — pages of research towards summoning and binding it, worth
++50% to the user's PSF and +1 to the Crit Die against that demon. Spell books are
+**Spell Texts** (p306), and a partly-learnt spell read from one is cast as though
+fully learnt at twice the casting time. Neither is built yet.
+
 **A Device casts with its maker's skill, not its bearer's.** "The basic
 chance of casting the spell through a Magickal device is equal to the Method of
 Magick TSC% of the Magick User who [made it]", its targeting uses that same
@@ -1060,9 +1095,10 @@ that works, and the thing that cannot be seen without Foundry to click it in.
 
 **Charges follow the maker, not the bearer.** A Device made by a mage of Magick
 Level 6 holds the charges a Level 6 mage gives it whoever carries it later, so
-the maker's level is recorded on the item. The p303 table says a Greater Device
-self-recharges; its full entry on p304 says only that it may be recharged as the
-others are. The full entry is followed.
+the maker's level is recorded on the item. A Greater Device made an Artefact of Power
+(p304) recharges itself — seven charges a day, thirteen at a conjunction of the
+Metaphysical Current. An earlier note here called the p303 summary's
+"self-recharge" a contradiction; it is that ritual's result, described in brief.
 
 **Not automated:** recharging on its schedule, the Constitution roll when a
 Focus is destroyed near its maker, the penalty for casting without a lost Focus,

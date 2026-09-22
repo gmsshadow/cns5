@@ -72,13 +72,25 @@ export class CnS5ItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
         ];
 
         // Warn rather than refuse: a Gamemaster may know better, and the sheet
-        // says plainly when the grade's limits are broken.
-        const verdict = CNS5.deviceAccepts(
-          this.item.system.grade,
-          spells.map((sp) => sp.mr),
-          this.item.system.makerMl
-        );
-        if (!verdict.allowed) ui.notifications.warn(game.i18n.localize(verdict.reason));
+        // says plainly when the grade's limits are broken. The limits differ by
+        // kind — a Scroll takes one spell of its band, a Focus stores by total
+        // Magick Resistance, a Device by grade.
+        const kind = this.item.system.kind;
+        let reason = null;
+        if (kind === "scroll") {
+          if (spells.length > 1) reason = "CNS5.Scroll.onlyOne";
+          else if (!CNS5.scrollAccepts(this.item.system.grade, dropped.system.mr ?? 0)) {
+            reason = "CNS5.Scroll.wrongGrade";
+          }
+        } else if (kind === "device") {
+          const verdict = CNS5.deviceAccepts(
+            this.item.system.grade,
+            spells.map((sp) => sp.mr),
+            this.item.system.makerMl
+          );
+          if (!verdict.allowed) reason = verdict.reason;
+        }
+        if (reason) ui.notifications.warn(game.i18n.localize(reason));
 
         await this.item.update({ "system.spells": spells });
       });
@@ -136,7 +148,11 @@ export class CnS5ItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     context.flawKinds = this.#choices(CNS5.flawKinds, this.item.system.kind);
     context.ammunitionKinds = this.#choices(CNS5.ammunitionKinds, this.item.system.kind);
     if (this.item.type === "magickalItem") {
-      const table = this.item.system.kind === "focus" ? CNS5.focusGrades : CNS5.deviceGrades;
+      const table = {
+        focus: CNS5.focusGrades,
+        device: CNS5.deviceGrades,
+        scroll: CNS5.scrollGrades
+      }[this.item.system.kind] ?? CNS5.deviceGrades;
       context.grades = Object.entries(table).map(([value, entry]) => ({
         value,
         label: entry.label,

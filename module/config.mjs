@@ -2296,9 +2296,13 @@ CNS5.focusGrades = {
     recharge: { perMl: 1, every: "week" },
     constructionWeeks: 3,
     minimumMl: 0,
-    // Without it, once attuned, a mage casts at a loss.
+    // Without it, once attuned, a mage casts at a loss — for a while.
     lossPenalty: -14,
-    destroyedConPenalty: 0
+    lossMonths: 3,
+    // Destroyed within 1,000 feet of its maker: a CON AR, and on a failure all
+    // Fatigue lost and the mage stunned.
+    destroyedConPenalty: 0,
+    stunned: "1d10 rounds"
   },
   lesser: {
     label: "CNS5.Focus.lesser",
@@ -2311,7 +2315,11 @@ CNS5.focusGrades = {
     constructionWeeks: 7,
     minimumMl: 3,
     lossPenalty: -26,
-    destroyedConPenalty: 0
+    lossMonths: 7,
+    // An earlier version had no penalty here. p305 gives one: "a CON AR at a
+    // penalty of -13%".
+    destroyedConPenalty: -13,
+    stunned: "1d10 minutes"
   },
   greater: {
     label: "CNS5.Focus.greater",
@@ -2324,8 +2332,9 @@ CNS5.focusGrades = {
     constructionWeeks: 13,
     minimumMl: 6,
     lossPenalty: -42,
-    // Destroying a Greater Focus within 1,000 feet of its maker is felt harder.
-    destroyedConPenalty: -26
+    lossMonths: 13,
+    destroyedConPenalty: -26,
+    stunned: "2d10 minutes"
   }
 };
 
@@ -2336,10 +2345,13 @@ CNS5.focusGrades = {
  * with the Magick Level of the mage who made it rather than whoever is using
  * it. All three may be recharged while a single charge remains.
  *
- * Table - Magickal Devices on p303 describes the Greater Device as able "to
- * self-recharge its initial charges", while its full entry on p304 says only
- * that it may be recharged by repeating the last steps of its making, as the
- * others are. The full entry is followed; the summary is noted as disagreeing.
+ * A Greater Device is recharged like the others, by repeating the last steps of
+ * its making — unless it has been made an Artefact of Power (p304), a ritual
+ * against each Method in it on a day the stars are right, after which it
+ * recharges itself: seven charges a day, thirteen at a conjunction of the
+ * Metaphysical Current, and more again on its "birthday". An earlier reading
+ * took the p303 summary's "self-recharge" for a contradiction of p304; it is
+ * that ritual's result, described in brief.
  */
 CNS5.deviceGrades = {
   simple: {
@@ -2366,6 +2378,81 @@ CNS5.deviceGrades = {
     maxSpellMr: Infinity,
     chargesPerMl: 21
   }
+};
+
+/**
+ * The three grades of Scroll (p306).
+ *
+ * "Scrolls may only contain one spell with the type of scroll dictating the
+ * level of power of spell the scroll can contain. Simple scrolls may carry a
+ * spell with a MR of 1 to 3, Lesser Scrolls a spell of MR 4 to 7 and only
+ * Greater scrolls may carry a spell of MR 8+ or combination spells."
+ *
+ * A scroll is spent the moment it is used: "once triggered the wording fades
+ * and the scroll crumbles to dust", and "on a failure, the scroll or page is
+ * discharged" (p301). One cast, whatever comes of it.
+ */
+CNS5.scrollGrades = {
+  simple: { label: "CNS5.Scroll.simple", minMr: 1, maxMr: 3, gems: 1 },
+  lesser: { label: "CNS5.Scroll.lesser", minMr: 4, maxMr: 7, gems: 2 },
+  greater: { label: "CNS5.Scroll.greater", minMr: 8, maxMr: Infinity, gems: 3 }
+};
+
+/**
+ * Whether a spell fits a scroll of a given grade.
+ *
+ * @param {string} grade
+ * @param {number} mr
+ * @returns {boolean}
+ */
+CNS5.scrollAccepts = function (grade, mr) {
+  const scroll = CNS5.scrollGrades[grade];
+  if (!scroll) return false;
+  const value = Number(mr) || 0;
+  return value >= scroll.minMr && value <= scroll.maxMr;
+};
+
+/**
+ * Hours to inscribe a scroll (p306): "1 hour x MR of the spell".
+ */
+CNS5.inscribingHours = (mr) => Math.max(0, Number(mr) || 0);
+
+/**
+ * Activating a spell in an "other device" — a wand, a ring, a staff — is a
+ * roll of its own before any targeting (p301).
+ *
+ * "If the caster knows the spell at MR 0 then the casting is automatically
+ * successful. If the spell is not at MR 0, it is considered 'unlearnt' and the
+ * caster suffers from a penalty of -5% for each MR the spell is above 0. Of
+ * course, this penalty automatically applies to Non-Mages... On a failure, the
+ * casting is unsuccessful but the item loses one charge x MR of the spell."
+ *
+ * A success costs the single charge p297 gives. So a failure is dearer than a
+ * success by the spell's whole Magick Resistance — a hard lesson in carrying a
+ * wand one does not understand.
+ */
+CNS5.deviceUnlearntPenalty = -5;
+
+/**
+ * The chance of activating a spell in a device, and what it costs either way.
+ *
+ * @param {object} options
+ * @returns {{automatic: boolean, chance: number, penalty: number,
+ *            chargesOnSuccess: number, chargesOnFailure: number}}
+ */
+CNS5.deviceActivation = function ({ makerTsc = 0, mr = 0, known = false }) {
+  const value = Math.max(0, Number(mr) || 0);
+  const penalty = known ? 0 : CNS5.deviceUnlearntPenalty * value;
+
+  return {
+    // Knowing it at MR 0 needs no roll at all.
+    automatic: known,
+    chance: Math.max(0, (Number(makerTsc) || 0) + penalty),
+    penalty,
+    chargesOnSuccess: 1,
+    // Never less than one: a spell of MR 0 still spends the charge it tried.
+    chargesOnFailure: Math.max(1, value)
+  };
 };
 
 /**

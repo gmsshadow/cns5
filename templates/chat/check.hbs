@@ -17,6 +17,9 @@
 
     <p class="cns5-check__result">{{resultLabel}} &mdash; {{outcomeLabel}}</p>
 
+    {{#if activationLabel}}
+    <p class="cns5-check__cost">{{activationLabel}}</p>
+    {{/if}}
     {{#if shotLabel}}
     <p class="cns5-check__cost">{{shotLabel}}</p>
     {{/if}}

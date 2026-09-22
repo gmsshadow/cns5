@@ -19,11 +19,19 @@ export class CnS5MagickalItem extends CnS5PhysicalItem {
   static defineSchema() {
     const schema = super.defineSchema();
 
+    // A Device holds spells and charges; a Focus is an aid the mage casts his
+    // own spells through, and stores a few besides; a Scroll carries a single
+    // spell and is spent the moment it is read.
     schema.kind = new fields.StringField({
       required: true,
       initial: "device",
-      choices: ["device", "focus"]
+      choices: ["device", "focus", "scroll"]
     });
+
+    // A Scroll crumbles once read, hit or miss. It is kept, greyed, rather than
+    // deleted: a thing that has just happened at the table is worth being able
+    // to see, and the player can throw it away.
+    schema.discharged = new fields.BooleanField({ required: true, initial: false });
 
     schema.grade = new fields.StringField({
       required: true,
@@ -90,12 +98,18 @@ export class CnS5MagickalItem extends CnS5PhysicalItem {
   prepareDerivedData() {
     super.prepareDerivedData();
 
-    const table = this.kind === "focus" ? CNS5.focusGrades : CNS5.deviceGrades;
-    this.gradeData = table[this.grade] ?? null;
+    const table = {
+      focus: CNS5.focusGrades,
+      device: CNS5.deviceGrades,
+      scroll: CNS5.scrollGrades
+    }[this.kind];
+    this.gradeData = table?.[this.grade] ?? null;
     this.gradeLabel = this.gradeData?.label ?? "";
 
-    this.maxCharges = CNS5.itemCharges(this.kind, this.grade, this.makerMl);
-    this.spent = this.charges <= 0;
+    // A Scroll has no charges: it is used once.
+    this.maxCharges =
+      this.kind === "scroll" ? 0 : CNS5.itemCharges(this.kind, this.grade, this.makerMl);
+    this.spent = this.kind === "scroll" ? this.discharged : this.charges <= 0;
 
     // A Focus stores spells by their Magick Resistance rather than by count.
     if (this.kind === "focus") {
@@ -104,9 +118,26 @@ export class CnS5MagickalItem extends CnS5PhysicalItem {
 
     const heldMrs = this.spells.map((s) => s.mr);
     this.heldMr = heldMrs.reduce((total, mr) => total + mr, 0);
-    this.accepts =
-      this.kind === "device"
-        ? CNS5.deviceAccepts(this.grade, heldMrs, this.makerMl)
-        : { allowed: true, reason: null };
+
+    if (this.kind === "device") {
+      this.accepts = CNS5.deviceAccepts(this.grade, heldMrs, this.makerMl);
+    } else if (this.kind === "scroll") {
+      // One spell, of the grade's band of Magick Resistance.
+      this.accepts =
+        this.spells.length > 1
+          ? { allowed: false, reason: "CNS5.Scroll.onlyOne" }
+          : this.spells.length && !CNS5.scrollAccepts(this.grade, this.spells[0].mr)
+            ? { allowed: false, reason: "CNS5.Scroll.wrongGrade" }
+            : { allowed: true, reason: null };
+    } else {
+      // A Focus stores by total Magick Resistance rather than by count.
+      this.accepts =
+        this.heldMr > (this.storedMrCapacity ?? 0)
+          ? { allowed: false, reason: "CNS5.Focus.overStore" }
+          : { allowed: true, reason: null };
+    }
+
+    // Whatever holds spells can have them cast from it; a spent one cannot.
+    this.castable = this.spells.length > 0 && !this.spent;
   }
 }

@@ -4,6 +4,7 @@
         <select name="system.kind" {{#unless editable}}disabled{{/unless}}>
             <option value="device" {{#if (eq system.kind "device")}}selected{{/if}}>{{localize "CNS5.Magickal.device"}}</option>
             <option value="focus" {{#if (eq system.kind "focus")}}selected{{/if}}>{{localize "CNS5.Magickal.focus"}}</option>
+            <option value="scroll" {{#if (eq system.kind "scroll")}}selected{{/if}}>{{localize "CNS5.Magickal.scroll"}}</option>
         </select>
     </label>
     <label class="cns5-field">
@@ -22,7 +23,7 @@
 </div>
 <p class="cns5-hint">{{localize "CNS5.Magickal.makerHint"}}</p>
 
-{{#if (eq system.kind "device")}}
+{{#unless (eq system.kind "focus")}}
 <div class="cns5-grid cns5-grid--three">
     <label class="cns5-field">
         <span>{{localize "CNS5.Device.makerTsc"}}</span>
@@ -41,8 +42,16 @@
     </label>
 </div>
 <p class="cns5-hint">{{localize "CNS5.Device.makerSkillHint"}}</p>
-{{/if}}
+{{/unless}}
 
+{{#if (eq system.kind "scroll")}}
+<label class="cns5-checkbox">
+    <input type="checkbox" name="system.discharged" {{checked system.discharged}}
+           {{#unless editable}}disabled{{/unless}}>
+    <span>{{localize "CNS5.Scroll.discharged"}}</span>
+</label>
+<p class="cns5-hint">{{localize "CNS5.Scroll.hint"}}</p>
+{{else}}
 <div class="cns5-grid cns5-grid--two">
     <label class="cns5-field">
         <span>{{localize "CNS5.Magickal.charges"}}</span>
@@ -54,6 +63,7 @@
         <output>{{system.maxCharges}}</output>
     </div>
 </div>
+{{/if}}
 
 {{#if (eq system.kind "focus")}}
 <fieldset class="cns5-fieldset">
@@ -71,7 +81,10 @@
     </label>
     <p class="cns5-hint">{{localize "CNS5.Focus.hint"}}</p>
 </fieldset>
-{{else}}
+{{/if}}
+
+{{!-- Every kind holds spells: a Device several, a Focus a few by Magick
+      Resistance, a Scroll exactly one. --}}
 <fieldset class="cns5-fieldset">
     <legend>{{localize "CNS5.Device.holds"}}</legend>
     {{#if system.spells.length}}
@@ -97,9 +110,8 @@
     <p class="cns5-hint cns5-hint--bad">{{localize system.accepts.reason}}</p>
     {{/unless}}
     <p class="cns5-drop-zone" data-cns5-spell-drop>{{localize "CNS5.Device.dropHint"}}</p>
-    <p class="cns5-hint">{{localize "CNS5.Device.hint"}}</p>
+    <p class="cns5-hint">{{localize (concat "CNS5.Holds." system.kind)}}</p>
 </fieldset>
-{{/if}}
 
 <div class="cns5-grid cns5-grid--three">
     <label class="cns5-field">

@@ -148,12 +148,23 @@
             <tr class="cns5-subrow">
                 <td colspan="4">
                     {{#each thing.system.spells as |held index|}}
-                    <button type="button" class="cns5-add" data-action="castFromDevice"
-                            data-item-id="{{thing.id}}" data-index="{{index}}"
-                            {{#if thing.system.spent}}disabled{{/if}}
-                            data-tooltip="{{localize 'CNS5.Device.castTooltip'}}">
-                        {{held.name}}
-                    </button>
+                    <span class="cns5-held-chip">
+                        <button type="button" class="cns5-add" data-action="castFromDevice"
+                                data-item-id="{{thing.id}}" data-index="{{index}}"
+                                {{#if thing.system.spent}}disabled{{/if}}
+                                data-tooltip="{{localize 'CNS5.Device.castTooltip'}}">
+                            {{held.name}}
+                        </button>
+                        {{#if @root.editable}}
+                        <button type="button" class="cns5-held-chip__remove"
+                                data-action="removeDeviceSpell"
+                                data-item-id="{{thing.id}}" data-index="{{index}}"
+                                aria-label="{{localize 'CNS5.Device.remove'}}"
+                                data-tooltip="{{localize 'CNS5.Device.remove'}}">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                        {{/if}}
+                    </span>
                     {{/each}}
                 </td>
             </tr>

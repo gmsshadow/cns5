@@ -77,12 +77,13 @@
     {{#if system.spells.length}}
     <ul class="cns5-list">
         {{#each system.spells as |held index|}}
-        <li>
-            {{held.name}} <span class="cns5-hint">MR {{held.mr}}, {{held.fp}} FP</span>
+        <li class="cns5-held">
+            <span class="cns5-held__name">{{held.name}}</span>
+            <span class="cns5-hint">MR {{held.mr}}, {{held.fp}} FP</span>
             {{#if @root.editable}}
-            <button type="button" class="cns5-inline-remove" data-action="removeHeldSpell"
+            <button type="button" class="cns5-held__remove" data-action="removeHeldSpell"
                     data-index="{{index}}" data-tooltip="{{localize 'CNS5.Device.remove'}}">
-                <i class="fa-solid fa-xmark"></i>
+                <i class="fa-solid fa-trash"></i> {{localize "CNS5.Device.removeShort"}}
             </button>
             {{/if}}
         </li>

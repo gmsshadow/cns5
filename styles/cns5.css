@@ -1420,17 +1420,53 @@
     opacity: 0.8;
 }
 
-/* A small control beside a list entry, to take it out again. */
-.cns5-inline-remove {
+
+/* A spell held in a device, on the device's own sheet: its name, what it is
+   worth, and a plainly labelled way to take it out again. */
+.cns5-held {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    list-style: none;
+    margin-left: -1.2rem;
+    padding: 0.2rem 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.cns5-held__name {
+    font-weight: 600;
+}
+
+.cns5-held__remove {
+    margin-left: auto;
+    flex: 0 0 auto;
+    width: auto;
+    padding: 0.1rem 0.5rem;
+    font-size: 0.8rem;
+    line-height: 1.4;
+}
+
+/* On the Magick tab, each held spell is a button to cast it with a small
+   cross beside it to take it out. */
+.cns5-held-chip {
     display: inline-flex;
-    padding: 0 0.25rem;
+    align-items: center;
+    margin: 0.15rem 0.35rem 0.15rem 0;
+}
+
+.cns5-held-chip__remove {
+    flex: 0 0 auto;
+    width: auto;
+    padding: 0 0.3rem;
     border: none;
     background: none;
     font-size: 0.8rem;
     cursor: pointer;
-    opacity: 0.65;
+    opacity: 0.7;
 }
 
-.cns5-inline-remove:hover {
+.cns5-held-chip__remove:hover,
+.cns5-held-chip__remove:focus-visible {
     opacity: 1;
+    color: var(--cns-oxblood);
 }

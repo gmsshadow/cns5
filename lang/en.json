@@ -895,5 +895,7 @@
   "CNS5.Device.castTooltip": "Activate this spell. It casts with the maker's skill and costs a charge.",
   "CNS5.Device.costs": "{fp} FP, and a charge — {left} left",
   "CNS5.Device.materialComponent": "Part of the target went into the making (+{bonus}%)",
-  "CNS5.Device.noMeditation": "Meditation cannot improve a device's aim, nor lower a save against it."
+  "CNS5.Device.noMeditation": "Meditation cannot improve a device's aim, nor lower a save against it.",
+  "CNS5.Device.removeShort": "Remove",
+  "CNS5.Device.removeConfirm": "Take {spell} out of {item}? What was recorded of it goes too; drop it back in to restore it."
 }

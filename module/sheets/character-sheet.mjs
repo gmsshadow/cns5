@@ -39,7 +39,8 @@ export class CnS5CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2)
       toggleCarried: CnS5CharacterSheet.#onToggleCarried,
       openWizard: CnS5CharacterSheet.#onOpenWizard,
       attemptUnskilled: CnS5CharacterSheet.#onAttemptUnskilled,
-      castFromDevice: CnS5CharacterSheet.#onCastFromDevice
+      castFromDevice: CnS5CharacterSheet.#onCastFromDevice,
+      removeDeviceSpell: CnS5CharacterSheet.#onRemoveDeviceSpell
     }
   };
 
@@ -366,6 +367,38 @@ export class CnS5CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2)
    */
   static async #onCastFromDevice(event, target) {
     await this.actor.castFromDevice(target.dataset.itemId, Number(target.dataset.index));
+  }
+
+  /* -------------------------------------------- */
+
+  /**
+   * Take a spell out of a Device, from the Magick tab.
+   *
+   * Asked first: it is one small cross beside the button that casts the
+   * spell, and taking a spell out loses what was recorded of it. A slip of the
+   * mouse should not empty a wand.
+   *
+   * @this {CnS5CharacterSheet}
+   */
+  static async #onRemoveDeviceSpell(event, target) {
+    const device = this.actor.items.get(target.dataset.itemId);
+    const index = Number(target.dataset.index);
+    const held = device?.system.spells[index];
+    if (!held) return;
+
+    const confirmed = await foundry.applications.api.DialogV2.confirm({
+      window: { title: game.i18n.localize("CNS5.Device.remove") },
+      content: `<p>${game.i18n.format("CNS5.Device.removeConfirm", {
+        spell: held.name,
+        item: device.name
+      })}</p>`,
+      rejectClose: false
+    });
+    if (!confirmed) return;
+
+    await device.update({
+      "system.spells": device.system.spells.filter((_, i) => i !== index)
+    });
   }
 
   /* -------------------------------------------- */

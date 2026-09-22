@@ -1047,6 +1047,17 @@ Resistance, its cost and its reach with it, since the bearer cannot be asked.
 Breaking the grade's limits is warned of rather than refused — a Gamemaster may
 know better.
 
+A spell is taken out again either from the device's own sheet, where each held
+spell has a Remove button, or from the Magick tab, where a small cross sits
+beside the button that casts it. The second asks first, being one slip of the
+mouse from the cast button, and taking a spell out loses what was recorded of
+it.
+
+`test/templates.test.mjs` checks that every button's action has a handler
+behind it. A `data-action` with nothing behind it renders as a perfectly good
+button that does nothing when pressed — indistinguishable on screen from one
+that works, and the thing that cannot be seen without Foundry to click it in.
+
 **Charges follow the maker, not the bearer.** A Device made by a mage of Magick
 Level 6 holds the charges a Level 6 mage gives it whoever carries it later, so
 the maker's level is recorded on the item. The p303 table says a Greater Device

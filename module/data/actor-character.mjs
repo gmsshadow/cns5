@@ -166,11 +166,17 @@ export class CnS5Character extends CnS5ActorBase {
     this.magick.pmf = this.magick.pmfOverride ?? derived;
     this.magick.level = this.magick.pmf > 0 ? CNS5.magickLevel(this.magick.pmf) : 0;
 
-    // Starting spell allowance: total levels in Modes of Magick times ML (p295).
-    const modeLevels = this.parent.items
-      .filter((i) => i.type === "skill" && /mode|magick/i.test(i.name))
-      .reduce((total, i) => total + i.system.level, 0);
-    this.magick.startingMR = modeLevels * this.magick.level;
+    // Starting spells: "add together the total number of levels the Mage
+    // possess in the various Methods of Magick, and multiply the total by the
+    // Mage's ML" (p295). Methods, being the schools — the loose match this
+    // replaced counted Modes as well, and lore skills besides, so a mage with
+    // Magickal Beast Lore bought spells with it.
+    const methodLevels = CNS5.knownMethods([...this.parent.items]).reduce(
+      (total, skill) => total + skill.system.level,
+      0
+    );
+    this.magick.methodLevels = methodLevels;
+    this.magick.startingMR = methodLevels * this.magick.level;
   }
 
   /* -------------------------------------------- */

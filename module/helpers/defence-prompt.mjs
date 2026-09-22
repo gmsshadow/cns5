@@ -274,7 +274,7 @@ export async function promptThrow(weapon, profile) {
  * @param {object} options
  * @returns {Promise<object|null>} null if dismissed
  */
-export async function promptTargeting(spell, { tables, resistance, targetName }) {
+export async function promptTargeting(spell, { tables, resistance, targetName, focus = null }) {
   const boxes = (list, name) =>
     list
       .map(
@@ -344,6 +344,16 @@ export async function promptTargeting(spell, { tables, resistance, targetName })
              </label>`
       }
 
+      ${
+        focus
+          ? `<label class="cns5-checkbox">
+               <input type="checkbox" name="useFocus" checked>
+               <span>${game.i18n.localize("CNS5.Focus.castThrough")} — ${focus.name}
+                 <span class="cns5-hint">${game.i18n.localize("CNS5.Focus.castHint")}</span>
+               </span>
+             </label>`
+          : ""
+      }
       <label class="cns5-checkbox">
         <input type="checkbox" name="willing">
         <span>${game.i18n.format("CNS5.Targeting.willing", {
@@ -407,6 +417,7 @@ export async function promptTargeting(spell, { tables, resistance, targetName })
             ? Math.max(0, Number(form.elements.resistance.value) || 0)
             : null,
           willing: form.elements.willing.checked,
+          useFocus: Boolean(form.elements.useFocus?.checked),
           extendRange: form.elements.extendRange.checked,
           movement: ticked("movement"),
           obstacles: ticked("obstacles"),

@@ -90,13 +90,74 @@ OBSTACLES = [
 ]
 
 
+def extract_learning_modifiers(pdf):
+    """Table - Spell Magick Resistance Modifiers (p295).
+
+    Thirteen Methods of Magick down the side against fourteen Modes across the
+    top, each cell a modifier to a spell's Magick Resistance when a mage of that
+    tradition learns a spell of that school. A positive figure raises the spell's
+    Magick Resistance and so the time it takes: commands come readily to a
+    Necromancer and hard to a Conjurer, which at Magick Level 5 is the
+    difference between three days and eighty-four.
+
+    The column headings are set rotated, and pdfplumber reads a rotated word
+    back to front, so they are reversed before use.
+    """
+    page = pdf.pages[294]
+
+    columns = collections.defaultdict(list)
+    for w in page.extract_words(extra_attrs=["upright"]):
+        # The leftmost rotated label is the table's own title rather than a
+        # Mode. Bounded by position, since the book misspells "Modifier" there
+        # and a match on the word misses it.
+        if not w["upright"] and w["x0"] >= 190:
+            columns[round(w["x0"] / 6) * 6].append(w)
+
+    modes = {}
+    for x, parts in columns.items():
+        label = " ".join(
+            p["text"][::-1] for p in sorted(parts, key=lambda w: -w["top"])
+        ).strip()
+        if label:
+            modes[x] = label
+
+    order = [modes[x] for x in sorted(modes)]
+
+    rows = collections.defaultdict(list)
+    for w in page.extract_words():
+        rows[round(w["top"] / ROW)].append(w)
+
+    table = {}
+    for key in sorted(rows):
+        row = sorted(rows[key], key=lambda w: w["x0"])
+        values = [w for w in row if re.fullmatch(r"[+-]?\d", w["text"])]
+        if len(values) != len(order):
+            continue
+
+        name = " ".join(w["text"] for w in row if w["x0"] < 195).strip()
+        if not name:
+            continue
+
+        # The four elements are printed as one Method over four rows, only the
+        # first carrying the family name. They are separate skills, so each is
+        # given its own.
+        if name in ("Earth", "Fire", "Water"):
+            name = f"Basic Magick {name}"
+
+        table[name] = {mode: int(v["text"]) for mode, v in zip(order, values)}
+
+    return {"modes": order, "modifiers": table}
+
+
 if __name__ == "__main__":
     with pdfplumber.open(PDF) as pdf:
         resistance = extract_resistance(pdf)
+        learning = extract_learning_modifiers(pdf)
     movement, obstacles = MOVEMENT, OBSTACLES
 
     print(f"resistance {len(resistance)}  movement {len(movement)}  "
-          f"obstacles {len(obstacles)}", file=sys.stderr)
+          f"obstacles {len(obstacles)}  learning {len(learning['modifiers'])} methods "
+          f"x {len(learning['modes'])} modes", file=sys.stderr)
 
     json.dump(
         {
@@ -106,6 +167,8 @@ if __name__ == "__main__":
             "targetResistance": resistance,
             "movement": movement,
             "obstacles": obstacles,
+            "learningModes": learning["modes"],
+            "learningModifiers": learning["modifiers"],
         },
         sys.stdout,
         indent=2,

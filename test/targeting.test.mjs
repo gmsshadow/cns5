@@ -206,5 +206,132 @@ ok("a moment", describeMagnitude(45, "time"), "45 seconds");
 ok("a while", describeMagnitude(900, "time"), "15 minutes");
 ok("a day", describeMagnitude(86_400, "time"), "1 day");
 
+/* -- Learning a spell (pp.293-295) ------------------------------------------- */
+
+/* Table - Time Taken to Learn Spells, every cell of it. The book gives a
+   formula too — "21 x (MR / (ML +2)) (round down)" — and the two disagree in
+   thirty of the seventy-two cells, always by one. Rounding to nearest matches
+   all of them, so the table is followed and the word treated as the error. */
+const printedLearning = {
+  1: [7, 5, 4, 4, 3, 3, 2, 2, 2, 2],
+  2: [14, 11, 8, 7, 6, 5, 5, 4, 4, 4],
+  3: [21, 16, 13, 11, 9, 8, 7, 6, 6, 5],
+  4: [null, 21, 17, 14, 12, 11, 9, 8, 8, 7],
+  5: [null, null, 21, 18, 15, 13, 12, 11, 10, 9],
+  6: [null, null, null, 21, 18, 16, 14, 13, 11, 11],
+  7: [null, null, null, null, 21, 18, 16, 15, 13, 12],
+  8: [null, null, null, null, null, 21, 19, 17, 15, 14],
+  9: [null, null, null, null, null, null, 21, 19, 17, 16],
+  10: [null, null, null, null, null, null, null, 21, 19, 18]
+};
+
+const wrongCells = [];
+for (const [mr, row] of Object.entries(printedLearning)) {
+  row.forEach((want, index) => {
+    if (want === null) return;
+    const got = CNS5.daysPerMrStep(Number(mr), index + 1);
+    if (got !== want) wrongCells.push(`MR${mr} ML${index + 1}: ${got} not ${want}`);
+  });
+}
+ok("every cell of the table", wrongCells, []);
+
+/* The blanks are where the spell is beyond the mage: "the maximum MR of a
+   spell that can be learnt by a Mage is his ML + 2". */
+const shouldBeBlank = [];
+for (const [mr, row] of Object.entries(printedLearning)) {
+  row.forEach((cell, index) => {
+    const ml = index + 1;
+    const beyond = Number(mr) > CNS5.maxLearnableMr(ml);
+    if (beyond !== (cell === null)) shouldBeBlank.push(`MR${mr} ML${ml}`);
+  });
+}
+ok("and every blank is a spell beyond reach", shouldBeBlank, []);
+
+/* The times are cumulative: "a Mage who is ML 5 wishing to learn a MR 3 spell
+   requires (9 + 6 + 3) = 18 days". */
+const learn = CNS5.daysToLearn(3, 5);
+ok("the book's worked example", learn.days, 18);
+ok("step by step", learn.steps, [3, 6, 9]);
+ok("and it is within his reach", learn.learnable, true);
+
+ok("a mage of Magick Level 5 may reach", CNS5.maxLearnableMr(5), 7);
+ok("but no further", CNS5.daysToLearn(8, 5).learnable, false);
+ok("though the figure is still given", CNS5.daysToLearn(8, 5).days > 0, true);
+
+/* Research and invention. */
+ok("days researching from a book", CNS5.daysOfResearch(3, 5), 24);
+ok("a better mage researches quicker", CNS5.daysOfResearch(3, 10), 9);
+ok("inventing takes at least three days", CNS5.spellCreation.minimumDays, 3);
+ok("a failure costs seven a point", CNS5.spellCreation.retryDaysPerMr, 7);
+ok("and a second bars it until he improves", CNS5.spellCreation.improvementNeeded, 5);
+ok("on the spot, a tenth of the two together", CNS5.onTheSpotChance(70, 12), 8);
+
+/* -- What a tradition makes of a school -------------------------------------- */
+
+const magick = JSON.parse(await readFile(path.join(ROOT, "data", "magick.json"), "utf8"));
+
+ok("methods in the grid", Object.keys(magick.learningModifiers).length, 13);
+ok("modes across it", magick.learningModes.length, 14);
+ok(
+  "every cell is a figure",
+  Object.values(magick.learningModifiers)
+    .flatMap((row) => Object.values(row))
+    .filter((v) => !Number.isInteger(v)),
+  []
+);
+ok(
+  "and none is beyond three either way",
+  Object.values(magick.learningModifiers)
+    .flatMap((row) => Object.values(row))
+    .filter((v) => Math.abs(v) > 3),
+  []
+);
+
+const effective = (mr, method, mode) =>
+  CNS5.effectiveLearningMr({ mr, method, mode, table: magick });
+
+/* A positive figure raises the spell's Magick Resistance, and the days go as
+   that — so commands come hard to a Conjurer and readily to a Necromancer. */
+ok("a Conjurer at a Command spell", effective(4, "Command Magick", "Conjuration Mode of Magick").modifier, 3);
+ok("a Necromancer at the same", effective(4, "Command Magick", "Necromantic Mode of Magick").modifier, -3);
+ok("which raises it to", effective(4, "Command Magick", "Conjuration Mode of Magick").effective, 7);
+ok("and lowers it to", effective(4, "Command Magick", "Necromantic Mode of Magick").effective, 1);
+
+/* Never below one: no spell is free to learn, however well it suits. */
+ok("a perfect fit is still work", effective(1, "Wards Magick", "Air Mode of Magick").effective, 1);
+ok("even at three below", effective(2, "Wards Magick", "Air Mode of Magick").effective, 1);
+
+/* The names differ between the table and the skill list, and a miss here would
+   silently give every mage a modifier of nothing. */
+const methodSkills = [
+  "Arcane Magick", "Basic Magick – Air", "Basic Magick – Earth", "Basic Magick – Fire",
+  "Basic Magick – Water", "Command Magick", "Divination Magick", "Illusion Magick",
+  "Plant Magick", "Summoning Magick", "Transcendental Magick", "Transmutation Magick",
+  "Wards Magick"
+];
+ok(
+  "every Method finds its row",
+  methodSkills.filter((m) => !CNS5.learningRowFor(m, magick.learningModifiers)),
+  []
+);
+
+const modeSkills = [
+  "Conjuration Mode of Magick", "Divination Mode of Magick", "Enchantment Mode of Magick",
+  "Hex Master Mode of Magick", "Necromantic Mode of Magick", "Power Word Mode of Magick",
+  "Thaumaturgy Mode of Magick", "Druidic Priest Mode", "Shamanic Priest Mode",
+  "Witchcraft Priest Mode"
+];
+ok(
+  "every Mode finds its column",
+  modeSkills.filter((m) => !CNS5.learningColumnFor(m, magick.learningModes)),
+  []
+);
+
+/* Thaumaturgy is spelled "Thaumatrugy" in the table. The data keeps the page's
+   spelling; the matching copes with it. */
+ok("the book's transposition", magick.learningModes.includes("Thaumatrugy"), true);
+ok("matched anyway",
+   CNS5.learningColumnFor("Thaumaturgy Mode of Magick", magick.learningModes), "Thaumatrugy");
+
 console.log(fails ? `\n${fails} FAILURES` : "\nAll checks passed.");
 process.exit(fails ? 1 : 0);

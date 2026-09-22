@@ -134,6 +134,9 @@ export class CnS5CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2)
       .sort((a, b) => Number(b.system.primary) - Number(a.system.primary) || byName(a, b));
 
     context.ammunition = this.actor.items.filter((i) => i.type === "ammunition").sort(byName);
+    context.magickalItems = this.actor.items
+      .filter((i) => i.type === "magickalItem")
+      .sort(byName);
     context.talents = this.actor.items.filter((i) => i.type === "talent").sort(byName);
     context.flaws = this.actor.items.filter((i) => i.type === "flaw").sort(byName);
 
@@ -216,7 +219,8 @@ export class CnS5CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2)
       { id: "equipment", label: "CNS5.Item.equipment", types: ["equipment"] },
       // Ammunition is gear as much as it is part of a shot: it is carried, it
       // weighs something, and it counts against what a character can bear.
-      { id: "arms", label: "CNS5.Item.arms", types: ["weapon", "armour", "ammunition"] }
+      { id: "arms", label: "CNS5.Item.arms", types: ["weapon", "armour", "ammunition"] },
+      { id: "magickal", label: "CNS5.Magickal.heading", types: ["magickalItem"] }
     ];
 
     return groups

@@ -1,0 +1,89 @@
+<div class="cns5-grid cns5-grid--three">
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Magickal.kind"}}</span>
+        <select name="system.kind" {{#unless editable}}disabled{{/unless}}>
+            <option value="device" {{#if (eq system.kind "device")}}selected{{/if}}>{{localize "CNS5.Magickal.device"}}</option>
+            <option value="focus" {{#if (eq system.kind "focus")}}selected{{/if}}>{{localize "CNS5.Magickal.focus"}}</option>
+        </select>
+    </label>
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Magickal.grade"}}</span>
+        <select name="system.grade" {{#unless editable}}disabled{{/unless}}>
+            {{#each grades}}
+            <option value="{{value}}" {{#if selected}}selected{{/if}}>{{localize label}}</option>
+            {{/each}}
+        </select>
+    </label>
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Magickal.makerMl"}}</span>
+        <input type="number" name="system.makerMl" value="{{system.makerMl}}" min="1"
+               {{#unless editable}}disabled{{/unless}}>
+    </label>
+</div>
+<p class="cns5-hint">{{localize "CNS5.Magickal.makerHint"}}</p>
+
+<div class="cns5-grid cns5-grid--two">
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Magickal.charges"}}</span>
+        <input type="number" name="system.charges" value="{{system.charges}}" min="0"
+               max="{{system.maxCharges}}" {{#unless editable}}disabled{{/unless}}>
+    </label>
+    <div class="cns5-field">
+        <span>{{localize "CNS5.Magickal.maxCharges"}}</span>
+        <output>{{system.maxCharges}}</output>
+    </div>
+</div>
+
+{{#if (eq system.kind "focus")}}
+<fieldset class="cns5-fieldset">
+    <legend>{{localize "CNS5.Focus.benefits"}}</legend>
+    <dl class="cns5-derived">
+        <div><dt>{{localize "CNS5.Focus.psf"}}</dt><dd>+{{system.gradeData.psf}}%</dd></div>
+        <div><dt>{{localize "CNS5.Focus.targeting"}}</dt><dd>+{{system.gradeData.targeting}}%</dd></div>
+        <div><dt>{{localize "CNS5.Focus.stores"}}</dt><dd>{{system.storedMrCapacity}} MR</dd></div>
+        <div><dt>{{localize "CNS5.Focus.without"}}</dt><dd>{{system.gradeData.lossPenalty}}%</dd></div>
+    </dl>
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Focus.attunedTo"}}</span>
+        <input type="text" name="system.attunedTo" value="{{system.attunedTo}}"
+               {{#unless editable}}disabled{{/unless}}>
+    </label>
+    <p class="cns5-hint">{{localize "CNS5.Focus.hint"}}</p>
+</fieldset>
+{{else}}
+<fieldset class="cns5-fieldset">
+    <legend>{{localize "CNS5.Device.holds"}}</legend>
+    {{#if system.spells.length}}
+    <ul class="cns5-list">
+        {{#each system.spells}}
+        <li>{{name}} <span class="cns5-hint">MR {{mr}}</span></li>
+        {{/each}}
+    </ul>
+    <p class="cns5-hint">{{localize "CNS5.Device.totalMr"}} {{system.heldMr}}</p>
+    {{else}}
+    <p class="cns5-hint">{{localize "CNS5.Device.empty"}}</p>
+    {{/if}}
+    {{#unless system.accepts.allowed}}
+    <p class="cns5-hint cns5-hint--bad">{{localize system.accepts.reason}}</p>
+    {{/unless}}
+    <p class="cns5-hint">{{localize "CNS5.Device.hint"}}</p>
+</fieldset>
+{{/if}}
+
+<div class="cns5-grid cns5-grid--three">
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Item.weight"}}</span>
+        <input type="number" name="system.weight" value="{{system.weight}}" min="0" step="0.05"
+               {{#unless editable}}disabled{{/unless}}>
+    </label>
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Item.cost"}}</span>
+        <input type="number" name="system.cost" value="{{system.cost}}" min="0"
+               {{#unless editable}}disabled{{/unless}}>
+    </label>
+    <label class="cns5-checkbox">
+        <input type="checkbox" name="system.carried" {{checked system.carried}}
+               {{#unless editable}}disabled{{/unless}}>
+        <span>{{localize "CNS5.Item.carried"}}</span>
+    </label>
+</div>

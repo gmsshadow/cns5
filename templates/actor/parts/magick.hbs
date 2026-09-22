@@ -100,4 +100,55 @@
         {{/if}}
     </section>
 
+    <section class="cns5-skills">
+        <h3 class="cns5-skills__heading">
+            {{localize "CNS5.Magickal.heading"}}
+            <button type="button" class="cns5-add" data-action="createItem" data-type="magickalItem">
+                {{localize "CNS5.Item.add"}}
+            </button>
+        </h3>
+        {{#if magickalItems.length}}
+        <table class="cns5-skills__table">
+            <thead>
+            <tr>
+                <th scope="col" class="cns5-skills__name">{{localize "CNS5.Magickal.heading"}}</th>
+                <th scope="col">{{localize "CNS5.Magickal.grade"}}</th>
+                <th scope="col">{{localize "CNS5.Magickal.charges"}}</th>
+                <th scope="col"><span class="cns5-visually-hidden">{{localize "CNS5.Skill.controls"}}</span></th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#each magickalItems as |thing|}}
+            <tr class="{{#if thing.system.spent}}is-unskilled{{/if}}">
+                <th scope="row">
+                    <button type="button" class="cns5-skills__roll" data-action="editItem"
+                            data-item-id="{{thing.id}}"
+                            data-tooltip="{{localize 'CNS5.Item.edit'}}">{{thing.name}}</button>
+                    <span class="cns5-tag cns5-tag--origin">
+                        {{#if (eq thing.system.kind "focus")}}{{localize "CNS5.Magickal.focus"}}{{else}}{{localize "CNS5.Magickal.device"}}{{/if}}
+                    </span>
+                </th>
+                <td class="cns5-skills__readout">{{localize thing.system.gradeLabel}}</td>
+                <td class="cns5-skills__readout cns5-skills__readout--total">
+                    {{thing.system.charges}} / {{thing.system.maxCharges}}
+                </td>
+                <td class="cns5-skills__controls">
+                    <button type="button" data-action="editItem" data-item-id="{{thing.id}}"
+                            data-tooltip="{{localize 'CNS5.Item.edit'}}">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                    </button>
+                    <button type="button" data-action="deleteItem" data-item-id="{{thing.id}}"
+                            data-tooltip="{{localize 'CNS5.Item.delete'}}">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+            {{/each}}
+            </tbody>
+        </table>
+        {{else}}
+        <p class="cns5-hint">{{localize "CNS5.Magickal.none"}}</p>
+        {{/if}}
+    </section>
+
 </section>

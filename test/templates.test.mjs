@@ -172,7 +172,11 @@ const actorTemplates = await walk(path.join(ROOT, "templates", "actor"), ".hbs")
 let actorMarkup = "";
 for (const file of actorTemplates) actorMarkup += await readFile(file, "utf8");
 
-const sheetFiles = await walk(path.join(ROOT, "module", "sheets"), ".mjs");
+// Only the actor sheets count. The item sheet names every type in its map of
+// body templates, so reading it made every type look surfaced whether or not
+// any actor ever listed it — which is exactly the case this check exists for.
+const sheetFiles = (await walk(path.join(ROOT, "module", "sheets"), ".mjs"))
+  .filter((file) => !file.endsWith("item-sheet.mjs") && !file.endsWith("skill-sheet.mjs"));
 let sheetCode = "";
 for (const file of sheetFiles) sheetCode += await readFile(file, "utf8");
 

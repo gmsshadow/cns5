@@ -879,6 +879,34 @@ Three things are not figures and are not treated as failures to read one:
 Every one of the 313 printed ranges resolves to one of those. Durations are less
 tractable: a couple of dozen are instructions rather than quantities.
 
+### Learning a spell
+
+Days to learn are **cumulative**: a spell of Magick Resistance 3 costs the step
+to 1, the step to 2 and the step to 3 added together, which for a mage of Magick
+Level 5 is 3 + 6 + 9 = 18 days. A mage may not learn a spell of Magick
+Resistance above his Magick Level plus two.
+
+**The book's table and its formula disagree.** The formula is printed as
+"21 x (MR / (ML +2)) (round down)", and rounding down is wrong in thirty of the
+table's seventy-two cells, always by exactly one. Rounding to nearest matches
+every cell without exception, so the table is followed and the word in the
+formula treated as the error. A test checks all seventy-two.
+
+**What a tradition makes of a school.** Table - Spell Magick Resistance
+Modifiers is a grid of thirteen Methods against fourteen Modes, and each cell
+raises or lowers a spell's Magick Resistance for a mage of that tradition. Since
+the days go as that figure, the effect is large: a Command Magick spell of
+Magick Resistance 4 is three points harder for a Conjurer and three easier for a
+Necromancer, which at Magick Level 5 is eighty-four days against three. It never
+falls below one — no spell is free to learn however well it suits.
+
+The table abbreviates its headings, and spells Thaumaturgy "Thaumatrugy". The
+data keeps the page's spelling and the matching copes with it.
+
+**Also implemented:** the days of research a book or scroll demands before the
+roll, the minimum span and the retry cost of inventing a spell, and the chance
+of inventing one on the spot.
+
 ### Casting one from the sheet
 
 Clicking a spell's name casts it, as clicking a weapon's name attacks with it
@@ -955,8 +983,53 @@ Three things multiply it, and they apply together:
 So a scroll read in a high mana place costs a quarter of what memory costs in a
 low one. The Shadow World also gives +10% to any Mode of Magick.
 
-**Casting through a Focus is listed but not implemented**: what it costs is
-settled under the making of Magickal Items, which is a chapter of its own.
+### Magickal items
+
+A **Focus** is not a way of casting but an aid to it. A mage casts from memory
+*through* his Focus, so it is offered as a choice of its own and layered on top
+of whatever else bears on the casting rather than chosen instead of it. An
+earlier version listed it as a casting source beside scrolls and devices, which
+is the wrong shape.
+
+Cast through, it sharpens the caster's skill in the school and his aim, and
+lightens the cost — and since the target's save is measured against that same
+skill, it makes the spell harder to shrug off too:
+
+| | Simple | Lesser | Greater |
+| --- | --- | --- | --- |
+| Method of Magick | +7% | +13% | +26% |
+| Targeting | +5% | +10% | +15% |
+| Fatigue | less 2 | halved | quartered |
+| Stores, per maker's level | 3 MR | 7 MR | 13 MR |
+| Weeks to make | 3 | 7 | 13 |
+| Least Magick Level to make | — | 3 | 6 |
+| Without it, once attuned | -14% | -26% | -42% |
+
+The Fatigue reduction comes last, lightening whatever the mana of the place and
+the source have made of the cost, and never takes it below one. Only a Focus the
+caster is carrying and is attuned to is offered.
+
+Table - Magickal Devices on p303 summarises these, and the fuller entries on
+pp.304-305 add two things it leaves out: the targeting bonus, and the store of
+spells. The fuller entries are followed.
+
+A **Device** holds spells and charges to cast them with. A Simple one holds a
+single spell of MR 7 or less; a Lesser up to thirteen, totalling MR 21, with none
+of MR 7 or more — so six at most, a *lower* ceiling than the Simple Device's and
+easy to get backwards; a Greater any number, totalling twenty-one times its
+maker's Magick Level. The item sheet says when the spells placed in one break
+those limits.
+
+**Charges follow the maker, not the bearer.** A Device made by a mage of Magick
+Level 6 holds the charges a Level 6 mage gives it whoever carries it later, so
+the maker's level is recorded on the item. The p303 table says a Greater Device
+self-recharges; its full entry on p304 says only that it may be recharged as the
+others are. The full entry is followed.
+
+**Not automated:** recharging on its schedule, the Constitution roll when a
+Focus is destroyed near its maker, the penalty for casting without a lost Focus,
+and the making itself beyond the hours of empowering. Those are a Gamemaster's
+bookkeeping and the figures are on the item sheet to keep it with.
 
 ## Damage
 

@@ -627,21 +627,37 @@ export class CnS5Actor extends Actor {
       situational: 0
     };
 
+    // A Focus serves only the mage attuned to it, so only one this caster made
+    // and is carrying is offered. Left blank, "attuned to" is taken to mean the
+    // bearer — the usual case, since a Focus is made for oneself.
+    const focus = this.items.find(
+      (i) =>
+        i.type === "magickalItem" &&
+        i.system.kind === "focus" &&
+        i.system.carried &&
+        (!i.system.attunedTo || i.system.attunedTo === this.name)
+    ) ?? null;
+
     if (!skipDialog) {
       const answered = await promptTargeting(spell, {
         tables,
         resistance,
-        targetName: target?.name ?? null
+        targetName: target?.name ?? null,
+        focus
       });
       if (answered === null) return null;
       declared = answered;
     }
 
+    const throughFocus = declared.useFocus && focus ? focus : null;
+    const focusGrade = throughFocus ? CNS5.focusGrades[throughFocus.system.grade] : null;
+
     const cost = CNS5.spellCost({
       base: spell.system.fpToCast,
       mana: declared.mana,
       source: declared.source,
-      extendRange: declared.extendRange
+      extendRange: declared.extendRange,
+      focus: throughFocus?.system.grade ?? null
     });
 
     const targeting = resolveTargeting({
@@ -653,6 +669,8 @@ export class CnS5Actor extends Actor {
       willing: declared.willing,
       dodgePsf: declared.dodgePsf,
       manaBonus: cost.tscBonus,
+      // A Focus sharpens the caster's skill in the school and his aim alike.
+      focusBonus: focusGrade ? focusGrade.psf + focusGrade.targeting : 0,
       situational: situational + declared.situational + spell.system.otherModifier,
       tables
     });
@@ -686,7 +704,9 @@ export class CnS5Actor extends Actor {
     let save = null;
     if (result.success && target && spell.system.resistable) {
       save = await target.resistSpell({
-        casterPsf: method.system.psf,
+        // The Focus adds to the caster's skill in the school, and that is what
+        // the target contends against.
+        casterPsf: method.system.psf + (focusGrade?.psf ?? 0),
         presence: Math.max(
           this.system.attr.app?.value ?? 0,
           this.system.attr.bv?.value ?? 0
@@ -732,6 +752,7 @@ export class CnS5Actor extends Actor {
         { label: "CNS5.Targeting.willingShort", value: targeting.willingBonus, signed: true },
         { label: "CNS5.Targeting.dodge", value: -targeting.dodgePsf, signed: true },
         { label: "CNS5.Mana.bonus", value: targeting.manaBonus, signed: true },
+        { label: "CNS5.Focus.bonus", value: targeting.focusBonus, signed: true },
         { label: "CNS5.Roll.situational", value: targeting.situational, signed: true }
       ])
     });

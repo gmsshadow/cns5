@@ -50,7 +50,8 @@ export class CnS5ItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     religion: "systems/cns5/templates/item/religion-body.hbs",
     talent: "systems/cns5/templates/item/talent-body.hbs",
     flaw: "systems/cns5/templates/item/flaw-body.hbs",
-    ammunition: "systems/cns5/templates/item/ammunition-body.hbs"
+    ammunition: "systems/cns5/templates/item/ammunition-body.hbs",
+    magickalItem: "systems/cns5/templates/item/magickal-body.hbs"
   };
 
   /** @override */
@@ -77,6 +78,14 @@ export class CnS5ItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     context.armourLocations = this.#choices(CNS5.armourLocations, this.item.system.location);
     context.flawKinds = this.#choices(CNS5.flawKinds, this.item.system.kind);
     context.ammunitionKinds = this.#choices(CNS5.ammunitionKinds, this.item.system.kind);
+    if (this.item.type === "magickalItem") {
+      const table = this.item.system.kind === "focus" ? CNS5.focusGrades : CNS5.deviceGrades;
+      context.grades = Object.entries(table).map(([value, entry]) => ({
+        value,
+        label: entry.label,
+        selected: value === this.item.system.grade
+      }));
+    }
     context.phobiaSeverities = this.#choices(CNS5.phobiaSeverities, this.item.system.severity);
 
     // Which parts this piece protects, and how surely.

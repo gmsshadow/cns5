@@ -70,6 +70,7 @@ export function resolveTargeting({
   willing = false,
   dodgePsf = 0,
   manaBonus = 0,
+  focusBonus = 0,
   situational = 0,
   tables: loaded = null
 }) {
@@ -98,6 +99,7 @@ export function resolveTargeting({
     (willing ? CNS5.willingTargetBonus : 0) -
     dodgePsf +
     manaBonus +
+    focusBonus +
     situational;
 
   return {
@@ -114,6 +116,7 @@ export function resolveTargeting({
     willingBonus: willing ? CNS5.willingTargetBonus : 0,
     dodgePsf,
     manaBonus,
+    focusBonus,
     situational,
     total
   };

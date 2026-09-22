@@ -1891,9 +1891,12 @@ CNS5.castingSources = {
   memory: { label: "CNS5.Casting.memory", fatigue: 1, charge: false },
   scroll: { label: "CNS5.Casting.scroll", fatigue: 0.5, charge: false },
   deviceMage: { label: "CNS5.Casting.deviceMage", fatigue: 0.25, charge: true },
-  deviceOther: { label: "CNS5.Casting.deviceOther", fatigue: 0.5, charge: true },
-  focus: { label: "CNS5.Casting.focus", fatigue: 1, charge: false, unimplemented: true }
+  deviceOther: { label: "CNS5.Casting.deviceOther", fatigue: 0.5, charge: true }
 };
+
+// A Focus is not listed here. It is not a thing a spell is read *from* but an
+// aid a spell is cast *through*, used alongside memory, so it is offered as a
+// choice of its own and layered on top of whichever source applies.
 
 /**
  * Doubling the Fatigue spent extends a spell's reach by half again (p296).
@@ -1923,16 +1926,28 @@ CNS5.spellDodgeMinimumDistance = 50;
  * @param {object} options
  * @returns {{fatigue: number, extended: boolean, charge: boolean}}
  */
-CNS5.spellCost = function ({ base = 0, mana = "average", source = "memory", extendRange = false }) {
+CNS5.spellCost = function ({
+  base = 0,
+  mana = "average",
+  source = "memory",
+  extendRange = false,
+  focus = null
+}) {
   const place = CNS5.manaLevels[mana] ?? CNS5.manaLevels.average;
   const from = CNS5.castingSources[source] ?? CNS5.castingSources.memory;
   const extension = extendRange ? CNS5.rangeExtension.fatigue : 1;
 
+  const beforeFocus = Math.ceil(base * place.fatigue * from.fatigue * extension);
+  // The Focus lightens whatever it is asked to carry, so it comes last.
+  const fatigue = focus ? CNS5.focusFatigue(beforeFocus, focus) : beforeFocus;
+
   return {
-    fatigue: Math.ceil(base * place.fatigue * from.fatigue * extension),
+    fatigue,
+    beforeFocus,
     extended: extendRange,
     charge: from.charge,
-    tscBonus: place.tsc
+    tscBonus: place.tsc,
+    focus
   };
 };
 
@@ -2078,4 +2093,347 @@ CNS5.readResistance = function (roll, chance) {
   if (roll <= CNS5.resistanceAlwaysSucceeds) return { resisted: true, certain: "always" };
   if (roll >= CNS5.resistanceAlwaysFails) return { resisted: false, certain: "never" };
   return { resisted: roll <= chance, certain: null };
+};
+
+/* -------------------------------------------- */
+/*  Learning a spell                            */
+/*  (pp.293-295)                                */
+/* -------------------------------------------- */
+
+/**
+ * "The maximum MR of a spell that can be learnt by a Mage is his ML + 2."
+ */
+CNS5.maxLearnableMr = (magickLevel) => (Number(magickLevel) || 0) + 2;
+
+/**
+ * Days to take a spell from one step of Magick Resistance to the next (p294).
+ *
+ * The book gives both a table and a formula for it, and they disagree. The
+ * formula is printed as "21 x (MR / (ML +2)) (round down)", which matches 42 of
+ * the table's 72 cells; rounding down is wrong in 30 of them and always by
+ * exactly one. Rounding to nearest matches every cell without exception, so the
+ * table is followed and the word in the formula treated as the error.
+ *
+ * @param {number} mr  the step being paid for
+ * @param {number} ml  the mage's Magick Level
+ * @returns {number} days
+ */
+CNS5.daysPerMrStep = function (mr, ml) {
+  return Math.round((21 * Number(mr)) / ((Number(ml) || 0) + 2));
+};
+
+/**
+ * Days to learn a spell outright.
+ *
+ * "The times shown in Table – Time Taken to Learn are cumulative, so that a
+ * Mage who is ML 5 wishing to learn a MR 3 spell requires (9 + 6 + 3) = 18
+ * days" — the steps from one Magick Resistance to the next, added together, not
+ * the single figure in the cell.
+ *
+ * @param {number} mr
+ * @param {number} ml
+ * @returns {{days: number, steps: number[], learnable: boolean, maximum: number}}
+ */
+CNS5.daysToLearn = function (mr, ml) {
+  const maximum = CNS5.maxLearnableMr(ml);
+  const target = Math.max(0, Math.round(Number(mr) || 0));
+
+  const steps = [];
+  for (let step = 1; step <= target; step++) steps.push(CNS5.daysPerMrStep(step, ml));
+
+  return {
+    days: steps.reduce((total, n) => total + n, 0),
+    steps,
+    learnable: target <= maximum,
+    maximum
+  };
+};
+
+/**
+ * Days of research before the roll, where a spell is taken from a book or a
+ * scroll rather than from a Master (p293): "(13 - ML) x MR days".
+ */
+CNS5.daysOfResearch = function (mr, ml) {
+  return Math.max(0, (13 - (Number(ml) || 0)) * Math.max(0, Number(mr) || 0));
+};
+
+/**
+ * Inventing a spell from nothing (p293).
+ *
+ * The same span of days as research, but never fewer than three, undisturbed;
+ * then a roll against the Method. A failure costs a further seven days per
+ * point of Magick Resistance before it may be tried again, and a second failure
+ * bars it until the mage's chance in that Method improves by five per cent.
+ */
+CNS5.spellCreation = {
+  minimumDays: 3,
+  retryDaysPerMr: 7,
+  improvementNeeded: 5
+};
+
+/**
+ * Inventing one in the moment (p293): a minute of undisturbed concentration and
+ * a roll at a tenth of the Method's chance plus the Mode's skill factor.
+ *
+ * @param {number} methodTsc
+ * @param {number} modePsf
+ * @returns {number}
+ */
+CNS5.onTheSpotChance = function (methodTsc, modePsf) {
+  return Math.floor(((Number(methodTsc) || 0) + (Number(modePsf) || 0)) / 10);
+};
+
+/**
+ * How a Method's name in the learning table matches a skill's.
+ *
+ * The table abbreviates: "Arcane" for Arcane Magick, "Air" for Basic Magick –
+ * Air. Matched loosely, since the alternative is thirteen exceptions.
+ *
+ * @param {string} method  a skill name
+ * @param {object} modifiers  the table
+ * @returns {string|null}
+ */
+CNS5.learningRowFor = function (method, modifiers) {
+  const key = (s) => s.toLowerCase().replace(/[^a-z]/g, "");
+  const wanted = key(method);
+  return (
+    Object.keys(modifiers).find((row) => key(row) === wanted) ??
+    Object.keys(modifiers).find((row) => wanted.includes(key(row))) ??
+    Object.keys(modifiers).find((row) => key(row).includes(wanted)) ??
+    null
+  );
+};
+
+/**
+ * Likewise for a Mode, whose column is abbreviated the same way: "Hex Master"
+ * for Hex Master Mode of Magick. Note the book spells one of them
+ * "Thaumatrugy", which is preserved rather than corrected — the data says what
+ * the page says.
+ *
+ * @param {string} mode
+ * @param {string[]} columns
+ * @returns {string|null}
+ */
+CNS5.learningColumnFor = function (mode, columns) {
+  const key = (s) => s.toLowerCase().replace(/[^a-z]/g, "");
+  const wanted = key(mode);
+  return (
+    columns.find((c) => key(c) === wanted) ??
+    columns.find((c) => wanted.includes(key(c))) ??
+    // "Thaumatrugy" against "Thaumaturgy": a transposition in the book.
+    columns.find((c) => key(c).slice(0, 6) === wanted.slice(0, 6)) ??
+    null
+  );
+};
+
+/**
+ * What a spell's Magick Resistance counts as for this mage.
+ *
+ * The modifier raises or lowers the spell's Magick Resistance for this mage,
+ * and the days it takes go as that figure — so a Command Magick spell at MR 4
+ * is three points harder for a Conjurer and three easier for a Necromancer,
+ * which at Magick Level 5 is eighty-four days against three.
+ *
+ * @param {object} options
+ * @returns {{effective: number, modifier: number, row: string|null, column: string|null}}
+ */
+CNS5.effectiveLearningMr = function ({ mr, method, mode, table }) {
+  const row = table?.learningModifiers
+    ? CNS5.learningRowFor(method ?? "", table.learningModifiers)
+    : null;
+  const column = table?.learningModes
+    ? CNS5.learningColumnFor(mode ?? "", table.learningModes)
+    : null;
+
+  const modifier = row && column ? table.learningModifiers[row][column] ?? 0 : 0;
+
+  return {
+    // Never below one: a spell is never free to learn however well it suits.
+    effective: Math.max(1, (Number(mr) || 0) + modifier),
+    modifier,
+    row,
+    column
+  };
+};
+
+/**
+ * A spell only partly learnt may still be attempted, at ten per cent off for
+ * every point of its Magick Resistance (p298), with a backfire to follow.
+ */
+CNS5.partialLearningPenalty = -10;
+
+/* -------------------------------------------- */
+/*  Magickal items                              */
+/*  (pp.302-305)                                */
+/* -------------------------------------------- */
+
+/**
+ * The three grades of Focus.
+ *
+ * A Focus is not a way of casting but an aid to it: a mage casts from memory
+ * *through* his Focus, which sharpens his skill and his aim and lightens the
+ * cost. So it is layered on top of whatever else bears on a casting, rather
+ * than chosen instead of it.
+ *
+ * Table - Magickal Devices on p303 summarises these, and the fuller entries on
+ * pp.304-305 add two things the summary leaves out: a bonus to targeting as
+ * well as to skill, and a store of spells the Focus can cast itself. The fuller
+ * entries are followed.
+ */
+CNS5.focusGrades = {
+  simple: {
+    label: "CNS5.Focus.simple",
+    psf: 7,
+    targeting: 5,
+    // "Reduced by -2 FP", and never below one.
+    fatigue: { subtract: 2 },
+    storedMrPerMl: 3,
+    chargesPerMl: 3,
+    recharge: { perMl: 1, every: "week" },
+    constructionWeeks: 3,
+    minimumMl: 0,
+    // Without it, once attuned, a mage casts at a loss.
+    lossPenalty: -14,
+    destroyedConPenalty: 0
+  },
+  lesser: {
+    label: "CNS5.Focus.lesser",
+    psf: 13,
+    targeting: 10,
+    fatigue: { multiply: 0.5 },
+    storedMrPerMl: 7,
+    chargesPerMl: 7,
+    recharge: { perMl: 3, every: "week" },
+    constructionWeeks: 7,
+    minimumMl: 3,
+    lossPenalty: -26,
+    destroyedConPenalty: 0
+  },
+  greater: {
+    label: "CNS5.Focus.greater",
+    psf: 26,
+    targeting: 15,
+    fatigue: { multiply: 0.25 },
+    storedMrPerMl: 13,
+    chargesPerMl: 13,
+    recharge: { perMl: 1, every: "day" },
+    constructionWeeks: 13,
+    minimumMl: 6,
+    lossPenalty: -42,
+    // Destroying a Greater Focus within 1,000 feet of its maker is felt harder.
+    destroyedConPenalty: -26
+  }
+};
+
+/**
+ * The three grades of Device.
+ *
+ * A Device holds spells and charges to cast them with, and the charges scale
+ * with the Magick Level of the mage who made it rather than whoever is using
+ * it. All three may be recharged while a single charge remains.
+ *
+ * Table - Magickal Devices on p303 describes the Greater Device as able "to
+ * self-recharge its initial charges", while its full entry on p304 says only
+ * that it may be recharged by repeating the last steps of its making, as the
+ * others are. The full entry is followed; the summary is noted as disagreeing.
+ */
+CNS5.deviceGrades = {
+  simple: {
+    label: "CNS5.Device.simple",
+    // "A single spell up to MR 7."
+    maxSpells: 1,
+    maxSpellMr: 7,
+    chargesPerMl: 4
+  },
+  lesser: {
+    label: "CNS5.Device.lesser",
+    // "Up to 13 spells with a total of MR 21 with no spell having a MR of 7 or
+    // higher" — so six at most, which is not the same limit as the Simple one.
+    maxSpells: 13,
+    maxTotalMr: 21,
+    maxSpellMr: 6,
+    chargesPerMl: 13
+  },
+  greater: {
+    label: "CNS5.Device.greater",
+    // "Any amount of spells up to a total MR of 21 x ML... with no MR limit."
+    maxSpells: Infinity,
+    maxTotalMrPerMl: 21,
+    maxSpellMr: Infinity,
+    chargesPerMl: 21
+  }
+};
+
+/**
+ * What casting through a Focus costs.
+ *
+ * Applied after everything else — the mana of the place, what the spell is read
+ * from, any extension of its range — since the Focus lightens whatever cost it
+ * is asked to carry. "The minimum cost is always 1 FP."
+ *
+ * @param {number} fatigue  the cost before the Focus
+ * @param {string} grade
+ * @returns {number}
+ */
+CNS5.focusFatigue = function (fatigue, grade) {
+  const focus = CNS5.focusGrades[grade];
+  if (!focus || !(fatigue > 0)) return fatigue;
+
+  const reduced = focus.fatigue.subtract
+    ? fatigue - focus.fatigue.subtract
+    : Math.ceil(fatigue * focus.fatigue.multiply);
+
+  return Math.max(1, reduced);
+};
+
+/**
+ * Charges a new item holds, which follow its maker's Magick Level.
+ *
+ * @param {string} kind   "focus" or "device"
+ * @param {string} grade
+ * @param {number} makerMl
+ * @returns {number}
+ */
+CNS5.itemCharges = function (kind, grade, makerMl) {
+  const table = kind === "focus" ? CNS5.focusGrades : CNS5.deviceGrades;
+  return (table[grade]?.chargesPerMl ?? 0) * Math.max(0, Number(makerMl) || 0);
+};
+
+/**
+ * Hours to empower a device with one spell (p303): "(7 / ML) hours x the Spell
+ * MR for each spell", recited in sittings of no more than ten hours with no
+ * more than three between them.
+ *
+ * @param {number} mr
+ * @param {number} ml
+ * @returns {{hours: number, sittings: number}}
+ */
+CNS5.empoweringHours = function (mr, ml) {
+  const level = Math.max(1, Number(ml) || 1);
+  const hours = Math.round(((7 / level) * Math.max(0, Number(mr) || 0)) * 10) / 10;
+  return { hours, sittings: Math.max(1, Math.ceil(hours / 10)) };
+};
+
+/**
+ * Whether a set of spells may be placed in a Device of a given grade.
+ *
+ * @param {string} grade
+ * @param {number[]} spellMrs
+ * @param {number} makerMl
+ * @returns {{allowed: boolean, reason: string|null}}
+ */
+CNS5.deviceAccepts = function (grade, spellMrs, makerMl) {
+  const device = CNS5.deviceGrades[grade];
+  if (!device) return { allowed: false, reason: "CNS5.Device.unknownGrade" };
+
+  const mrs = spellMrs.map((n) => Number(n) || 0);
+  const total = mrs.reduce((sum, n) => sum + n, 0);
+  const ceiling = device.maxTotalMrPerMl
+    ? device.maxTotalMrPerMl * Math.max(0, Number(makerMl) || 0)
+    : device.maxTotalMr ?? Infinity;
+
+  if (mrs.length > device.maxSpells) return { allowed: false, reason: "CNS5.Device.tooMany" };
+  if (mrs.some((mr) => mr > device.maxSpellMr)) return { allowed: false, reason: "CNS5.Device.tooStrong" };
+  if (total > ceiling) return { allowed: false, reason: "CNS5.Device.overTotal" };
+  return { allowed: true, reason: null };
 };

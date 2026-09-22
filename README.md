@@ -1032,6 +1032,20 @@ those limits.
 - a **Focus** holds spells its maker placed in it, at a charge a point of Magick
   Resistance.
 
+**What the bearer pays**, from p297: a quarter of the spell's cost from a
+device for a mage and half for anyone else, rounded up, and half from a scroll
+whoever reads it. So Charm, costing 6 from memory, costs a mage 2 from a wand and
+anyone else 3. The card names the rate it used — "2 FP — a quarter of 6, being a
+mage" — since the figure alone looks like an error. A spell drawn from a Focus's
+store is paid for in charges instead.
+
+The whole casting is declared before anything is rolled: the mana of the place,
+the range, what stands between. That is the order a player says it in, and the
+only order in which the mana can bear on the cost, since the cost is paid at the
+casting roll whether or not the spell comes out. An earlier version asked the
+mana only when aiming, after the Fatigue had been taken, so a low mana place
+never doubled what a device or scroll cost.
+
 So a scroll makes two rolls and perhaps a third, and the card heads each:
 **Step 1 — Casting the spell**, boxed above the dice with its own roll and
 target; **Step 2 — Targeting it**, the main dice; **Step 3 — the target's save**

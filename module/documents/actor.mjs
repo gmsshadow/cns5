@@ -1004,6 +1004,30 @@ export class CnS5Actor extends Actor {
       isMage &&
       this.items.some((i) => i.type === "spell" && i.name.toLowerCase() === held.name.toLowerCase());
 
+    /* -- Declaring the casting --------------------------------------------- */
+
+    // Asked before anything is rolled. The mana of the place bears on what
+    // the casting costs, and the cost is paid whether or not the spell comes
+    // out of the item — so it has to be known before step 2, not after it.
+    const tables = await magickTables();
+    const target = [...game.user.targets][0]?.actor ?? null;
+    const resistance = intrinsicResistance(target, tables.targetResistance);
+
+    let declared = {
+      mana: "average", range: "short", dodgePsf: 0, resistance: null,
+      willing: false, movement: [], obstacles: [], situational: 0,
+      materialComponent: false, saveReductions: {}
+    };
+
+    if (!skipDialog) {
+      const answered = await promptTargeting(
+        { name: held.name },
+        { tables, resistance, targetName: target?.name ?? null, fromDevice: true }
+      );
+      if (answered === null) return null;
+      declared = answered;
+    }
+
     const rolls = [];
     const parts = [];
 
@@ -1058,12 +1082,24 @@ export class CnS5Actor extends Actor {
     // What the bearer pays in Fatigue (p297): a quarter for a mage and half for
     // anyone else from a device; half from a scroll. A spell stored in a Focus
     // is paid for in charges.
+    const place = CNS5.manaLevels[declared.mana] ?? CNS5.manaLevels.average;
     const fatigue =
       kind === "focus"
         ? 0
         : kind === "scroll"
-          ? Math.ceil(held.fp * CNS5.castingSources.scroll.fatigue)
-          : CNS5.deviceFatigue(held.fp, isMage);
+          ? Math.ceil(held.fp * CNS5.castingSources.scroll.fatigue * place.fatigue)
+          : CNS5.deviceFatigue(held.fp, isMage, declared.mana);
+
+    // Which of p297's rates applied, so a card showing 2 FP for a spell that
+    // costs 6 says why: a quarter of it, being a mage.
+    const rateKey =
+      kind === "focus"
+        ? "focus"
+        : kind === "scroll"
+          ? "scroll"
+          : isMage
+            ? "deviceMage"
+            : "deviceOther";
     await this.spendMagickCost(fatigue);
 
     // Step 1, named for what it was: reading a scroll, coaxing a device,
@@ -1086,9 +1122,26 @@ export class CnS5Actor extends Actor {
       outcome: game.i18n.localize(released ? "CNS5.Step.cast" : "CNS5.Step.notCast")
     };
 
+    const manaNote =
+      place.fatigue === 1 ? "" : `, ${game.i18n.localize(`CNS5.Mana.costNote.${declared.mana}`)}`;
+    const fatiguePart =
+      kind === "focus"
+        ? game.i18n.localize("CNS5.Rate.focus")
+        : game.i18n.format("CNS5.Rate.fatigue", {
+            fp: fatigue,
+            share: game.i18n.localize(`CNS5.Rate.share.${rateKey}`),
+            base: held.fp,
+            reason: game.i18n.localize(`CNS5.Rate.reason.${rateKey}`),
+            mana: manaNote
+          });
+
     const costLabel = game.i18n.format(
       kind === "scroll" ? "CNS5.Scroll.costs" : "CNS5.Device.costs",
-      { fp: fatigue, spent: chargesSpent, left: Math.max(0, item.system.charges - chargesSpent) }
+      {
+        fatigue: fatiguePart,
+        spent: chargesSpent,
+        left: Math.max(0, item.system.charges - chargesSpent)
+      }
     );
 
     // A spell that never left the item has nothing to target. Its card shows
@@ -1111,25 +1164,6 @@ export class CnS5Actor extends Actor {
     }
 
     /* -- Step 3: targeting ------------------------------------------------- */
-
-    const tables = await magickTables();
-    const target = [...game.user.targets][0]?.actor ?? null;
-    const resistance = intrinsicResistance(target, tables.targetResistance);
-
-    let declared = {
-      mana: "average", range: "short", dodgePsf: 0, resistance: null,
-      willing: false, movement: [], obstacles: [], situational: 0,
-      materialComponent: false, saveReductions: {}
-    };
-
-    if (!skipDialog) {
-      const answered = await promptTargeting(
-        { name: held.name },
-        { tables, resistance, targetName: target?.name ?? null, fromDevice: true }
-      );
-      if (answered === null) return null;
-      declared = answered;
-    }
 
     const targeting = resolveTargeting({
       methodTsc: item.system.makerTsc,

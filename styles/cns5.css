@@ -1470,3 +1470,55 @@
     opacity: 1;
     color: var(--cns-oxblood);
 }
+
+/* The first of two rolls, when an item has to give up its spell before the
+   spell can be aimed. It sits above the dice it explains. */
+.cns5-check__step {
+    margin: 0.2rem 0 0.35rem;
+    padding: 0.3rem 0.45rem;
+    border-left: 3px solid var(--cns-check-accent, #6d2723);
+    background: rgba(0, 0, 0, 0.04);
+    font-size: 0.88rem;
+    line-height: 1.35;
+}
+
+/* --------------------------------------------------------------------------
+   The steps of a spell cast from an item
+   -------------------------------------------------------------------------- */
+
+/* A spell from a scroll or device is cast, then aimed, then perhaps resisted:
+   three rolls on one card. Each is headed, and the first — which has its own
+   dice and its own failure — sits in a box of its own above the main result. */
+.cns5-check__step-heading {
+    margin: 0.4rem 0 0.15rem;
+    font-size: 0.78rem;
+    font-variant: small-caps;
+    letter-spacing: 0.05em;
+    font-weight: 700;
+    opacity: 0.85;
+}
+
+.cns5-check__step {
+    margin: 0.3rem 0 0.2rem;
+    padding: 0.3rem 0.5rem;
+    border-left: 3px solid var(--cns-rule, #b8a88a);
+    background: rgba(0, 0, 0, 0.04);
+    border-radius: 2px;
+}
+
+.cns5-check__step.is-success {
+    border-left-color: var(--cns-verdigris);
+}
+
+.cns5-check__step.is-failure {
+    border-left-color: var(--cns-oxblood);
+}
+
+.cns5-check__step .cns5-check__step-heading {
+    margin-top: 0;
+}
+
+.cns5-check__step-text {
+    margin: 0;
+    font-size: 0.9rem;
+}

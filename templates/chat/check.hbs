@@ -2,6 +2,24 @@
     <h4 class="cns5-check__title">{{title}}</h4>
     <p class="cns5-check__subtitle">{{subtitle}}</p>
 
+    {{!-- A spell from an item is got out of it before it is aimed, and the two
+          are separate rolls with separate failures (p301). Each is named, so a
+          card showing two sets of dice says which was which. --}}
+    {{#if castingStep}}
+    <div class="cns5-check__step {{#if castingStep.success}}is-success{{else}}is-failure{{/if}}">
+        <p class="cns5-check__step-heading">{{castingStep.heading}}</p>
+        <p class="cns5-check__step-text">
+            {{castingStep.text}}{{#if castingStep.rolled}} &mdash;
+            <strong>{{castingStep.roll}}</strong> {{localize "CNS5.Step.against"}} {{castingStep.need}}%{{/if}}
+            &mdash; <strong>{{castingStep.outcome}}</strong>
+        </p>
+    </div>
+    {{/if}}
+
+    {{#if targetingHeading}}
+    <p class="cns5-check__step-heading">{{targetingHeading}}</p>
+    {{/if}}
+
     <div class="cns5-check__dice">
         <div class="cns5-check__die">
             <span class="cns5-check__die-value">{{roll}}</span>
@@ -16,10 +34,10 @@
     </div>
 
     <p class="cns5-check__result">{{resultLabel}} &mdash; {{outcomeLabel}}</p>
-
-    {{#if activationLabel}}
-    <p class="cns5-check__cost">{{activationLabel}}</p>
+    {{#if nothingToTarget}}
+    <p class="cns5-hint">{{nothingToTarget}}</p>
     {{/if}}
+
     {{#if shotLabel}}
     <p class="cns5-check__cost">{{shotLabel}}</p>
     {{/if}}
@@ -42,6 +60,7 @@
     </p>
     {{/if}}
     {{#if saveLabel}}
+    {{#if saveHeading}}<p class="cns5-check__step-heading">{{saveHeading}}</p>{{/if}}
     <p class="cns5-check__exchange">{{saveLabel}}</p>
     {{#if saveCertain}}
     <p class="cns5-hint">{{saveCertain}}</p>

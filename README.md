@@ -1032,6 +1032,15 @@ those limits.
 - a **Focus** holds spells its maker placed in it, at a charge a point of Magick
   Resistance.
 
+So a scroll makes two rolls and perhaps a third, and the card heads each:
+**Step 1 — Casting the spell**, boxed above the dice with its own roll and
+target; **Step 2 — Targeting it**, the main dice; **Step 3 — the target's save**
+where the spell allows one. If the casting fails the card shows that roll as its
+dice and says there is nothing to target. Both of the first two rolls start from
+the writer's skill, which is why they can look alike, but the first is the bare
+figure and the second carries every targeting modifier — the distance, the
+target's resistance, what stands between.
+
 An earlier version made only the targeting roll and spent one charge flat, so a
 wand in untrained hands worked exactly as well as in its maker's. A spell on the
 sheet is taken as learnt to MR 0, since nothing yet records one learnt only

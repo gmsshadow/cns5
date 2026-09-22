@@ -1012,6 +1012,7 @@ export class CnS5Actor extends Actor {
     let released = true;
     let chargesSpent = 0;
     let activation = null;
+    let castRoll = null;
 
     if (kind === "device") {
       activation = CNS5.deviceActivation({ makerTsc: item.system.makerTsc, mr: held.mr, known });
@@ -1022,6 +1023,7 @@ export class CnS5Actor extends Actor {
         );
         const roll = await resolveCheck({ target: need, critMod });
         rolls.push(...roll.rolls);
+        castRoll = roll;
         released = roll.success;
         activation.roll = roll.roll;
         activation.need = need;
@@ -1037,6 +1039,7 @@ export class CnS5Actor extends Actor {
       );
       const roll = await resolveCheck({ target: need, critMod });
       rolls.push(...roll.rolls);
+      castRoll = roll;
       released = roll.success;
       activation = { automatic: false, roll: roll.roll, need, chance: item.system.makerTsc };
     } else {
@@ -1063,24 +1066,47 @@ export class CnS5Actor extends Actor {
           : CNS5.deviceFatigue(held.fp, isMage);
     await this.spendMagickCost(fatigue);
 
+    // Step 1, named for what it was: reading a scroll, coaxing a device,
+    // drawing on a Focus's store. Only the first two are ever rolled.
+    const castingStep = {
+      heading: game.i18n.localize("CNS5.Step.casting"),
+      text: game.i18n.localize(
+        kind === "scroll"
+          ? "CNS5.Step.readScroll"
+          : kind === "focus"
+            ? "CNS5.Step.fromFocus"
+            : activation?.automatic
+              ? "CNS5.Step.deviceKnown"
+              : "CNS5.Step.deviceUnknown"
+      ),
+      rolled: Boolean(castRoll),
+      roll: castRoll?.roll ?? null,
+      need: activation?.need ?? null,
+      success: released,
+      outcome: game.i18n.localize(released ? "CNS5.Step.cast" : "CNS5.Step.notCast")
+    };
+
     const costLabel = game.i18n.format(
       kind === "scroll" ? "CNS5.Scroll.costs" : "CNS5.Device.costs",
       { fp: fatigue, spent: chargesSpent, left: Math.max(0, item.system.charges - chargesSpent) }
     );
 
-    // A spell that never left the item has nothing to target.
+    // A spell that never left the item has nothing to target. Its card shows
+    // the casting roll as its dice, headed as the step it was, and says so.
     if (!released) {
-      return ChatMessage.create({
-        speaker: ChatMessage.getSpeaker({ actor: this }),
+      return checkToMessage(this, {
+        ...castRoll,
         rolls,
-        content: `<div class="cns5-check">
-          <h3 class="cns5-check__title">${title}</h3>
-          <p class="cns5-check__exchange">${game.i18n.format(
-            kind === "scroll" ? "CNS5.Scroll.failed" : "CNS5.Device.failed",
-            { roll: activation?.roll ?? "—", need: activation?.need ?? "—" }
-          )}</p>
-          <p class="cns5-check__cost">${costLabel}</p>
-        </div>`
+        title,
+        subtitle: game.i18n.format("CNS5.Device.castSubtitle", {
+          maker: item.system.makerTsc,
+          target: activation?.need ?? 0
+        }),
+        targetingHeading: castingStep.heading,
+        nothingToTarget: game.i18n.localize(
+          kind === "scroll" ? "CNS5.Scroll.failed" : "CNS5.Device.failed"
+        ),
+        cost: costLabel
       });
     }
 
@@ -1150,18 +1176,17 @@ export class CnS5Actor extends Actor {
     return checkToMessage(this, {
       ...result,
       title,
-      subtitle: game.i18n.format("CNS5.Device.castSubtitle", {
-        maker: item.system.makerTsc,
-        target: chance
-      }),
-      activationLabel: activation
-        ? activation.automatic
-          ? game.i18n.localize("CNS5.Device.automatic")
-          : game.i18n.format("CNS5.Device.activated", {
-              roll: activation.roll,
-              need: activation.need
-            })
-        : null,
+      subtitle: game.i18n.format(
+        kind === "scroll" ? "CNS5.Scroll.castSubtitle" : "CNS5.Device.castSubtitle",
+        { maker: item.system.makerTsc, target: chance }
+      ),
+      // Two rolls are made — one to get the spell out of the item, one to aim
+      // it — and the card's dice show only the second. Saying which is which
+      // is the difference between a card that reads and one that looks like it
+      // rolled twice for no reason.
+      castingStep,
+      targetingHeading: game.i18n.localize("CNS5.Step.targeting"),
+      saveHeading: game.i18n.localize("CNS5.Step.save"),
       unclamped: targeting.total,
       overflow,
       shortfall,

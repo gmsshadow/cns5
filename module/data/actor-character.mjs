@@ -41,6 +41,16 @@ export class CnS5Character extends CnS5ActorBase {
         choices: Object.keys(CNS5.birthOmens)
       }),
       starSign: new fields.StringField({ required: true, blank: true, initial: "" }),
+
+      // "Acts of Faith solely within the competence of ordained priests" are
+      // marked †; those open also to monastics and Holy Fighting Orders ‡
+      // (p404). So a character's standing in his faith decides what he may
+      // invoke, whatever his Personal Faith Factor.
+      holyStanding: new fields.StringField({
+        required: true,
+        initial: "lay",
+        choices: Object.keys(CNS5.holyStandings)
+      }),
       nationality: new fields.StringField({ required: true, blank: true, initial: "" }),
       liege: new fields.StringField({ required: true, blank: true, initial: "" }),
       influenceFactor: new fields.NumberField({ required: true, integer: true, initial: 0 }),
@@ -103,6 +113,16 @@ export class CnS5Character extends CnS5ActorBase {
       // for everyone, cleric or not.
       skill: new fields.StringField({ required: true, initial: "Faith" }),
       baseSpirit: new fields.NumberField({ required: true, integer: true, initial: 0 }),
+
+      // The congregation a clergyman serves, and where. "Acts of Faith...
+      // performed for a congregation or for a community... can call upon the
+      // Belief of those participating" (p403), which is where the Fatigue for
+      // the costlier Acts comes from.
+      congregation: new fields.StringField({ required: true, blank: true, initial: "" }),
+      holyPlace: new fields.StringField({ required: true, initial: "none" }),
+      shrine: new fields.StringField({ required: true, initial: "none" }),
+      // What is left of the pool drawn at the last service.
+      beliefPool: new fields.NumberField({ required: true, integer: true, initial: 0, min: 0 }),
       pffOverride: new fields.NumberField({
         required: false,
         nullable: true,
@@ -123,6 +143,14 @@ export class CnS5Character extends CnS5ActorBase {
     if (this.details.race?.toLowerCase() === "human") this.jump += 2;
 
     this.experience.available = this.experience.earned - this.experience.spent;
+
+    // The Experience Level the total has reached (p45). A skill may be raised
+    // to this level at its ordinary cost; past it, every level of the
+    // difference is paid for again.
+    const progress = CNS5.experienceProgress(this.experience.earned);
+    this.experience.level = progress.level;
+    this.experience.nextLevelAt = progress.next;
+    this.experience.toNextLevel = progress.needed;
 
     // A single farthing total makes comparisons and change trivial; the sheet
     // still shows and edits the four denominations separately.
@@ -157,6 +185,20 @@ export class CnS5Character extends CnS5ActorBase {
 
     this.magick.modeItem = mode ?? null;
     this.magick.modeMissing = Boolean(this.magick.mode) && !mode;
+    // The sign a character was born under, matched from what is written in the
+    // field — it has always been free text, so a name typed before this table
+    // existed still finds its sign. Two skill categories are favoured by it,
+    // and one attribute (p53).
+    const written = (this.details.starSign ?? "").trim().toLowerCase();
+    this.details.sign =
+      Object.keys(CNS5.birthSigns).find((key) => written.startsWith(key)) ?? "";
+    const sign = CNS5.birthSigns[this.details.sign] ?? null;
+
+    this.details.favouredCategories = sign?.categories ?? [];
+    this.details.favouredAttribute = sign?.attribute ?? "";
+    // How many favoured skills the sign grants, which a poor aspect halves.
+    this.details.sunsignSkills = sign ? CNS5.sunsignSkills[this.details.birthOmens] ?? 0 : 0;
+
     this.magick.aspectBonus = CNS5.magickAspectBonus(
       this.details.birthOmens,
       this.magick.tradition
@@ -195,6 +237,34 @@ export class CnS5Character extends CnS5ActorBase {
 
     const derived = skill ? Math.floor(skill.system.psf / 2) + this.faith.baseSpirit : 0;
     this.faith.pff = this.faith.pffOverride ?? derived;
+
+    // "Faith does not measure belief in a Deity. That is represented by
+    // Spirit" (p400). What his Current Spirit makes of him is read from
+    // Table - Perceived Faith, and decides among other things who he may pray
+    // for.
+    this.faith.believer = CNS5.believerFor(this.spirit.value);
+
+    // "He may raise his Current Spirit by +1 for every 5% PSF (rounded up)."
+    // An entitlement he may take, not a gain applied for him — and only in the
+    // religion the skill was learnt in.
+    this.faith.spiritFromSkill = skill ? CNS5.spiritFromFaith(skill.system.psf) : 0;
+
+    // How many he may pray for besides himself (p403). Office counts for far
+    // more than belief, which is the point of ordination.
+    this.faith.divineAid = CNS5.divineAidFor({
+      believer: this.faith.believer,
+      standing: this.details.holyStanding,
+      spirit: this.spirit.value,
+      priestlyMage: this.magick.tradition === "priestMage"
+    });
+
+    // What his congregation and its building would yield, were he to draw on
+    // it. Rolled rather than counted, so only the dice are shown.
+    this.faith.beliefPoolFormula = CNS5.beliefPoolFormula({
+      congregation: this.faith.congregation,
+      place: this.faith.holyPlace,
+      shrine: this.faith.shrine
+    });
   }
 
   /* -------------------------------------------- */

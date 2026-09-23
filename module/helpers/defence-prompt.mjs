@@ -276,7 +276,7 @@ export async function promptThrow(weapon, profile) {
  */
 export async function promptTargeting(
   spell,
-  { tables, resistance, targetName, focus = null, fromDevice = false }
+  { tables, resistance, targetName, focus = null, fromDevice = false, fromBook = false }
 ) {
   const boxes = (list, name) =>
     list
@@ -317,11 +317,18 @@ export async function promptTargeting(
           <select name="mana">${choices(CNS5.manaLevels, "average")}</select>
         </label>
         ${
-          fromDevice
+          // A device or a book is its own source: there is nothing to choose.
+          fromDevice || fromBook
             ? ""
             : `<label class="cns5-field">
                  <span>${game.i18n.localize("CNS5.Targeting.source")}</span>
-                 <select name="source">${choices(CNS5.castingSources, "memory")}</select>
+                 <select name="source">${choices(
+                   // A book is read from its own section, not chosen here.
+                   Object.fromEntries(
+                     Object.entries(CNS5.castingSources).filter(([k]) => k !== "book")
+                   ),
+                   "memory"
+                 )}</select>
                </label>`
         }
         <label class="cns5-field">
@@ -391,6 +398,25 @@ export async function promptTargeting(
       <p class="cns5-check__subheading">${game.i18n.localize("CNS5.Targeting.obstacles")}</p>
       ${boxes(tables.obstacles, "obstacles")}
 
+      ${
+        // Meditation stored up in one spell, which sharpens the aim (p298).
+        // Not the meditation below, which is spent on a casting to make it
+        // harder to shrug off.
+        fromDevice
+          ? ""
+          : `<div class="cns5-grid cns5-grid--two">
+               <label class="cns5-field">
+                 <span>${game.i18n.localize("CNS5.Targeting.meditation")}</span>
+                 <input type="number" name="meditationTargeting" value="0" min="0">
+               </label>
+               <label class="cns5-checkbox">
+                 <input type="checkbox" name="meditationFasting">
+                 <span>${game.i18n.localize("CNS5.Targeting.fasting")}</span>
+               </label>
+             </div>
+             <p class="hint">${game.i18n.localize("CNS5.Targeting.meditationHint")}</p>`
+      }
+
       <label class="cns5-field">
         <span>${game.i18n.localize("CNS5.Roll.situational")}</span>
         <input type="number" name="situational" value="0">
@@ -447,6 +473,8 @@ export async function promptTargeting(
           movement: ticked("movement"),
           obstacles: ticked("obstacles"),
           situational: Number(form.elements.situational.value) || 0,
+          meditationTargeting: Math.max(0, Number(form.elements.meditationTargeting?.value) || 0),
+          meditationFasting: Boolean(form.elements.meditationFasting?.checked),
           // What the caster does to make the spell harder to shrug off.
           saveReductions: {
             mantra: form.elements.mantra.checked,

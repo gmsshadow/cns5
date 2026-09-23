@@ -13,13 +13,20 @@ import {
   promptDefence
 } from "../helpers/defence-prompt.mjs";
 import { armourAt } from "../helpers/defence.mjs";
+import { parseMagnitude } from "../helpers/magnitude.mjs";
+import { parseFaithChance, parseFaithCost, faithChanceFor } from "../helpers/faith.mjs";
 import {
   promptShot,
   promptThrow,
   promptTargeting,
   promptMethod
 } from "../helpers/defence-prompt.mjs";
-import { magickTables, intrinsicResistance, resolveTargeting } from "../helpers/targeting.mjs";
+import {
+  magickTables,
+  intrinsicResistance,
+  resolveTargeting,
+  magickalDefences
+} from "../helpers/targeting.mjs";
 import {
   missileProfile,
   availableAmmunition,
@@ -569,7 +576,11 @@ export class CnS5Actor extends Actor {
    * @param {string} [range]  short, long or max
    * @returns {Promise<ChatMessage|null>}
    */
-  async rollSpell(itemId, range = "short", { modifier = 0, skipDialog = false } = {}) {
+  async rollSpell(
+    itemId,
+    range = "short",
+    { modifier = 0, skipDialog = false, fromBook = false } = {}
+  ) {
     const spell = this.items.get(itemId);
     if (!spell || spell.type !== "spell") {
       throw new Error(`CnS5 | No spell item ${itemId} on ${this.name}`);
@@ -643,7 +654,8 @@ export class CnS5Actor extends Actor {
         tables,
         resistance,
         targetName: target?.name ?? null,
-        focus
+        focus,
+        fromBook
       });
       if (answered === null) return null;
       declared = answered;
@@ -652,13 +664,81 @@ export class CnS5Actor extends Actor {
     const throughFocus = declared.useFocus && focus ? focus : null;
     const focusGrade = throughFocus ? CNS5.focusGrades[throughFocus.system.grade] : null;
 
+    // Read from his own book, a spell costs as one read from any book does:
+    // half (p297).
+    const source = fromBook ? "book" : declared.source;
     const cost = CNS5.spellCost({
-      base: spell.system.fpToCast,
+      // The caster's own cost, with anything his tradition carries past MR 10
+      // added at 3 FP a point (p294).
+      base: spell.system.effectiveFp,
       mana: declared.mana,
-      source: declared.source,
+      source,
       extendRange: declared.extendRange,
       focus: throughFocus?.system.grade ?? null
     });
+
+    /* -- Casting a spell not yet fully learnt (p299) ------------------------ */
+
+    // A known spell comes to hand without a roll. One still being learnt has
+    // to be got into shape first, at 10% off for every point of Magick
+    // Resistance still to go — unless it is read from the mage's own book,
+    // which casts it "as if he had learnt it fully", at twice the time (p307).
+    let castingStep = null;
+    if (spell.system.partlyLearnt && !fromBook) {
+      const need = Math.max(0, method.system.tsc + spell.system.learningPenalty);
+      const { target: clamped, critMod: castCrit } = clampSuccessChance(need, method.system.df);
+      const cast = await resolveCheck({ target: clamped, critMod: castCrit });
+
+      castingStep = {
+        heading: game.i18n.localize("CNS5.Step.casting"),
+        text: game.i18n.format("CNS5.Step.partlyLearnt", {
+          remaining: spell.system.remaining,
+          penalty: spell.system.learningPenalty
+        }),
+        rolled: true,
+        roll: cast.roll,
+        need: clamped,
+        success: cast.success,
+        outcome: game.i18n.localize(cast.success ? "CNS5.Step.cast" : "CNS5.Step.notCast")
+      };
+
+      if (!cast.success) {
+        // The Crit Die of the failed casting says how badly it went, and every
+        // result costs Fatigue at its own multiple (p299).
+        const backfire = CNS5.readBackfire(cast.critTotal);
+        const fatigue = Math.ceil(cost.fatigue * backfire.fatigue);
+        await this.spendMagickCost(fatigue);
+
+        return checkToMessage(this, {
+          ...cast,
+          title,
+          subtitle: game.i18n.format("CNS5.Backfire.subtitle", { need: clamped }),
+          targetingHeading: castingStep.heading,
+          nothingToTarget: game.i18n.localize(`CNS5.Backfire.${backfire.key}`),
+          backfire,
+          backfireLabel: game.i18n.format("CNS5.Backfire.label", {
+            die: cast.critTotal,
+            severity: game.i18n.localize(`CNS5.Backfire.name.${backfire.key}`)
+          }),
+          cost: game.i18n.format("CNS5.Backfire.costs", {
+            fp: fatigue,
+            base: cost.fatigue,
+            multiple: backfire.fatigue
+          })
+        });
+      }
+
+      // Carried onto the targeting card, so both sets of dice are accounted for.
+      castingStep.rolls = cast.rolls;
+    } else if (fromBook) {
+      castingStep = {
+        heading: game.i18n.localize("CNS5.Step.casting"),
+        text: game.i18n.localize("CNS5.Step.fromBook"),
+        rolled: false,
+        success: true,
+        outcome: game.i18n.localize("CNS5.Step.cast")
+      };
+    }
 
     const targeting = resolveTargeting({
       methodTsc: method.system.tsc,
@@ -671,6 +751,12 @@ export class CnS5Actor extends Actor {
       manaBonus: cost.tscBonus,
       // A Focus sharpens the caster's skill in the school and his aim alike.
       focusBonus: focusGrade ? focusGrade.psf + focusGrade.targeting : 0,
+      // Days of meditation stored up in this one spell (p298).
+      meditationBonus: CNS5.targetingMeditationBonus({
+        days: declared.meditationTargeting ?? 0,
+        fasting: declared.meditationFasting ?? false,
+        magickLevel: this.system.magick.level
+      }),
       situational: situational + declared.situational + spell.system.otherModifier,
       tables
     });
@@ -690,7 +776,37 @@ export class CnS5Actor extends Actor {
       method.system.df
     );
 
+    // Whatever protects the target is targeted first, outermost in (p298).
+    const pierced = await this.#pierceDefences({
+      target,
+      targeting,
+      difficulty: method.system.df
+    });
+
+    if (!pierced.through) {
+      return checkToMessage(this, {
+        ...(await resolveCheck({ target: chance, critMod })),
+        rolls: [...(castingStep?.rolls ?? []), ...pierced.rolls],
+        title,
+        subtitle: game.i18n.format("CNS5.Roll.spellSubtitle", {
+          range: game.i18n.localize(CNS5.spellRanges[declared.range].label),
+          target: chance
+        }),
+        castingStep,
+        defenceSteps: pierced.steps,
+        nothingToTarget: game.i18n.format("CNS5.Defence.blocked", {
+          name: pierced.stoppedBy.name
+        }),
+        cost: game.i18n.format("CNS5.Roll.spellCost", {
+          fp: cost.fatigue,
+          ap: spell.system.apToCast
+        })
+      });
+    }
+
     const result = await resolveCheck({ target: chance, critMod });
+    if (castingStep?.rolls) result.rolls.unshift(...castingStep.rolls);
+    if (pierced.rolls.length) result.rolls.unshift(...pierced.rolls);
 
     // Tapping the Metaphysical Current costs Fatigue, "or if exhausted, Body
     // Points" (p296) — whether or not the targeting found its mark.
@@ -732,6 +848,22 @@ export class CnS5Actor extends Actor {
         ap: spell.system.apToCast
       }),
       spellCost: cost,
+      // "Once the time limit is reached, the spell degrades over a 1D10 minute
+      // period" (p296) — so a spell does not stop dead, and the die is rolled
+      // where there is a duration to run out.
+      durationLabel: spell.system.durationLabel,
+      decayMinutes: result.success && spell.system.parsedDuration?.kind === "formula"
+        ? (await new Roll(CNS5.spellDecayDie).evaluate()).total
+        : null,
+      // Only a spell that needed getting into shape, or was read from a book,
+      // has a step before the targeting to show.
+      castingStep,
+      defenceSteps: pierced.steps,
+      targetingHeading:
+        castingStep || pierced.steps.length ? game.i18n.localize("CNS5.Step.targeting") : null,
+      saveHeading: castingStep ? game.i18n.localize("CNS5.Step.save") : null,
+      // "This doubles the time required to cast the spell" (p307).
+      bookNote: fromBook ? game.i18n.localize("CNS5.Book.doubleTime") : null,
       save,
       saveLabel: save
         ? game.i18n.format(save.resisted ? "CNS5.Save.resisted" : "CNS5.Save.failed", {
@@ -753,6 +885,7 @@ export class CnS5Actor extends Actor {
         { label: "CNS5.Targeting.dodge", value: -targeting.dodgePsf, signed: true },
         { label: "CNS5.Mana.bonus", value: targeting.manaBonus, signed: true },
         { label: "CNS5.Focus.bonus", value: targeting.focusBonus, signed: true },
+        { label: "CNS5.Targeting.meditation", value: targeting.meditationBonus, signed: true },
         { label: "CNS5.Roll.situational", value: targeting.situational, signed: true }
       ])
     });
@@ -786,17 +919,25 @@ export class CnS5Actor extends Actor {
       return null;
     }
 
-    // The Acts of Faith tables print no success chance, so compendium entries
-    // ship with none. Rolling anyway would clamp to 1% and look like a working
-    // roll that always fails.
-    if (!act.system.successChance) {
-      ui.notifications.warn(
-        game.i18n.format("CNS5.Faith.noChanceSet", { act: act.name })
-      );
+    // "† Acts of Faith that are solely within the competence of ordained
+    // priests. ‡ Acts... that may only be invoked by ordained Priests,
+    // Monastics and members of Holy Fighting Orders" (p404).
+    const standing = this.system.details.holyStanding ?? "lay";
+    if (act.system.ordainedOnly && standing !== "ordained") {
+      ui.notifications.warn(game.i18n.format("CNS5.Faith.ordainedOnly", { act: act.name }));
+      return null;
+    }
+    if (act.system.monasticOnly && standing === "lay") {
+      ui.notifications.warn(game.i18n.format("CNS5.Faith.monasticOnly", { act: act.name }));
       return null;
     }
 
     const title = game.i18n.format("CNS5.Roll.faithTitle", { act: act.name });
+
+    // The Act may name a recipient other than the one praying, and its chance
+    // and its cost may fall on either (p404).
+    const recipient = [...game.user.targets][0]?.actor ?? null;
+    const people = { performer: this, recipient };
 
     let situational = modifier;
     if (!skipDialog) {
@@ -805,22 +946,243 @@ export class CnS5Actor extends Actor {
       situational += prompted.modifier;
     }
 
-    const target = Math.clamp(act.system.successChance + situational, 1, 100);
-    const result = await resolveCheck({ target });
+    /* -- The Sacraments, which need no roll -------------------------------- */
+
+    // "Auto: Automatically takes effect (i.e. no Spirit AR% roll, etc. is
+    // required)."
+    if (act.system.automatic) {
+      const spent = await this.#payFaithCost(act, people, null);
+      return ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({ actor: this }),
+        content: `<div class="cns5-check">
+          <h3 class="cns5-check__title">${title}</h3>
+          <p class="cns5-check__result">${game.i18n.localize("CNS5.Faith.automatic")}</p>
+          ${spent.label ? `<p class="cns5-check__cost">${spent.label}</p>` : ""}
+        </div>`
+      });
+    }
+
+    const { variants, unread } = parseFaithChance(act.system.successChanceText);
+    if (!variants.length) {
+      ui.notifications.warn(
+        game.i18n.format("CNS5.Faith.noChanceSet", { act: act.name, text: unread ?? "" })
+      );
+      return null;
+    }
+
+    // Where the book gives alternatives, the first is taken; a Gamemaster who
+    // wants the other can roll it as a free-form check.
+    const steps = variants[0];
+
+    // "Table - Requests for Divine Aid shows who a character is able to pray
+    // for." A layman prays for himself alone; only from True Believer upwards
+    // may another be named at all.
+    const aid = this.system.faith.divineAid;
+    const others = [...game.user.targets].filter((t) => t.actor !== this).length;
+    if (others > Math.max(aid.others, aid.instead ? 1 : 0)) {
+      ui.notifications.warn(
+        game.i18n.format("CNS5.Faith.tooManyPrayedFor", {
+          asked: others,
+          allowed: aid.others,
+          believer: game.i18n.localize(`CNS5.Believer.${this.system.faith.believer}`)
+        })
+      );
+      return null;
+    }
+
+    // A step against the recipient needs a recipient.
+    if (!recipient && steps.some((step) => step.of === "recipient" ||
+        (step.added ?? []).some((a) => a.of === "recipient"))) {
+      ui.notifications.warn(game.i18n.format("CNS5.Faith.needsRecipient", { act: act.name }));
+      return null;
+    }
+
+    /* -- Each step in turn, all of which must succeed ---------------------- */
+
+    const rolls = [];
+    const faithSteps = [];
+    let last = null;
+    let succeeded = true;
+
+    for (const [index, step] of steps.entries()) {
+      const { chance, parts } = faithChanceFor(step, people);
+      const need = Math.clamp(chance + (index === 0 ? situational : 0), 1, 100);
+      const roll = await resolveCheck({ target: need });
+      rolls.push(...roll.rolls);
+      last = roll;
+
+      faithSteps.push({
+        heading: game.i18n.format("CNS5.Faith.step", { number: index + 1 }),
+        text: parts.map((p) => `${p.label} (${p.value})`).join(" + "),
+        rolled: true,
+        roll: roll.roll,
+        need,
+        success: roll.success,
+        outcome: game.i18n.localize(roll.success ? "CNS5.Faith.granted" : "CNS5.Faith.denied")
+      });
+
+      if (!roll.success) {
+        succeeded = false;
+        break;
+      }
+    }
+
+    const spent = await this.#payFaithCost(act, people, last);
+    const spirit = await this.#settleSpirit(spent.fatigue, succeeded, last?.critTotal ?? 0);
 
     return checkToMessage(this, {
-      ...result,
+      ...last,
+      rolls,
       title,
-      subtitle: game.i18n.format("CNS5.Roll.faithSubtitle", { target }),
-      cost: game.i18n.format("CNS5.Roll.faithCost", {
-        fp: act.system.fpCost,
-        ap: act.system.apToPray
+      subtitle: game.i18n.format("CNS5.Faith.subtitle", {
+        chance: act.system.successChanceText
       }),
+      defenceSteps: faithSteps.slice(0, -1),
+      targetingHeading: faithSteps.length > 1 ? faithSteps.at(-1).heading : null,
+      targetName: recipient?.name ?? null,
+      cost: spent.label,
+      spiritNote: spirit?.label ?? null,
+      nothingToTarget: succeeded ? null : game.i18n.localize("CNS5.Faith.notGranted"),
       breakdown: this.#breakdown([
-        { label: "CNS5.Faith.successChance", value: act.system.successChance },
+        ...faithChanceFor(steps[0], people).parts.map((p) => ({ label: p.label, value: p.value })),
         { label: "CNS5.Roll.situational", value: situational, signed: true }
       ])
     });
+  }
+
+  /* -------------------------------------------- */
+
+  /**
+   * Draw the Belief Pool from a congregation at worship (p403).
+   *
+   * "Acts of Faith which are performed for a congregation or for a community
+   * of believers can call upon the Belief of those participating." The pool is
+   * rolled from the size of the congregation, the building and any shrine, and
+   * what is drawn stands until it is spent.
+   *
+   * @returns {Promise<ChatMessage|null>}
+   */
+  async drawBeliefPool() {
+    const { multiplier, formula, parts } = this.system.faith.beliefPoolFormula;
+    if (!multiplier) {
+      ui.notifications.warn(game.i18n.localize("CNS5.Belief.noCongregation"));
+      return null;
+    }
+
+    const roll = await new Roll(formula).evaluate();
+    await this.update({ "system.faith.beliefPool": roll.total });
+
+    return ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: this }),
+      rolls: [roll],
+      content: `<div class="cns5-check">
+        <h3 class="cns5-check__title">${game.i18n.localize("CNS5.Belief.drawn")}</h3>
+        <p class="cns5-check__result">${game.i18n.format("CNS5.Belief.pool", {
+          total: roll.total,
+          multiplier
+        })}</p>
+        <p class="cns5-hint">${parts
+          .map((part) => `${game.i18n.localize(part.label)} (${part.multiplier})`)
+          .join(", ")}</p>
+      </div>`
+    });
+  }
+
+  /* -------------------------------------------- */
+
+  /**
+   * What performing an Act of Faith does to the intercessor's Spirit (p400).
+   *
+   * He expends Current Spirit equal to the Act's Fatigue cost. Granted, he has
+   * it all back, and one more if the Crit Die came up ten. Denied, he has only
+   * half of it back — "he believes his Deity may have forsaken him" — and on a
+   * critical failure none at all.
+   *
+   * @param {number} cost
+   * @param {boolean} success
+   * @param {number} critTotal
+   * @returns {Promise<{label: string}|null>}
+   */
+  async #settleSpirit(cost, success, critTotal) {
+    if (!(cost > 0)) return null;
+
+    const change = CNS5.spiritAfterAct({ cost, success, critTotal });
+    if (change.net !== 0) {
+      // Current Spirit "can lapse into total non-existence", so it is floored
+      // at nothing rather than allowed below it.
+      await this.update({
+        "system.spirit.value": Math.max(0, this.system.spirit.value + change.net)
+      });
+    }
+
+    return {
+      label: game.i18n.format(`CNS5.Spirit.${change.key}`, {
+        expended: change.expended,
+        regained: change.regained,
+        net: change.net > 0 ? `+${change.net}` : change.net
+      })
+    };
+  }
+
+  /* -------------------------------------------- */
+
+  /**
+   * Take what an Act of Faith costs, from whoever it names.
+   *
+   * "Cost: The FP cost, assessed against the person(s) named" (p404) — which
+   * may be the one praying or the one prayed for, and may be a figure, a third
+   * of all he has, or the Crit Die of the roll just made.
+   *
+   * @param {Item} act
+   * @param {{performer: Actor, recipient: Actor|null}} people
+   * @param {object|null} roll
+   * @returns {Promise<{label: string}>}
+   */
+  async #payFaithCost(act, people, roll) {
+    const { charges, offering, unread } = parseFaithCost(act.system.costText);
+    const told = [];
+    let mine = 0;
+
+    for (const charge of charges) {
+      const who = charge.of === "recipient" ? people.recipient : people.performer;
+      if (!who) continue;
+
+      let fatigue = charge.fatigue ?? 0;
+      if (charge.critDie) fatigue = Math.max(0, roll?.critTotal ?? 0);
+      if (charge.fractionOfTotal) {
+        fatigue = Math.ceil((who.system.fatigue.max ?? 0) * charge.fractionOfTotal);
+      }
+      if (!fatigue) continue;
+
+      // A clergyman spends the Belief of those worshipping with him before he
+      // spends himself (p403) — which is the only way the costlier Acts can be
+      // paid for at all.
+      let fromPool = 0;
+      if (who === people.performer) {
+        fromPool = Math.min(fatigue, this.system.faith.beliefPool ?? 0);
+        if (fromPool) {
+          await this.update({ "system.faith.beliefPool": this.system.faith.beliefPool - fromPool });
+          told.push(game.i18n.format("CNS5.Belief.spent", { fp: fromPool }));
+        }
+      }
+
+      const own = fatigue - fromPool;
+      if (own) await who.spendMagickCost(own);
+      if (who === people.performer) mine += own;
+      told.push(
+        game.i18n.format(charge.perHour ? "CNS5.Faith.costPerHour" : "CNS5.Faith.cost", {
+          fp: fatigue,
+          name: who.name
+        })
+      );
+    }
+
+    if (offering) told.push(game.i18n.format("CNS5.Faith.offering", { offering }));
+    if (unread) told.push(game.i18n.format("CNS5.Faith.costUnread", { text: unread }));
+
+    // Spirit is expended against what the intercessor himself paid, not against
+    // what was taken from the one prayed for.
+    return { label: told.join("; "), fatigue: mine };
   }
 
   /* -------------------------------------------- */
@@ -977,6 +1339,23 @@ export class CnS5Actor extends Actor {
     const held = item.system.spells[index];
     if (!held) return null;
 
+    // A mage's own book is read to cast a spell he knows only in part, and it
+    // casts that spell "as if he had learnt it fully" at twice the time (p307).
+    // It is his own casting, with his own skill — so it is handed to the
+    // ordinary casting of his own spell rather than resolved here.
+    const ownBook =
+      kind === "book" && (!item.system.writtenBy || item.system.writtenBy === this.name);
+    if (ownBook) {
+      const spell = this.items.find(
+        (i) => i.type === "spell" && i.name.toLowerCase() === held.name.toLowerCase()
+      );
+      if (!spell) {
+        ui.notifications.warn(game.i18n.format("CNS5.Book.notLearning", { spell: held.name }));
+        return null;
+      }
+      return this.rollSpell(spell.id, "short", { skipDialog, fromBook: true });
+    }
+
     if (item.system.spent) {
       ui.notifications.warn(
         game.i18n.format(kind === "scroll" ? "CNS5.Scroll.spent" : "CNS5.Device.spent", {
@@ -1053,7 +1432,7 @@ export class CnS5Actor extends Actor {
         activation.need = need;
       }
       chargesSpent = released ? activation.chargesOnSuccess : activation.chargesOnFailure;
-    } else if (kind === "scroll") {
+    } else if (kind === "scroll" || kind === "book") {
       // "The basic chance of casting the spell through a Magickal device is
       // equal to the Method of Magick TSC% of the Magick User who wrote the
       // scroll... On a failure, the scroll or page is discharged."
@@ -1070,9 +1449,16 @@ export class CnS5Actor extends Actor {
       chargesSpent = Math.max(1, held.mr);
     }
 
-    // Spent whatever came of it.
+    // Spent whatever came of it — except a book, which loses only the page of
+    // a spell that failed: "on a failure, the scroll or page is discharged".
     if (kind === "scroll") {
       await item.update({ "system.discharged": true });
+    } else if (kind === "book") {
+      if (!released) {
+        await item.update({
+          "system.spells": item.system.spells.filter((_, i) => i !== index)
+        });
+      }
     } else {
       await item.update({
         "system.charges": Math.max(0, item.system.charges - chargesSpent)
@@ -1086,7 +1472,7 @@ export class CnS5Actor extends Actor {
     const fatigue =
       kind === "focus"
         ? 0
-        : kind === "scroll"
+        : kind === "scroll" || kind === "book"
           ? Math.ceil(held.fp * CNS5.castingSources.scroll.fatigue * place.fatigue)
           : CNS5.deviceFatigue(held.fp, isMage, declared.mana);
 
@@ -1095,8 +1481,8 @@ export class CnS5Actor extends Actor {
     const rateKey =
       kind === "focus"
         ? "focus"
-        : kind === "scroll"
-          ? "scroll"
+        : kind === "scroll" || kind === "book"
+          ? kind
           : isMage
             ? "deviceMage"
             : "deviceOther";
@@ -1109,6 +1495,8 @@ export class CnS5Actor extends Actor {
       text: game.i18n.localize(
         kind === "scroll"
           ? "CNS5.Step.readScroll"
+          : kind === "book"
+            ? "CNS5.Step.readBook"
           : kind === "focus"
             ? "CNS5.Step.fromFocus"
             : activation?.automatic
@@ -1136,7 +1524,11 @@ export class CnS5Actor extends Actor {
           });
 
     const costLabel = game.i18n.format(
-      kind === "scroll" ? "CNS5.Scroll.costs" : "CNS5.Device.costs",
+      kind === "scroll"
+        ? "CNS5.Scroll.costs"
+        : kind === "book"
+          ? "CNS5.Book.costs"
+          : "CNS5.Device.costs",
       {
         fatigue: fatiguePart,
         spent: chargesSpent,
@@ -1157,13 +1549,81 @@ export class CnS5Actor extends Actor {
         }),
         targetingHeading: castingStep.heading,
         nothingToTarget: game.i18n.localize(
-          kind === "scroll" ? "CNS5.Scroll.failed" : "CNS5.Device.failed"
+          kind === "scroll"
+            ? "CNS5.Scroll.failed"
+            : kind === "book"
+              ? "CNS5.Book.failed"
+              : "CNS5.Device.failed"
         ),
         cost: costLabel
       });
     }
 
     /* -- Step 3: targeting ------------------------------------------------- */
+
+    /* -- A non-mage aiming (p299) ------------------------------------------ */
+
+    // "Any non-Mage trying to target a spell (unless it is a touch effect
+    // whereby a blow is required) must first succeed with a Willpower roll."
+    // Mages never check: "they are attuned with Magick and know how to target
+    // spells". On a failure the spell goes astray, and Table - Willpower
+    // Failure says where — though its last band is a reprieve.
+    let willpowerStep = null;
+    const reach = parseMagnitude(held.rangeText, "distance");
+    const byTouch = reach.kind === "word" && /touch/i.test(reach.label ?? "");
+
+    if (!isMage && !byTouch) {
+      const willpower = this.items.find(
+        (i) => i.type === "skill" && i.name.toLowerCase() === "willpower"
+      );
+      // Without the skill it is tried untrained, at the chance its Difficulty
+      // Factor gives to anyone.
+      const band = CNS5.difficultyFactors[willpower?.system.df ?? 3];
+      const need = willpower ? willpower.system.tsc : band.unskilled;
+      const { target: clamped, critMod: wCrit } = clampSuccessChance(
+        need,
+        willpower?.system.df ?? 3
+      );
+      const check = await resolveCheck({ target: clamped, critMod: wCrit });
+      rolls.push(...check.rolls);
+
+      let astray = null;
+      if (!check.success) {
+        const where = await new Roll("1d100").evaluate();
+        rolls.push(where);
+        astray = { roll: where.total, ...CNS5.readWillpowerFailure(where.total) };
+      }
+
+      willpowerStep = {
+        heading: game.i18n.localize("CNS5.Step.willpower"),
+        text: game.i18n.localize("CNS5.Step.willpowerText"),
+        rolled: true,
+        roll: check.roll,
+        need: clamped,
+        success: check.success || Boolean(astray?.corrected),
+        outcome: game.i18n.localize(
+          check.success ? "CNS5.Step.aimed" : astray?.corrected ? "CNS5.Step.corrected" : "CNS5.Step.astray"
+        )
+      };
+
+      // Gone astray: there is no target to roll against. Where it went is the
+      // Gamemaster's to settle from the table's result.
+      if (!check.success && !astray.corrected) {
+        return checkToMessage(this, {
+          ...check,
+          rolls,
+          title,
+          subtitle: game.i18n.format("CNS5.Device.castSubtitle", {
+            maker: item.system.makerTsc,
+            target: clamped
+          }),
+          castingStep,
+          targetingHeading: willpowerStep.heading,
+          nothingToTarget: game.i18n.format(`CNS5.Astray.${astray.key}`, { roll: astray.roll }),
+          cost: costLabel
+        });
+      }
+    }
 
     const targeting = resolveTargeting({
       methodTsc: item.system.makerTsc,
@@ -1190,6 +1650,34 @@ export class CnS5Actor extends Actor {
       targeting.total,
       item.system.makerDf
     );
+    // Whatever protects the target is targeted first (p298), at the maker's
+    // skill like everything else a device does.
+    const pierced = await this.#pierceDefences({
+      target,
+      targeting,
+      difficulty: item.system.makerDf
+    });
+    rolls.push(...pierced.rolls);
+
+    if (!pierced.through) {
+      return checkToMessage(this, {
+        ...(await resolveCheck({ target: chance, critMod })),
+        rolls,
+        title,
+        subtitle: game.i18n.format("CNS5.Device.castSubtitle", {
+          maker: item.system.makerTsc,
+          target: chance
+        }),
+        castingStep,
+        willpowerStep,
+        defenceSteps: pierced.steps,
+        nothingToTarget: game.i18n.format("CNS5.Defence.blocked", {
+          name: pierced.stoppedBy.name
+        }),
+        cost: costLabel
+      });
+    }
+
     const result = await resolveCheck({ target: chance, critMod });
     result.rolls.unshift(...rolls);
 
@@ -1219,6 +1707,8 @@ export class CnS5Actor extends Actor {
       // is the difference between a card that reads and one that looks like it
       // rolled twice for no reason.
       castingStep,
+      willpowerStep,
+      defenceSteps: pierced.steps,
       targetingHeading: game.i18n.localize("CNS5.Step.targeting"),
       saveHeading: game.i18n.localize("CNS5.Step.save"),
       unclamped: targeting.total,
@@ -1248,6 +1738,72 @@ export class CnS5Actor extends Actor {
         { label: "CNS5.Roll.situational", value: targeting.situational, signed: true }
       ])
     });
+  }
+
+  /* -------------------------------------------- */
+
+  /**
+   * Work a spell through whatever protects its target (p298).
+   *
+   * Each protection is targeted in its own right, outermost first, at the same
+   * chance as the victim would be but resisting by its own Magick Resistance.
+   * A spell that fails against one goes no further — "the Circle or Ward must
+   * itself be targeted in order for the spell to penetrate".
+   *
+   * @param {object} options
+   * @returns {Promise<{through: boolean, steps: Array, rolls: Array, stoppedBy: object|null}>}
+   */
+  async #pierceDefences({ target, targeting, difficulty, harmful = true }) {
+    const defences = magickalDefences(target);
+    const steps = [];
+    const rolls = [];
+
+    for (const defence of defences) {
+      // The same shot, against this protection's own resistance rather than
+      // the victim's.
+      const against = targeting.total + targeting.resistance - defence.mr;
+      const { target: need, critMod } = clampSuccessChance(against, difficulty);
+      const roll = await resolveCheck({ target: need, critMod });
+      rolls.push(...roll.rolls);
+
+      const step = {
+        heading: game.i18n.format("CNS5.Defence.heading", {
+          kind: game.i18n.localize(`CNS5.Magickal.${defence.kind}`)
+        }),
+        text: game.i18n.format("CNS5.Defence.text", { name: defence.name, mr: defence.mr }),
+        rolled: true,
+        roll: roll.roll,
+        need,
+        success: roll.success,
+        outcome: game.i18n.localize(roll.success ? "CNS5.Defence.through" : "CNS5.Defence.stopped")
+      };
+      steps.push(step);
+
+      if (!roll.success) {
+        // A Focus that fails to stop a spell may turn on its bearer.
+        if (defence.backfires) {
+          const chance = await new Roll("1d100").evaluate();
+          rolls.push(chance);
+          step.note = game.i18n.format(
+            chance.total <= CNS5.focusDefenceBackfire
+              ? "CNS5.Defence.focusBackfired"
+              : "CNS5.Defence.focusHeld",
+            { roll: chance.total, chance: CNS5.focusDefenceBackfire }
+          );
+        }
+        return { through: false, steps, rolls, stoppedBy: defence };
+      }
+
+      // "If such an amulet is overcome, the defensive spell will discharge for
+      // 1D10 days if the spell overcoming it was of a harmful nature."
+      if (defence.kind === "amulet" && harmful) {
+        const days = await new Roll(CNS5.amuletDischargeDays).evaluate();
+        rolls.push(days);
+        step.note = game.i18n.format("CNS5.Defence.amuletDischarged", { days: days.total });
+      }
+    }
+
+    return { through: true, steps, rolls, stoppedBy: null };
   }
 
   /* -------------------------------------------- */

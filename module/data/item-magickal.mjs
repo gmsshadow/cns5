@@ -25,8 +25,27 @@ export class CnS5MagickalItem extends CnS5PhysicalItem {
     schema.kind = new fields.StringField({
       required: true,
       initial: "device",
-      choices: ["device", "focus", "scroll"]
+      choices: ["device", "focus", "scroll", "book", "ward", "amulet"]
     });
+
+    // A Focus may be raised in defence like an Amulet, at the risk of a
+    // backfire if it fails to stop the spell (p298).
+    schema.usedDefensively = new fields.BooleanField({ required: true, initial: false });
+
+    // How old a protection is: an Amulet or Focus gains 2% of Magick
+    // Resistance for every 25 years of its existence.
+    schema.ageYears = new fields.NumberField({
+      required: true, integer: true, initial: 0, min: 0
+    });
+
+    // Whose book it is. A mage's own is read to cast spells he is still
+    // learning; anyone else's is read like a scroll, at its writer's skill
+    // (p301, p307). Left blank it is taken as the bearer's own, that being
+    // the usual case.
+    schema.writtenBy = new fields.StringField({ required: true, blank: true, initial: "" });
+
+    // "A spell written for one specific mode is useless to another" (p306).
+    schema.writtenForMode = new fields.StringField({ required: true, blank: true, initial: "" });
 
     // A Scroll crumbles once read, hit or miss. It is kept, greyed, rather than
     // deleted: a thing that has just happened at the table is worth being able
@@ -103,13 +122,37 @@ export class CnS5MagickalItem extends CnS5PhysicalItem {
       device: CNS5.deviceGrades,
       scroll: CNS5.scrollGrades
     }[this.kind];
+
+    // A book has no grade and no charges; it has pages.
+    if (this.kind === "book") this.pages = CNS5.bookPages(this.spells);
+
+    // What a protection resists by, and whether it stands in a spell's way.
+    // A Ward or Circle "is targeted as if they were the Mage who created
+    // them", so it resists as he would; an Amulet or a Focus by the strongest
+    // spell in it and by its age (p298).
+    const strongest = Math.max(0, ...this.spells.map((sp) => sp.mr), 0);
+    if (this.kind === "amulet" || (this.kind === "focus" && this.usedDefensively)) {
+      this.protectiveMr = CNS5.protectiveMr(strongest, this.ageYears);
+    } else if (this.kind === "ward") {
+      this.protectiveMr = this.makerPsf;
+    } else {
+      this.protectiveMr = 0;
+    }
+
+    // Only something carried, and not already spent, stands in the way.
+    this.defends =
+      CNS5.defenceOrder.includes(this.kind === "focus" && !this.usedDefensively ? "" : this.kind) &&
+      this.carried &&
+      !this.spent;
     this.gradeData = table?.[this.grade] ?? null;
     this.gradeLabel = this.gradeData?.label ?? "";
 
-    // A Scroll has no charges: it is used once.
-    this.maxCharges =
-      this.kind === "scroll" ? 0 : CNS5.itemCharges(this.kind, this.grade, this.makerMl);
-    this.spent = this.kind === "scroll" ? this.discharged : this.charges <= 0;
+    // Neither a Scroll nor a book has charges: one is used once, the other
+    // for as long as its pages last.
+    const chargeless = this.kind === "scroll" || this.kind === "book";
+    this.maxCharges = chargeless ? 0 : CNS5.itemCharges(this.kind, this.grade, this.makerMl);
+    this.spent =
+      this.kind === "scroll" ? this.discharged : this.kind === "book" ? false : this.charges <= 0;
 
     // A Focus stores spells by their Magick Resistance rather than by count.
     if (this.kind === "focus") {
@@ -139,6 +182,9 @@ export class CnS5MagickalItem extends CnS5PhysicalItem {
           : this.spells.length && !CNS5.scrollAccepts(this.grade, this.spells[0].mr)
             ? { allowed: false, reason: "CNS5.Scroll.wrongGrade" }
             : { allowed: true, reason: null };
+    } else if (this.kind === "book") {
+      // A book holds as many spells as it has pages for.
+      this.accepts = { allowed: true, reason: null };
     } else {
       // A Focus stores by total Magick Resistance rather than by count.
       this.accepts =

@@ -140,6 +140,11 @@ export class CnS5Skill extends foundry.abstract.TypeDataModel {
     );
     this.levelBonus = this.known ? this.level * 3 : 0;
     this.categoryBonus = CNS5.skillCategories[this.category]?.psf ?? 0;
+    // Whether the character's birth sign inclines towards this skill's group
+    // (p52). It does not grant the bonus — the player chooses which favoured
+    // skills to take — but it says which may be chosen.
+    this.favouredBySign = (actorSystem.details?.favouredCategories ?? []).includes(this.group);
+
     this.masteryBonus = (this.mastered ? 10 : 0) + (this.sunsign ? 10 : 0);
 
     // A gentle character is better at courtesy and at command (p119). Courtly

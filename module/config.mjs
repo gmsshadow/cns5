@@ -305,10 +305,114 @@ CNS5.periods = {
   wf: "CNS5.Period.wf"
 };
 
+/**
+ * A character's standing in his faith, which decides what he may invoke.
+ *
+ * "† Acts of Faith that are solely within the competence of ordained priests.
+ * ‡ Acts of Faith that may only be invoked by ordained Priests, Monastics
+ * (monks, nuns) and members of Holy Fighting Orders" (p404).
+ */
+CNS5.holyStandings = {
+  lay: "CNS5.Standing.lay",
+  monastic: "CNS5.Standing.monastic",
+  ordained: "CNS5.Standing.ordained"
+};
+
 CNS5.birthOmens = {
   well: "CNS5.Omens.well",
   neutral: "CNS5.Omens.neutral",
   poor: "CNS5.Omens.poor"
+};
+
+/**
+ * Table - Birth Omens (p54): what an aspect is rolled on, what it costs to
+ * choose instead, and how it shapes the favoured attribute.
+ *
+ * "Positive numbers indicate extra points gained if an aspect is chosen, while
+ * negative numbers are PC Points that must be spent in order to obtain a
+ * desired Aspect." The last column is for the random method of generating
+ * attributes: a Well Aspected character rolls his favoured attribute with an
+ * extra 2D10 and keeps the best two dice, a Poorly Aspected one the worst two.
+ */
+CNS5.birthOmenTable = {
+  well: { roll: [1, 15], pcPoints: -10, favouredAttribute: "best" },
+  neutral: { roll: [16, 85], pcPoints: 0, favouredAttribute: null },
+  poor: { roll: [86, 100], pcPoints: 10, favouredAttribute: "worst" }
+};
+
+/* -------------------------------------------- */
+/*  Birth signs                                 */
+/*  (pp.52-53)                                  */
+/* -------------------------------------------- */
+
+/**
+ * Table - Birth Signs & Skills (p53).
+ *
+ * "Each of the twelve Birth Sign inclines towards two skill categories, a well
+ * aspected or Neutral character has the choice of either two skills from one
+ * favoured category or one skill from each of their favoured category. A poorly
+ * aspected character may only choose a single skill."
+ *
+ * A chosen skill that is also one of the character's primary vocational skills
+ * "is regarded as Mastered at +20 PSF% and +2 Levels (This is a free mastery
+ * slot)"; otherwise it is +10 PSF% and +2 levels. The system already carries
+ * both halves of that on a skill — `mastered` and `sunsign`, ten per cent
+ * apiece — so what was missing was only which categories a sign favours.
+ *
+ * The categories are named as our own skill list names them: the table's
+ * "Thievery" is the Thievish category, its "Outdoor" the Outdoor one.
+ */
+CNS5.birthSigns = {
+  aries: { label: "CNS5.Sign.aries", roll: [1, 8], categories: ["Combat", "Art & Entertainment"], attribute: "dex", from: "Mar 21", to: "Apr 19" },
+  taurus: { label: "CNS5.Sign.taurus", roll: [9, 16], categories: ["Athletic", "Lore Scientific"], attribute: "str", from: "Apr 20", to: "May 20" },
+  gemini: { label: "CNS5.Sign.gemini", roll: [17, 24], categories: ["Craft & Trade", "Thievish"], attribute: "wis", from: "May 21", to: "Jun 20" },
+  cancer: { label: "CNS5.Sign.cancer", roll: [25, 32], categories: ["Craft & Trade", "Art & Entertainment"], attribute: "int", from: "Jun 21", to: "Jul 22" },
+  leo: { label: "CNS5.Sign.leo", roll: [33, 40], categories: ["Combat", "Outdoor"], attribute: "con", from: "Jul 23", to: "Aug 22" },
+  virgo: { label: "CNS5.Sign.virgo", roll: [41, 48], categories: ["Lore Historical", "Materia Magicka"], attribute: "int", from: "Aug 23", to: "Sep 22" },
+  libra: { label: "CNS5.Sign.libra", roll: [49, 56], categories: ["Lore Historical", "Perception"], attribute: "wis", from: "Sep 23", to: "Oct 22" },
+  scorpio: { label: "CNS5.Sign.scorpio", roll: [57, 64], categories: ["Combat", "Materia Magicka"], attribute: "con", from: "Oct 23", to: "Nov 21" },
+  sagittarius: { label: "CNS5.Sign.sagittarius", roll: [65, 72], categories: ["Agricultural", "Seamanship"], attribute: "con", from: "Nov 22", to: "Dec 21" },
+  capricorn: { label: "CNS5.Sign.capricorn", roll: [73, 80], categories: ["Charismatic", "Materia Magicka"], attribute: "bv", from: "Dec 22", to: "Jan 19" },
+  aquarius: { label: "CNS5.Sign.aquarius", roll: [81, 88], categories: ["Charismatic", "Lore Scientific"], attribute: "int", from: "Jan 20", to: "Feb 18" },
+  pisces: { label: "CNS5.Sign.pisces", roll: [89, 96], categories: ["Craft & Trade", "Materia Magicka"], attribute: "dex", from: "Feb 19", to: "Mar 20" }
+};
+
+/** "97 -100 Select Sign", and ten points to choose one outright (p52). */
+CNS5.selectSignRoll = [97, 100];
+CNS5.selectSignCost = 10;
+
+/**
+ * How many favoured skills a sign grants, by aspect (p52), and what each is
+ * worth in Personal Skill Factor.
+ */
+CNS5.sunsignSkills = { well: 2, neutral: 2, poor: 1 };
+CNS5.sunsignPsf = { vocational: 20, other: 10 };
+CNS5.sunsignLevels = 2;
+
+/**
+ * Bonuses to experience for using a skill in a favoured category (p53).
+ *
+ * Magick runs the other way from everything else: a neutrally aspected mage
+ * gains nothing, where a poorly aspected one gains ten. Priestly Magick is
+ * odder still, gaining only when neutral.
+ */
+CNS5.sunsignExperience = {
+  ordinary: { well: 15, neutral: 10, poor: 5 },
+  magick: { well: 15, neutral: 0, poor: 10 },
+  priestly: { well: 0, neutral: 10, poor: 0 }
+};
+
+/**
+ * The sign a roll of the d100 gives, or null where the player chooses.
+ * @param {number} roll
+ * @returns {string|null}
+ */
+CNS5.birthSignFor = function (roll) {
+  const value = Number(roll) || 0;
+  const hit = Object.entries(CNS5.birthSigns).find(
+    ([, sign]) => value >= sign.roll[0] && value <= sign.roll[1]
+  );
+  return hit ? hit[0] : null;
 };
 
 /** Magick Resistance is 10% for Neutral omens, 0% otherwise (worksheet, p288). */
@@ -1068,7 +1172,9 @@ CNS5.overspendRules = {
 CNS5.flawKinds = {
   deficiency: "CNS5.Flaw.kind.deficiency",
   phobia: "CNS5.Flaw.kind.phobia",
-  curse: "CNS5.Flaw.kind.curse"
+  curse: "CNS5.Flaw.kind.curse",
+  // Rolled on its own d10 table when a curse makes a character allergic (p87).
+  allergy: "CNS5.Flaw.kind.allergy"
 };
 
 /**
@@ -2230,6 +2336,248 @@ CNS5.learningColumnFor = function (mode, columns) {
   );
 };
 
+/* -------------------------------------------- */
+/*  What a tradition makes of a school, to hand */
+/* -------------------------------------------- */
+
+/**
+ * Table - Spell Magick Resistance Modifiers (p295), held here as well as in
+ * data/magick.json.
+ *
+ * The data file is fetched, and a spell works out its cost for its caster while
+ * the actor is being prepared — before any fetch has had a chance to return. So
+ * the grid is kept here for that, and a test holds the two copies to the same
+ * figures; data/magick.json stays what tools/extract-magick.py writes.
+ */
+CNS5.learningGrid = {
+  "modes": [
+    "Conjuration",
+    "Divination",
+    "Enchantment",
+    "Air",
+    "Earth",
+    "Fire",
+    "Water",
+    "Hex Master",
+    "Necromantic",
+    "Power Word",
+    "Thaumatrugy",
+    "Druidic",
+    "Shamanic",
+    "Witchcraft"
+  ],
+  "modifiers": {
+    "Basic Magick Air": {
+      "Conjuration": -1,
+      "Divination": 1,
+      "Enchantment": 0,
+      "Air": -3,
+      "Earth": 0,
+      "Fire": -2,
+      "Water": -2,
+      "Hex Master": 0,
+      "Necromantic": 3,
+      "Power Word": -1,
+      "Thaumatrugy": 0,
+      "Druidic": 2,
+      "Shamanic": 2,
+      "Witchcraft": 3
+    },
+    "Basic Magick Earth": {
+      "Conjuration": 0,
+      "Divination": 3,
+      "Enchantment": 2,
+      "Air": 0,
+      "Earth": -3,
+      "Fire": -2,
+      "Water": -2,
+      "Hex Master": 0,
+      "Necromantic": 3,
+      "Power Word": 2,
+      "Thaumatrugy": 3,
+      "Druidic": 1,
+      "Shamanic": 3,
+      "Witchcraft": 3
+    },
+    "Basic Magick Fire": {
+      "Conjuration": 0,
+      "Divination": 1,
+      "Enchantment": 1,
+      "Air": -2,
+      "Earth": -2,
+      "Fire": -3,
+      "Water": 0,
+      "Hex Master": 0,
+      "Necromantic": 3,
+      "Power Word": 0,
+      "Thaumatrugy": 0,
+      "Druidic": 2,
+      "Shamanic": 3,
+      "Witchcraft": 2
+    },
+    "Basic Magick Water": {
+      "Conjuration": 0,
+      "Divination": 0,
+      "Enchantment": 1,
+      "Air": -2,
+      "Earth": -2,
+      "Fire": 0,
+      "Water": -3,
+      "Hex Master": 0,
+      "Necromantic": 3,
+      "Power Word": 1,
+      "Thaumatrugy": 2,
+      "Druidic": 1,
+      "Shamanic": 3,
+      "Witchcraft": 3
+    },
+    "Arcane": {
+      "Conjuration": 2,
+      "Divination": -2,
+      "Enchantment": 1,
+      "Air": 1,
+      "Earth": 1,
+      "Fire": 1,
+      "Water": 3,
+      "Hex Master": 0,
+      "Necromantic": -2,
+      "Power Word": 1,
+      "Thaumatrugy": 0,
+      "Druidic": 0,
+      "Shamanic": -1,
+      "Witchcraft": 2
+    },
+    "Command": {
+      "Conjuration": 3,
+      "Divination": 0,
+      "Enchantment": -3,
+      "Air": -1,
+      "Earth": -1,
+      "Fire": -1,
+      "Water": 0,
+      "Hex Master": 0,
+      "Necromantic": -3,
+      "Power Word": -3,
+      "Thaumatrugy": -2,
+      "Druidic": 0,
+      "Shamanic": 0,
+      "Witchcraft": -2
+    },
+    "Divination": {
+      "Conjuration": -1,
+      "Divination": -3,
+      "Enchantment": 2,
+      "Air": -1,
+      "Earth": 1,
+      "Fire": -1,
+      "Water": -1,
+      "Hex Master": 0,
+      "Necromantic": -3,
+      "Power Word": 2,
+      "Thaumatrugy": 1,
+      "Druidic": -3,
+      "Shamanic": -2,
+      "Witchcraft": -2
+    },
+    "Illusion": {
+      "Conjuration": -2,
+      "Divination": 3,
+      "Enchantment": -3,
+      "Air": 3,
+      "Earth": 3,
+      "Fire": 3,
+      "Water": 1,
+      "Hex Master": 0,
+      "Necromantic": -1,
+      "Power Word": -1,
+      "Thaumatrugy": -3,
+      "Druidic": 0,
+      "Shamanic": 1,
+      "Witchcraft": 0
+    },
+    "Plant": {
+      "Conjuration": -1,
+      "Divination": 0,
+      "Enchantment": 3,
+      "Air": 3,
+      "Earth": 1,
+      "Fire": 3,
+      "Water": 1,
+      "Hex Master": 0,
+      "Necromantic": 3,
+      "Power Word": 3,
+      "Thaumatrugy": 1,
+      "Druidic": 1,
+      "Shamanic": -2,
+      "Witchcraft": -2
+    },
+    "Summoning": {
+      "Conjuration": -1,
+      "Divination": -3,
+      "Enchantment": -2,
+      "Air": 0,
+      "Earth": 0,
+      "Fire": 0,
+      "Water": 0,
+      "Hex Master": 0,
+      "Necromantic": -3,
+      "Power Word": -2,
+      "Thaumatrugy": 1,
+      "Druidic": -1,
+      "Shamanic": -2,
+      "Witchcraft": -2
+    },
+    "Transcendental": {
+      "Conjuration": 3,
+      "Divination": -3,
+      "Enchantment": 1,
+      "Air": 2,
+      "Earth": 2,
+      "Fire": 2,
+      "Water": 3,
+      "Hex Master": 0,
+      "Necromantic": 0,
+      "Power Word": 0,
+      "Thaumatrugy": 1,
+      "Druidic": -2,
+      "Shamanic": -3,
+      "Witchcraft": 0
+    },
+    "Transmutation": {
+      "Conjuration": -3,
+      "Divination": 3,
+      "Enchantment": -2,
+      "Air": 3,
+      "Earth": 3,
+      "Fire": 3,
+      "Water": 3,
+      "Hex Master": 0,
+      "Necromantic": 0,
+      "Power Word": 0,
+      "Thaumatrugy": -2,
+      "Druidic": -1,
+      "Shamanic": -2,
+      "Witchcraft": -3
+    },
+    "Wards": {
+      "Conjuration": 1,
+      "Divination": 0,
+      "Enchantment": -1,
+      "Air": -3,
+      "Earth": -3,
+      "Fire": -3,
+      "Water": -3,
+      "Hex Master": 0,
+      "Necromantic": -3,
+      "Power Word": -2,
+      "Thaumatrugy": -2,
+      "Druidic": 0,
+      "Shamanic": 0,
+      "Witchcraft": -2
+    }
+  }
+};
+
 /**
  * What a spell's Magick Resistance counts as for this mage.
  *
@@ -2242,23 +2590,35 @@ CNS5.learningColumnFor = function (mode, columns) {
  * @returns {{effective: number, modifier: number, row: string|null, column: string|null}}
  */
 CNS5.effectiveLearningMr = function ({ mr, method, mode, table }) {
-  const row = table?.learningModifiers
-    ? CNS5.learningRowFor(method ?? "", table.learningModifiers)
-    : null;
-  const column = table?.learningModes
-    ? CNS5.learningColumnFor(mode ?? "", table.learningModes)
-    : null;
+  const modifiers = table?.learningModifiers ?? CNS5.learningGrid.modifiers;
+  const modes = table?.learningModes ?? CNS5.learningGrid.modes;
 
-  const modifier = row && column ? table.learningModifiers[row][column] ?? 0 : 0;
+  const row = method ? CNS5.learningRowFor(method, modifiers) : null;
+  const column = mode ? CNS5.learningColumnFor(mode, modes) : null;
+  const modifier = row && column ? modifiers[row][column] ?? 0 : 0;
+
+  // "The minimum MR of a spell is always 1 and the maximum MR is always 10. If
+  // the modifier takes the MR of a spell above 10, then the MR remains at 10
+  // but the Fatigue Point cost of the spell increases by 3 FP per point above
+  // 10" (p294). The book's own case: a Diviner learning an MR 8 Transmutation
+  // spell, at +3, learns it as MR 10 and pays 3 FP more to cast it.
+  const raw = (Number(mr) || 0) + modifier;
+  const excess = Math.max(0, raw - CNS5.spellMrMaximum);
 
   return {
-    // Never below one: a spell is never free to learn however well it suits.
-    effective: Math.max(1, (Number(mr) || 0) + modifier),
+    effective: Math.min(CNS5.spellMrMaximum, Math.max(CNS5.spellMrMinimum, raw)),
     modifier,
+    excess,
+    fatigueSurcharge: excess * CNS5.excessMrFatigue,
     row,
     column
   };
 };
+
+/** The bounds p294 sets on a spell's Magick Resistance, and the price of the excess. */
+CNS5.spellMrMinimum = 1;
+CNS5.spellMrMaximum = 10;
+CNS5.excessMrFatigue = 3;
 
 /**
  * A spell only partly learnt may still be attempted, at ten per cent off for
@@ -2553,4 +2913,533 @@ CNS5.deviceAccepts = function (grade, spellMrs, makerMl) {
   if (mrs.some((mr) => mr > device.maxSpellMr)) return { allowed: false, reason: "CNS5.Device.tooStrong" };
   if (total > ceiling) return { allowed: false, reason: "CNS5.Device.overTotal" };
   return { allowed: true, reason: null };
+};
+
+/* -------------------------------------------- */
+/*  Partly learnt spells and backfires          */
+/*  (p299)                                      */
+/* -------------------------------------------- */
+
+/**
+ * "If the spell is not fully learnt and the Mage wishes to try to cast the
+ * spell he has to make a roll to attempt to cast the spell successfully. A
+ * skill roll is made against his Method of Magick with a penalty of -10% per
+ * MR over 0. If the Casting fails there is the potential of a backfire and the
+ * severity of this is shown by the Crit Die."
+ *
+ * Learning a spell is bringing its Magick Resistance down for oneself, a step
+ * at a time, to nought (p294). So what is recorded is the Magick Resistance
+ * still to go, and a spell with none left is known.
+ */
+CNS5.partlyLearntPenalty = -10;
+
+/**
+ * Table - Spell Backfire Severity (p299), read from the Crit Die of the failed
+ * casting. Every result costs Fatigue at the multiple shown; the worst of them
+ * also let the spell loose where the Gamemaster must decide what it does.
+ */
+CNS5.backfires = [
+  { min: 1, max: 1, fatigue: 0.5, key: "fizzle" },
+  { min: 2, max: 4, fatigue: 1, key: "fails" },
+  { min: 5, max: 7, fatigue: 2, key: "major" },
+  // "The spell goes off at the Mage's feet."
+  { min: 8, max: 9, fatigue: 2, key: "extreme", loose: true },
+  // "The spell activates in the Mage's hand with double Spell Effects."
+  { min: 10, max: Infinity, fatigue: 2, key: "disastrous", loose: true, doubleEffect: true }
+];
+
+/**
+ * Read the backfire for a failed casting's Crit Die.
+ *
+ * The die is read as it stood after modifiers, and a result below one is read
+ * as one — the table starts there, and a favourable modifier on a failure has
+ * already done what it can by making the backfire mild.
+ *
+ * @param {number} critTotal
+ * @returns {object}
+ */
+CNS5.readBackfire = function (critTotal) {
+  const value = Math.max(1, Number(critTotal) || 1);
+  return CNS5.backfires.find((b) => value >= b.min && value <= b.max) ?? CNS5.backfires[0];
+};
+
+/**
+ * Days to take a spell one step closer to known, from Table - Time Taken to
+ * Learn: the step from this Magick Resistance to the one below.
+ *
+ * @param {number} mrRemaining
+ * @param {number} ml
+ * @returns {number|null}
+ */
+CNS5.daysToNextStep = function (mrRemaining, ml) {
+  const mr = Math.max(0, Number(mrRemaining) || 0);
+  return mr > 0 ? CNS5.daysPerMrStep(mr, ml) : null;
+};
+
+/* -------------------------------------------- */
+/*  Non-mages aiming a device                   */
+/*  (p299)                                      */
+/* -------------------------------------------- */
+
+/**
+ * "Any non-Mage trying to target a spell (unless it is a touch effect whereby a
+ * blow is required) must first succeed with a Willpower roll... If the
+ * Willpower roll fails, proper targeting fails too, and the spell effect misses
+ * its intended target." Mages never check.
+ *
+ * Table - Willpower Failure then says where it went. The last band is a
+ * reprieve: the caster "manages to correct the error in time".
+ */
+CNS5.willpowerFailure = [
+  { min: 1, max: 25, key: "dispelled" },
+  { min: 26, max: 40, key: "near30" },
+  { min: 41, max: 55, key: "near10" },
+  { min: 56, max: 70, key: "overshoots" },
+  { min: 71, max: 85, key: "short" },
+  { min: 86, max: 100, key: "corrected", corrected: true }
+];
+
+CNS5.readWillpowerFailure = function (roll) {
+  const value = Math.min(100, Math.max(1, Number(roll) || 1));
+  return CNS5.willpowerFailure.find((w) => value >= w.min && value <= w.max);
+};
+
+/* -------------------------------------------- */
+/*  Spell books                                 */
+/*  (pp.301, 306-307)                           */
+/* -------------------------------------------- */
+
+/**
+ * "Each spell will require one page per MR of the spell, after any
+ * modifications for the mode. A spell written for one specific mode is useless
+ * to another" (p306).
+ *
+ * A book is used two ways. The mage's own: "if the Mage has not learned the
+ * spell fully... he may read the spell from the book, this doubles the time
+ * required to cast the spell but means the spell is automatically cast as if he
+ * had learnt it fully" (p307). Someone else's is read like a scroll (p301): at
+ * its writer's skill, and "on a failure, the scroll or page is discharged".
+ */
+CNS5.bookPages = function (spells) {
+  return (spells ?? []).reduce((total, spell) => total + Math.max(1, Number(spell.mr) || 0), 0);
+};
+
+CNS5.castingSources.book = { label: "CNS5.Casting.book", fatigue: 0.5, charge: false };
+
+/* -------------------------------------------- */
+/*  Experience Level                            */
+/*  (p45)                                       */
+/* -------------------------------------------- */
+
+/**
+ * Table - Total Experience Points (p45): the least total experience each
+ * Experience Level asks for.
+ *
+ * A character may raise any skill up to his Experience Level at the ordinary
+ * cost; beyond it he pays for every level of the difference, "learning far
+ * above his current Experience Level... outrunning his current competence".
+ * So the figure decides what improving costs, and is worth showing.
+ */
+CNS5.experienceLevelFloors = [
+  0, 5_001, 10_001, 15_001, 20_001, 30_001, 40_001, 50_001, 65_001, 80_001,
+  95_001, 110_001, 130_001, 150_001, 170_001, 195_001, 220_001, 245_001,
+  270_001, 330_001
+];
+
+/** "From Level 20 onwards each Experience Level costs +30,000 Exp." */
+CNS5.experienceBeyondTwenty = 30_000;
+
+/**
+ * The Experience Level a total of experience has reached.
+ *
+ * @param {number} total
+ * @returns {number}
+ */
+CNS5.experienceLevel = function (total) {
+  const earned = Math.max(0, Number(total) || 0);
+
+  const last = CNS5.experienceLevelFloors.at(-1);
+  if (earned >= last) {
+    return CNS5.experienceLevelFloors.length +
+      Math.floor((earned - last) / CNS5.experienceBeyondTwenty);
+  }
+
+  // The highest floor this total has reached.
+  let level = 1;
+  CNS5.experienceLevelFloors.forEach((floor, index) => {
+    if (earned >= floor) level = index + 1;
+  });
+  return level;
+};
+
+/**
+ * What the next Experience Level asks for, and how far off it is.
+ *
+ * @param {number} total
+ * @returns {{level: number, next: number, needed: number}}
+ */
+CNS5.experienceProgress = function (total) {
+  const earned = Math.max(0, Number(total) || 0);
+  const level = CNS5.experienceLevel(earned);
+
+  const next =
+    level < CNS5.experienceLevelFloors.length
+      ? CNS5.experienceLevelFloors[level]
+      : CNS5.experienceLevelFloors.at(-1) +
+        (level - CNS5.experienceLevelFloors.length + 1) * CNS5.experienceBeyondTwenty;
+
+  return { level, next, needed: Math.max(0, next - earned) };
+};
+
+/* -------------------------------------------- */
+/*  Magickal defences                           */
+/*  (p298)                                      */
+/* -------------------------------------------- */
+
+/**
+ * "If the target is protected by Magick, the spell may have to overcome those
+ * protections before the intended victim may himself be targeted."
+ *
+ * Each protection is targeted in its own right, outermost first, and a spell
+ * that fails against one goes no further. A Circle or Ward "is targeted as if
+ * they were the Mage who created them", so it resists as he would; an Amulet
+ * and a Focus resist by what has been put into them and by their age.
+ */
+CNS5.defenceOrder = ["ward", "amulet", "focus"];
+
+/**
+ * "An amulet will have a MR equal to 5% per level of the spell placed in it. In
+ * addition, an amulet will automatically increase its MR by 2% for every 25
+ * years of its existence." A Focus used defensively resists the same way, by
+ * the highest spell placed in it.
+ */
+CNS5.protectiveMrPerLevel = 5;
+CNS5.protectiveMrPerAge = 2;
+CNS5.protectiveAgeStep = 25;
+
+CNS5.protectiveMr = function (spellLevel, years = 0) {
+  const level = Math.max(0, Number(spellLevel) || 0);
+  const age = Math.max(0, Number(years) || 0);
+  return (
+    level * CNS5.protectiveMrPerLevel +
+    Math.floor(age / CNS5.protectiveAgeStep) * CNS5.protectiveMrPerAge
+  );
+};
+
+/**
+ * "If such an amulet is overcome, the defensive spell will discharge for 1D10
+ * days if the spell overcoming it was of a harmful nature and directly
+ * injurious."
+ */
+CNS5.amuletDischargeDays = "1d10";
+
+/**
+ * "The Mage may elect to use the Focus defensively, like an Amulet. However,
+ * there is a 20% chance of a backfire occurring if the Focus fails to stop the
+ * spell."
+ */
+CNS5.focusDefenceBackfire = 20;
+
+/**
+ * Targeting and Meditation, optional (p298).
+ *
+ * "A Mage may select one spell per ML that he has learnt and enhance it. An
+ * enhancement of +1% x ML per day of meditation to his Targeting TSC% may be
+ * gained. The enhancement will be raised to +2% x ML if he fasts and does
+ * nothing else during his meditations. This process can be used to raise the
+ * targeting probabilities by up to +25%."
+ *
+ * Not to be confused with the meditation that lowers a target's save (p301):
+ * that one is spent on the casting, this one is stored up in a single spell.
+ */
+CNS5.targetingMeditation = { perDay: 1, fasting: 2, maximum: 25 };
+
+CNS5.targetingMeditationBonus = function ({ days = 0, fasting = false, magickLevel = 1 }) {
+  const rate = fasting ? CNS5.targetingMeditation.fasting : CNS5.targetingMeditation.perDay;
+  const gained = rate * Math.max(0, Number(days) || 0) * Math.max(1, Number(magickLevel) || 1);
+  return Math.min(CNS5.targetingMeditation.maximum, gained);
+};
+
+/**
+ * "The duration of a spell is finite, based on the ML of the caster... Once the
+ * time limit is reached, the spell degrades over a 1D10 minute period" (p296).
+ */
+CNS5.spellDecayDie = "1d10";
+
+/* -------------------------------------------- */
+/*  Spirit, and what moves it                   */
+/*  (pp.400-401)                                */
+/* -------------------------------------------- */
+
+/**
+ * Table - Perceived Faith (p400): what a character's Current Spirit makes of
+ * him. "Faith does not measure belief in a Deity. That is represented by
+ * Spirit."
+ *
+ * Unlike Body and Fatigue, "Current SPR can greatly exceed a character's
+ * original starting base or it can lapse into total non-existence".
+ */
+CNS5.perceivedFaith = [
+  { min: 0, max: 0, key: "atheist" },
+  { min: 1, max: 3, key: "skeptical" },
+  { min: 4, max: 6, key: "transgressor" },
+  { min: 7, max: 10, key: "lapsed" },
+  { min: 11, max: 20, key: "true" },
+  { min: 21, max: 35, key: "devout" },
+  { min: 36, max: 49, key: "fervent" },
+  { min: 50, max: Infinity, key: "saintly" }
+];
+
+CNS5.believerFor = function (spirit) {
+  const value = Math.max(0, Number(spirit) || 0);
+  return (CNS5.perceivedFaith.find((b) => value >= b.min && value <= b.max) ?? CNS5.perceivedFaith[0]).key;
+};
+
+/**
+ * "If the character develops Faith skill in his current religion, he may raise
+ * his Current Spirit by +1 for every 5% PSF (rounded up)" (p400). An
+ * entitlement rather than an automatic gain, and only for the religion the
+ * skill was learnt in.
+ */
+CNS5.spiritPerFaithPsf = 5;
+
+CNS5.spiritFromFaith = function (psf) {
+  return Math.ceil(Math.max(0, Number(psf) || 0) / CNS5.spiritPerFaithPsf);
+};
+
+/**
+ * What performing an Act of Faith does to Current Spirit (p400).
+ *
+ * "When an intercessor performs an Act of Faith he expends Current SPR equal to
+ * the Fatigue cost of the Act of Faith. If the Act of Faith is successful he
+ * regains all the expended Current SPR and gains a bonus of +1 Current SPR if a
+ * Crit Die is a 10. However, if the Act of Faith fails, he only regains half of
+ * the expended Current SPR... If a Critical Failure (Crit Die 10) then the
+ * cleric loses all of the expended Current SPR."
+ *
+ * So the net of it: a success costs nothing and may give one; a failure costs
+ * half what was spent; a critical failure costs all of it.
+ *
+ * @param {object} options
+ * @returns {{expended: number, regained: number, net: number, key: string}}
+ */
+CNS5.spiritAfterAct = function ({ cost = 0, success = false, critTotal = 0 }) {
+  const expended = Math.max(0, Number(cost) || 0);
+  const critical = (Number(critTotal) || 0) >= 10;
+
+  if (success) {
+    return {
+      expended,
+      regained: expended,
+      net: critical ? 1 : 0,
+      key: critical ? "blessed" : "restored"
+    };
+  }
+
+  if (critical) return { expended, regained: 0, net: -expended, key: "forsaken" };
+
+  const regained = Math.floor(expended / 2);
+  return { expended, regained, net: regained - expended, key: "shaken" };
+};
+
+/**
+ * Table - Miracles Believer's Bonus and Table - Miracles Unbeliever's Bonus
+ * (p401): what witnessing a miracle does to Current Spirit.
+ *
+ * A believer gains; someone of another religion gains in the new faith and
+ * loses in his own, the two figures given as a pair.
+ */
+CNS5.miracleBonus = {
+  minor: {
+    cleric: 0,
+    clericCrit: 1,
+    believer: 1,
+    believerCrit: 2,
+    witness: 1,
+    unbeliever: [0, 0],
+    unbelieverCrit: [1, -1],
+    unbelieverWitness: [0, 0],
+    unbelieverWitnessCrit: [1, -1]
+  },
+  miracle: {
+    cleric: 1,
+    clericCrit: 1,
+    believer: 1,
+    believerCrit: 3,
+    witness: 1,
+    unbeliever: [1, 0],
+    unbelieverCrit: [2, -2],
+    unbelieverWitness: [1, -2],
+    unbelieverWitnessCrit: [1, -1]
+  },
+  greater: {
+    cleric: 1,
+    clericCrit: 3,
+    believer: 2,
+    believerCrit: 4,
+    witness: 2,
+    unbeliever: [3, -3],
+    unbelieverCrit: [5, -6],
+    unbelieverWitness: [2, -2],
+    unbelieverWitnessCrit: [2, -3]
+  }
+};
+
+/** "At 50 SPR Points, one's Faith is such…" — and conversion turns on these. */
+CNS5.conversionSpirit = 11;
+CNS5.lapsedSpirit = 10;
+
+/* -------------------------------------------- */
+/*  Who may be prayed for                       */
+/*  (p403)                                      */
+/* -------------------------------------------- */
+
+/**
+ * Table - Requests for Divine Aid.
+ *
+ * "The person praying has no 'power' to do anything himself" — so what limits
+ * him is not skill but belief, and for the clergy, office. A layman prays for
+ * himself; a True Believer may pray for someone *instead* of himself; from
+ * Devout upwards he prays for others *in addition* to himself.
+ *
+ * `others` is how many besides himself, `instead` that he may name another in
+ * his own place rather than as well.
+ */
+CNS5.divineAidByBelief = {
+  atheist: { others: 0, instead: false },
+  skeptical: { others: 0, instead: false },
+  transgressor: { others: 0, instead: false },
+  lapsed: { others: 0, instead: false },
+  true: { others: 0, instead: true },
+  devout: { others: 1, instead: true },
+  fervent: { others: "spirit", multiplier: 0.5, instead: true },
+  saintly: { others: "spirit", multiplier: 1, instead: true }
+};
+
+/**
+ * "Clerics includes all lay brothers in monastic orders, including fighting
+ * orders." Office counts for far more than belief here — though a Priestly
+ * Mage, whose attention is divided, for less than an ordained priest.
+ */
+CNS5.divineAidByOffice = {
+  monastic: 5,
+  ordained: 10,
+  priestlyMage: 3
+};
+
+/**
+ * How many people a character may pray for besides himself.
+ *
+ * Office overrides belief where it is the greater, which it almost always is:
+ * a Sainted layman prays for his Spirit in others, an ordained priest of the
+ * same Spirit for ten times it.
+ *
+ * @param {object} options
+ * @returns {{others: number, instead: boolean, by: string}}
+ */
+CNS5.divineAidFor = function ({ believer = "atheist", standing = "lay", spirit = 0, priestlyMage = false }) {
+  const spr = Math.max(0, Number(spirit) || 0);
+
+  const belief = CNS5.divineAidByBelief[believer] ?? CNS5.divineAidByBelief.atheist;
+  const byBelief = belief.others === "spirit" ? Math.floor(spr * belief.multiplier) : belief.others;
+
+  const office = priestlyMage
+    ? CNS5.divineAidByOffice.priestlyMage
+    : standing === "ordained"
+      ? CNS5.divineAidByOffice.ordained
+      : standing === "monastic"
+        ? CNS5.divineAidByOffice.monastic
+        : 0;
+  const byOffice = office * spr;
+
+  return {
+    others: Math.max(byBelief, byOffice),
+    instead: belief.instead || office > 0,
+    by: byOffice > byBelief ? "office" : "belief"
+  };
+};
+
+/* -------------------------------------------- */
+/*  The Belief Pool                             */
+/*  (p403)                                      */
+/* -------------------------------------------- */
+
+/**
+ * Table - Belief Pool: the Fatigue a clergyman may call upon from those who
+ * worship with him, rather than spending his own.
+ *
+ * Each figure is a multiple of a d10, so a pool is rolled rather than counted.
+ * Several Acts cost thirty or forty Fatigue, which no one man has; this is
+ * where that comes from.
+ */
+CNS5.congregations = {
+  smallRural: { label: "CNS5.Congregation.smallRural", multiplier: 1.0 },
+  typicalRural: { label: "CNS5.Congregation.typicalRural", multiplier: 1.5 },
+  largeRural: { label: "CNS5.Congregation.largeRural", multiplier: 2.0 },
+  veryLargeRural: { label: "CNS5.Congregation.veryLargeRural", multiplier: 3.0 },
+  smallTown: { label: "CNS5.Congregation.smallTown", multiplier: 1.0 },
+  typicalTown: { label: "CNS5.Congregation.typicalTown", multiplier: 1.5 },
+  largeTown: { label: "CNS5.Congregation.largeTown", multiplier: 2.5 },
+  veryLargeTown: { label: "CNS5.Congregation.veryLargeTown", multiplier: 3.5 }
+};
+
+/**
+ * "These bonuses are added to the basic Belief Pool gained for the appropriate
+ * size of congregation. This reflects the added benefit of being in a sacred
+ * location." A shrine's bonus is cumulative with the building's.
+ */
+CNS5.holyPlaces = {
+  none: { label: "CNS5.HolyPlace.none", multiplier: 0 },
+  cathedral: { label: "CNS5.HolyPlace.cathedral", multiplier: 4.0 },
+  smallPriory: { label: "CNS5.HolyPlace.smallPriory", multiplier: 2.5 },
+  typicalPriory: { label: "CNS5.HolyPlace.typicalPriory", multiplier: 3.5 },
+  largePriory: { label: "CNS5.HolyPlace.largePriory", multiplier: 4.5 },
+  majorMonastic: { label: "CNS5.HolyPlace.majorMonastic", multiplier: 6.0 }
+};
+
+CNS5.shrines = {
+  none: { label: "CNS5.Shrine.none", multiplier: 0 },
+  local: { label: "CNS5.Shrine.local", multiplier: 3.0 },
+  regional: { label: "CNS5.Shrine.regional", multiplier: 6.0 },
+  national: { label: "CNS5.Shrine.national", multiplier: 12.0 }
+};
+
+/**
+ * The dice a Belief Pool is drawn with: the multipliers added, then a d10 for
+ * each whole one and the fraction taken of another.
+ *
+ * @param {object} options
+ * @returns {{multiplier: number, formula: string, parts: Array}}
+ */
+CNS5.beliefPoolFormula = function ({ congregation = "", place = "none", shrine = "none" }) {
+  const parts = [];
+  const add = (label, multiplier) => {
+    if (multiplier) parts.push({ label, multiplier });
+    return multiplier;
+  };
+
+  const total =
+    add(CNS5.congregations[congregation]?.label ?? "", CNS5.congregations[congregation]?.multiplier ?? 0) +
+    add(CNS5.holyPlaces[place]?.label ?? "", CNS5.holyPlaces[place]?.multiplier ?? 0) +
+    add(CNS5.shrines[shrine]?.label ?? "", CNS5.shrines[shrine]?.multiplier ?? 0);
+
+  // "3.5 x 1D10" is three dice and half of a fourth.
+  const whole = Math.floor(total);
+  const half = total - whole >= 0.5;
+  const formula = total
+    ? `${whole ? `${whole}d10` : ""}${whole && half ? " + " : ""}${half ? "floor(1d10 / 2)" : ""}`
+    : "0";
+
+  return { multiplier: total, formula, parts };
+};
+
+/**
+ * Table - Acts of Faith (p403): "special modifiers to the Clergy's ability to
+ * call upon the benefits of Acts of Faith for others" — a believing clergyman
+ * reaches far more people than an indifferent one.
+ */
+CNS5.clergyReachByBelief = { devout: 3, fervent: 7, saintly: 12 };
+
+CNS5.clergyReach = function (believer, usual) {
+  return (CNS5.clergyReachByBelief[believer] ?? 1) * Math.max(0, Number(usual) || 0);
 };

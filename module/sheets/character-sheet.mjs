@@ -40,6 +40,7 @@ export class CnS5CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2)
       openWizard: CnS5CharacterSheet.#onOpenWizard,
       attemptUnskilled: CnS5CharacterSheet.#onAttemptUnskilled,
       castFromDevice: CnS5CharacterSheet.#onCastFromDevice,
+      drawBeliefPool: CnS5CharacterSheet.#onDrawBeliefPool,
       removeDeviceSpell: CnS5CharacterSheet.#onRemoveDeviceSpell
     }
   };
@@ -145,6 +146,16 @@ export class CnS5CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2)
     context.scrolls = magickal
       .filter((i) => i.system.kind === "scroll")
       .sort((a, b) => Number(a.system.discharged) - Number(b.system.discharged));
+
+    // A book is either the character's own — spells he is learning — or
+    // someone else's, read like a scroll. They are used so differently that
+    // they are shown apart.
+    const books = magickal.filter((i) => i.system.kind === "book");
+    const mine = (book) => !book.system.writtenBy || book.system.writtenBy === this.actor.name;
+    context.ownBooks = books.filter(mine);
+    // What stands between the character and a spell cast at him (p298).
+    context.wards = magickal.filter((i) => ["ward", "amulet"].includes(i.system.kind));
+    context.otherBooks = books.filter((b) => !mine(b));
     context.talents = this.actor.items.filter((i) => i.type === "talent").sort(byName);
     context.flaws = this.actor.items.filter((i) => i.type === "flaw").sort(byName);
 
@@ -183,6 +194,16 @@ export class CnS5CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2)
     context.characterTypes = this.#choices(CNS5.characterTypes, system.details.characterType);
     context.periods = this.#choices(CNS5.periods, system.details.period);
     context.birthOmens = this.#choices(CNS5.birthOmens, system.details.birthOmens);
+    context.standings = this.#choices(CNS5.holyStandings, system.details.holyStanding);
+    const labelled = (table) =>
+      Object.fromEntries(Object.entries(table).map(([k, v]) => [k, v.label]));
+    context.congregations = this.#choices(labelled(CNS5.congregations), system.faith.congregation);
+    context.holyPlaces = this.#choices(labelled(CNS5.holyPlaces), system.faith.holyPlace);
+    context.shrines = this.#choices(labelled(CNS5.shrines), system.faith.shrine);
+    context.signs = this.#choices(
+      Object.fromEntries(Object.entries(CNS5.birthSigns).map(([k, v]) => [k, v.label])),
+      system.details.sign
+    );
     context.traditions = this.#choices(CNS5.magickTraditions, system.magick.tradition);
 
     const enrich = foundry.applications.ux.TextEditor.implementation.enrichHTML;
@@ -363,6 +384,16 @@ export class CnS5CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2)
     const item = this.actor.items.get(input.dataset.itemId);
     if (!item) return;
     await item.update({ "system.level": Math.max(0, Number(input.value) || 0) });
+  }
+
+  /* -------------------------------------------- */
+
+  /**
+   * Draw the Belief Pool from the congregation.
+   * @this {CnS5CharacterSheet}
+   */
+  static async #onDrawBeliefPool() {
+    await this.actor.drawBeliefPool();
   }
 
   /* -------------------------------------------- */

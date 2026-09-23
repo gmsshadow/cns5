@@ -16,6 +16,46 @@
     </div>
     {{/if}}
 
+    {{!-- Whatever protects the target is targeted first, outermost in, and a
+          spell that fails against one goes no further (p298). --}}
+    {{#each defenceSteps}}
+    <div class="cns5-check__step {{#if success}}is-success{{else}}is-failure{{/if}}">
+        <p class="cns5-check__step-heading">{{heading}}</p>
+        <p class="cns5-check__step-text">
+            {{text}} &mdash; <strong>{{roll}}</strong> {{localize "CNS5.Step.against"}} {{need}}%
+            &mdash; <strong>{{outcome}}</strong>
+        </p>
+        {{#if note}}<p class="cns5-hint">{{note}}</p>{{/if}}
+    </div>
+    {{/each}}
+
+    {{!-- A non-mage aims a device by Willpower first (p299). It sits between
+          casting and targeting, unnumbered, so the three numbered steps mean
+          the same on every card. --}}
+    {{#if willpowerStep}}
+    <div class="cns5-check__step {{#if willpowerStep.success}}is-success{{else}}is-failure{{/if}}">
+        <p class="cns5-check__step-heading">{{willpowerStep.heading}}</p>
+        <p class="cns5-check__step-text">
+            {{willpowerStep.text}} &mdash;
+            <strong>{{willpowerStep.roll}}</strong> {{localize "CNS5.Step.against"}} {{willpowerStep.need}}%
+            &mdash; <strong>{{willpowerStep.outcome}}</strong>
+        </p>
+    </div>
+    {{/if}}
+
+    {{#if backfireLabel}}
+    <p class="cns5-check__backfire">{{backfireLabel}}</p>
+    {{/if}}
+    {{#if spiritNote}}
+    <p class="cns5-check__cost">{{spiritNote}}</p>
+    {{/if}}
+    {{#if decayMinutes}}
+    <p class="cns5-hint">{{localize "CNS5.Spell.decays" duration=durationLabel minutes=decayMinutes}}</p>
+    {{/if}}
+    {{#if bookNote}}
+    <p class="cns5-hint">{{bookNote}}</p>
+    {{/if}}
+
     {{#if targetingHeading}}
     <p class="cns5-check__step-heading">{{targetingHeading}}</p>
     {{/if}}

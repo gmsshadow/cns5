@@ -344,17 +344,33 @@ function toActOfFaith(row) {
   const notes = [];
   if (row.vocations.length) notes.push(row.vocations.join(", "));
   if (row.pffInherited) notes.push("minimum PFF shared with the entry above it");
+  // The vocation tables and the descriptions disagree over two Acts. Both
+  // figures are carried, and the one the description gives is used.
+  if (row.pffInDescription !== undefined) {
+    notes.push(`the vocation table gives PFF ${row.pffMinimum}, its description ${row.pffInDescription}`);
+  }
+  if (!row.described) notes.push("no description of its own in the rulebook");
+
+  // Where the two disagree, the fuller entry wins.
+  const pff = row.pffInDescription ?? row.pffMinimum;
+  const pages = [row.page, row.descriptionPage].filter(Boolean);
 
   return document("actOfFaith", row.name, "icons/svg/holy-shield.svg", {
     religion: "",
     vocations: row.vocations,
     section: row.section ?? "",
-    pffMinimum: row.pffMinimum,
+    pffMinimum: pff,
     successChance: 0,
+    successChanceText: row.successChanceText ?? "",
+    costText: row.costText ?? "",
+    automatic: Boolean(row.automatic),
+    ordainedOnly: Boolean(row.ordainedOnly),
+    monasticOnly: Boolean(row.monasticOnly),
+    equivalentTo: row.equivalentTo ?? "",
     fpCost: 0,
     apToPray: 0,
     notes: notes.join(" — "),
-    reference: `p${row.page}`,
+    reference: [...new Set(pages)].map((p) => `p${p}`).join(", "),
     description: ""
   });
 }
@@ -829,10 +845,16 @@ await build("equipment", gear.weapons.filter(isQuiver).map(toQuiver));
  * The 1D10 table prints the same entry twice — "Minor Phobia & roll again for
  * another flaw" at 01-05 for seven points and again at 06 for thirteen. That is
  * as printed, so both ship, told apart by the roll that produces them. */
+/* Curses (pp.85-86) and the allergies some of them lead to (p87). They are
+ * flaws like any other, rolled on their own tables. */
+const cursesData = JSON.parse(await readFile(path.join(DATA, "curses.json"), "utf8"));
+
 const flawRows = [
   ...traits.flaws.map((row) => [row, "deficiency"]),
   ...traits.additionalFlaws.map((row) => [row, "deficiency"]),
-  ...traits.phobias.map((row) => [row, "phobia"])
+  ...traits.phobias.map((row) => [row, "phobia"]),
+  ...cursesData.curses.map((row) => [row, "curse"]),
+  ...cursesData.allergies.map((row) => [row, "allergy"])
 ];
 const flawCounts = flawRows.reduce((acc, [row]) => {
   acc[row.name] = (acc[row.name] ?? 0) + 1;

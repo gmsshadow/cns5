@@ -15,6 +15,13 @@
             <span>{{localize "CNS5.Experience.available"}}</span>
             <output class="cns5-experience__available">{{system.experience.available}}</output>
         </div>
+        <div class="cns5-field cns5-field--narrow">
+            <span>{{localize "CNS5.Experience.level"}}</span>
+            <output class="cns5-experience__available"
+                    data-tooltip="{{localize 'CNS5.Experience.levelHint' next=system.experience.nextLevelAt needed=system.experience.toNextLevel}}">
+                {{system.experience.level}}
+            </output>
+        </div>
 
         <div class="cns5-experience__controls">
             <button type="button" data-action="createSkill" data-kind="skill">
@@ -75,6 +82,7 @@
                     {{/unless}}
                     {{#if skill.system.mastered}}<span class="cns5-tag" data-tooltip="{{localize 'CNS5.Skill.mastered'}}">M</span>{{/if}}
                     {{#if skill.system.sunsign}}<span class="cns5-tag" data-tooltip="{{localize 'CNS5.Skill.sunsign'}}">☉</span>{{/if}}
+                    {{#unless skill.system.sunsign}}{{#if skill.system.favouredBySign}}<span class="cns5-tag cns5-tag--faint" data-tooltip="{{localize 'CNS5.Skill.favouredCategory'}}">☉</span>{{/if}}{{/unless}}
                     {{#if skill.system.trainingRequired}}<span class="cns5-tag" data-tooltip="{{localize 'CNS5.Skill.trainingRequired'}}">TR</span>{{/if}}
                 </th>
                 <td>{{skill.system.df}}</td>

@@ -43,6 +43,22 @@
     </label>
 </div>
 
+{{!-- How far the spell is from being known. Nought is known. --}}
+<div class="cns5-grid cns5-grid--two">
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Spell.mrRemaining"}}</span>
+        <input type="number" name="system.mrRemaining" value="{{system.mrRemaining}}"
+               min="0" max="{{system.mr}}" {{#unless editable}}disabled{{/unless}}>
+    </label>
+    {{#if system.daysToNextStep}}
+    <div class="cns5-field">
+        <span>{{localize "CNS5.Spell.learning"}}</span>
+        <output>{{localize "CNS5.Spell.nextStep" days=system.daysToNextStep}}</output>
+    </div>
+    {{/if}}
+</div>
+<p class="cns5-hint">{{localize "CNS5.Spell.mrRemainingHint"}}</p>
+
 <div class="cns5-checks">
     <label class="cns5-checkbox">
         <input type="checkbox" name="system.resisted" {{checked system.resistable}}

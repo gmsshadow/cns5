@@ -545,6 +545,157 @@ thrown away and then guessed at again on purchase.
 So the untrained section shows each skill's category as a tag: what it will be
 worth once basic knowledge is bought.
 
+## Birth signs and curses
+
+**Table - Birth Signs & Skills** (p53). Each of the twelve signs inclines
+towards two skill categories and one attribute. A well or neutrally aspected
+character takes two favoured skills, a poorly aspected one takes a single skill,
+and each is worth +2 levels and +10% PSF — or +20% and a free mastery where it is
+one of the character's vocational skills. Both halves of that were already on a
+skill as `mastered` and `sunsign`, ten per cent apiece; what was missing was the
+table saying which categories a sign favours. Skills in those categories are
+marked faintly on the Skills tab, so the choice is visible.
+
+The favoured attribute belongs to **Table - Birth Omens** (p54): rolling
+attributes at random, a Well Aspected character rolls his favoured one with an
+extra 2D10 and keeps the best two dice, a Poorly Aspected one the worst two.
+
+**Table - Curses** (pp.85-86) and **Table - Allergies** (p87), never previously
+extracted. Thirty-five curses covering every face of the d100 — including the
+98-99 "twice cursed" and 100 "thrice cursed" that a player's spreadsheet of the
+same table stops short of — and six allergies. They ship as flaws with their roll,
+their die and the page they are printed on, and nothing else. What a curse does
+is the rulebook's and is not shipped — not in its wording nor in a paraphrase of
+ours, which is the same bargain the spells and the other flaws are held to. Each
+carries a short name from `tools/curse-labels.json`, in this system's own words,
+only so that one entry can be told from its neighbours.
+
+## Experience Level
+
+**Table - Total Experience Points** (p45). A skill may be raised to the
+character's Experience Level at its ordinary cost; past it, every level of the
+difference is paid for again. The level is shown beside the available
+experience, with the next threshold on hover. Beyond level 20 each further level
+costs another 30,000.
+
+## Acts of Faith
+
+The vocation tables on pp.145-146 say who may perform each Act and at what
+Personal Faith Factor, and nothing else. Everything an Act actually does is in
+its description (pp.441-454), set out with dotted leaders — PFF, SC, Cost —
+and those are now extracted and merged in. Of 48 Acts, 46 have a description;
+Greater Miracle and Prayer for Strength of the Holy are named in the tables but
+have no entry of their own.
+
+**A success chance is a formula, not a number**: "Faith TSC%", "2/3 Faith TSC%",
+"Recipient's Spirit AR". It is kept as written, since it is measured against the
+supplicant or the recipient. Ten Acts are marked **Auto** and always take effect
+— the Sacraments, which "always succeed and are never" in doubt — and none of
+those has a success chance, which a test checks.
+
+**Costs name whose Fatigue they take**: "-3 FP from Supplicant", "-Crit Die FP
+from Cleric", "-6 FP from Priest". Supplicant and recipient need not be the same
+person.
+
+**The marks on a name are carried**: † for Acts "solely within the competence of
+ordained priests", ‡ for those open also to monastics and Holy Fighting Orders.
+Twenty-seven are ordained-only, seven the wider reservation.
+
+**The book disagrees with itself twice.** The vocation tables give Baptism PFF 20
+and Ordination 45; their descriptions give 15 and 40. Checked by position on the
+page, so it is the book rather than the extraction. Both figures are carried, the
+description's is used as the fuller entry, and the compendium entry says so.
+
+As with the spells, no description text is shipped: each Act carries the pages it
+is printed on.
+
+### Spirit, and what moves it
+
+"Faith does not measure belief in a Deity. That is represented by Spirit"
+(p400). Current Spirit is shown on the Faith tab as what it makes of the
+character — **Table - Perceived Faith**, from Atheist at nothing through Lapsed,
+True Believer, Devout and Fervent to Saintly at 50 and above. Unlike Body and
+Fatigue it can rise far above where it began or fall away to nothing, so it is
+not capped.
+
+Developing the Faith skill entitles a character to **+1 Current Spirit for every
+5% of Personal Skill Factor**, rounded up, in the religion he learnt it in. The
+figure is shown but not added for him: the rules make it his to take.
+
+**Performing an Act moves it.** The intercessor expends Current Spirit equal to
+the Act's Fatigue cost. Granted, he has it all back, and one more if the Crit Die
+came up ten. Denied, he has only half back — "he believes his Deity may have
+forsaken him". On a critical failure, none at all. So a success is free, an
+ordinary failure costs half the Act's cost in belief, and a critical failure
+costs the whole of it. The card says which happened.
+
+**Table - Miracles Believer's Bonus** and its unbeliever counterpart are
+recorded. Witnessing a miracle of one's own religion raises Current Spirit;
+witnessing another's raises belief in that faith and lowers it in one's own,
+which is why those entries are pairs. Nothing yet drives them — they need a
+witnessing workflow — but the figures are there.
+
+### Who may be prayed for
+
+Table - Requests for Divine Aid (p403). "The person praying has no 'power' to
+do anything himself", so what limits him is belief, and for the clergy, office.
+A layman prays for himself alone; a **True Believer** may name someone
+*instead* of himself; a **Devout** for one in addition; a **Fervent** for half
+his Spirit besides; a **Sainted** for his Spirit. A monastic reaches five times
+his Spirit, an ordained priest ten, and a Priestly Mage three, his attention
+being divided.
+
+Whichever is the greater applies, which is almost always office. The Faith tab
+shows the figure, and an Act aimed at more people than that is refused with the
+number he is allowed.
+
+### The Belief Pool
+
+A clergyman need not spend himself. "Acts of Faith which are performed for a
+congregation or for a community of believers can call upon the Belief of those
+participating" (p403) — which is the only way the costlier Acts, at 33 or 48
+Fatigue, can be paid for at all.
+
+The Faith tab records the congregation, its building and any shrine, and a
+button draws the pool at a service. Each figure is a multiple of a d10, so it is
+rolled rather than counted: a small rural congregation is 1d10, a very large
+town one 3d10 and half a fourth, and a cathedral with a national shrine adds
+sixteen dice more. A shrine's bonus is cumulative with its building's.
+
+What is drawn stands until it is spent. An Act takes from the pool first and
+from the clergyman himself only for the remainder — and only that remainder
+costs him Spirit, since it is what he himself paid.
+
+### Performing one
+
+A success chance is a formula measured against whoever is concerned, so it is
+read rather than reduced to a number: an optional fraction, whose figure it is,
+which figure, and a modifier. Clauses joined by **then** are rolled one after
+another and all must succeed; **plus** adds a figure into the same roll; a
+semicolon separates alternatives, of which the first is taken.
+
+So "½ Recipient's Faith TSC, then ¾ Cleric's PFF" is two rolls against two
+different people, and "2/3 Faith TSC, plus Cleric's PFF" is one roll against two
+figures added. Every success chance in the book parses.
+
+The figures are the character's chance in the **Faith** skill, his **Personal
+Faith Factor**, or an **Attribute Roll on Spirit**. An Act measured against the
+recipient needs one targeted, and says so rather than rolling against nobody.
+
+**Costs name whose Fatigue they take** — the one praying or the one prayed for —
+and may be a figure, a third of all he has, the Crit Die of the roll just made,
+or a figure repeated per hour. They are taken from the right character, and fall
+on Body once Fatigue is gone, as any other magickal cost does. Two Acts say only
+"Variable" or "See Below"; those are reported as written rather than guessed at.
+
+**The Sacraments ask no roll.** An Act marked Auto takes effect and only its cost
+is settled.
+
+**Standing gates the marked Acts.** A character is a layman, a monastic or an
+ordained priest, recorded on the Faith tab: † Acts need ordination, ‡ Acts need
+at least a monastic or a Holy Fighting Order. A Personal Faith Factor high
+enough is not sufficient.
+
 ## Skill categories
 
 There are three, and only three: Primary, Secondary and Tertiary.
@@ -936,6 +1087,44 @@ was protected by; and an ammunition row's name was plain text that did nothing
 at all when clicked, with nothing to say why. Equipping is a control among the
 others now, as carrying already was on the Personal Chattel tab.
 
+### Getting past what protects the target
+
+"If the target is protected by Magick, the spell may have to overcome those
+protections before the intended victim may himself be targeted" (p298). Each
+protection is targeted in its own right, outermost first, at the same chance as
+the victim but resisting by its own Magick Resistance — and a spell that fails
+against one goes no further.
+
+- A **Ward or Circle** "is targeted as if they were the Mage who created them",
+  so it resists as he would.
+- An **Amulet of Protection** resists by 5% for every level of the spell in it,
+  and 2% more for every 25 years of its existence. Overcome it with something
+  harmful and its own spell discharges for 1d10 days.
+- A **Focus** its bearer has raised in defence resists the same way, by the
+  strongest spell in it — but if it fails to stop the spell there is a 20%
+  chance it turns on him.
+
+Wards and Amulets are kinds of magickal item, listed on the Magick tab; a Focus
+is raised in defence by a box on its own sheet. Each attempt is a step on the
+chat card, with what it resisted by and whether the spell got through.
+
+### Aiming by meditation
+
+An optional rule (p298): a mage may store up meditation in one spell per Magick
+Level, gaining +1% per Magick Level a day to his targeting, or +2% if he fasts
+and does nothing else, to a ceiling of +25%.
+
+It is easy to confuse with the meditation that lowers a target's save (p301),
+since both are a point a day to a ceiling of twenty-five. The difference is that
+this one is multiplied by the caster's Magick Level and kept in a single spell,
+where that one is spent on a casting. Both are asked for separately.
+
+### Spells fade rather than stop
+
+"Once the time limit is reached, the spell degrades over a 1D10 minute period"
+(p296). A spell that lands with a duration to run out has its fade rolled and
+noted on the card.
+
 ### Resisting a spell
 
 A spell that reaches its target may still be thrown off by them, where the spell
@@ -1084,11 +1273,83 @@ table they read alike, although they are used differently: a Focus shows what it
 adds to a casting, a Device its maker's skill and its charges, a Scroll whether it
 has been read. Each section's Add button makes an item of its own kind.
 
+### The bounds on a spell's Magick Resistance
+
+"The minimum MR of a spell is always 1 and the maximum MR is always 10. If the
+modifier takes the MR of a spell above 10, then the MR remains at 10 but the
+Fatigue Point cost of the spell increases by 3 FP per point above 10" (p294).
+The book's own case is a Diviner learning an MR 8 Transmutation spell: his +3
+takes it to 11, so he learns it as MR 10 and pays 3 FP more to cast it.
+
+So a spell's Magick Resistance and cost on a mage's sheet are *his*, not the
+table's, and the sheet shows both with the table's figures on hover. Only the
+floor of 1 was implemented before.
+
+The grid is held in `module/config.mjs` as well as in `data/magick.json`,
+because a spell works out its cost while its actor is being prepared — before
+any fetch could return. A test holds the two copies to the same figures.
+
+### Spells not yet fully learnt
+
+Learning a spell is bringing its Magick Resistance down for oneself, a step at a
+time, to nought (p294). So each spell records the **MR still to learn**, and a
+spell with none left is known. Every spell starts at nought on a sheet — a
+character's spells are taken as learnt unless a player or Gamemaster says
+otherwise — and one still being learnt is marked in Known Spells with the days
+to its next step.
+
+Cast from memory, a spell not fully learnt has first to be got into shape: a
+roll against the Method at **10% off for every point still to learn** (p299). On a
+failure the Crit Die of that roll gives the backfire, shown automatically:
+
+| Crit Die | | Fatigue |
+| --- | --- | --- |
+| 1 | the spell fails | half |
+| 2-4 | the spell fails | full |
+| 5-7 | a major backfire | double |
+| 8-9 | an extreme backfire — it goes off at the mage's feet | double |
+| 10 | a disastrous backfire — it goes off in his hand, with double effect | double |
+
+The last two let the spell loose where the Gamemaster must decide what it does.
+A device now reads "known at MR 0" from this figure rather than from the spell
+merely being on the sheet.
+
+### Spell books
+
+**A mage's own book** is read to cast a spell he knows only in part: "this
+doubles the time required to cast the spell but means the spell is automatically
+cast as if he had learnt it fully" (p307). It is his own casting, with his own
+skill, at half the Fatigue as from any book — so the spell must be among his
+Known Spells, however little of it is learnt.
+
+**Anyone else's book** is read like a scroll (p301): at the writer's skill, and
+"on a failure, the scroll or page is discharged" — that spell's page is lost,
+and the rest of the book is untouched. A spell that works leaves the book as it
+was. Which a book is follows from who wrote it: left blank, it is the bearer's
+own. The Magick tab lists the two apart, since they are used so differently.
+
+A spell takes a page for every point of its Magick Resistance, and a book is
+written for one Mode of Magick and useless to another (p306); the Mode is
+recorded on the book.
+
+### A non-mage aiming a device
+
+"Any non-Mage trying to target a spell (unless it is a touch effect whereby a
+blow is required) must first succeed with a Willpower roll" (p299). It comes
+between getting the spell out of the item and aiming it, for anything worked by
+a command word or trigger — devices, scrolls, other people's books. On a failure
+the spell goes astray, and Table - Willpower Failure says where: dispelled, the
+nearest creature within thirty or ten feet, overshooting, falling short — or, on
+86 and over, caught in time and aimed after all. Mages never check. Without the
+Willpower skill, it is tried untrained.
+
+On the card it sits unnumbered between Step 1 and Step 2, so the three numbered
+steps mean the same on every card.
+
 **A Grimoire is not a spell book.** In this rulebook (p307) it is a reference on
 one particular demon — pages of research towards summoning and binding it, worth
 +50% to the user's PSF and +1 to the Crit Die against that demon. Spell books are
-**Spell Texts** (p306), and a partly-learnt spell read from one is cast as though
-fully learnt at twice the casting time. Neither is built yet.
+**Spell Texts** (p306), built as described above. Grimoires are not built.
 
 **A Device casts with its maker's skill, not its bearer's.** "The basic
 chance of casting the spell through a Magickal device is equal to the Method of
@@ -1269,6 +1530,27 @@ brackets once a character is down. Crossing either line is announced to chat and
 marks the token with Foundry's own unconscious or dead status — once, at the
 moment it happens, not again for every blow that lands on a man already down.
 Healing back above zero clears it.
+
+## Checked against a player's spreadsheet
+
+Someone built a skills-and-spells manager for this game as a workbook, and its
+seven thousand formulas are a second reading of the same rulebook. Every table
+it shares with this system was compared cell by cell. The 208-cell Method x Mode
+grid agreed exactly, as did the attribute bonuses, weight factor, strength
+ratios, Magick Levels, Difficulty Factors, Focus bonuses and the point budgets;
+so did the formulas for Body, Fatigue, lifting capacity, Jump, PMF and PFF.
+
+Where the two disagreed the rulebook settled it, and it settled for this system
+each time: the workbook's Attribute Roll at 8 is 59% where p103 says 50, its
+two-handed Attacker's Bonus copies the Heavy column where p282 groups
+"Two-handed or Polearms" as one, its Base Action Points ignore the rule that INT
+and FER above 20 do not count, and its days-to-learn skip the per-step rounding
+that makes ours match all 72 printed cells.
+
+It did catch one of ours, though — see the Magick Resistance bounds below — and
+a page footer that had crept into an extraction of the Curses table. That footer
+carries the name and order number of whoever bought the copy of the PDF, so it
+is stripped wherever it appears, and a test now checks no data file contains one.
 
 ### Optional rules from p281
 

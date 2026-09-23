@@ -50,6 +50,14 @@ export class CnS5Spell extends foundry.abstract.TypeDataModel {
       // "1 mile x ML". Short and long ranges are worked out from it.
       rangeText: new fields.StringField({ required: true, blank: true, initial: "" }),
 
+      // How much of the spell's Magick Resistance the caster has still to
+      // bring down before it is his. Nought is known, which is where every spell
+      // starts on a sheet: a character's spells are taken as learnt unless a
+      // player or Gamemaster says otherwise (p294, p299).
+      mrRemaining: new fields.NumberField({
+        required: true, integer: true, initial: 0, min: 0
+      }),
+
       // Whether the target may resist. Left unset, it follows the rule of thumb
       // — spells that charm, command, frighten or confuse — because each spell's
       // own description says how it may be resisted and that is prose, not
@@ -157,6 +165,28 @@ export class CnS5Spell extends foundry.abstract.TypeDataModel {
     this.modeMissing = !modeItem;
     this.methodModifier = modeItem?.system.psf ?? 0;
 
+    // What this spell is worth to *this* caster. His tradition raises or lowers
+    // the Magick Resistance of every school (p295), within the bounds of 1 and
+    // 10, and anything the modifier would carry past 10 is paid for in
+    // Fatigue instead: 3 FP a point (p294). So a spell's MR and cost on a
+    // mage's sheet are his, not the table's.
+    const tradition = CNS5.effectiveLearningMr({
+      mr: this.mr,
+      method: this.resolvedMethod || this.method,
+      mode: actorSystem.magick?.mode ?? ""
+    });
+    this.effectiveMr = tradition.effective;
+    this.traditionModifier = tradition.modifier;
+    this.mrSurcharge = tradition.fatigueSurcharge;
+    this.effectiveFp = (this.fpToCast ?? 0) + tradition.fatigueSurcharge;
+
+    // A spell not yet brought down to nought is cast at a loss, and may
+    // backfire (p299). Never more to go than the spell has for this caster.
+    this.remaining = Math.min(this.mrRemaining ?? 0, this.effectiveMr);
+    this.partlyLearnt = this.remaining > 0;
+    this.learningPenalty = this.remaining * CNS5.partlyLearntPenalty;
+    this.daysToNextStep = CNS5.daysToNextStep(this.remaining, level);
+
     // The chance before anything in the way is counted: the caster's skill in
     // the school, and the spell's own modifier.
     //
@@ -196,6 +226,27 @@ export class CnS5ActOfFaith extends foundry.abstract.TypeDataModel {
 
       pffMinimum: new fields.NumberField({ required: true, integer: true, initial: 0 }),
       successChance: new fields.NumberField({ required: true, integer: true, initial: 0, min: 0 }),
+
+      // How the description gives the chance: "Faith TSC%", "2/3 Faith TSC%",
+      // "Recipient's Spirit AR". It is kept as written because it is a formula
+      // against the supplicant or the recipient, not a number (p404).
+      successChanceText: new fields.StringField({ required: true, blank: true, initial: "" }),
+
+      // Likewise the cost: "-3 FP from Supplicant", "-Crit Die FP from Cleric".
+      costText: new fields.StringField({ required: true, blank: true, initial: "" }),
+
+      // "Auto: Automatically takes effect (i.e. no Spirit AR% roll, etc. is
+      // required)" — the Sacraments, which "always succeed" (p404).
+      automatic: new fields.BooleanField({ required: true, initial: false }),
+
+      // "† Acts of Faith that are solely within the competence of ordained
+      // priests. ‡ Acts of Faith that may only invoked by ordained Priests,
+      // Monastics (monks, nuns) and members of Holy Fighting Orders" (p404).
+      ordainedOnly: new fields.BooleanField({ required: true, initial: false }),
+      monasticOnly: new fields.BooleanField({ required: true, initial: false }),
+
+      // An Act whose effect is another's: "Equivalent: Greater Miracle".
+      equivalentTo: new fields.StringField({ required: true, blank: true, initial: "" }),
       fpCost: new fields.NumberField({ required: true, integer: true, initial: 0, min: 0 }),
       apToPray: new fields.NumberField({ required: true, integer: true, initial: 0, min: 0 }),
       notes: new fields.StringField({ required: true, blank: true, initial: "" }),

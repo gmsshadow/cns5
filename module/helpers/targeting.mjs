@@ -71,6 +71,7 @@ export function resolveTargeting({
   dodgePsf = 0,
   manaBonus = 0,
   focusBonus = 0,
+  meditationBonus = 0,
   situational = 0,
   tables: loaded = null
 }) {
@@ -100,6 +101,7 @@ export function resolveTargeting({
     dodgePsf +
     manaBonus +
     focusBonus +
+    meditationBonus +
     situational;
 
   return {
@@ -117,7 +119,41 @@ export function resolveTargeting({
     dodgePsf,
     manaBonus,
     focusBonus,
+    meditationBonus,
     situational,
     total
   };
+}
+
+/* -------------------------------------------- */
+
+/**
+ * What stands between a caster and his target (p298).
+ *
+ * "If a Circle of Protection or Ward defends the intended target, the Circle or
+ * Ward must itself be targeted in order for the spell to penetrate." The same
+ * holds for an Amulet of Protection, and for a Focus its bearer has raised in
+ * defence. Each is targeted in its own right, and a spell that fails against
+ * one goes no further.
+ *
+ * They are returned outermost first: a Ward stands about a place, an Amulet
+ * about a person, and a Focus is in his hand.
+ *
+ * @param {Actor|null} target
+ * @returns {Array<object>}
+ */
+export function magickalDefences(target) {
+  if (!target) return [];
+
+  return target.items
+    .filter((i) => i.type === "magickalItem" && i.system.defends)
+    .map((item) => ({
+      item,
+      name: item.name,
+      kind: item.system.kind,
+      mr: item.system.protectiveMr,
+      // A Focus that fails to stop a spell may turn on its bearer.
+      backfires: item.system.kind === "focus"
+    }))
+    .sort((a, b) => CNS5.defenceOrder.indexOf(a.kind) - CNS5.defenceOrder.indexOf(b.kind));
 }

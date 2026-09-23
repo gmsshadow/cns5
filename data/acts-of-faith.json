@@ -1,6 +1,6 @@
 {
   "source": "Chivalry & Sorcery 5th Edition core rules, Acts of Faith tables pp.145-146",
-  "note": "Mechanical data only; no description text is reproduced. Success chance, Fatigue cost and Action Points to pray are not printed in these tables and are left at zero. Three entries print no minimum of their own and inherit it from the row above; those are flagged with pffInherited.",
+  "note": "Mechanical data only; no description text is reproduced. Success chance, Fatigue cost and Action Points to pray are not printed in these tables and are left at zero. Three entries print no minimum of their own and inherit it from the row above; those are flagged with pffInherited. The figures and formulae from each Act's description (pp.441-454) are merged in; no description text is shipped.",
   "count": 47,
   "acts": [
     {
@@ -17,7 +17,13 @@
         "Ordained"
       ],
       "marksFound": 6,
-      "page": 145
+      "page": 145,
+      "described": true,
+      "descriptionPage": 441,
+      "ordainedOnly": false,
+      "monasticOnly": false,
+      "successChanceText": "Recipient’s Spirit AR",
+      "costText": "-1 FP from Supplicant"
     },
     {
       "name": "Common Prayer",
@@ -33,7 +39,13 @@
         "Ordained"
       ],
       "marksFound": 6,
-      "page": 145
+      "page": 145,
+      "described": true,
+      "descriptionPage": 441,
+      "ordainedOnly": false,
+      "monasticOnly": false,
+      "successChanceText": "Supplicant’s Spirit AR",
+      "costText": "-1 FP from Supplicant per hour"
     },
     {
       "name": "Prayer for Forgiveness",
@@ -49,7 +61,13 @@
         "Ordained"
       ],
       "marksFound": 6,
-      "page": 145
+      "page": 145,
+      "described": true,
+      "descriptionPage": 442,
+      "ordainedOnly": false,
+      "monasticOnly": false,
+      "successChanceText": "Supplicant’s Spirit AR",
+      "costText": "-1 FP from Supplicant"
     },
     {
       "name": "Prayer for Guidance",
@@ -65,7 +83,13 @@
         "Ordained"
       ],
       "marksFound": 6,
-      "page": 145
+      "page": 145,
+      "described": true,
+      "descriptionPage": 442,
+      "ordainedOnly": false,
+      "monasticOnly": false,
+      "successChanceText": "½ Faith TSC%",
+      "costText": "-Crit Die FP from Supplicant"
     },
     {
       "name": "Prayer for Insight",
@@ -81,7 +105,13 @@
         "Ordained"
       ],
       "marksFound": 6,
-      "page": 145
+      "page": 145,
+      "described": true,
+      "descriptionPage": 442,
+      "ordainedOnly": false,
+      "monasticOnly": false,
+      "successChanceText": "Faith TSC%",
+      "costText": "-Crit Die FP from Supplicant"
     },
     {
       "name": "Prayer for Luck",
@@ -97,7 +127,13 @@
         "Ordained"
       ],
       "marksFound": 6,
-      "page": 145
+      "page": 145,
+      "described": true,
+      "descriptionPage": 442,
+      "ordainedOnly": false,
+      "monasticOnly": false,
+      "successChanceText": "Faith TSC%",
+      "costText": "-3 FP from Supplicant"
     },
     {
       "name": "Prayer for Protection",
@@ -113,7 +149,13 @@
         "Ordained"
       ],
       "marksFound": 6,
-      "page": 145
+      "page": 145,
+      "described": true,
+      "descriptionPage": 442,
+      "ordainedOnly": false,
+      "monasticOnly": false,
+      "successChanceText": "Faith TSC%",
+      "costText": "Variable from Supplicant"
     },
     {
       "name": "Prayer for Skill or Craft",
@@ -129,7 +171,13 @@
         "Ordained"
       ],
       "marksFound": 6,
-      "page": 145
+      "page": 145,
+      "described": true,
+      "descriptionPage": 443,
+      "ordainedOnly": false,
+      "monasticOnly": false,
+      "successChanceText": "Faith TSC%",
+      "costText": "-Crit Die FP from Supplicant"
     },
     {
       "name": "Prayer for Strength",
@@ -145,7 +193,13 @@
         "Ordained"
       ],
       "marksFound": 6,
-      "page": 145
+      "page": 145,
+      "described": true,
+      "descriptionPage": 443,
+      "ordainedOnly": false,
+      "monasticOnly": false,
+      "successChanceText": "2/3 Faith TSC%",
+      "costText": "-3 FP from Supplicant"
     },
     {
       "name": "Courage of the Righteous",
@@ -161,7 +215,13 @@
         "Ordained"
       ],
       "marksFound": 6,
-      "page": 145
+      "page": 145,
+      "described": true,
+      "descriptionPage": 443,
+      "ordainedOnly": false,
+      "monasticOnly": false,
+      "successChanceText": "Believer’s Faith TSC% + PFF",
+      "costText": "-Crit Die FP from recipient"
     },
     {
       "name": "Bless Item",
@@ -173,7 +233,13 @@
         "Ordained"
       ],
       "marksFound": 6,
-      "page": 145
+      "page": 145,
+      "described": true,
+      "descriptionPage": 443,
+      "ordainedOnly": true,
+      "monasticOnly": false,
+      "costText": "-3 FP from Priest",
+      "automatic": true
     },
     {
       "name": "Bury the Dead",
@@ -185,7 +251,13 @@
         "Ordained"
       ],
       "marksFound": 6,
-      "page": 145
+      "page": 145,
+      "described": true,
+      "descriptionPage": 443,
+      "ordainedOnly": true,
+      "monasticOnly": false,
+      "costText": "-4 FP from Priest",
+      "automatic": true
     },
     {
       "name": "Sanctification",
@@ -199,7 +271,13 @@
         "Ordained"
       ],
       "marksFound": 6,
-      "page": 145
+      "page": 145,
+      "described": true,
+      "descriptionPage": 443,
+      "ordainedOnly": true,
+      "monasticOnly": false,
+      "successChanceText": "Faith TSC% -20",
+      "costText": "-3 FP from Priest"
     },
     {
       "name": "Holy Barrier of Guard",
@@ -215,7 +293,13 @@
         "Ordained"
       ],
       "marksFound": 6,
-      "page": 145
+      "page": 145,
+      "described": true,
+      "descriptionPage": 444,
+      "ordainedOnly": false,
+      "monasticOnly": true,
+      "successChanceText": "Faith TSC% -20",
+      "costText": "-3 FP from Cleric"
     },
     {
       "name": "Prayer to Smite the Godless",
@@ -227,7 +311,13 @@
         "Ordained"
       ],
       "marksFound": 6,
-      "page": 145
+      "page": 145,
+      "described": true,
+      "descriptionPage": 444,
+      "ordainedOnly": false,
+      "monasticOnly": true,
+      "successChanceText": "Faith TSC% -25",
+      "costText": "-6 FP from Cleric"
     },
     {
       "name": "Prayer for Strength of the Righteous",
@@ -240,7 +330,13 @@
         "Ordained"
       ],
       "marksFound": 6,
-      "page": 145
+      "page": 145,
+      "described": true,
+      "descriptionPage": 444,
+      "ordainedOnly": false,
+      "monasticOnly": true,
+      "successChanceText": "Faith TSC% -25 then 2/3 Recipient’s Spirit AR if bestowed",
+      "costText": "-6 FP from Cleric"
     },
     {
       "name": "Prayer to Detect Magickal Forces",
@@ -252,7 +348,13 @@
         "Ordained"
       ],
       "marksFound": 6,
-      "page": 145
+      "page": 145,
+      "described": true,
+      "descriptionPage": 445,
+      "ordainedOnly": true,
+      "monasticOnly": false,
+      "successChanceText": "Faith TSC% -25",
+      "costText": "-3 FP from Priest"
     },
     {
       "name": "Prayer to Find the Open Way",
@@ -268,7 +370,13 @@
         "Ordained"
       ],
       "marksFound": 6,
-      "page": 145
+      "page": 145,
+      "described": true,
+      "descriptionPage": 445,
+      "ordainedOnly": false,
+      "monasticOnly": true,
+      "successChanceText": "Faith TSC% -30",
+      "costText": "-3 FP from Cleric"
     },
     {
       "name": "Prayer to Recognise Evil",
@@ -284,7 +392,13 @@
         "Ordained"
       ],
       "marksFound": 6,
-      "page": 145
+      "page": 145,
+      "described": true,
+      "descriptionPage": 445,
+      "ordainedOnly": false,
+      "monasticOnly": true,
+      "successChanceText": "Faith TSC% -30",
+      "costText": "-3 FP from Cleric"
     },
     {
       "name": "Ritual: Remove Curse",
@@ -298,7 +412,13 @@
         "Ordained"
       ],
       "marksFound": 6,
-      "page": 145
+      "page": 145,
+      "described": true,
+      "descriptionPage": 445,
+      "ordainedOnly": true,
+      "monasticOnly": false,
+      "successChanceText": "Faith TSC% -35 then ½ Recipient’s Spirit AR",
+      "costText": "-12 FP from Priest"
     },
     {
       "name": "Prayer to Smite the Godless II",
@@ -311,7 +431,13 @@
         "Ordained"
       ],
       "marksFound": 6,
-      "page": 145
+      "page": 145,
+      "described": true,
+      "descriptionPage": 446,
+      "ordainedOnly": false,
+      "monasticOnly": true,
+      "successChanceText": "Faith% -40; Faith TSC% -45 then ½ Recipient’s Spirit AR if bestowed",
+      "costText": "-9 FP from Cleric; -5 FP from Cleric"
     },
     {
       "name": "Prayer for Strength of the Holy",
@@ -324,7 +450,8 @@
         "Ordained"
       ],
       "marksFound": 6,
-      "page": 145
+      "page": 145,
+      "described": false
     },
     {
       "name": "Ritual: Exorcise Demons",
@@ -338,7 +465,13 @@
         "Ordained"
       ],
       "marksFound": 6,
-      "page": 145
+      "page": 145,
+      "described": true,
+      "descriptionPage": 446,
+      "ordainedOnly": true,
+      "monasticOnly": false,
+      "successChanceText": "Faith TSC% -45",
+      "costText": "-12 FP (see below)"
     },
     {
       "name": "Visions",
@@ -351,7 +484,13 @@
         "Ordained"
       ],
       "marksFound": 6,
-      "page": 145
+      "page": 145,
+      "described": true,
+      "descriptionPage": 446,
+      "ordainedOnly": true,
+      "monasticOnly": false,
+      "successChanceText": "Cleric’s Spirit AR",
+      "costText": "-⅓ total FP from Cleric"
     },
     {
       "name": "Minor Miracle",
@@ -364,7 +503,13 @@
         "Ordained"
       ],
       "marksFound": 6,
-      "page": 145
+      "page": 145,
+      "described": true,
+      "descriptionPage": 449,
+      "ordainedOnly": false,
+      "monasticOnly": false,
+      "successChanceText": "2/3 Faith TSC%",
+      "costText": "S1 to S3."
     },
     {
       "name": "Miracle",
@@ -377,7 +522,13 @@
         "Ordained"
       ],
       "marksFound": 6,
-      "page": 145
+      "page": 145,
+      "described": true,
+      "descriptionPage": 449,
+      "ordainedOnly": false,
+      "monasticOnly": false,
+      "successChanceText": "½ Faith TSC%; ⅓ Faith TSC%",
+      "costText": "S3 to S5; S6."
     },
     {
       "name": "Greater Miracle",
@@ -390,7 +541,8 @@
         "Ordained"
       ],
       "marksFound": 6,
-      "page": 145
+      "page": 145,
+      "described": false
     },
     {
       "name": "Purify Food and Water",
@@ -405,7 +557,14 @@
         "Ordained"
       ],
       "marksFound": 6,
-      "page": 145
+      "page": 145,
+      "described": true,
+      "descriptionPage": 451,
+      "ordainedOnly": true,
+      "monasticOnly": false,
+      "successChanceText": "¼ Priest’s Spirit AR + PFF",
+      "costText": "-6 FP from Priest. Recipients offer S1.",
+      "equivalentTo": "Minor Miracle"
     },
     {
       "name": "Restore the Faithful",
@@ -419,7 +578,14 @@
         "Ordained"
       ],
       "marksFound": 6,
-      "page": 145
+      "page": 145,
+      "described": true,
+      "descriptionPage": 451,
+      "ordainedOnly": false,
+      "monasticOnly": true,
+      "successChanceText": "2/3 Faith TSC, plus Cleric’s PFF",
+      "costText": "-9 FP from Cleric. Recipient offers S2.",
+      "equivalentTo": "Minor Miracle"
     },
     {
       "name": "Cure the Wounded",
@@ -433,7 +599,14 @@
         "Ordained"
       ],
       "marksFound": 6,
-      "page": 145
+      "page": 145,
+      "described": true,
+      "descriptionPage": 451,
+      "ordainedOnly": true,
+      "monasticOnly": false,
+      "successChanceText": "½ Recipient’s Faith TSC, plus ⅔ Cleric’s PFF",
+      "costText": "-18 FP from Cleric. Recipient offers S2.",
+      "equivalentTo": "Minor Miracle"
     },
     {
       "name": "Neutralise Toxins",
@@ -447,7 +620,14 @@
         "Ordained"
       ],
       "marksFound": 6,
-      "page": 145
+      "page": 145,
+      "described": true,
+      "descriptionPage": 451,
+      "ordainedOnly": true,
+      "monasticOnly": false,
+      "successChanceText": "½ Recipient’s Faith TSC, plus ¾ Cleric’s PFF",
+      "costText": "-24 FP from Cleric. Recipient offers S3.",
+      "equivalentTo": "Miracle"
     },
     {
       "name": "Restoration",
@@ -458,7 +638,14 @@
         "Ordained"
       ],
       "marksFound": 6,
-      "page": 145
+      "page": 145,
+      "described": true,
+      "descriptionPage": 451,
+      "ordainedOnly": true,
+      "monasticOnly": false,
+      "successChanceText": "½ Recipient’s Faith TSC, then ¾ Cleric’s PFF",
+      "costText": "-18 FP from Cleric. Recipient offers S3.",
+      "equivalentTo": "Minor Miracle"
     },
     {
       "name": "Cure Disease",
@@ -472,7 +659,13 @@
         "Ordained"
       ],
       "marksFound": 6,
-      "page": 145
+      "page": 145,
+      "described": true,
+      "descriptionPage": 452,
+      "ordainedOnly": true,
+      "monasticOnly": false,
+      "successChanceText": "½ Recipient’s Faith TSC, then 2/3 Cleric’s PFF",
+      "equivalentTo": "Greater Miracle"
     },
     {
       "name": "Heal Grievous Wounds",
@@ -486,7 +679,14 @@
         "Ordained"
       ],
       "marksFound": 6,
-      "page": 145
+      "page": 145,
+      "described": true,
+      "descriptionPage": 452,
+      "ordainedOnly": true,
+      "monasticOnly": false,
+      "successChanceText": "½ Recipient’s Faith TSC, then 2/3 Clerics PFF",
+      "costText": "-24 from Cleric. Recipient offers S4.",
+      "equivalentTo": "Miracle"
     },
     {
       "name": "Cure Blindness",
@@ -500,7 +700,14 @@
         "Ordained"
       ],
       "marksFound": 6,
-      "page": 145
+      "page": 145,
+      "described": true,
+      "descriptionPage": 452,
+      "ordainedOnly": true,
+      "monasticOnly": false,
+      "successChanceText": "⅓ Recipient’s Faith TSC, then 2/3 Cleric’s PFF",
+      "costText": "-33 FP from Cleric. Recipient offers S5.",
+      "equivalentTo": "Greater Miracle"
     },
     {
       "name": "Cure Deafness",
@@ -514,7 +721,14 @@
         "Ordained"
       ],
       "marksFound": 6,
-      "page": 145
+      "page": 145,
+      "described": true,
+      "descriptionPage": 452,
+      "ordainedOnly": true,
+      "monasticOnly": false,
+      "successChanceText": "⅓ Recipient’s Faith TSC%, then 2/3 Cleric’s PFF",
+      "costText": "-33 FP from Cleric. Recipient offers S5.",
+      "equivalentTo": "Greater Miracle"
     },
     {
       "name": "Restore Use of Limb",
@@ -525,7 +739,14 @@
         "Ordained"
       ],
       "marksFound": 6,
-      "page": 145
+      "page": 145,
+      "described": true,
+      "descriptionPage": 452,
+      "ordainedOnly": true,
+      "monasticOnly": false,
+      "successChanceText": "⅓ Recipient’s Faith TSC, then 2/3 Cleric’s PFF",
+      "costText": "-33 FP from Cleric. Recipient offers S5.",
+      "equivalentTo": "Greater Miracle"
     },
     {
       "name": "Call Back the Dying",
@@ -538,7 +759,14 @@
         "Ordained"
       ],
       "marksFound": 6,
-      "page": 145
+      "page": 145,
+      "described": true,
+      "descriptionPage": 452,
+      "ordainedOnly": true,
+      "monasticOnly": false,
+      "successChanceText": "⅓ Priest’s Spirit AR",
+      "costText": "-48 FP from Priest",
+      "equivalentTo": "Greater Miracle"
     },
     {
       "name": "Baptism",
@@ -550,7 +778,14 @@
         "Ordained"
       ],
       "marksFound": 6,
-      "page": 146
+      "page": 146,
+      "described": true,
+      "descriptionPage": 453,
+      "ordainedOnly": true,
+      "monasticOnly": false,
+      "costText": "-6 FP from Priest",
+      "automatic": true,
+      "pffInDescription": 15
     },
     {
       "name": "Confirmation",
@@ -561,7 +796,13 @@
         "Ordained"
       ],
       "marksFound": 6,
-      "page": 146
+      "page": 146,
+      "described": true,
+      "descriptionPage": 453,
+      "ordainedOnly": true,
+      "monasticOnly": false,
+      "costText": "-3 FP from Bishop",
+      "automatic": true
     },
     {
       "name": "Extreme Unction",
@@ -572,7 +813,13 @@
         "Ordained"
       ],
       "marksFound": 6,
-      "page": 146
+      "page": 146,
+      "described": true,
+      "descriptionPage": 453,
+      "ordainedOnly": true,
+      "monasticOnly": false,
+      "costText": "See Below",
+      "automatic": true
     },
     {
       "name": "Last Rites",
@@ -583,7 +830,13 @@
         "Ordained"
       ],
       "marksFound": 6,
-      "page": 146
+      "page": 146,
+      "described": true,
+      "descriptionPage": 453,
+      "ordainedOnly": true,
+      "monasticOnly": false,
+      "costText": "-3 FP from Priest",
+      "automatic": true
     },
     {
       "name": "Anointing the Sick",
@@ -594,7 +847,13 @@
         "Ordained"
       ],
       "marksFound": 6,
-      "page": 146
+      "page": 146,
+      "described": true,
+      "descriptionPage": 453,
+      "ordainedOnly": true,
+      "monasticOnly": false,
+      "successChanceText": "Recipient’s Faith TSC%",
+      "costText": "-3 FP from Priest"
     },
     {
       "name": "Anointing the Wounded",
@@ -605,7 +864,13 @@
         "Ordained"
       ],
       "marksFound": 6,
-      "page": 146
+      "page": 146,
+      "described": true,
+      "descriptionPage": 454,
+      "ordainedOnly": true,
+      "monasticOnly": false,
+      "successChanceText": "Recipient’s Faith TSC%",
+      "costText": "-3 FP from Priest"
     },
     {
       "name": "Holy Eucharist (Mass)",
@@ -617,7 +882,13 @@
         "Ordained"
       ],
       "marksFound": 6,
-      "page": 146
+      "page": 146,
+      "described": true,
+      "descriptionPage": 454,
+      "ordainedOnly": true,
+      "monasticOnly": false,
+      "costText": "-6 FP from Priest",
+      "automatic": true
     },
     {
       "name": "Matrimony",
@@ -631,7 +902,13 @@
         "Ordained"
       ],
       "marksFound": 6,
-      "page": 146
+      "page": 146,
+      "described": true,
+      "descriptionPage": 454,
+      "ordainedOnly": true,
+      "monasticOnly": false,
+      "costText": "-6 FP from Priest",
+      "automatic": true
     },
     {
       "name": "Ordination",
@@ -642,7 +919,28 @@
         "Ordained"
       ],
       "marksFound": 6,
-      "page": 146
+      "page": 146,
+      "described": true,
+      "descriptionPage": 454,
+      "ordainedOnly": true,
+      "monasticOnly": false,
+      "costText": "-9 FP from Bishop",
+      "automatic": true,
+      "pffInDescription": 40
+    },
+    {
+      "name": "Penance (Confession)",
+      "section": "Clerical Acts of Faith",
+      "pffMinimum": 20,
+      "vocations": [],
+      "page": 454,
+      "described": true,
+      "descriptionPage": 454,
+      "ordainedOnly": true,
+      "monasticOnly": false,
+      "inVocationTables": false,
+      "costText": "-3 FP from recipient",
+      "automatic": true
     }
   ]
 }

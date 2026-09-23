@@ -40,10 +40,24 @@
         </label>
         <label class="cns5-field">
             <span>{{localize "CNS5.Details.starSign"}}</span>
-            <input type="text" name="system.details.starSign" value="{{system.details.starSign}}"
-                   {{#unless editable}}disabled{{/unless}}>
+            <select name="system.details.starSign" {{#unless editable}}disabled{{/unless}}>
+                <option value="">{{localize "CNS5.Details.noSign"}}</option>
+                {{#each signs}}
+                <option value="{{value}}" {{#if selected}}selected{{/if}}>{{localize label}}</option>
+                {{/each}}
+            </select>
         </label>
     </div>
+
+    {{#if system.details.favouredCategories.length}}
+    <p class="cns5-hint">
+        {{localize "CNS5.Details.favouredBy"}}
+        {{#each system.details.favouredCategories}}<strong>{{this}}</strong>{{#unless @last}}, {{/unless}}{{/each}};
+        {{localize "CNS5.Details.favouredAttr"}}
+        <strong>{{localize (concat "CNS5.Attr." system.details.favouredAttribute)}}</strong>.
+        {{localize "CNS5.Details.sunsignCount" count=system.details.sunsignSkills}}
+    </p>
+    {{/if}}
 
     <div class="cns5-grid cns5-grid--three">
         <label class="cns5-field">

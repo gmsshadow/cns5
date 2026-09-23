@@ -68,9 +68,21 @@
                         {{localize "CNS5.Save.label"}}
                     </span>
                     {{/if}}
+                    {{#if spell.system.partlyLearnt}}
+                    <span class="cns5-tag cns5-tag--learning"
+                          data-tooltip="{{localize 'CNS5.Spell.mrRemainingHint'}}{{#if spell.system.daysToNextStep}} {{localize 'CNS5.Spell.nextStep' days=spell.system.daysToNextStep}}{{/if}}">
+                        {{localize "CNS5.Spell.learning"}} &middot; {{spell.system.remaining}} MR
+                    </span>
+                    {{/if}}
                 </th>
-                <td class="cns5-skills__readout">{{spell.system.mr}}</td>
-                <td class="cns5-skills__readout">{{spell.system.fpToCast}}</td>
+                <td class="cns5-skills__readout"
+                    {{#if spell.system.traditionModifier}}data-tooltip="{{localize 'CNS5.Spell.traditionHint' base=spell.system.mr modifier=spell.system.traditionModifier}}"{{/if}}>
+                    {{spell.system.effectiveMr}}{{#if spell.system.traditionModifier}}*{{/if}}
+                </td>
+                <td class="cns5-skills__readout"
+                    {{#if spell.system.mrSurcharge}}data-tooltip="{{localize 'CNS5.Spell.surchargeHint' base=spell.system.fpToCast extra=spell.system.mrSurcharge}}"{{/if}}>
+                    {{spell.system.effectiveFp}}{{#if spell.system.mrSurcharge}}*{{/if}}
+                </td>
                 <td class="cns5-skills__readout">{{spell.system.apToCast}}</td>
                 <td class="cns5-skills__readout cns5-skills__readout--total"
                     data-tooltip="{{localize 'CNS5.Spell.baseChanceHint'}}">
@@ -97,6 +109,210 @@
         </table>
         {{else}}
         <p class="cns5-hint">{{localize "CNS5.Magick.empty"}}</p>
+        {{/if}}
+    </section>
+
+    <section class="cns5-skills">
+        <h3 class="cns5-skills__heading">
+            {{localize "CNS5.Magickal.ownBooks"}}
+            <button type="button" class="cns5-add" data-action="createItem" data-type="magickalItem"
+                    data-kind="book">
+                {{localize "CNS5.Item.add"}}
+            </button>
+        </h3>
+        {{#if ownBooks.length}}
+        <table class="cns5-skills__table">
+            <thead>
+            <tr>
+                <th scope="col" class="cns5-skills__name">{{localize "CNS5.Magickal.book"}}</th>
+                
+                <th scope="col">{{localize "CNS5.Book.pages"}}</th>
+                <th scope="col"><span class="cns5-visually-hidden">{{localize "CNS5.Skill.controls"}}</span></th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#each ownBooks as |thing|}}
+            <tr>
+                <th scope="row">
+                    <button type="button" class="cns5-skills__roll" data-action="editItem"
+                            data-item-id="{{thing.id}}"
+                            data-tooltip="{{localize 'CNS5.Item.edit'}}">{{thing.name}}</button>
+                    {{#if thing.system.writtenForMode}}
+                    <span class="cns5-tag cns5-tag--origin">{{thing.system.writtenForMode}}</span>
+                    {{/if}}
+                </th>
+                
+                <td class="cns5-skills__readout cns5-skills__readout--total">{{thing.system.pages}}</td>
+                <td class="cns5-skills__controls">
+                    <button type="button" data-action="editItem" data-item-id="{{spell.id}}"
+                            data-tooltip="{{localize 'CNS5.Item.edit'}}">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                    </button>
+                    <button type="button" data-action="deleteItem" data-item-id="{{spell.id}}"
+                            data-tooltip="{{localize 'CNS5.Item.delete'}}">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+            <tr class="cns5-subrow">
+                <td colspan="3">
+                    {{#each thing.system.spells as |held index|}}
+                    <span class="cns5-held-chip">
+                        <button type="button" class="cns5-add" data-action="castFromDevice"
+                                data-item-id="{{thing.id}}" data-index="{{index}}"
+                                {{#unless thing.system.castable}}disabled{{/unless}}
+                                data-tooltip="{{localize 'CNS5.Device.castTooltip'}}">
+                            {{held.name}} <span class="cns5-hint">MR {{held.mr}}</span>
+                        </button>
+                        {{#if @root.editable}}
+                        <button type="button" class="cns5-held-chip__remove"
+                                data-action="removeDeviceSpell"
+                                data-item-id="{{thing.id}}" data-index="{{index}}"
+                                aria-label="{{localize 'CNS5.Device.remove'}}"
+                                data-tooltip="{{localize 'CNS5.Device.remove'}}">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                        {{/if}}
+                    </span>
+                    {{else}}
+                    <span class="cns5-hint">{{localize "CNS5.Device.empty"}}</span>
+                    {{/each}}
+                </td>
+            </tr>
+            {{/each}}
+            </tbody>
+        </table>
+        <p class="cns5-hint">{{localize "CNS5.Book.ownHint"}}</p>
+        {{else}}
+        <p class="cns5-hint">{{localize "CNS5.Book.ownNone"}}</p>
+        {{/if}}
+    </section>
+
+    <section class="cns5-skills">
+        <h3 class="cns5-skills__heading">
+            {{localize "CNS5.Magickal.otherBooks"}}
+            <button type="button" class="cns5-add" data-action="createItem" data-type="magickalItem"
+                    data-kind="book">
+                {{localize "CNS5.Item.add"}}
+            </button>
+        </h3>
+        {{#if otherBooks.length}}
+        <table class="cns5-skills__table">
+            <thead>
+            <tr>
+                <th scope="col" class="cns5-skills__name">{{localize "CNS5.Magickal.book"}}</th>
+                <th scope="col">{{localize "CNS5.Book.writtenBy"}}</th>
+                <th scope="col">{{localize "CNS5.Scroll.writer"}}</th>
+                <th scope="col">{{localize "CNS5.Book.pages"}}</th>
+                <th scope="col"><span class="cns5-visually-hidden">{{localize "CNS5.Skill.controls"}}</span></th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#each otherBooks as |thing|}}
+            <tr>
+                <th scope="row">
+                    <button type="button" class="cns5-skills__roll" data-action="editItem"
+                            data-item-id="{{thing.id}}"
+                            data-tooltip="{{localize 'CNS5.Item.edit'}}">{{thing.name}}</button>
+                    {{#if thing.system.writtenForMode}}
+                    <span class="cns5-tag cns5-tag--origin">{{thing.system.writtenForMode}}</span>
+                    {{/if}}
+                </th>
+                <td class="cns5-skills__readout">{{thing.system.writtenBy}}</td>
+                <td class="cns5-skills__readout">{{thing.system.makerTsc}}%</td>
+                <td class="cns5-skills__readout cns5-skills__readout--total">{{thing.system.pages}}</td>
+                <td class="cns5-skills__controls">
+                    <button type="button" data-action="editItem" data-item-id="{{spell.id}}"
+                            data-tooltip="{{localize 'CNS5.Item.edit'}}">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                    </button>
+                    <button type="button" data-action="deleteItem" data-item-id="{{spell.id}}"
+                            data-tooltip="{{localize 'CNS5.Item.delete'}}">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+            <tr class="cns5-subrow">
+                <td colspan="5">
+                    {{#each thing.system.spells as |held index|}}
+                    <span class="cns5-held-chip">
+                        <button type="button" class="cns5-add" data-action="castFromDevice"
+                                data-item-id="{{thing.id}}" data-index="{{index}}"
+                                {{#unless thing.system.castable}}disabled{{/unless}}
+                                data-tooltip="{{localize 'CNS5.Device.castTooltip'}}">
+                            {{held.name}} <span class="cns5-hint">MR {{held.mr}}</span>
+                        </button>
+                        {{#if @root.editable}}
+                        <button type="button" class="cns5-held-chip__remove"
+                                data-action="removeDeviceSpell"
+                                data-item-id="{{thing.id}}" data-index="{{index}}"
+                                aria-label="{{localize 'CNS5.Device.remove'}}"
+                                data-tooltip="{{localize 'CNS5.Device.remove'}}">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                        {{/if}}
+                    </span>
+                    {{else}}
+                    <span class="cns5-hint">{{localize "CNS5.Device.empty"}}</span>
+                    {{/each}}
+                </td>
+            </tr>
+            {{/each}}
+            </tbody>
+        </table>
+        <p class="cns5-hint">{{localize "CNS5.Book.otherHint"}}</p>
+        {{else}}
+        <p class="cns5-hint">{{localize "CNS5.Book.otherNone"}}</p>
+        {{/if}}
+    </section>
+
+    {{!-- What stands between the character and a spell cast at him. Each is
+          targeted in its own right before he is (p298). --}}
+    <section class="cns5-skills">
+        <h3 class="cns5-skills__heading">
+            {{localize "CNS5.Magickal.wards"}}
+            <button type="button" class="cns5-add" data-action="createItem" data-type="magickalItem"
+                    data-kind="amulet">
+                {{localize "CNS5.Item.add"}}
+            </button>
+        </h3>
+        {{#if wards.length}}
+        <table class="cns5-skills__table">
+            <thead>
+            <tr>
+                <th scope="col" class="cns5-skills__name">{{localize "CNS5.Magickal.wards"}}</th>
+                <th scope="col">{{localize "CNS5.Defence.protectiveMr"}}</th>
+                <th scope="col"><span class="cns5-visually-hidden">{{localize "CNS5.Skill.controls"}}</span></th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#each wards as |thing|}}
+            <tr>
+                <th scope="row">
+                    <button type="button" class="cns5-skills__roll" data-action="editItem"
+                            data-item-id="{{thing.id}}"
+                            data-tooltip="{{localize 'CNS5.Item.edit'}}">{{thing.name}}</button>
+                    <span class="cns5-tag cns5-tag--origin">
+                        {{localize (concat "CNS5.Magickal." thing.system.kind)}}
+                    </span>
+                </th>
+                <td class="cns5-skills__readout cns5-skills__readout--total">{{thing.system.protectiveMr}}%</td>
+                <td class="cns5-skills__controls">
+                    <button type="button" data-action="editItem" data-item-id="{{thing.id}}"
+                            data-tooltip="{{localize 'CNS5.Item.edit'}}">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                    </button>
+                    <button type="button" data-action="deleteItem" data-item-id="{{thing.id}}"
+                            data-tooltip="{{localize 'CNS5.Item.delete'}}">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+            {{/each}}
+            </tbody>
+        </table>
+        {{else}}
+        <p class="cns5-hint">{{localize "CNS5.Defence.none"}}</p>
         {{/if}}
     </section>
 

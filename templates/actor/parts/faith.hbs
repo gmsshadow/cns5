@@ -1,6 +1,34 @@
 <section class="tab {{tab.cssClass}}" data-tab="{{tab.id}}" data-group="{{tab.group}}">
 
     <div class="cns5-grid cns5-grid--three">
+        <div class="cns5-field">
+            <span>{{localize "CNS5.Faith.divineAid"}}</span>
+            <output data-tooltip="{{localize 'CNS5.Faith.divineAidHint'}}">
+                {{#if system.faith.divineAid.others}}+{{system.faith.divineAid.others}}
+                {{else if system.faith.divineAid.instead}}{{localize "CNS5.Faith.insteadOnly"}}
+                {{else}}{{localize "CNS5.Faith.himselfOnly"}}{{/if}}
+            </output>
+        </div>
+        <div class="cns5-field">
+            <span>{{localize "CNS5.Faith.believer"}}</span>
+            <output data-tooltip="{{localize 'CNS5.Faith.believerHint'}}">
+                {{localize (concat "CNS5.Believer." system.faith.believer)}}
+            </output>
+        </div>
+        <div class="cns5-field">
+            <span>{{localize "CNS5.Faith.spiritFromSkill"}}</span>
+            <output data-tooltip="{{localize 'CNS5.Faith.spiritFromSkillHint'}}">
+                +{{system.faith.spiritFromSkill}}
+            </output>
+        </div>
+                <label class="cns5-field">
+            <span>{{localize "CNS5.Details.holyStanding"}}</span>
+            <select name="system.details.holyStanding" {{#unless editable}}disabled{{/unless}}>
+                {{#each standings}}
+                <option value="{{value}}" {{#if selected}}selected{{/if}}>{{localize label}}</option>
+                {{/each}}
+            </select>
+        </label>
         <label class="cns5-field">
             <span>{{localize "CNS5.Faith.skill"}}</span>
             <input type="text" name="system.faith.skill" value="{{system.faith.skill}}"
@@ -123,6 +151,55 @@
         {{else}}
         <p class="cns5-hint">{{localize "CNS5.Faith.noActs"}}</p>
         {{/if}}
+    </section>
+
+    <section class="cns5-skills">
+        <h3 class="cns5-skills__heading">
+            {{localize "CNS5.Belief.heading"}}
+            <button type="button" class="cns5-add" data-action="drawBeliefPool"
+                    data-tooltip="{{localize 'CNS5.Belief.drawHint'}}">
+                {{localize "CNS5.Belief.draw"}}
+            </button>
+        </h3>
+        <div class="cns5-grid cns5-grid--three">
+            <label class="cns5-field">
+                <span>{{localize "CNS5.Belief.congregation"}}</span>
+                <select name="system.faith.congregation" {{#unless editable}}disabled{{/unless}}>
+                    <option value="">{{localize "CNS5.Belief.noCongregationOption"}}</option>
+                    {{#each congregations}}
+                    <option value="{{value}}" {{#if selected}}selected{{/if}}>{{localize label}}</option>
+                    {{/each}}
+                </select>
+            </label>
+            <label class="cns5-field">
+                <span>{{localize "CNS5.Belief.holyPlace"}}</span>
+                <select name="system.faith.holyPlace" {{#unless editable}}disabled{{/unless}}>
+                    {{#each holyPlaces}}
+                    <option value="{{value}}" {{#if selected}}selected{{/if}}>{{localize label}}</option>
+                    {{/each}}
+                </select>
+            </label>
+            <label class="cns5-field">
+                <span>{{localize "CNS5.Belief.shrine"}}</span>
+                <select name="system.faith.shrine" {{#unless editable}}disabled{{/unless}}>
+                    {{#each shrines}}
+                    <option value="{{value}}" {{#if selected}}selected{{/if}}>{{localize label}}</option>
+                    {{/each}}
+                </select>
+            </label>
+        </div>
+        <div class="cns5-grid cns5-grid--two">
+            <label class="cns5-field">
+                <span>{{localize "CNS5.Belief.pooled"}}</span>
+                <input type="number" name="system.faith.beliefPool" value="{{system.faith.beliefPool}}"
+                       min="0" {{#unless editable}}disabled{{/unless}}>
+            </label>
+            <div class="cns5-field">
+                <span>{{localize "CNS5.Belief.yields"}}</span>
+                <output>{{system.faith.beliefPoolFormula.multiplier}} &times; 1d10</output>
+            </div>
+        </div>
+        <p class="cns5-hint">{{localize "CNS5.Belief.hint"}}</p>
     </section>
 
 </section>

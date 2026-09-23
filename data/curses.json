@@ -1,0 +1,418 @@
+{
+  "source": "Chivalry & Sorcery 5th Edition core rules, Table - Curses (pp.85-86) and Table - Allergies (p87)",
+  "note": "Rolls, pages and names only. The names are this system's own, from tools/curse-labels.json. Nothing of what a curse does is shipped: see the page given on each entry.",
+  "curses": [
+    {
+      "name": "Jonah",
+      "roll": [
+        1,
+        4
+      ],
+      "die": "1d100",
+      "page": 85,
+      "rollsOnAnotherTable": false
+    },
+    {
+      "name": "Mislays Things",
+      "roll": [
+        5,
+        8
+      ],
+      "die": "1d100",
+      "page": 85,
+      "rollsOnAnotherTable": false
+    },
+    {
+      "name": "Uncoordinated",
+      "roll": [
+        9,
+        12
+      ],
+      "die": "1d100",
+      "page": 85,
+      "rollsOnAnotherTable": false
+    },
+    {
+      "name": "Unsettles Animals",
+      "roll": [
+        13,
+        16
+      ],
+      "die": "1d100",
+      "page": 85,
+      "rollsOnAnotherTable": false
+    },
+    {
+      "name": "Reluctant Mounts",
+      "roll": [
+        17,
+        20
+      ],
+      "die": "1d100",
+      "page": 85,
+      "rollsOnAnotherTable": false
+    },
+    {
+      "name": "Dogs Are Hostile",
+      "roll": [
+        21,
+        24
+      ],
+      "die": "1d100",
+      "page": 85,
+      "rollsOnAnotherTable": false
+    },
+    {
+      "name": "Cats Are Hostile",
+      "roll": [
+        25,
+        28
+      ],
+      "die": "1d100",
+      "page": 85,
+      "rollsOnAnotherTable": false
+    },
+    {
+      "name": "Stung",
+      "roll": [
+        29,
+        32
+      ],
+      "die": "1d100",
+      "page": 85,
+      "rollsOnAnotherTable": false
+    },
+    {
+      "name": "Drawn Snakes",
+      "roll": [
+        33,
+        36
+      ],
+      "die": "1d100",
+      "page": 85,
+      "rollsOnAnotherTable": false
+    },
+    {
+      "name": "Demon-Sired",
+      "roll": [
+        37,
+        38
+      ],
+      "die": "1d100",
+      "page": 85,
+      "rollsOnAnotherTable": false
+    },
+    {
+      "name": "Speaking Animal",
+      "roll": [
+        39,
+        40
+      ],
+      "die": "1d100",
+      "page": 85,
+      "rollsOnAnotherTable": false
+    },
+    {
+      "name": "Blight on Livestock",
+      "roll": [
+        41,
+        42
+      ],
+      "die": "1d100",
+      "page": 85,
+      "rollsOnAnotherTable": false
+    },
+    {
+      "name": "Blue Flames",
+      "roll": [
+        43,
+        44
+      ],
+      "die": "1d100",
+      "page": 85,
+      "rollsOnAnotherTable": false
+    },
+    {
+      "name": "Withering Touch",
+      "roll": [
+        45,
+        46
+      ],
+      "die": "1d100",
+      "page": 85,
+      "rollsOnAnotherTable": false
+    },
+    {
+      "name": "Burns in Sunlight",
+      "roll": [
+        47,
+        50
+      ],
+      "die": "1d100",
+      "page": 85,
+      "rollsOnAnotherTable": false
+    },
+    {
+      "name": "Mild Allergy",
+      "roll": [
+        51,
+        60
+      ],
+      "die": "1d100",
+      "page": 85,
+      "rollsOnAnotherTable": true
+    },
+    {
+      "name": "Serious Allergy",
+      "roll": [
+        61,
+        63
+      ],
+      "die": "1d100",
+      "page": 85,
+      "rollsOnAnotherTable": true
+    },
+    {
+      "name": "Severe Allergy",
+      "roll": [
+        64,
+        66
+      ],
+      "die": "1d100",
+      "page": 86,
+      "rollsOnAnotherTable": true
+    },
+    {
+      "name": "Witch Mark",
+      "roll": [
+        67,
+        67
+      ],
+      "die": "1d100",
+      "page": 86,
+      "rollsOnAnotherTable": false
+    },
+    {
+      "name": "The Evil Eye",
+      "roll": [
+        68,
+        68
+      ],
+      "die": "1d100",
+      "page": 86,
+      "rollsOnAnotherTable": false
+    },
+    {
+      "name": "Always Dishevelled",
+      "roll": [
+        69,
+        71
+      ],
+      "die": "1d100",
+      "page": 86,
+      "rollsOnAnotherTable": false
+    },
+    {
+      "name": "Evil Dreams",
+      "roll": [
+        72,
+        75
+      ],
+      "die": "1d100",
+      "page": 86,
+      "rollsOnAnotherTable": false
+    },
+    {
+      "name": "Unsettling Presence",
+      "roll": [
+        76,
+        77
+      ],
+      "die": "1d100",
+      "page": 86,
+      "rollsOnAnotherTable": false
+    },
+    {
+      "name": "Troubled by Sunlight",
+      "roll": [
+        78,
+        79
+      ],
+      "die": "1d100",
+      "page": 86,
+      "rollsOnAnotherTable": false
+    },
+    {
+      "name": "Blighted Beasts",
+      "roll": [
+        80,
+        81
+      ],
+      "die": "1d100",
+      "page": 86,
+      "rollsOnAnotherTable": false
+    },
+    {
+      "name": "Major Phobia",
+      "roll": [
+        82,
+        83
+      ],
+      "die": "1d100",
+      "page": 86,
+      "rollsOnAnotherTable": true
+    },
+    {
+      "name": "Noticeable Deformity",
+      "roll": [
+        84,
+        90
+      ],
+      "die": "1d100",
+      "page": 86,
+      "rollsOnAnotherTable": false
+    },
+    {
+      "name": "Serious Deformity",
+      "roll": [
+        91,
+        91
+      ],
+      "die": "1d100",
+      "page": 86,
+      "rollsOnAnotherTable": false
+    },
+    {
+      "name": "Severe Deformity",
+      "roll": [
+        92,
+        92
+      ],
+      "die": "1d100",
+      "page": 86,
+      "rollsOnAnotherTable": false
+    },
+    {
+      "name": "Body Odour",
+      "roll": [
+        93,
+        93
+      ],
+      "die": "1d100",
+      "page": 86,
+      "rollsOnAnotherTable": false
+    },
+    {
+      "name": "Mild Speech Impairment",
+      "roll": [
+        94,
+        95
+      ],
+      "die": "1d100",
+      "page": 86,
+      "rollsOnAnotherTable": false
+    },
+    {
+      "name": "Noticeable Speech Impairment",
+      "roll": [
+        96,
+        96
+      ],
+      "die": "1d100",
+      "page": 86,
+      "rollsOnAnotherTable": false
+    },
+    {
+      "name": "Severe Speech Impairment",
+      "roll": [
+        97,
+        97
+      ],
+      "die": "1d100",
+      "page": 86,
+      "rollsOnAnotherTable": false
+    },
+    {
+      "name": "Twice Cursed",
+      "roll": [
+        98,
+        99
+      ],
+      "die": "1d100",
+      "page": 86,
+      "rollsOnAnotherTable": true
+    },
+    {
+      "name": "Thrice Cursed",
+      "roll": [
+        100,
+        100
+      ],
+      "die": "1d100",
+      "page": 86,
+      "rollsOnAnotherTable": true
+    }
+  ],
+  "allergies": [
+    {
+      "name": "Allergy: Fur or Hair",
+      "roll": [
+        1,
+        2
+      ],
+      "die": "1d10",
+      "page": 87,
+      "rollsOnAnotherTable": false
+    },
+    {
+      "name": "Allergy: Dust",
+      "roll": [
+        3,
+        4
+      ],
+      "die": "1d10",
+      "page": 87,
+      "rollsOnAnotherTable": false
+    },
+    {
+      "name": "Allergy: Insect Bites",
+      "roll": [
+        5,
+        6
+      ],
+      "die": "1d10",
+      "page": 87,
+      "rollsOnAnotherTable": false
+    },
+    {
+      "name": "Allergy: Common Food",
+      "roll": [
+        7,
+        8
+      ],
+      "die": "1d10",
+      "page": 87,
+      "rollsOnAnotherTable": false
+    },
+    {
+      "name": "Allergy: Uncommon Food",
+      "roll": [
+        9,
+        9
+      ],
+      "die": "1d10",
+      "page": 87,
+      "rollsOnAnotherTable": false
+    },
+    {
+      "name": "Allergy: Mould",
+      "roll": [
+        10,
+        10
+      ],
+      "die": "1d10",
+      "page": 87,
+      "rollsOnAnotherTable": false
+    }
+  ]
+}

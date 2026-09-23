@@ -5,8 +5,23 @@
             <option value="device" {{#if (eq system.kind "device")}}selected{{/if}}>{{localize "CNS5.Magickal.device"}}</option>
             <option value="focus" {{#if (eq system.kind "focus")}}selected{{/if}}>{{localize "CNS5.Magickal.focus"}}</option>
             <option value="scroll" {{#if (eq system.kind "scroll")}}selected{{/if}}>{{localize "CNS5.Magickal.scroll"}}</option>
+            <option value="book" {{#if (eq system.kind "book")}}selected{{/if}}>{{localize "CNS5.Magickal.book"}}</option>
+            <option value="ward" {{#if (eq system.kind "ward")}}selected{{/if}}>{{localize "CNS5.Magickal.ward"}}</option>
+            <option value="amulet" {{#if (eq system.kind "amulet")}}selected{{/if}}>{{localize "CNS5.Magickal.amulet"}}</option>
         </select>
     </label>
+    {{#if (eq system.kind "book")}}
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Book.writtenBy"}}</span>
+        <input type="text" name="system.writtenBy" value="{{system.writtenBy}}"
+               {{#unless editable}}disabled{{/unless}}>
+    </label>
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Book.writtenForMode"}}</span>
+        <input type="text" name="system.writtenForMode" value="{{system.writtenForMode}}"
+               {{#unless editable}}disabled{{/unless}}>
+    </label>
+    {{else}}
     <label class="cns5-field">
         <span>{{localize "CNS5.Magickal.grade"}}</span>
         <select name="system.grade" {{#unless editable}}disabled{{/unless}}>
@@ -20,8 +35,13 @@
         <input type="number" name="system.makerMl" value="{{system.makerMl}}" min="1"
                {{#unless editable}}disabled{{/unless}}>
     </label>
+    {{/if}}
 </div>
+{{#if (eq system.kind "book")}}
+<p class="cns5-hint">{{localize "CNS5.Book.writtenByHint"}} {{localize "CNS5.Book.modeHint"}}</p>
+{{else}}
 <p class="cns5-hint">{{localize "CNS5.Magickal.makerHint"}}</p>
+{{/if}}
 
 {{#unless (eq system.kind "focus")}}
 <div class="cns5-grid cns5-grid--three">
@@ -44,7 +64,37 @@
 <p class="cns5-hint">{{localize "CNS5.Device.makerSkillHint"}}</p>
 {{/unless}}
 
-{{#if (eq system.kind "scroll")}}
+{{#if system.defends}}
+<fieldset class="cns5-fieldset">
+    <legend>{{localize "CNS5.Defence.protectiveMr"}} {{system.protectiveMr}}%</legend>
+    {{#unless (eq system.kind "ward")}}
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Defence.ageYears"}}</span>
+        <input type="number" name="system.ageYears" value="{{system.ageYears}}" min="0"
+               {{#unless editable}}disabled{{/unless}}>
+    </label>
+    <p class="cns5-hint">{{localize "CNS5.Defence.ageHint"}}</p>
+    {{/unless}}
+</fieldset>
+{{/if}}
+
+{{#if (eq system.kind "focus")}}
+<div class="cns5-checks">
+    <label class="cns5-checkbox">
+        <input type="checkbox" name="system.usedDefensively" {{checked system.usedDefensively}}
+               {{#unless editable}}disabled{{/unless}}>
+        <span>{{localize "CNS5.Defence.usedDefensively"}}</span>
+    </label>
+</div>
+<p class="cns5-hint">{{localize "CNS5.Defence.usedDefensivelyHint"}}</p>
+{{/if}}
+
+{{#if (eq system.kind "book")}}
+<div class="cns5-field">
+    <span>{{localize "CNS5.Book.pages"}}</span>
+    <output>{{system.pages}}</output>
+</div>
+{{else if (eq system.kind "scroll")}}
 <label class="cns5-checkbox">
     <input type="checkbox" name="system.discharged" {{checked system.discharged}}
            {{#unless editable}}disabled{{/unless}}>

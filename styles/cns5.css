@@ -1536,3 +1536,27 @@
     border-top: 1px solid rgba(0, 0, 0, 0.12);
     border-bottom: 1px solid rgba(0, 0, 0, 0.12);
 }
+
+/* A spell that went wrong in the making. The worst results let it loose where
+   the Gamemaster must decide what it does, so this is not a line to miss. */
+.cns5-check__backfire {
+    margin: 0.3rem 0;
+    padding: 0.3rem 0.5rem;
+    border-left: 3px solid var(--cns-oxblood);
+    background: rgba(109, 39, 35, 0.08);
+    font-weight: 700;
+}
+
+/* A spell still being learnt: cast at a loss, and liable to backfire. Marked
+   so a caster sees it before reaching for it. */
+.cns5-tag--learning {
+    border-color: var(--cns-gilt);
+    color: var(--cns-gilt);
+}
+
+/* A skill a birth sign inclines towards but which has not been taken as a
+   favoured one: shown faintly, since it is an opportunity rather than a fact. */
+.cns5-tag--faint {
+    opacity: 0.4;
+    border-style: dashed;
+}

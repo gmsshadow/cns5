@@ -1053,6 +1053,30 @@ export class CnS5Actor extends Actor {
   /* -------------------------------------------- */
 
   /**
+   * What witnessing a miracle does to a character's Spirit (p401).
+   *
+   * A believer of the faith gains outright. A man of another religion gains
+   * belief in the faith he has just seen at work and loses it in his own —
+   * and since a character keeps one Current Spirit rather than one per
+   * religion, the loss is applied and the gain reported for the Gamemaster to
+   * record against the new faith.
+   *
+   * @param {object} options
+   * @returns {Promise<object>}
+   */
+  async witnessMiracle({ level = "minor", role = "witness", sameFaith = true, critical = false }) {
+    const change = CNS5.miracleSpirit({ level, role, sameFaith, critical });
+
+    if (change.own) {
+      await this.update({ "system.spirit.value": this.system.spirit.value + change.own });
+    }
+
+    return { ...change, name: this.name };
+  }
+
+  /* -------------------------------------------- */
+
+  /**
    * Draw the Belief Pool from a congregation at worship (p403).
    *
    * "Acts of Faith which are performed for a congregation or for a community
@@ -1108,10 +1132,12 @@ export class CnS5Actor extends Actor {
 
     const change = CNS5.spiritAfterAct({ cost, success, critTotal });
     if (change.net !== 0) {
-      // Current Spirit "can lapse into total non-existence", so it is floored
-      // at nothing rather than allowed below it.
+      // Not floored at nothing. Current Spirit "can lapse into total
+      // non-existence" (p400) and further: p404 speaks of "those with low or
+      // negative Spirit", whom evil spirits are drawn to, and gives them a
+      // negative aura. A man may believe less than nothing.
       await this.update({
-        "system.spirit.value": Math.max(0, this.system.spirit.value + change.net)
+        "system.spirit.value": this.system.spirit.value + change.net
       });
     }
 

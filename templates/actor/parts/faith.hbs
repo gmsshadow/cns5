@@ -2,6 +2,14 @@
 
     <div class="cns5-grid cns5-grid--three">
         <div class="cns5-field">
+            <span>{{localize "CNS5.Faith.aura"}}</span>
+            <output data-tooltip="{{localize 'CNS5.Faith.auraHint'}}">
+                {{#if system.faith.aura.points}}{{cns5Signed system.faith.aura.modifier}}%
+                {{localize "CNS5.Faith.auraWithin"}} {{system.faith.aura.radiusYards}} yd
+                {{else}}{{localize "CNS5.Faith.noAura"}}{{/if}}
+            </output>
+        </div>
+        <div class="cns5-field">
             <span>{{localize "CNS5.Faith.divineAid"}}</span>
             <output data-tooltip="{{localize 'CNS5.Faith.divineAidHint'}}">
                 {{#if system.faith.divineAid.others}}+{{system.faith.divineAid.others}}
@@ -156,7 +164,11 @@
     <section class="cns5-skills">
         <h3 class="cns5-skills__heading">
             {{localize "CNS5.Belief.heading"}}
-            <button type="button" class="cns5-add" data-action="drawBeliefPool"
+            <button type="button" class="cns5-add" data-action="witnessMiracle"
+                data-tooltip="{{localize 'CNS5.Miracle.hint'}}">
+            {{localize "CNS5.Miracle.button"}}
+        </button>
+        <button type="button" class="cns5-add" data-action="drawBeliefPool"
                     data-tooltip="{{localize 'CNS5.Belief.drawHint'}}">
                 {{localize "CNS5.Belief.draw"}}
             </button>

@@ -82,3 +82,97 @@ export class CnS5UnskilledAttempt {
     });
   }
 }
+
+/* -------------------------------------------- */
+
+/**
+ * A miracle, and what those who saw it make of it (p401).
+ *
+ * Applied to whoever is selected on the canvas, since a miracle is seen by
+ * everyone present rather than by one character. What each takes from it
+ * depends on whether it was worked upon him, whether he shares the faith, and
+ * how plainly it was divine — the Crit Die of the Act that produced it.
+ */
+export class CnS5Miracle {
+  /**
+   * @param {Actor[]} witnesses
+   * @returns {Promise<ChatMessage|null>}
+   */
+  static async prompt(witnesses) {
+    if (!witnesses.length) {
+      ui.notifications.warn(game.i18n.localize("CNS5.Miracle.noWitnesses"));
+      return null;
+    }
+
+    const options = (source, selected) =>
+      Object.entries(source)
+        .map(
+          ([key, label]) =>
+            `<option value="${key}" ${key === selected ? "selected" : ""}>${game.i18n.localize(
+              label
+            )}</option>`
+        )
+        .join("");
+
+    const content = `
+      <div class="cns5-prompt">
+        <p>${game.i18n.format("CNS5.Miracle.prompt", { count: witnesses.length })}</p>
+        <label for="cns5-miracle-level">${game.i18n.localize("CNS5.Miracle.level")}</label>
+        <select id="cns5-miracle-level" name="level">
+          ${options(CNS5.miracleLevels, "miracle")}
+        </select>
+        <label for="cns5-miracle-role">${game.i18n.localize("CNS5.Miracle.role")}</label>
+        <select id="cns5-miracle-role" name="role">${options(CNS5.miracleRoles, "witness")}</select>
+        <label class="cns5-checkbox">
+          <input type="checkbox" name="sameFaith" checked>
+          <span>${game.i18n.localize("CNS5.Miracle.sameFaith")}</span>
+        </label>
+        <label class="cns5-checkbox">
+          <input type="checkbox" name="critical">
+          <span>${game.i18n.localize("CNS5.Miracle.critical")}</span>
+        </label>
+        <p class="hint">${game.i18n.localize("CNS5.Miracle.hint")}</p>
+      </div>`;
+
+    const chosen = await foundry.applications.api.DialogV2.prompt({
+      window: { title: game.i18n.localize("CNS5.Miracle.title") },
+      content,
+      ok: {
+        label: game.i18n.localize("CNS5.Miracle.apply"),
+        callback: (event, button) => ({
+          level: button.form.elements.level.value,
+          role: button.form.elements.role.value,
+          sameFaith: button.form.elements.sameFaith.checked,
+          critical: button.form.elements.critical.checked
+        })
+      },
+      rejectClose: false
+    });
+
+    if (!chosen) return null;
+
+    const told = [];
+    for (const actor of witnesses) {
+      const change = await actor.witnessMiracle(chosen);
+      told.push(
+        game.i18n.format(
+          change.newFaith ? "CNS5.Miracle.converted" : "CNS5.Miracle.moved",
+          {
+            name: change.name,
+            own: change.own > 0 ? `+${change.own}` : change.own,
+            newFaith: change.newFaith > 0 ? `+${change.newFaith}` : change.newFaith
+          }
+        )
+      );
+    }
+
+    return ChatMessage.create({
+      content: `<div class="cns5-check">
+        <h3 class="cns5-check__title">${game.i18n.localize(
+          CNS5.miracleLevels[chosen.level]
+        )}</h3>
+        <ul class="cns5-list">${told.map((t) => `<li>${t}</li>`).join("")}</ul>
+      </div>`
+    });
+  }
+}

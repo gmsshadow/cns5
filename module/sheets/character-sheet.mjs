@@ -1,6 +1,6 @@
 import { CNS5 } from "../config.mjs";
 import { CnS5CreationWizard } from "../apps/creation-wizard.mjs";
-import { CnS5UnskilledAttempt } from "../apps/unskilled.mjs";
+import { CnS5UnskilledAttempt, CnS5Miracle } from "../apps/unskilled.mjs";
 
 const { HandlebarsApplicationMixin, DialogV2 } = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
@@ -41,6 +41,7 @@ export class CnS5CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2)
       attemptUnskilled: CnS5CharacterSheet.#onAttemptUnskilled,
       castFromDevice: CnS5CharacterSheet.#onCastFromDevice,
       drawBeliefPool: CnS5CharacterSheet.#onDrawBeliefPool,
+      witnessMiracle: CnS5CharacterSheet.#onWitnessMiracle,
       removeDeviceSpell: CnS5CharacterSheet.#onRemoveDeviceSpell
     }
   };
@@ -384,6 +385,22 @@ export class CnS5CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2)
     const item = this.actor.items.get(input.dataset.itemId);
     if (!item) return;
     await item.update({ "system.level": Math.max(0, Number(input.value) || 0) });
+  }
+
+  /* -------------------------------------------- */
+
+  /**
+   * Apply a miracle to everyone who saw it.
+   *
+   * Taken from the canvas rather than from this sheet, a miracle being seen by
+   * everyone present. The character whose sheet this is counts among them if
+   * his token is selected.
+   *
+   * @this {CnS5CharacterSheet}
+   */
+  static async #onWitnessMiracle() {
+    const selected = canvas?.tokens?.controlled?.map((t) => t.actor).filter(Boolean) ?? [];
+    await CnS5Miracle.prompt(selected.length ? selected : [this.actor]);
   }
 
   /* -------------------------------------------- */

@@ -635,6 +635,42 @@ witnessing another's raises belief in that faith and lowers it in one's own,
 which is why those entries are pairs. Nothing yet drives them — they need a
 witnessing workflow — but the figures are there.
 
+### Spiritual aura
+
+"Beings, locations, objects... that possess a large amount of Spirit (positive
+or negative) radiate a field, or aura, of power" (p404). Current Spirit divided
+by ten gives its strength, each point reaching a quarter of a mile and worth 5%
+either way to every roll made within it. The Faith tab shows both figures;
+applying them is the Gamemaster's, since it depends on who is standing where.
+
+**Spirit is no longer floored at nothing.** p400 says it can "lapse into total
+non-existence", but p404 speaks of "those with low or negative Spirit", whom
+evil spirits are drawn to, and gives them a negative aura. A man may believe
+less than nothing, and a run of failed Acts will take him there.
+
+The book says the aura is Spirit "divided by 10 (round down)", which taken
+literally would make a man of -15 Spirit radiate more strongly (-2) than a man
+of +15 radiates (+1). The two are treated alike here: the magnitude is rounded
+down and the sign kept.
+
+A group may combine its auras. The Spirits are added and the aura taken of the
+whole rather than the auras added, so a dozen men of nine Spirit apiece radiate
+nothing alone and ten points together — which is what a congregation is for.
+
+### A miracle witnessed
+
+The button on the Faith tab applies Table - Miracles Believer's Bonus and its
+unbeliever counterpart (p401) to everyone selected on the canvas, a miracle
+being seen by all present rather than by one character. What each takes from it
+depends on whether he worked it, whether it was worked upon him, whether he
+shares the faith, and whether the Crit Die made it plainly divine.
+
+One of another religion **gains belief in the faith he has just seen at work and
+loses it in his own** — which is how conversion happens to a man against his
+will. A character keeps one Current Spirit rather than one per religion, so the
+loss is applied and the gain reported for the Gamemaster to record against the
+new faith.
+
 ### Who may be prayed for
 
 Table - Requests for Divine Aid (p403). "The person praying has no 'power' to

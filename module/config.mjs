@@ -3285,6 +3285,47 @@ CNS5.miracleBonus = {
   }
 };
 
+/** The three degrees of miracle the tables distinguish. */
+CNS5.miracleLevels = {
+  minor: "CNS5.Miracle.minor",
+  miracle: "CNS5.Miracle.miracleLevel",
+  greater: "CNS5.Miracle.greater"
+};
+
+/** What a person was to the miracle: its worker, its object, or a bystander. */
+CNS5.miracleRoles = {
+  cleric: "CNS5.Miracle.cleric",
+  believer: "CNS5.Miracle.recipient",
+  witness: "CNS5.Miracle.bystander"
+};
+
+/**
+ * What a witness gains, by what he is and what he saw (p401).
+ *
+ * A believer of the faith gains Spirit outright. Someone of another religion
+ * gains belief in the faith he has just seen at work and loses it in his own,
+ * which is why those figures come in pairs and why conversion is a thing that
+ * can happen to a man against his will.
+ *
+ * @param {object} options
+ * @returns {{own: number, newFaith: number}}
+ */
+CNS5.miracleSpirit = function ({ level = "minor", role = "witness", sameFaith = true, critical = false }) {
+  const table = CNS5.miracleBonus[level] ?? CNS5.miracleBonus.minor;
+
+  if (sameFaith) {
+    const key = { cleric: "cleric", believer: "believer", witness: "witness" }[role] ?? "witness";
+    // Only the cleric and the one it was worked upon have a critical entry of
+    // their own; a bystander gains the same whatever the Crit Die.
+    const value = critical ? table[`${key}Crit`] ?? table[key] : table[key];
+    return { own: value ?? 0, newFaith: 0 };
+  }
+
+  const key = role === "witness" ? "unbelieverWitness" : "unbeliever";
+  const [gained, lost] = critical ? table[`${key}Crit`] : table[key];
+  return { own: lost ?? 0, newFaith: gained ?? 0 };
+};
+
 /** "At 50 SPR Points, one's Faith is such…" — and conversion turns on these. */
 CNS5.conversionSpirit = 11;
 CNS5.lapsedSpirit = 10;
@@ -3442,4 +3483,54 @@ CNS5.clergyReachByBelief = { devout: 3, fervent: 7, saintly: 12 };
 
 CNS5.clergyReach = function (believer, usual) {
   return (CNS5.clergyReachByBelief[believer] ?? 1) * Math.max(0, Number(usual) || 0);
+};
+
+/* -------------------------------------------- */
+/*  Spiritual Aura                              */
+/*  (p404)                                      */
+/* -------------------------------------------- */
+
+/**
+ * "Beings, locations, objects... that possess a large amount of Spirit
+ * (positive or negative) radiate a field, or aura, of power that can influence
+ * the Spirit of those encountering them."
+ *
+ * The strength is the Current Spirit divided by ten, the radius a quarter of a
+ * mile for each point, and every point worth five per cent either way to all
+ * rolls made within it.
+ *
+ * The book says "round down", which taken literally would make a man of -15
+ * Spirit radiate more strongly (-2) than a man of +15 radiates (+1). The two
+ * are treated alike here, the magnitude being rounded down and the sign kept,
+ * so that -15 gives -1 as +15 gives +1.
+ */
+CNS5.auraPerSpirit = 10;
+CNS5.auraRadiusYards = 440;
+CNS5.auraModifierPerPoint = 5;
+
+CNS5.spiritualAura = function (spirit) {
+  const value = Number(spirit) || 0;
+  const points = Math.sign(value) * Math.floor(Math.abs(value) / CNS5.auraPerSpirit);
+
+  return {
+    points,
+    radiusYards: Math.abs(points) * CNS5.auraRadiusYards,
+    modifier: points * CNS5.auraModifierPerPoint
+  };
+};
+
+/**
+ * "Closely bound groups (such as a church congregation, or a PC party
+ * containing a cleric) may combine the individuals' separate SPR auras
+ * together into a sum total."
+ *
+ * The Spirits are added and the aura taken of the whole, rather than the auras
+ * added: a dozen men of nine Spirit apiece radiate nothing alone and a great
+ * deal together, which is the point of a congregation.
+ *
+ * @param {number[]} spirits
+ * @returns {object}
+ */
+CNS5.combinedAura = function (spirits) {
+  return CNS5.spiritualAura((spirits ?? []).reduce((total, s) => total + (Number(s) || 0), 0));
 };

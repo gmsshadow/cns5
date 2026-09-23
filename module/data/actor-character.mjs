@@ -260,6 +260,9 @@ export class CnS5Character extends CnS5ActorBase {
 
     // What his congregation and its building would yield, were he to draw on
     // it. Rolled rather than counted, so only the dice are shown.
+    // What his belief radiates, and how far (p404).
+    this.faith.aura = CNS5.spiritualAura(this.spirit.value);
+
     this.faith.beliefPoolFormula = CNS5.beliefPoolFormula({
       congregation: this.faith.congregation,
       place: this.faith.holyPlace,

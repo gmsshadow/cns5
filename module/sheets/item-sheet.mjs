@@ -120,7 +120,8 @@ export class CnS5ItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     talent: "systems/cns5/templates/item/talent-body.hbs",
     flaw: "systems/cns5/templates/item/flaw-body.hbs",
     ammunition: "systems/cns5/templates/item/ammunition-body.hbs",
-    magickalItem: "systems/cns5/templates/item/magickal-body.hbs"
+    magickalItem: "systems/cns5/templates/item/magickal-body.hbs",
+    hindrance: "systems/cns5/templates/item/hindrance-body.hbs"
   };
 
   /** @override */
@@ -147,6 +148,11 @@ export class CnS5ItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     context.armourLocations = this.#choices(CNS5.armourLocations, this.item.system.location);
     context.flawKinds = this.#choices(CNS5.flawKinds, this.item.system.kind);
     context.ammunitionKinds = this.#choices(CNS5.ammunitionKinds, this.item.system.kind);
+    if (this.item.type === "hindrance") {
+      context.hindranceKinds = this.#choices(CNS5.hindranceKinds, this.item.system.kind);
+      context.hindranceSeverities = this.#choices(CNS5.hindranceSeverities, this.item.system.severity);
+      context.hindranceDarkness = this.#choices(CNS5.hindranceDarkness, this.item.system.dark);
+    }
     if (this.item.type === "magickalItem") {
       const table = {
         focus: CNS5.focusGrades,

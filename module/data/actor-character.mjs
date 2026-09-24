@@ -114,6 +114,10 @@ export class CnS5Character extends CnS5ActorBase {
       skill: new fields.StringField({ required: true, initial: "Faith" }),
       baseSpirit: new fields.NumberField({ required: true, integer: true, initial: 0 }),
 
+      // Grace, won by resisting a hindrance and lost by giving in to one
+      // (p408). "Grace can never be lower than Base SPR."
+      gracePoints: new fields.NumberField({ required: true, integer: true, initial: 0 }),
+
       // The congregation a clergyman serves, and where. "Acts of Faith...
       // performed for a congregation or for a community... can call upon the
       // Belief of those participating" (p403), which is where the Fatigue for
@@ -123,6 +127,8 @@ export class CnS5Character extends CnS5ActorBase {
       shrine: new fields.StringField({ required: true, initial: "none" }),
       // What is left of the pool drawn at the last service.
       beliefPool: new fields.NumberField({ required: true, integer: true, initial: 0, min: 0 }),
+      // Away from his congregation a priest draws only a third of it (p402).
+      awayFromFlock: new fields.BooleanField({ required: true, initial: false }),
       pffOverride: new fields.NumberField({
         required: false,
         nullable: true,
@@ -260,6 +266,28 @@ export class CnS5Character extends CnS5ActorBase {
 
     // What his congregation and its building would yield, were he to draw on
     // it. Rolled rather than counted, so only the dice are shown.
+    // Hindrances, and what they cost him. His Spirit may rise no higher than
+    // 100 divided by how many he holds (p399), and each Dark one was worth five
+    // points when he was made (p408).
+    const hindrances = this.parent.items.filter((i) => i.type === "hindrance");
+    this.faith.hindranceCount = hindrances.length;
+    this.faith.maximumSpirit = CNS5.maximumSpirit(hindrances.length);
+    this.faith.darkHindrancePoints = hindrances.reduce((t, h) => t + h.system.pcPoints, 0);
+    this.faith.overSpiritCap =
+      Number.isFinite(this.faith.maximumSpirit) && this.spirit.value > this.faith.maximumSpirit;
+
+    // "All starting PCs must choose five attachments... two of which at least
+    // must be 'major'" (p407). Said, not enforced: a character met in play may
+    // have fewer.
+    const majors = hindrances.filter((h) => CNS5.severityOrder.indexOf(h.system.severity) >= 1).length;
+    this.faith.meetsStartingHindrances =
+      hindrances.length >= CNS5.startingHindrances.count && majors >= CNS5.startingHindrances.major;
+
+    // Grace never falls below Base Spirit (p408), and a man whose Spirit has
+    // gone negative has "fallen from Grace" (p407).
+    this.faith.grace = Math.max(this.faith.gracePoints, this.faith.baseSpirit);
+    this.faith.fallenFromGrace = this.spirit.value < 0;
+
     // What his belief radiates, and how far (p404).
     this.faith.aura = CNS5.spiritualAura(this.spirit.value);
 

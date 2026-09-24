@@ -28,7 +28,9 @@ import pdfplumber
 PDF = sys.argv[1] if len(sys.argv) > 1 else "CS_5th_Edition_Digital_Colour_2020_HAPPY_PRINTER.pdf"
 PAGES = range(441, 455)
 
-FIELD = re.compile(r"^([A-Z][A-Za-z' /&]{1,24}):\s*\.{3,}\s*(.*)$")
+# A field's sign sometimes sits before the dots rather than after them —
+# "Cost: - .....24 FP from Cleric" — so it is caught either side and kept.
+FIELD = re.compile(r"^([A-Z][A-Za-z' /&]{1,24}):\s*(-\s*)?\.{3,}\s*(.*)$")
 CONTINUED = re.compile(r"^\.{3,}\s*(.+)$")
 FOOTER = re.compile(r"^\s*\d{1,3}\s+[A-Z][\w'’-]+.*\(Order #\d+\)\s*$")
 
@@ -57,7 +59,8 @@ def extract(pdf):
 
                 field = FIELD.match(line)
                 if field:
-                    label, value = field.group(1), field.group(2).strip()
+                    label = field.group(1)
+                    value = ((field.group(2) or "").strip() + field.group(3).strip()).strip()
                     # The first labelled line after a heading opens a new Act.
                     # Not every Act begins with its PFF: the Sacraments open
                     # with "Auto:", having no chance to speak of, and matching

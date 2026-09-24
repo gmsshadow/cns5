@@ -42,6 +42,11 @@ export class CnS5CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2)
       castFromDevice: CnS5CharacterSheet.#onCastFromDevice,
       drawBeliefPool: CnS5CharacterSheet.#onDrawBeliefPool,
       witnessMiracle: CnS5CharacterSheet.#onWitnessMiracle,
+      resistHindrance: CnS5CharacterSheet.#onResistHindrance,
+      resistHindranceByFaith: CnS5CharacterSheet.#onResistHindranceByFaith,
+      discoverHindrance: CnS5CharacterSheet.#onDiscoverHindrance,
+      eliminateHindrance: CnS5CharacterSheet.#onEliminateHindrance,
+      redeemHindrance: CnS5CharacterSheet.#onRedeemHindrance,
       removeDeviceSpell: CnS5CharacterSheet.#onRemoveDeviceSpell
     }
   };
@@ -196,6 +201,10 @@ export class CnS5CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2)
     context.periods = this.#choices(CNS5.periods, system.details.period);
     context.birthOmens = this.#choices(CNS5.birthOmens, system.details.birthOmens);
     context.standings = this.#choices(CNS5.holyStandings, system.details.holyStanding);
+    // Worst first: a severe hindrance is the one that matters most.
+    context.hindrances = this.actor.items
+      .filter((i) => i.type === "hindrance")
+      .sort((a, b) => b.system.severityRank - a.system.severityRank || a.name.localeCompare(b.name));
     const labelled = (table) =>
       Object.fromEntries(Object.entries(table).map(([k, v]) => [k, v.label]));
     context.congregations = this.#choices(labelled(CNS5.congregations), system.faith.congregation);
@@ -385,6 +394,48 @@ export class CnS5CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2)
     const item = this.actor.items.get(input.dataset.itemId);
     if (!item) return;
     await item.update({ "system.level": Math.max(0, Number(input.value) || 0) });
+  }
+
+  /* -------------------------------------------- */
+
+  /**
+   * A morality check against a hindrance, by Willpower.
+   * @this {CnS5CharacterSheet}
+   */
+  static async #onResistHindrance(event, target) {
+    await this.actor.resistHindrance(target.dataset.itemId);
+  }
+
+  /**
+   * The same, by two thirds of Faith instead (p408).
+   * @this {CnS5CharacterSheet}
+   */
+  static async #onResistHindranceByFaith(event, target) {
+    await this.actor.resistHindrance(target.dataset.itemId, { byFaith: true });
+  }
+
+  /** @this {CnS5CharacterSheet} */
+  static async #onDiscoverHindrance(event, target) {
+    await this.actor.discoverHindrance(target.dataset.itemId);
+  }
+
+  /**
+   * Working at a hindrance may be rid of it altogether — or make it worse —
+   * so it is asked first.
+   * @this {CnS5CharacterSheet}
+   */
+  static async #onEliminateHindrance(event, target) {
+    const confirmed = await foundry.applications.api.DialogV2.confirm({
+      window: { title: game.i18n.localize("CNS5.Hindrance.eliminateTooltip") },
+      content: `<p>${game.i18n.localize("CNS5.Hindrance.eliminateConfirm")}</p>`,
+      rejectClose: false
+    });
+    if (confirmed) await this.actor.eliminateHindrance(target.dataset.itemId);
+  }
+
+  /** @this {CnS5CharacterSheet} */
+  static async #onRedeemHindrance(event, target) {
+    await this.actor.redeemHindrance(target.dataset.itemId);
   }
 
   /* -------------------------------------------- */

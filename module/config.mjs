@@ -3534,3 +3534,171 @@ CNS5.spiritualAura = function (spirit) {
 CNS5.combinedAura = function (spirits) {
   return CNS5.spiritualAura((spirits ?? []).reduce((total, s) => total + (Number(s) || 0), 0));
 };
+
+/**
+ * How an Act's cost is shared between a clergyman and his flock (p402).
+ *
+ * "He may draw upon -2 FP from the Belief Pool for every -1 FP he expends from
+ * his personal FP until he has exhausted his weekly allotment." So the pool
+ * never pays the whole of it: he pays a third himself and the congregation two
+ * thirds, for as long as the pool lasts, and the whole once it is gone.
+ *
+ * @param {number} cost
+ * @param {number} pool  what is left of the allotment
+ * @returns {{own: number, fromPool: number}}
+ */
+CNS5.beliefPoolRatio = 2;
+
+CNS5.shareFaithCost = function (cost, pool) {
+  const total = Math.max(0, Number(cost) || 0);
+  const available = Math.max(0, Number(pool) || 0);
+
+  // At two to one he pays a third, rounded up, so the flock never carries more
+  // than twice his share.
+  const own = Math.ceil(total / (CNS5.beliefPoolRatio + 1));
+  const fromPool = Math.min(available, total - own);
+
+  // Whatever the pool cannot meet falls back on him.
+  return { own: total - fromPool, fromPool };
+};
+
+/**
+ * "When away from his congregation, their prayers go with him, so a priest can
+ * still draw on 1/3 of the FP he normally could were he in the parish" (p402).
+ */
+CNS5.awayFromFlockShare = 1 / 3;
+
+/* -------------------------------------------- */
+/*  Spiritual Hindrances                        */
+/*  (pp.399, 407-412)                           */
+/* -------------------------------------------- */
+
+/**
+ * "Hindrances are a yardstick of the separation of a person from the purity of
+ * The Divine, but are also the foibles that influence one's unique character."
+ * Three kinds: fixations of the flesh and the world, delusions about the self,
+ * and mistaken notions of how Creation works.
+ */
+CNS5.hindranceKinds = {
+  physical: "CNS5.Hindrance.kind.physical",
+  self: "CNS5.Hindrance.kind.self",
+  cosmic: "CNS5.Hindrance.kind.cosmic"
+};
+
+CNS5.hindranceSeverities = {
+  minor: "CNS5.Hindrance.severity.minor",
+  major: "CNS5.Hindrance.severity.major",
+  severe: "CNS5.Hindrance.severity.severe"
+};
+
+/** The order severity rises in, for a hindrance that grows worse. */
+CNS5.severityOrder = ["minor", "major", "severe"];
+
+/**
+ * "Some hindrances are listed as 'dark'... Each hindrance of this type
+ * possessed grants +5 bonus PC Points" (p408). Some are only potentially so —
+ * Impulsive Action is Dark "if this takes the form of causing suffering to
+ * others".
+ */
+CNS5.hindranceDarkness = {
+  none: "CNS5.Hindrance.dark.none",
+  potential: "CNS5.Hindrance.dark.potential",
+  dark: "CNS5.Hindrance.dark.dark"
+};
+CNS5.darkHindrancePcPoints = 5;
+
+/**
+ * "All starting PCs must choose five attachments for their character, two of
+ * which at least must be 'major' attachments" (p407).
+ */
+CNS5.startingHindrances = { count: 5, major: 2 };
+
+/**
+ * "A character's Spirit (either Current or Base) cannot be raised higher than a
+ * limit of 100 divided by the number of hindrances possessed (round down)...
+ * a saint with none has a totally unlimited Spirit ability" (p399). There is
+ * no limit below: "there is no limit to the dark depths".
+ *
+ * @param {number} count
+ * @returns {number} Infinity where there are none
+ */
+CNS5.maximumSpirit = function (count) {
+  const n = Math.max(0, Number(count) || 0);
+  return n ? Math.floor(100 / n) : Infinity;
+};
+
+/**
+ * Grace won or lost by resisting a hindrance or giving in to it (p408):
+ * "1/4 Crit Die (round up) for a minor hindrance, 1/2 Crit Die (round up) for a
+ * major hindrance and Crit Die for a severe hindrance. However, those that fail
+ * to resist their hindrances forfeit a similar level of Grace Points."
+ */
+CNS5.graceShare = { minor: 0.25, major: 0.5, severe: 1 };
+
+CNS5.graceFor = function (severity, critDie) {
+  return Math.ceil(Math.max(0, Number(critDie) || 0) * (CNS5.graceShare[severity] ?? 0));
+};
+
+/**
+ * "A standard morality check takes the form of a roll against one's Willpower
+ * skill... Characters may choose to utilise 2/3 of their Faith skill rather
+ * than making a Willpower roll" (p408).
+ */
+CNS5.moralityByFaith = 2 / 3;
+
+/**
+ * "A Willpower roll may warrant a bonus of +25% to the roll, when defeat would
+ * signify a catastrophic knock to an attachment" — the hindrance put to use,
+ * at the Gamemaster's word and only if it has been played (p408).
+ */
+CNS5.hindranceUseBonus = 25;
+
+/**
+ * "A successful Read Character roll with a Crit Die result as indicated is
+ * required for a character to initially realise that they even have an
+ * impediment. Minor hindrances are much harder to discover" (p411).
+ */
+CNS5.discoverCritDie = { minor: 4, major: 6, severe: 8 };
+
+/**
+ * The Willpower Crit Die needed to mitigate or eliminate a hindrance, by how
+ * many a character still has (p411): "Last 3, 2nd 4, 3rd 5... 8th 10".
+ *
+ * Read with the last remaining hindrance needing a 3 and each further one a
+ * point more, so that shedding the first of many is hardest and the last is
+ * easiest — the table does not say which way it runs, and this is the reading
+ * that has the eighth needing the ten.
+ *
+ * @param {number} held
+ * @returns {number}
+ */
+CNS5.eliminateCritDie = function (held) {
+  return Math.min(10, Math.max(1, Number(held) || 1) + 2);
+};
+
+/**
+ * What an unsuccessful attempt to eliminate a hindrance does (p412), by the
+ * Crit Die: nothing; the hindrance grows a level more severe; or, at worst, it
+ * is replaced by a Dark one of the Gamemaster's choosing.
+ */
+CNS5.eliminationBackfire = [
+  { min: 1, max: 5, key: "noEffect" },
+  { min: 6, max: 7, key: "worsens" },
+  { min: 8, max: 9, key: "worsensOrDark" },
+  { min: 10, max: Infinity, key: "replacedByDark" }
+];
+
+CNS5.readEliminationBackfire = function (critDie) {
+  const value = Math.max(1, Number(critDie) || 1);
+  return CNS5.eliminationBackfire.find((r) => value >= r.min && value <= r.max);
+};
+
+/**
+ * "If one desired [a dark hindrance] to be changed into a 'normal' one, a
+ * Willpower roll must be made with a penalty of -25%" (p412). The severity does
+ * not fall; only the darkness goes.
+ */
+CNS5.redeemDarkPenalty = -25;
+
+/** Attempts again after "20 + 1D10 days - WIS" (pp.411-412). */
+CNS5.hindranceRetryFormula = "20 + 1d10";

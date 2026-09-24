@@ -1,0 +1,228 @@
+{
+  "source": "Chivalry & Sorcery 5th Edition core rules, Spiritual Hindrances, pp.408-411",
+  "note": "Names, kinds and the Dark mark only. No description text is shipped.",
+  "hindrances": [
+    {
+      "name": "Aristotelianism",
+      "kind": "physical",
+      "dark": "none",
+      "page": 408
+    },
+    {
+      "name": "Bacchanalianism",
+      "kind": "physical",
+      "dark": "none",
+      "page": 408
+    },
+    {
+      "name": "Impulsive Action",
+      "kind": "physical",
+      "dark": "potential",
+      "page": 408
+    },
+    {
+      "name": "Maladies",
+      "kind": "physical",
+      "dark": "dark",
+      "page": 408
+    },
+    {
+      "name": "Miser",
+      "kind": "physical",
+      "dark": "none",
+      "page": 409
+    },
+    {
+      "name": "Occult Might",
+      "kind": "physical",
+      "dark": "dark",
+      "page": 409
+    },
+    {
+      "name": "Past Events",
+      "kind": "physical",
+      "dark": "none",
+      "page": 409
+    },
+    {
+      "name": "Precious Ownership",
+      "kind": "physical",
+      "dark": "none",
+      "page": 409
+    },
+    {
+      "name": "Sovereignty",
+      "kind": "physical",
+      "dark": "none",
+      "page": 409
+    },
+    {
+      "name": "Temptations of The Flesh",
+      "kind": "physical",
+      "dark": "none",
+      "page": 409
+    },
+    {
+      "name": "The Dance of Death",
+      "kind": "physical",
+      "dark": "dark",
+      "page": 409
+    },
+    {
+      "name": "Unusual Sexual Appetites",
+      "kind": "physical",
+      "dark": "dark",
+      "page": 409
+    },
+    {
+      "name": "Ascetic Detachment",
+      "kind": "self",
+      "dark": "none",
+      "page": 409
+    },
+    {
+      "name": "Bravery",
+      "kind": "self",
+      "dark": "none",
+      "page": 409
+    },
+    {
+      "name": "Canny Guile",
+      "kind": "self",
+      "dark": "none",
+      "page": 409
+    },
+    {
+      "name": "Empathetic",
+      "kind": "self",
+      "dark": "none",
+      "page": 409
+    },
+    {
+      "name": "Helpless",
+      "kind": "self",
+      "dark": "dark",
+      "page": 409
+    },
+    {
+      "name": "Iron-willed",
+      "kind": "self",
+      "dark": "dark",
+      "page": 409
+    },
+    {
+      "name": "Magnanimity",
+      "kind": "self",
+      "dark": "none",
+      "page": 410
+    },
+    {
+      "name": "Ruthlessness",
+      "kind": "self",
+      "dark": "none",
+      "page": 410
+    },
+    {
+      "name": "Sadistic",
+      "kind": "self",
+      "dark": "dark",
+      "page": 410
+    },
+    {
+      "name": "Spiritual Pride",
+      "kind": "self",
+      "dark": "none",
+      "page": 410
+    },
+    {
+      "name": "The Folly of Man",
+      "kind": "self",
+      "dark": "none",
+      "page": 410
+    },
+    {
+      "name": "Weak-Willed",
+      "kind": "self",
+      "dark": "dark",
+      "page": 410
+    },
+    {
+      "name": "Unbending Righteousness",
+      "kind": "self",
+      "dark": "none",
+      "page": 410
+    },
+    {
+      "name": "Worthlessness",
+      "kind": "self",
+      "dark": "dark",
+      "page": 410
+    },
+    {
+      "name": "Aesthetics",
+      "kind": "cosmic",
+      "dark": "none",
+      "page": 410
+    },
+    {
+      "name": "Brutality",
+      "kind": "cosmic",
+      "dark": "none",
+      "page": 410
+    },
+    {
+      "name": "Cynical Pessimism",
+      "kind": "cosmic",
+      "dark": "dark",
+      "page": 410
+    },
+    {
+      "name": "Denial of The Divine Plan",
+      "kind": "cosmic",
+      "dark": "dark",
+      "page": 410
+    },
+    {
+      "name": "Duty",
+      "kind": "cosmic",
+      "dark": "none",
+      "page": 410
+    },
+    {
+      "name": "Lady Fate",
+      "kind": "cosmic",
+      "dark": "none",
+      "page": 411
+    },
+    {
+      "name": "Narcissism",
+      "kind": "cosmic",
+      "dark": "dark",
+      "page": 411
+    },
+    {
+      "name": "Sisyphean Exhaustion",
+      "kind": "cosmic",
+      "dark": "dark",
+      "page": 411
+    },
+    {
+      "name": "Truth",
+      "kind": "cosmic",
+      "dark": "none",
+      "page": 411
+    },
+    {
+      "name": "Unknowable Existence",
+      "kind": "cosmic",
+      "dark": "none",
+      "page": 411
+    },
+    {
+      "name": "Utilitarianism",
+      "kind": "cosmic",
+      "dark": "none",
+      "page": 411
+    }
+  ]
+}

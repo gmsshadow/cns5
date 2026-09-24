@@ -1560,3 +1560,9 @@
     opacity: 0.4;
     border-style: dashed;
 }
+
+/* A Dark hindrance: more ingrained, and worth marking apart. */
+.cns5-tag--dark {
+    border-color: var(--cns-oxblood);
+    color: var(--cns-oxblood);
+}

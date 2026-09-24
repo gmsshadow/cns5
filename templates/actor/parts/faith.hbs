@@ -140,8 +140,12 @@
                 </th>
                 <td class="cns5-skills__readout">{{act.system.pffMinimum}}</td>
                 <td class="cns5-skills__readout cns5-skills__readout--total">{{cns5Percent act.system.successChance}}</td>
-                <td class="cns5-skills__readout">{{act.system.fpCost}}</td>
-                <td class="cns5-skills__readout">{{act.system.apToPray}}</td>
+                <td class="cns5-skills__readout" data-tooltip="{{act.system.costText}}">
+                    {{#if act.system.fpCost}}{{act.system.fpCost}}{{else if act.system.costText}}&#8727;{{else}}—{{/if}}
+                </td>
+                <td class="cns5-skills__readout" data-tooltip="{{localize 'CNS5.Faith.apHint'}}">
+                    {{#if act.system.apToPray}}{{act.system.apToPray}}{{else}}—{{/if}}
+                </td>
                 <td class="cns5-skills__controls">
                     <button type="button" data-action="editItem" data-item-id="{{act.id}}"
                             data-tooltip="{{localize 'CNS5.Item.edit'}}">
@@ -206,12 +210,114 @@
                 <input type="number" name="system.faith.beliefPool" value="{{system.faith.beliefPool}}"
                        min="0" {{#unless editable}}disabled{{/unless}}>
             </label>
+            <label class="cns5-checkbox">
+                <input type="checkbox" name="system.faith.awayFromFlock" {{checked system.faith.awayFromFlock}}
+                       {{#unless editable}}disabled{{/unless}}>
+                <span>{{localize "CNS5.Belief.away"}}</span>
+            </label>
             <div class="cns5-field">
                 <span>{{localize "CNS5.Belief.yields"}}</span>
                 <output>{{system.faith.beliefPoolFormula.multiplier}} &times; 1d10</output>
             </div>
         </div>
         <p class="cns5-hint">{{localize "CNS5.Belief.hint"}}</p>
+    </section>
+
+
+    {{!-- Spiritual Hindrances (pp.407-412): what stands between a character and
+          The Divine, what they cap his Spirit at, and the Grace won by
+          resisting them. --}}
+    <section class="cns5-skills">
+        <h3 class="cns5-skills__heading">
+            {{localize "CNS5.Hindrance.heading"}}
+            <button type="button" class="cns5-add" data-action="createItem" data-type="hindrance">
+                {{localize "CNS5.Item.add"}}
+            </button>
+        </h3>
+        <div class="cns5-grid cns5-grid--three">
+            <div class="cns5-field">
+                <span>{{localize "CNS5.Hindrance.grace"}}</span>
+                <output data-tooltip="{{localize 'CNS5.Hindrance.graceHint'}}">{{system.faith.grace}}</output>
+            </div>
+            <label class="cns5-field">
+                <span>{{localize "CNS5.Hindrance.gracePoints"}}</span>
+                <input type="number" name="system.faith.gracePoints" value="{{system.faith.gracePoints}}"
+                       {{#unless editable}}disabled{{/unless}}>
+            </label>
+            <div class="cns5-field">
+                <span>{{localize "CNS5.Hindrance.maxSpirit"}}</span>
+                <output class="{{#if system.faith.overSpiritCap}}cns5-hint--bad{{/if}}"
+                        data-tooltip="{{localize 'CNS5.Hindrance.maxSpiritHint'}}">
+                    {{#if system.faith.hindranceCount}}{{system.faith.maximumSpirit}}{{else}}&infin;{{/if}}
+                </output>
+            </div>
+        </div>
+        {{#if system.faith.fallenFromGrace}}
+        <p class="cns5-hint cns5-hint--bad">{{localize "CNS5.Hindrance.fallen"}}</p>
+        {{/if}}
+        {{#unless system.faith.meetsStartingHindrances}}
+        <p class="cns5-hint">{{localize "CNS5.Hindrance.startingHint"}}</p>
+        {{/unless}}
+
+        {{#if hindrances.length}}
+        <table class="cns5-skills__table">
+            <thead>
+            <tr>
+                <th scope="col" class="cns5-skills__name">{{localize "CNS5.Hindrance.heading"}}</th>
+                <th scope="col">{{localize "CNS5.Hindrance.severityLabel"}}</th>
+                <th scope="col"><span class="cns5-visually-hidden">{{localize "CNS5.Skill.controls"}}</span></th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#each hindrances as |h|}}
+            <tr class="{{#unless h.system.discovered}}is-unskilled{{/unless}}">
+                <th scope="row">
+                    <button type="button" class="cns5-skills__roll" data-action="resistHindrance"
+                            data-item-id="{{h.id}}"
+                            data-tooltip="{{localize 'CNS5.Hindrance.resistTooltip'}}">{{h.name}}</button>
+                    <span class="cns5-tag cns5-tag--origin">{{localize h.system.kindLabel}}</span>
+                    {{#if h.system.isDark}}<span class="cns5-tag cns5-tag--dark">{{localize "CNS5.Hindrance.dark.dark"}}</span>{{/if}}
+                    {{#unless h.system.discovered}}<span class="cns5-tag cns5-tag--faint">{{localize "CNS5.Hindrance.unrecognised"}}</span>{{/unless}}
+                </th>
+                <td class="cns5-skills__readout">{{localize h.system.severityLabel}}</td>
+                <td class="cns5-skills__controls">
+                    <button type="button" data-action="resistHindranceByFaith" data-item-id="{{h.id}}"
+                            data-tooltip="{{localize 'CNS5.Hindrance.byFaithTooltip'}}">
+                        <i class="fa-solid fa-hands-praying"></i>
+                    </button>
+                    {{#if h.system.discovered}}
+                    <button type="button" data-action="eliminateHindrance" data-item-id="{{h.id}}"
+                            data-tooltip="{{localize 'CNS5.Hindrance.eliminateTooltip'}}">
+                        <i class="fa-solid fa-feather"></i>
+                    </button>
+                    {{else}}
+                    <button type="button" data-action="discoverHindrance" data-item-id="{{h.id}}"
+                            data-tooltip="{{localize 'CNS5.Hindrance.discoverTooltip'}}">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                    {{/if}}
+                    {{#if h.system.isDark}}
+                    <button type="button" data-action="redeemHindrance" data-item-id="{{h.id}}"
+                            data-tooltip="{{localize 'CNS5.Hindrance.redeemTooltip'}}">
+                        <i class="fa-solid fa-sun"></i>
+                    </button>
+                    {{/if}}
+                    <button type="button" data-action="editItem" data-item-id="{{h.id}}"
+                            data-tooltip="{{localize 'CNS5.Item.edit'}}">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                    </button>
+                    <button type="button" data-action="deleteItem" data-item-id="{{h.id}}"
+                            data-tooltip="{{localize 'CNS5.Item.delete'}}">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+            {{/each}}
+            </tbody>
+        </table>
+        {{else}}
+        <p class="cns5-hint">{{localize "CNS5.Hindrance.none"}}</p>
+        {{/if}}
     </section>
 
 </section>

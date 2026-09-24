@@ -1,0 +1,41 @@
+<div class="cns5-grid cns5-grid--three">
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Hindrance.kindLabel"}}</span>
+        <select name="system.kind" {{#unless editable}}disabled{{/unless}}>
+            {{#each hindranceKinds}}
+            <option value="{{value}}" {{#if selected}}selected{{/if}}>{{localize label}}</option>
+            {{/each}}
+        </select>
+    </label>
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Hindrance.severityLabel"}}</span>
+        <select name="system.severity" {{#unless editable}}disabled{{/unless}}>
+            {{#each hindranceSeverities}}
+            <option value="{{value}}" {{#if selected}}selected{{/if}}>{{localize label}}</option>
+            {{/each}}
+        </select>
+    </label>
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Hindrance.darkLabel"}}</span>
+        <select name="system.dark" {{#unless editable}}disabled{{/unless}}>
+            {{#each hindranceDarkness}}
+            <option value="{{value}}" {{#if selected}}selected{{/if}}>{{localize label}}</option>
+            {{/each}}
+        </select>
+    </label>
+</div>
+
+<div class="cns5-checks">
+    <label class="cns5-checkbox">
+        <input type="checkbox" name="system.discovered" {{checked system.discovered}}
+               {{#unless editable}}disabled{{/unless}}>
+        <span>{{localize "CNS5.Hindrance.discovered"}}</span>
+    </label>
+</div>
+<p class="cns5-hint">{{localize "CNS5.Hindrance.hint"}}</p>
+
+<label class="cns5-field">
+    <span>{{localize "CNS5.Item.reference"}}</span>
+    <input type="text" name="system.reference" value="{{system.reference}}"
+           {{#unless editable}}disabled{{/unless}}>
+</label>

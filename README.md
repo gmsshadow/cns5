@@ -609,6 +609,18 @@ description's is used as the fuller entry, and the compendium entry says so.
 As with the spells, no description text is shipped: each Act carries the pages it
 is printed on.
 
+**What an Act costs is shown, not only charged.** The compendium used to carry a
+Fatigue figure of nought for every Act, and the sheet showed that figure, so every
+Act looked free although the roll charged it correctly from the cost text. The
+figure is now read from the text where it is a single number the one performing
+pays, and the sheet shows the success chance and the cost as written. Twelve Acts
+have no such number — a Crit Die, a third of all he has, an offering, a cost the
+recipient pays, "variable" — and show an asterisk with the words on hover.
+
+**Acts of Faith have no Action Point cost.** The legend of their fields on p404
+has no time among them, so none is invented: the figure shows a dash, and can be
+filled in by a table that wants one.
+
 ### Spirit, and what moves it
 
 "Faith does not measure belief in a Deity. That is represented by Spirit"
@@ -698,9 +710,16 @@ rolled rather than counted: a small rural congregation is 1d10, a very large
 town one 3d10 and half a fourth, and a cathedral with a national shrine adds
 sixteen dice more. A shrine's bonus is cumulative with its building's.
 
-What is drawn stands until it is spent. An Act takes from the pool first and
-from the clergyman himself only for the remainder — and only that remainder
-costs him Spirit, since it is what he himself paid.
+The cost of an Act is shared, not handed over: "he may draw upon -2 FP from the
+Belief Pool for every -1 FP he expends from his personal FP until he has
+exhausted his weekly allotment" (p402). So a 48 FP Act with a full pool costs him
+16 and the congregation 32, and whatever the pool cannot meet falls back on him.
+An earlier version let the pool pay the whole of it, so a priest with a full pool
+paid nothing. Only his own share costs him Spirit, being what he himself paid.
+
+Away from his congregation "their prayers go with him", and he draws a third of
+what the parish would give. What is drawn stands until it is spent, as the
+week's allotment.
 
 ### Performing one
 
@@ -731,6 +750,52 @@ is settled.
 ordained priest, recorded on the Faith tab: † Acts need ordination, ‡ Acts need
 at least a monastic or a Holy Fighting Order. A Personal Faith Factor high
 enough is not sufficient.
+
+## Spiritual Hindrances
+
+"Hindrances are a yardstick of the separation of a person from the purity of The
+Divine, but are also the foibles that influence one's unique character" (p407).
+Thirty-seven, in three kinds — Physical & Worldly, Self-delusional and Cosmic —
+are in a compendium of their own, thirteen of them Dark and one (Impulsive
+Action) only potentially so. As with every other list, the names ship and the
+descriptions do not; each has a page reference and an empty description to
+write in. The book spells one of them "Bacchanalnaiism"; since a name is read
+by people rather than matched by anything, it is put right.
+
+A starting character chooses five, at least two of them major, and the Faith
+tab says so while he has fewer. A Dark one was worth five PC Points when he was
+made.
+
+**They cap his Spirit.** "A character's Spirit... cannot be raised higher than a
+limit of 100 divided by the number of hindrances possessed" (p399): seven
+hindrances allow 14, one allows 100, a saint with none has no limit. A gain from
+a granted Act or a witnessed miracle stops at the ceiling; a loss never stops.
+A man already above it is not pulled down — the rule forbids raising, not
+having.
+
+**Resisting one wins Grace.** A morality check is a Willpower roll, or two
+thirds of Faith at the player's choice (p408). Resisting wins Grace by the Crit
+Die — a quarter for a minor hindrance, a half for a major, all of it for a severe
+— and giving in costs as much. Grace never falls below Base Spirit, and a man
+whose Spirit has gone below nothing has fallen from Grace.
+
+**Recognising one comes first.** He cannot work at a fault he has not seen in
+himself: a Read Character roll with a Crit Die of 4, 6 or 8 by severity — a minor
+one being the hardest to see (p411). Unrecognised hindrances are shown faded.
+
+**Being rid of one** needs a Spirit roll and a Willpower roll whose Crit Die must
+reach a figure that rises with how many he holds: 3 for his last, 10 for the
+eighth. Success eases it a level, or removes a minor one altogether. Failure may
+do nothing, make it worse, or turn it Dark (p412). The table does not say which
+way its "Last 3, 2nd 4... 8th 10" runs; this reads it so that shedding the first
+of many is hardest.
+
+**A Dark one can be redeemed** by Willpower at -25%. It stays as severe, but is no
+longer Dark.
+
+The +25% for putting a hindrance to use, when defeat would knock an attachment,
+is the Gamemaster's to allow and only if the hindrance has been played, so it is
+not applied for him.
 
 ## Skill categories
 

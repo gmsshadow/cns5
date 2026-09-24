@@ -1053,6 +1053,250 @@ export class CnS5Actor extends Actor {
   /* -------------------------------------------- */
 
   /**
+   * Current Spirit after a change, held under its ceiling.
+   *
+   * "A character's Spirit... cannot be raised higher than a limit of 100
+   * divided by the number of hindrances possessed" (p399). A gain stops at the
+   * ceiling; a loss is never stopped, there being "no limit to the dark
+   * depths". Nor is a man already above the ceiling pulled down to it — the
+   * rule forbids raising, not having.
+   *
+   * @param {number} change
+   * @returns {number}
+   */
+  #spiritAfter(change) {
+    const now = this.system.spirit.value;
+    const next = now + change;
+    if (change <= 0) return next;
+    const ceiling = this.system.faith?.maximumSpirit ?? Infinity;
+    return now >= ceiling ? now : Math.min(next, ceiling);
+  }
+
+  /* -------------------------------------------- */
+
+  /**
+   * Roll a skill of the character's by name, for the hindrance rules.
+   *
+   * @param {string} name
+   * @param {object} [options]
+   * @returns {Promise<object|null>} null where he has no such skill
+   */
+  async #rollNamedSkill(name, { fraction = 1, modifier = 0 } = {}) {
+    const skill = this.items.find(
+      (i) => i.type === "skill" && i.name.toLowerCase() === name.toLowerCase()
+    );
+    if (!skill) return null;
+
+    const chance = Math.round(skill.system.tsc * fraction) + modifier;
+    const { target, critMod } = clampSuccessChance(chance, skill.system.df);
+    const roll = await resolveCheck({ target, critMod });
+    return { ...roll, need: target, skill: skill.name };
+  }
+
+  /* -------------------------------------------- */
+
+  /**
+   * A morality check against a hindrance (p408).
+   *
+   * "A standard morality check takes the form of a roll against one's
+   * Willpower skill... Characters may choose to utilise 2/3 of their Faith
+   * skill rather than making a Willpower roll." Resisting wins Grace by the
+   * Crit Die — a quarter of it for a minor hindrance, a half for a major, all
+   * of it for a severe — and giving in costs as much. Grace never falls below
+   * Base Spirit.
+   *
+   * @param {string} itemId
+   * @param {object} [options]
+   * @returns {Promise<ChatMessage|null>}
+   */
+  async resistHindrance(itemId, { byFaith = false, useBonus = false } = {}) {
+    const hindrance = this.items.get(itemId);
+    if (hindrance?.type !== "hindrance") return null;
+
+    const roll = byFaith
+      ? await this.#rollNamedSkill(this.system.faith.skill || "Faith", {
+          fraction: CNS5.moralityByFaith,
+          modifier: useBonus ? CNS5.hindranceUseBonus : 0
+        })
+      : await this.#rollNamedSkill("Willpower", {
+          modifier: useBonus ? CNS5.hindranceUseBonus : 0
+        });
+
+    if (!roll) {
+      ui.notifications.warn(
+        game.i18n.format("CNS5.Hindrance.noSkill", { skill: byFaith ? "Faith" : "Willpower" })
+      );
+      return null;
+    }
+
+    const grace = CNS5.graceFor(hindrance.system.severity, roll.critTotal);
+    const before = this.system.faith.gracePoints;
+    const after = roll.success
+      ? before + grace
+      : Math.max(this.system.faith.baseSpirit, before - grace);
+    await this.update({ "system.faith.gracePoints": after });
+
+    return checkToMessage(this, {
+      ...roll,
+      title: game.i18n.format("CNS5.Hindrance.resistTitle", { name: hindrance.name }),
+      subtitle: game.i18n.format("CNS5.Hindrance.resistSubtitle", {
+        skill: roll.skill,
+        need: roll.need
+      }),
+      cost: game.i18n.format(roll.success ? "CNS5.Hindrance.graceWon" : "CNS5.Hindrance.graceLost", {
+        grace: roll.success ? grace : before - after,
+        total: after
+      })
+    });
+  }
+
+  /* -------------------------------------------- */
+
+  /**
+   * Realise that one has a hindrance at all (p411).
+   *
+   * "A successful Read Character roll with a Crit Die result as indicated is
+   * required." A minor hindrance needs the highest Crit Die, being the least
+   * obvious — "more often overlooked in the search for faults".
+   *
+   * @param {string} itemId
+   * @returns {Promise<ChatMessage|null>}
+   */
+  async discoverHindrance(itemId) {
+    const hindrance = this.items.get(itemId);
+    if (hindrance?.type !== "hindrance") return null;
+
+    const roll = await this.#rollNamedSkill("Read Character");
+    if (!roll) {
+      ui.notifications.warn(game.i18n.format("CNS5.Hindrance.noSkill", { skill: "Read Character" }));
+      return null;
+    }
+
+    const needed = CNS5.discoverCritDie[hindrance.system.severity];
+    const found = roll.success && roll.critTotal >= needed;
+    if (found) await hindrance.update({ "system.discovered": true });
+
+    return checkToMessage(this, {
+      ...roll,
+      title: game.i18n.format("CNS5.Hindrance.discoverTitle", { name: hindrance.name }),
+      subtitle: game.i18n.format("CNS5.Hindrance.critNeeded", { needed }),
+      cost: game.i18n.localize(found ? "CNS5.Hindrance.found" : "CNS5.Hindrance.notFound")
+    });
+  }
+
+  /* -------------------------------------------- */
+
+  /**
+   * Work to be rid of a hindrance (pp.411-412).
+   *
+   * "A hindrance can be mastered and decreased in severity... or removed if
+   * already 'minor' with a qualifying SPR AR and a successful Willpower roll."
+   * The Crit Die the Willpower roll needs rises with how many he holds. And
+   * there are risks: a failure may worsen it, turn it Dark, or replace it.
+   *
+   * @param {string} itemId
+   * @returns {Promise<ChatMessage|null>}
+   */
+  async eliminateHindrance(itemId) {
+    const hindrance = this.items.get(itemId);
+    if (hindrance?.type !== "hindrance") return null;
+
+    // He cannot work at a fault he has not recognised.
+    if (!hindrance.system.discovered) {
+      ui.notifications.warn(game.i18n.format("CNS5.Hindrance.undiscovered", { name: hindrance.name }));
+      return null;
+    }
+
+    const spiritAr = CNS5.attributeRoll(this.system.attr.spr?.value ?? 0);
+    const spirit = await resolveCheck({ target: Math.clamp(spiritAr, 1, 99) });
+    const will = await this.#rollNamedSkill("Willpower");
+    if (!will) {
+      ui.notifications.warn(game.i18n.format("CNS5.Hindrance.noSkill", { skill: "Willpower" }));
+      return null;
+    }
+
+    const needed = CNS5.eliminateCritDie(this.system.faith.hindranceCount);
+    const mastered = spirit.success && will.success && will.critTotal >= needed;
+    const rank = hindrance.system.severityRank;
+    let outcome;
+
+    if (mastered) {
+      if (rank === 0) {
+        outcome = game.i18n.format("CNS5.Hindrance.removed", { name: hindrance.name });
+        await hindrance.delete();
+      } else {
+        const lower = CNS5.severityOrder[rank - 1];
+        await hindrance.update({ "system.severity": lower });
+        outcome = game.i18n.format("CNS5.Hindrance.eased", {
+          severity: game.i18n.localize(CNS5.hindranceSeverities[lower])
+        });
+      }
+    } else {
+      // "On an unsuccessful Willpower roll to eliminate an attachment, the
+      // following effects may happen" — read from the Willpower Crit Die.
+      const backfire = CNS5.readEliminationBackfire(will.critTotal);
+      const higher = CNS5.severityOrder[Math.min(rank + 1, CNS5.severityOrder.length - 1)];
+      if (backfire.key === "worsens" && rank < 2) {
+        await hindrance.update({ "system.severity": higher });
+      } else if (backfire.key === "worsensOrDark") {
+        await hindrance.update(
+          rank < 2 ? { "system.severity": higher } : { "system.dark": "dark" }
+        );
+      } else if (backfire.key === "replacedByDark") {
+        // Which Dark one is the Gamemaster's to choose; it is marked for him.
+        await hindrance.update({ "system.dark": "dark" });
+      }
+      outcome = game.i18n.localize(`CNS5.Hindrance.backfire.${backfire.key}`);
+    }
+
+    return checkToMessage(this, {
+      ...will,
+      rolls: [...spirit.rolls, ...will.rolls],
+      title: game.i18n.format("CNS5.Hindrance.eliminateTitle", { name: hindrance.name }),
+      subtitle: game.i18n.format("CNS5.Hindrance.eliminateSubtitle", {
+        spirit: spirit.roll,
+        spiritNeed: spiritAr,
+        needed
+      }),
+      cost: outcome
+    });
+  }
+
+  /* -------------------------------------------- */
+
+  /**
+   * Turn a Dark hindrance into an ordinary one (p412).
+   *
+   * "'Dark' hindrances are more ingrained, and if one desired to be changed
+   * into a 'normal' one, a Willpower roll must be made with a penalty of -25%.
+   * If successful the new hindrance does not decrease in severity, but is no
+   * longer 'dark'."
+   *
+   * @param {string} itemId
+   * @returns {Promise<ChatMessage|null>}
+   */
+  async redeemHindrance(itemId) {
+    const hindrance = this.items.get(itemId);
+    if (hindrance?.type !== "hindrance" || hindrance.system.dark !== "dark") return null;
+
+    const roll = await this.#rollNamedSkill("Willpower", { modifier: CNS5.redeemDarkPenalty });
+    if (!roll) {
+      ui.notifications.warn(game.i18n.format("CNS5.Hindrance.noSkill", { skill: "Willpower" }));
+      return null;
+    }
+    if (roll.success) await hindrance.update({ "system.dark": "none" });
+
+    return checkToMessage(this, {
+      ...roll,
+      title: game.i18n.format("CNS5.Hindrance.redeemTitle", { name: hindrance.name }),
+      subtitle: game.i18n.format("CNS5.Hindrance.redeemSubtitle", { need: roll.need }),
+      cost: game.i18n.localize(roll.success ? "CNS5.Hindrance.redeemed" : "CNS5.Hindrance.stillDark")
+    });
+  }
+
+  /* -------------------------------------------- */
+
+  /**
    * What witnessing a miracle does to a character's Spirit (p401).
    *
    * A believer of the faith gains outright. A man of another religion gains
@@ -1068,7 +1312,7 @@ export class CnS5Actor extends Actor {
     const change = CNS5.miracleSpirit({ level, role, sameFaith, critical });
 
     if (change.own) {
-      await this.update({ "system.spirit.value": this.system.spirit.value + change.own });
+      await this.update({ "system.spirit.value": this.#spiritAfter(change.own) });
     }
 
     return { ...change, name: this.name };
@@ -1094,7 +1338,11 @@ export class CnS5Actor extends Actor {
     }
 
     const roll = await new Roll(formula).evaluate();
-    await this.update({ "system.faith.beliefPool": roll.total });
+    // "When away from his congregation, their prayers go with him, so a priest
+    // can still draw on 1/3 of the FP he normally could" (p402).
+    const away = this.system.faith.awayFromFlock;
+    const allotment = away ? Math.floor(roll.total * CNS5.awayFromFlockShare) : roll.total;
+    await this.update({ "system.faith.beliefPool": allotment });
 
     return ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor: this }),
@@ -1102,9 +1350,10 @@ export class CnS5Actor extends Actor {
       content: `<div class="cns5-check">
         <h3 class="cns5-check__title">${game.i18n.localize("CNS5.Belief.drawn")}</h3>
         <p class="cns5-check__result">${game.i18n.format("CNS5.Belief.pool", {
-          total: roll.total,
+          total: allotment,
           multiplier
         })}</p>
+        ${away ? `<p class="cns5-hint">${game.i18n.format("CNS5.Belief.awayNote", { full: roll.total })}</p>` : ""}
         <p class="cns5-hint">${parts
           .map((part) => `${game.i18n.localize(part.label)} (${part.multiplier})`)
           .join(", ")}</p>
@@ -1136,9 +1385,7 @@ export class CnS5Actor extends Actor {
       // non-existence" (p400) and further: p404 speaks of "those with low or
       // negative Spirit", whom evil spirits are drawn to, and gives them a
       // negative aura. A man may believe less than nothing.
-      await this.update({
-        "system.spirit.value": this.system.spirit.value + change.net
-      });
+      await this.update({ "system.spirit.value": this.#spiritAfter(change.net) });
     }
 
     return {
@@ -1180,19 +1427,19 @@ export class CnS5Actor extends Actor {
       }
       if (!fatigue) continue;
 
-      // A clergyman spends the Belief of those worshipping with him before he
-      // spends himself (p403) — which is the only way the costlier Acts can be
-      // paid for at all.
+      // A clergyman shares the cost with his flock, two parts from the Belief
+      // Pool for every part from himself (p402). An earlier version let the
+      // pool pay the whole of it, so a priest with a full pool paid nothing.
       let fromPool = 0;
-      if (who === people.performer) {
-        fromPool = Math.min(fatigue, this.system.faith.beliefPool ?? 0);
+      let own = fatigue;
+      if (who === people.performer && (this.system.faith.beliefPool ?? 0) > 0) {
+        ({ own, fromPool } = CNS5.shareFaithCost(fatigue, this.system.faith.beliefPool));
         if (fromPool) {
           await this.update({ "system.faith.beliefPool": this.system.faith.beliefPool - fromPool });
           told.push(game.i18n.format("CNS5.Belief.spent", { fp: fromPool }));
         }
       }
 
-      const own = fatigue - fromPool;
       if (own) await who.spendMagickCost(own);
       if (who === people.performer) mine += own;
       told.push(

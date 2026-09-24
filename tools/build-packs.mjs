@@ -31,6 +31,7 @@ const ID_ALPHABET = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456
 // The weapon-to-skill correspondence lives in the system's config so that the
 // same rule applies at runtime to a weapon that has no skill recorded.
 const { CNS5 } = await import(path.join(ROOT, "module", "config.mjs"));
+const { parseFaithCost } = await import(path.join(ROOT, "module", "helpers", "faith.mjs"));
 const weaponSkill = (weapon) => CNS5.weaponSkill(weapon);
 
 /**
@@ -340,6 +341,18 @@ async function build(name, documents) {
  * @param {object} row
  * @returns {object}
  */
+/**
+ * The Fatigue an Act costs the one performing it, where that is a figure.
+ * @param {string} text
+ * @returns {number}
+ */
+function flatFatigue(text) {
+  const { charges } = parseFaithCost(text ?? "");
+  return charges
+    .filter((c) => c.of === "performer" && Number.isFinite(c.fatigue))
+    .reduce((total, c) => total + c.fatigue, 0);
+}
+
 function toActOfFaith(row) {
   const notes = [];
   if (row.vocations.length) notes.push(row.vocations.join(", "));
@@ -367,7 +380,14 @@ function toActOfFaith(row) {
     ordainedOnly: Boolean(row.ordainedOnly),
     monasticOnly: Boolean(row.monasticOnly),
     equivalentTo: row.equivalentTo ?? "",
-    fpCost: 0,
+    // The figure the one performing pays, read from the cost as written. An
+    // earlier version wrote nought here for every Act, so the compendium showed
+    // them all as free although the roll charged them correctly. A cost that
+    // is the Crit Die, a share of all he has, or "variable" has no single
+    // figure, and stays nought with the words beside it.
+    fpCost: flatFatigue(row.costText),
+    // The rulebook gives Acts of Faith no time and no Action Point cost — its
+    // legend of their fields has none (p404) — so none is invented.
     apToPray: 0,
     notes: notes.join(" — "),
     reference: [...new Set(pages)].map((p) => `p${p}`).join(", "),
@@ -837,6 +857,24 @@ await build("armour", [...buildArmour(), ...shieldData.shields.map(toShield)]);
 await build("acts-of-faith", faith.acts.map(toActOfFaith));
 await build("bestiary", bestiary.creatures.map(toCreature));
 await build("talents", traits.talents.map(toTalent));
+
+/* Spiritual Hindrances (pp.408-411): name, kind and whether Dark. A character
+ * chooses his own severity for each, so every one ships as minor for him to
+ * set; and the description, being the rulebook's, is his to write. */
+const hindranceData = JSON.parse(await readFile(path.join(DATA, "hindrances.json"), "utf8"));
+await build(
+  "hindrances",
+  hindranceData.hindrances.map((row) =>
+    document("hindrance", row.name, "icons/svg/eye.svg", {
+      kind: row.kind,
+      severity: "minor",
+      dark: row.dark,
+      discovered: false,
+      reference: `p${row.page}`,
+      description: ""
+    })
+  )
+);
 await build("equipment", gear.weapons.filter(isQuiver).map(toQuiver));
 
 /* Deficiencies, the small additional table, and the phobias all become flaws;

@@ -11,6 +11,7 @@ import { CnS5Spell, CnS5ActOfFaith, CnS5Religion } from "./data/item-mystical.mj
 import { CnS5Talent, CnS5Flaw } from "./data/item-traits.mjs";
 import { CnS5Ammunition } from "./data/item-ammunition.mjs";
 import { CnS5MagickalItem } from "./data/item-magickal.mjs";
+import { CnS5Hindrance } from "./data/item-hindrance.mjs";
 import { CnS5CharacterSheet } from "./sheets/character-sheet.mjs";
 import { CnS5SkillSheet } from "./sheets/skill-sheet.mjs";
 import { CnS5ItemSheet } from "./sheets/item-sheet.mjs";
@@ -94,7 +95,8 @@ Hooks.once("init", () => {
     talent: CnS5Talent,
     flaw: CnS5Flaw,
     ammunition: CnS5Ammunition,
-    magickalItem: CnS5MagickalItem
+    magickalItem: CnS5MagickalItem,
+    hindrance: CnS5Hindrance
   };
 
   // Initiative is a d10 added to Base Action Points and modified for armour
@@ -150,7 +152,7 @@ Hooks.once("init", () => {
   foundry.documents.collections.Items.registerSheet("cns5", CnS5ItemSheet, {
     types: [
       "weapon", "armour", "equipment", "spell", "actOfFaith",
-      "religion", "talent", "flaw", "ammunition", "magickalItem"
+      "religion", "talent", "flaw", "ammunition", "magickalItem", "hindrance"
     ],
     makeDefault: true,
     label: "CNS5.Sheet.item"
@@ -178,6 +180,7 @@ Hooks.once("init", () => {
     "systems/cns5/templates/item/flaw-body.hbs",
     "systems/cns5/templates/item/ammunition-body.hbs",
     "systems/cns5/templates/item/magickal-body.hbs",
+    "systems/cns5/templates/item/hindrance-body.hbs",
     "systems/cns5/templates/wizard/wizard.hbs",
     "systems/cns5/templates/wizard/step-method.hbs",
     "systems/cns5/templates/wizard/step-omens.hbs",

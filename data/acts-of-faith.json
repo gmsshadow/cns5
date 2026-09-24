@@ -665,7 +665,8 @@
       "ordainedOnly": true,
       "monasticOnly": false,
       "successChanceText": "½ Recipient’s Faith TSC, then 2/3 Cleric’s PFF",
-      "equivalentTo": "Greater Miracle"
+      "equivalentTo": "Greater Miracle",
+      "costText": "-24 FP from Cleric. Recipient offers S4."
     },
     {
       "name": "Heal Grievous Wounds",

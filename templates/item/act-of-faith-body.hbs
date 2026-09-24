@@ -16,16 +16,50 @@
     </label>
 </div>
 
+{{!-- What the Act asks, as the description gives it. These are what the roll
+      reads; the figures below are only the part of them that is a number. --}}
+<div class="cns5-grid cns5-grid--two">
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Faith.successChanceText"}}</span>
+        <input type="text" name="system.successChanceText" value="{{system.successChanceText}}"
+               placeholder="{{#if system.automatic}}{{localize 'CNS5.Faith.automaticShort'}}{{/if}}"
+               {{#unless editable}}disabled{{/unless}}>
+    </label>
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Faith.costText"}}</span>
+        <input type="text" name="system.costText" value="{{system.costText}}"
+               {{#unless editable}}disabled{{/unless}}>
+    </label>
+</div>
+<div class="cns5-checks">
+    <label class="cns5-checkbox">
+        <input type="checkbox" name="system.automatic" {{checked system.automatic}}
+               {{#unless editable}}disabled{{/unless}}>
+        <span>{{localize "CNS5.Faith.automaticShort"}}</span>
+    </label>
+    <label class="cns5-checkbox">
+        <input type="checkbox" name="system.ordainedOnly" {{checked system.ordainedOnly}}
+               {{#unless editable}}disabled{{/unless}}>
+        <span>{{localize "CNS5.Faith.ordainedMark"}}</span>
+    </label>
+    <label class="cns5-checkbox">
+        <input type="checkbox" name="system.monasticOnly" {{checked system.monasticOnly}}
+               {{#unless editable}}disabled{{/unless}}>
+        <span>{{localize "CNS5.Faith.monasticMark"}}</span>
+    </label>
+</div>
+<p class="cns5-hint">{{localize "CNS5.Faith.textHint"}}</p>
+
 <div class="cns5-grid cns5-grid--three">
     <label class="cns5-field">
         <span>{{localize "CNS5.Faith.fpCost"}}</span>
         <input type="number" name="system.fpCost" value="{{system.fpCost}}" min="0"
                {{#unless editable}}disabled{{/unless}}>
     </label>
-    <label class="cns5-field">
+    <label class="cns5-field" data-tooltip="{{localize 'CNS5.Faith.apHint'}}">
         <span>{{localize "CNS5.Faith.apToPray"}}</span>
-        <input type="number" name="system.apToPray" value="{{system.apToPray}}" min="0"
-               {{#unless editable}}disabled{{/unless}}>
+        <input type="number" name="system.apToPray" value="{{#if system.apToPray}}{{system.apToPray}}{{/if}}"
+               min="0" placeholder="—" {{#unless editable}}disabled{{/unless}}>
     </label>
     <label class="cns5-field">
         <span>{{localize "CNS5.Item.reference"}}</span>

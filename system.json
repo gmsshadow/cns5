@@ -2,7 +2,7 @@
   "id": "cns5",
   "title": "Chivalry & Sorcery 5th Edition",
   "description": "An unofficial system implementation of Chivalry & Sorcery 5th Edition for Foundry Virtual Tabletop.",
-  "version": "0.40.0",
+  "version": "0.41.0",
   "compatibility": {
     "minimum": "14",
     "verified": "14.368"
@@ -93,6 +93,11 @@
         ]
       },
       "magickalItem": {
+        "htmlFields": [
+          "description"
+        ]
+      },
+      "hindrance": {
         "htmlFields": [
           "description"
         ]
@@ -217,6 +222,17 @@
         "PLAYER": "OBSERVER",
         "ASSISTANT": "OWNER"
       }
+    },
+    {
+      "name": "hindrances",
+      "label": "C&S Spiritual Hindrances",
+      "path": "packs/hindrances",
+      "type": "Item",
+      "system": "cns5",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
     }
   ],
   "packFolders": [
@@ -234,7 +250,8 @@
         "talents",
         "flaws",
         "equipment",
-        "ammunition"
+        "ammunition",
+        "hindrances"
       ]
     }
   ]

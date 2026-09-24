@@ -1566,3 +1566,33 @@
     border-color: var(--cns-oxblood);
     color: var(--cns-oxblood);
 }
+
+/* A wizard step's buttons, set in a row above what they produce. */
+.cns5-wizard__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin: 0.4rem 0;
+}
+
+.cns5-wizard__actions button {
+    flex: 0 0 auto;
+    width: auto;
+}
+
+/* One of several things a single step asks — the curse, the talents, the
+   flaws — each under its own heading. */
+.cns5-wizard__block {
+    margin: 0 0 0.9rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.cns5-wizard__block:last-of-type {
+    border-bottom: none;
+}
+
+.cns5-wizard__block h3 {
+    margin: 0 0 0.2rem;
+    font-size: 1rem;
+}

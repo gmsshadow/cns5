@@ -545,6 +545,40 @@ thrown away and then guessed at again on purchase.
 So the untrained section shows each skill's category as a tag: what it will be
 worth once basic knowledge is bought.
 
+## The creation wizard, steps 2 and 6-10
+
+The wizard now follows the book's own sequence of steps, save for the
+background and the vocation, which are still to come.
+
+**Step 2, Horoscope.** Roll the sign on a d100, where 97 to 100 leaves the
+choice to the player at no cost, or choose one outright for ten PC Points. The
+step shows what the sign inclines towards.
+
+**Steps 6 and 7, Family.** Legitimacy, place among the children and standing
+with the head of the family can be rolled, taken at the book's default — the
+youngest of five legitimate children, a credit to the family — or chosen. A
+slave's child rolls legitimacy at -65, and an heir adds 21 to the status roll.
+
+The PC Points on these two pages run in opposite directions, and are kept
+apart. Legitimacy and family status print what is *gained* — an unrecognised
+bastard or a Black Sheep is compensated. Sibling Rank prints a *price* — the
+eldest costs three to buy, the youngest gives two back. All of it counts in the
+budget.
+
+**Steps 8 to 10, Curse, Talents and Flaws.** A Poorly Aspected character must
+roll a curse; anyone else may take one, worth five PC Points. A curse is
+followed where it says: an allergy to Table - Allergies, a phobia to Table -
+Phobias, "twice cursed" and "thrice cursed" back to the curses. Table - Special
+Abilities Outcomes says how many talents, each rolled on its table; a character
+with any talent must then check once for a flaw, at 40%. Everything rolled is
+added to the character from the compendia when the wizard finishes, and nothing
+is added twice.
+
+A test now checks that no name in the configuration is defined twice. Adding
+these steps quietly redefined two tables that already existed, in a different
+shape, and broke what relied on the originals — which only came to light
+because a whole test suite stopped running.
+
 ## Birth signs and curses
 
 **Table - Birth Signs & Skills** (p53). Each of the twelve signs inclines

@@ -1,0 +1,50 @@
+<h2>{{localize "CNS5.Creation.step.family"}}</h2>
+<p class="cns5-hint">{{localize "CNS5.Creation.familyHint"}}</p>
+
+<div class="cns5-checks">
+    <label class="cns5-checkbox">
+        <input type="checkbox" data-draft="slave" {{checked draft.slave}}>
+        <span>{{localize "CNS5.Creation.slave"}}</span>
+    </label>
+    <label class="cns5-checkbox">
+        <input type="checkbox" data-draft="heir" {{checked draft.heir}}>
+        <span>{{localize "CNS5.Creation.heir"}}</span>
+    </label>
+</div>
+
+<div class="cns5-wizard__actions">
+    <button type="button" data-action="rollFamily">
+        <i class="fa-solid fa-dice-d20"></i> {{localize "CNS5.Creation.rollFamily"}}
+    </button>
+    <button type="button" data-action="defaultFamily">{{localize "CNS5.Creation.defaultFamily"}}</button>
+</div>
+
+<div class="cns5-grid cns5-grid--three">
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Creation.legitimacy"}}</span>
+        <select data-draft="legitimacy">
+            {{#each legitimacies}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{localize label}}</option>{{/each}}
+        </select>
+    </label>
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Creation.siblingRank"}}</span>
+        <select data-draft="siblingRank" data-dtype="Number">
+            {{#each siblingRanks}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}
+        </select>
+    </label>
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Details.familyStatus"}}</span>
+        <select data-draft="familyStatus">
+            {{#each familyStatuses}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{localize label}}</option>{{/each}}
+        </select>
+    </label>
+</div>
+
+{{#if draft.familyRolls}}
+<p class="cns5-hint">{{draft.familyRolls}}</p>
+{{/if}}
+
+<dl class="cns5-derived">
+    <div><dt>{{localize "CNS5.Creation.familyPoints"}}</dt><dd>{{cns5Signed familyPoints}}</dd></div>
+</dl>
+<p class="cns5-hint">{{localize "CNS5.Creation.familyPointsHint"}}</p>

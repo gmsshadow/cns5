@@ -3702,3 +3702,95 @@ CNS5.redeemDarkPenalty = -25;
 
 /** Attempts again after "20 + 1D10 days - WIS" (pp.411-412). */
 CNS5.hindranceRetryFormula = "20 + 1d10";
+
+/* -------------------------------------------- */
+/*  Family                                      */
+/*  (pp.82-84)                                  */
+/* -------------------------------------------- */
+
+/**
+ * A d100 table read by its ranges.
+ * @param {Array<{roll: number[]}>} table
+ * @param {number} value
+ * @returns {object|null}
+ */
+CNS5.readRoll = function (table, value) {
+  const v = Number(value) || 0;
+  return table.find((row) => v >= row.roll[0] && v <= row.roll[1]) ?? null;
+};
+
+/**
+ * Legitimacy (p83). "Children of slaves suffer a -65% penalty on this roll."
+ *
+ * The PC Points here are *gained*: an unrecognised bastard is compensated for
+ * it. The Sibling Rank table beside it prints a *price* instead — so the two
+ * run in opposite directions, and are kept apart.
+ */
+CNS5.legitimacy = [
+  { roll: [1, 3], key: "unrecognised", pcGained: 5 },
+  { roll: [4, 10], key: "bastard", pcGained: 3 },
+  { roll: [11, 100], key: "legitimate", pcGained: 0 }
+];
+CNS5.slaveLegitimacyPenalty = -65;
+
+/** Initial Status of Parents (p83): the chance each is living. */
+CNS5.parentLiving = { father: 80, mother: 50 };
+
+/**
+ * Table - Sibling Rank (p83). "PCs are assumed to spring from the first 5
+ * children" and, by default, to be the youngest of five legitimate ones. The
+ * figure is a *price* in PC Points to buy the rank: the eldest costs three,
+ * the youngest gives two back.
+ */
+CNS5.siblingRankCost = { 1: 3, 2: 2, 3: 0, 4: -1, 5: -2 };
+CNS5.defaultSiblingRank = 5;
+
+/**
+ * "Roll ½D10 (round down) to find the sibling rank." A d10 of one gives
+ * nought, which is no rank at all; it is read as the eldest, the nearest rank
+ * there is.
+ *
+ * @param {number} d10
+ * @returns {number}
+ */
+CNS5.siblingRankFor = function (d10) {
+  return Math.min(5, Math.max(1, Math.floor((Number(d10) || 0) / 2)));
+};
+
+/**
+ * Table - Family Status (p84): how a character stands with the head of his
+ * family. "If an heir... add a bonus of +21% to the 1D100 dice roll." The
+ * PC Points are gained, as with legitimacy: a Black Sheep is compensated, a
+ * favourite pays.
+ */
+CNS5.familyStatus = [
+  { roll: [1, 15], key: "blackSheep", pcGained: 5 },
+  { roll: [16, 85], key: "credit", pcGained: 0 },
+  { roll: [86, Infinity], key: "goodChild", pcGained: -5 }
+];
+CNS5.heirFamilyBonus = 21;
+CNS5.defaultFamilyStatus = "credit";
+
+/* -------------------------------------------- */
+/*  Curse, talents and flaws                    */
+/*  (pp.84-101)                                 */
+/* -------------------------------------------- */
+
+/**
+ * "Poorly Aspected PC's are required to roll 1D100, consulting Table - Curses...
+ * Neutrally Aspected and Well-Aspected PC's are not required to roll... A player
+ * can however, always take a Curse." Taking one voluntarily under a points
+ * method is worth +5 PC Points (p84).
+ */
+CNS5.curseRequiredFor = ["poor"];
+CNS5.voluntaryCursePoints = 5;
+
+/** "Buy up to 3 special talents or abilities" (p87). */
+CNS5.talentsBoughtMaximum = 3;
+
+/**
+ * "If a PC Points method is being used, pick Flaws from Table - Flaws to gain a
+ * total bonus of no more than +25 PC Points. This option is only available if a
+ * character does not possess any special talents or abilities" (p94).
+ */
+CNS5.flawPointsMaximum = 25;

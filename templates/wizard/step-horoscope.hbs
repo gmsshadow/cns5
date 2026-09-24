@@ -1,0 +1,34 @@
+<h2>{{localize "CNS5.Creation.step.horoscope"}}</h2>
+<p class="cns5-hint">{{localize "CNS5.Creation.horoscopeHint"}}</p>
+
+<div class="cns5-wizard__actions">
+    <button type="button" data-action="rollSign">
+        <i class="fa-solid fa-dice-d20"></i> {{localize "CNS5.Creation.rollSign"}}
+    </button>
+</div>
+
+<label class="cns5-field">
+    <span>{{localize "CNS5.Details.starSign"}}</span>
+    <select data-draft="sign">
+        <option value="">{{localize "CNS5.Details.noSign"}}</option>
+        {{#each signs}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{localize label}}</option>{{/each}}
+    </select>
+</label>
+
+{{#if draft.signRoll}}
+<p class="cns5-hint">
+    {{localize "CNS5.Creation.rolled" roll=draft.signRoll}}
+    {{#if draft.signChoose}} — {{localize "CNS5.Creation.signChoose"}}{{/if}}
+</p>
+{{/if}}
+{{#if draft.signBought}}
+<p class="cns5-hint">{{localize "CNS5.Creation.signBought" cost=config.selectSignCost}}</p>
+{{/if}}
+
+{{#if signDetail}}
+<dl class="cns5-derived">
+    <div><dt>{{localize "CNS5.Details.favouredBy"}}</dt><dd>{{signDetail.categories}}</dd></div>
+    <div><dt>{{localize "CNS5.Details.favouredAttr"}}</dt><dd>{{localize signDetail.attribute}}</dd></div>
+    <div><dt>{{localize "CNS5.Creation.born"}}</dt><dd>{{signDetail.from}} – {{signDetail.to}}</dd></div>
+</dl>
+{{/if}}

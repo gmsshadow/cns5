@@ -35,6 +35,10 @@ export class CnS5Character extends CnS5ActorBase {
       gentle: new fields.BooleanField({ required: true, initial: false }),
       fathersVocation: new fields.StringField({ required: true, blank: true, initial: "" }),
       familyStatus: new fields.StringField({ required: true, blank: true, initial: "" }),
+      // Steps 6 and 7 (pp.82-84): born legitimate or not, and where among
+      // the children.
+      legitimacy: new fields.StringField({ required: true, blank: true, initial: "" }),
+      siblingRank: new fields.NumberField({ required: true, integer: true, initial: 0, min: 0 }),
       birthOmens: new fields.StringField({
         required: true,
         initial: "neutral",

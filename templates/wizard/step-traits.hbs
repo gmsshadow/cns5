@@ -1,0 +1,57 @@
+<h2>{{localize "CNS5.Creation.step.traits"}}</h2>
+
+<section class="cns5-wizard__block">
+    <h3>{{localize "CNS5.Creation.curse"}}</h3>
+    <p class="cns5-hint">
+        {{#if curseRequired}}{{localize "CNS5.Creation.curseRequired"}}{{else}}{{localize "CNS5.Creation.curseOptional"}}{{/if}}
+    </p>
+    <div class="cns5-wizard__actions">
+        <button type="button" data-action="rollCurse">
+            <i class="fa-solid fa-dice-d20"></i> {{localize "CNS5.Creation.rollCurse"}}
+        </button>
+        {{#if draft.curses.length}}
+        <button type="button" data-action="clearCurses">{{localize "CNS5.Creation.clear"}}</button>
+        {{/if}}
+    </div>
+    {{#if draft.curses.length}}
+    <ul class="cns5-list">{{#each draft.curses}}<li>{{this}}</li>{{/each}}</ul>
+    {{/if}}
+</section>
+
+<section class="cns5-wizard__block">
+    <h3>{{localize "CNS5.Creation.talents"}}</h3>
+    <p class="cns5-hint">{{localize "CNS5.Creation.talentsHint"}}</p>
+    <div class="cns5-wizard__actions">
+        <button type="button" data-action="rollTalents">
+            <i class="fa-solid fa-dice-d20"></i> {{localize "CNS5.Creation.rollTalents"}}
+        </button>
+        {{#if draft.talents.length}}
+        <button type="button" data-action="clearTalents">{{localize "CNS5.Creation.clear"}}</button>
+        {{/if}}
+    </div>
+    {{#if draft.talentRoll}}<p class="cns5-hint">{{draft.talentRoll}}</p>{{/if}}
+    {{#if draft.talents.length}}
+    <ul class="cns5-list">{{#each draft.talents}}<li>{{this}}</li>{{/each}}</ul>
+    {{/if}}
+</section>
+
+<section class="cns5-wizard__block">
+    <h3>{{localize "CNS5.Creation.flaws"}}</h3>
+    <p class="cns5-hint">
+        {{#if draft.talents.length}}{{localize "CNS5.Creation.flawRequired"}}{{else}}{{localize "CNS5.Creation.flawOptional"}}{{/if}}
+    </p>
+    <div class="cns5-wizard__actions">
+        <button type="button" data-action="rollFlaw">
+            <i class="fa-solid fa-dice-d20"></i> {{localize "CNS5.Creation.rollFlaw"}}
+        </button>
+        {{#if draft.flaws.length}}
+        <button type="button" data-action="clearFlaws">{{localize "CNS5.Creation.clear"}}</button>
+        {{/if}}
+    </div>
+    {{#if draft.flawRoll}}<p class="cns5-hint">{{draft.flawRoll}}</p>{{/if}}
+    {{#if draft.flaws.length}}
+    <ul class="cns5-list">{{#each draft.flaws}}<li>{{this}}</li>{{/each}}</ul>
+    {{/if}}
+</section>
+
+<p class="cns5-hint">{{localize "CNS5.Creation.traitsHint"}}</p>

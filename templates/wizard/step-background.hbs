@@ -1,27 +1,58 @@
 <h2>{{localize "CNS5.Creation.step.background"}}</h2>
-<p class="cns5-hint cns5-hint--bad">{{localize "CNS5.Creation.backgroundNotice"}}</p>
 
-<div class="cns5-grid cns5-grid--two">
-    <label class="cns5-field">
-        <span>{{localize "CNS5.Details.socialClass"}}</span>
-        <input type="text" data-draft="socialClass" value="{{draft.socialClass}}">
-    </label>
-    <label class="cns5-field">
-        <span>{{localize "CNS5.Details.fathersVocation"}}</span>
-        <input type="text" data-draft="fathersVocation" value="{{draft.fathersVocation}}">
-    </label>
-    <label class="cns5-field">
-        <span>{{localize "CNS5.Details.familyStatus"}}</span>
-        <input type="text" data-draft="familyStatus" value="{{draft.familyStatus}}">
-    </label>
-    <label class="cns5-field">
-        <span>{{localize "CNS5.Details.vocation"}}</span>
-        <input type="text" data-draft="vocation" value="{{draft.vocation}}">
-    </label>
-</div>
+<section class="cns5-wizard__block">
+    <h3>{{localize "CNS5.Creation.socialClass"}}</h3>
+    <p class="cns5-hint">{{localize "CNS5.Creation.socialClassHint"}}</p>
+    <div class="cns5-wizard__actions">
+        <button type="button" data-action="rollSocialClass">
+            <i class="fa-solid fa-dice-d20"></i> {{localize "CNS5.Creation.rollSocialClass"}}
+        </button>
+        <button type="button" data-action="defaultSocialClass">{{localize "CNS5.Creation.defaultSocialClass"}}</button>
+    </div>
+
+    <div class="cns5-grid cns5-grid--two">
+        <label class="cns5-field">
+            <span>{{localize "CNS5.Creation.class"}}</span>
+            <select data-draft="socialClassKey">
+                {{#each socialClasses}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{localize label}}</option>{{/each}}
+            </select>
+        </label>
+        {{#if socialBands.length}}
+        <label class="cns5-field">
+            <span>{{localize "CNS5.Creation.band"}}</span>
+            <select data-draft="socialBand">
+                {{#each socialBands}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}
+            </select>
+        </label>
+        {{/if}}
+    </div>
+
+    {{#if draft.socialRolls}}<p class="cns5-hint">{{draft.socialRolls}}</p>{{/if}}
+
+    <dl class="cns5-derived">
+        <div><dt>{{localize "CNS5.Creation.classPoints"}}</dt><dd>{{cns5Signed classPoints}}</dd></div>
+    </dl>
+    {{#if isPeasant}}<p class="cns5-hint">{{localize "CNS5.Creation.peasantBenefits"}}</p>{{/if}}
+    {{#if isOutsider}}<p class="cns5-hint cns5-hint--bad">{{localize "CNS5.Creation.outsiderNotice"}}</p>{{/if}}
+</section>
+
+<section class="cns5-wizard__block">
+    <h3>{{localize "CNS5.Details.fathersVocation"}}</h3>
+    <p class="cns5-hint cns5-hint--bad">{{localize "CNS5.Creation.fathersVocationNotice"}}</p>
+    <div class="cns5-grid cns5-grid--two">
+        <label class="cns5-field">
+            <span>{{localize "CNS5.Details.fathersVocation"}}</span>
+            <input type="text" data-draft="fathersVocation" value="{{draft.fathersVocation}}">
+        </label>
+        <label class="cns5-field">
+            <span>{{localize "CNS5.Details.vocation"}}</span>
+            <input type="text" data-draft="vocation" value="{{draft.vocation}}">
+        </label>
+    </div>
+</section>
 
 <label class="cns5-field">
     <span>{{localize "CNS5.Creation.notes"}}</span>
-    <textarea data-draft="notes" rows="4">{{draft.notes}}</textarea>
+    <textarea data-draft="notes" rows="3">{{draft.notes}}</textarea>
 </label>
 <p class="cns5-hint">{{localize "CNS5.Creation.notesHint"}}</p>

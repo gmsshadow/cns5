@@ -30,6 +30,10 @@ export class CnS5Character extends CnS5ActorBase {
       age: new fields.NumberField({ required: true, integer: true, initial: 18, min: 0 }),
       vocation: new fields.StringField({ required: true, blank: true, initial: "" }),
       socialClass: new fields.StringField({ required: true, blank: true, initial: "" }),
+      // The class and band as keys, for the tables that follow from them —
+      // which father's vocations he may have come from (p66 onwards).
+      socialClassKey: new fields.StringField({ required: true, blank: true, initial: "" }),
+      socialBand: new fields.StringField({ required: true, blank: true, initial: "" }),
       socialStatus: new fields.StringField({ required: true, blank: true, initial: "" }),
       // Gentle birth carries a bonus to courtesy and command (p119).
       gentle: new fields.BooleanField({ required: true, initial: false }),

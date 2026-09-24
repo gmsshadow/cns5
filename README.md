@@ -579,6 +579,32 @@ these steps quietly redefined two tables that already existed, in a different
 shape, and broke what relied on the originals — which only came to light
 because a whole test suite stopped running.
 
+### Step 5a, Social Class
+
+Tables - Social Class (pp.58-59), one for each period, are two rolls: the first
+finds the broad class — outsiders, serfs, freemen, townsmen, the chivalric — and
+the second where in it, from destitute to rich. The class can be rolled, taken
+at the book's default of an Average Freeman, or chosen. "Positive numbers
+indicate extra points gained... negative numbers are PC Points that must be
+spent" (p60): a destitute Early Feudal serf gains seven, a wealthy knight pays
+twenty-five. The budget counts it.
+
+The periods differ: half the Early Feudal world is unfree, an eighth of the Late.
+Late and Waning Feudal share a table.
+
+The Early Feudal serfs print Average as 34-76 and Wealthy as 76-100, so 76 is
+both. Average is read as ending at 75. A test checks that every table, and every
+class's bands within it, covers the d100 exactly once.
+
+A peasant — a serf or a free peasant, not a townsman — gains +2 Strength and
+Conditioning and Endurance at level 1, added when the wizard finishes. The two
+skills of his choice raised a level are left to the player, and the racial
+maximum on Strength to the Gamemaster.
+
+Still to come in Step 5: the tables of fathers' vocations and the background
+skills they give; Table - Jews and Table - Slaves for outsiders; and the fighting
+classes' holdings.
+
 ## Birth signs and curses
 
 **Table - Birth Signs & Skills** (p53). Each of the twelve signs inclines

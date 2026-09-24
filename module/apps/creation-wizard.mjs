@@ -36,6 +36,8 @@ export class CnS5CreationWizard extends HandlebarsApplicationMixin(ApplicationV2
       defaultSize: CnS5CreationWizard.#onDefaultSize,
       rollAge: CnS5CreationWizard.#onRollAge,
       rollSign: CnS5CreationWizard.#onRollSign,
+      rollSocialClass: CnS5CreationWizard.#onRollSocialClass,
+      defaultSocialClass: CnS5CreationWizard.#onDefaultSocialClass,
       rollFamily: CnS5CreationWizard.#onRollFamily,
       defaultFamily: CnS5CreationWizard.#onDefaultFamily,
       rollCurse: CnS5CreationWizard.#onRollCurse,
@@ -112,6 +114,11 @@ export class CnS5CreationWizard extends HandlebarsApplicationMixin(ApplicationV2
       race: system.details.race ?? "Human",
       nationality: system.details.nationality ?? "",
       socialClass: system.details.socialClass ?? "",
+      // Step 5a: the class and where in it, defaulting as the book does to an
+      // Average Freeman or Townsman.
+      socialClassKey: system.details.socialClassKey || CNS5.defaultSocialClass.key,
+      socialBand: system.details.socialBand || CNS5.defaultSocialClass.band,
+      socialRolls: "",
       fathersVocation: system.details.fathersVocation ?? "",
       familyStatus: CNS5.familyStatus.some((f) => f.key === system.details.familyStatus)
         ? system.details.familyStatus
@@ -188,6 +195,9 @@ export class CnS5CreationWizard extends HandlebarsApplicationMixin(ApplicationV2
     // the dice gave the right to choose, costs nothing.
     if (draft.sign && !draft.signRoll) spent += CNS5.selectSignCost;
 
+    // Step 5a: a poor class is compensated, a high one paid for (p60).
+    spent -= CnS5CreationWizard.#classPoints(draft);
+
     // Steps 6 and 7: a bastard or a Black Sheep is compensated; buying an
     // elder place or a favourite's standing is paid for (pp.83-84).
     spent -= CNS5.legitimacy.find((l) => l.key === draft.legitimacy)?.pcGained ?? 0;
@@ -244,6 +254,29 @@ export class CnS5CreationWizard extends HandlebarsApplicationMixin(ApplicationV2
       : null;
     // Chosen rather than rolled costs ten; the budget counts it.
     draft.signBought = Boolean(draft.sign) && !draft.signRoll;
+
+    // Step 5a.
+    const table = CNS5.socialClasses[draft.period] ?? CNS5.socialClasses.hc;
+    context.socialClasses = this.#choices(
+      Object.fromEntries(table.map((c) => [c.key, `CNS5.SocialClass.${c.key}`])),
+      draft.socialClassKey
+    );
+    const cls = table.find((c) => c.key === draft.socialClassKey);
+    // A band from the class chosen before this one means nothing here; the
+    // class's own average is taken instead, or its first band.
+    if (cls?.bands && !cls.bands.some((b) => b.key === draft.socialBand)) {
+      draft.socialBand = (cls.bands.find((b) => b.key === "average") ?? cls.bands[0]).key;
+    } else if (cls && !cls.bands) {
+      draft.socialBand = "";
+    }
+    context.socialBands = (cls?.bands ?? []).map((b) => ({
+      value: b.key,
+      label: `${game.i18n.localize(`CNS5.SocialBand.${b.key}`)} (${b.pcGained > 0 ? "+" : ""}${b.pcGained || "—"})`,
+      selected: b.key === draft.socialBand
+    }));
+    context.classPoints = CnS5CreationWizard.#classPoints(draft);
+    context.isPeasant = CNS5.peasantClasses.includes(draft.socialClassKey);
+    context.isOutsider = draft.socialClassKey === "outsider";
 
     // Steps 6 and 7.
     context.legitimacies = this.#choices(
@@ -529,6 +562,52 @@ export class CnS5CreationWizard extends HandlebarsApplicationMixin(ApplicationV2
   }
 
   /* -------------------------------------------- */
+  /*  Step 5a: social class (pp.58-60)            */
+  /* -------------------------------------------- */
+
+  /**
+   * What the class comes to in PC Points: gained for a poor start, spent for a
+   * high one. A band belonging to another class, left over from a change of
+   * class, counts for nothing.
+   */
+  static #classPoints(draft) {
+    const table = CNS5.socialClasses[draft.period] ?? CNS5.socialClasses.hc;
+    const cls = table.find((c) => c.key === draft.socialClassKey);
+    if (!cls) return 0;
+    if (!cls.bands) return cls.pcGained ?? 0;
+    return cls.bands.find((b) => b.key === draft.socialBand)?.pcGained ?? 0;
+  }
+
+  /** Two rolls: the class, then where in it. */
+  /** "Wealthy Freeman", as the sheet shows it. */
+  static #classLabel(draft) {
+    const cls = game.i18n.localize(`CNS5.SocialClass.${draft.socialClassKey}`);
+    return draft.socialBand
+      ? `${game.i18n.localize(`CNS5.SocialBand.${draft.socialBand}`)} ${cls}`
+      : cls;
+  }
+
+  static async #onRollSocialClass() {
+    const classRoll = (await new Roll("1d100").evaluate()).total;
+    const bandRoll = (await new Roll("1d100").evaluate()).total;
+    const found = CNS5.socialClassFor(this.draft.period, classRoll, bandRoll);
+    this.draft.socialClassKey = found.cls.key;
+    this.draft.socialBand = found.band?.key ?? "";
+    this.draft.socialRolls = game.i18n.format("CNS5.Creation.socialRolled", {
+      classRoll,
+      bandRoll: found.band ? bandRoll : "—"
+    });
+    this.render();
+  }
+
+  static async #onDefaultSocialClass() {
+    this.draft.socialClassKey = CNS5.defaultSocialClass.key;
+    this.draft.socialBand = CNS5.defaultSocialClass.band;
+    this.draft.socialRolls = "";
+    this.render();
+  }
+
+  /* -------------------------------------------- */
   /*  Steps 6 and 7: family (pp.82-84)            */
   /* -------------------------------------------- */
 
@@ -730,7 +809,9 @@ export class CnS5CreationWizard extends HandlebarsApplicationMixin(ApplicationV2
       "system.details.gender": draft.gender,
       "system.details.race": draft.race,
       "system.details.nationality": draft.nationality,
-      "system.details.socialClass": draft.socialClass,
+      "system.details.socialClass": CnS5CreationWizard.#classLabel(draft),
+      "system.details.socialClassKey": draft.socialClassKey,
+      "system.details.socialBand": draft.socialBand,
       "system.details.fathersVocation": draft.fathersVocation,
       "system.details.familyStatus": draft.familyStatus,
       "system.details.starSign": draft.sign ? game.i18n.localize(CNS5.birthSigns[draft.sign].label) : "",
@@ -760,6 +841,20 @@ export class CnS5CreationWizard extends HandlebarsApplicationMixin(ApplicationV2
       // Accurate Counting comes free to anyone of Intellect 12 or better
       // (worksheet, Vocation and Skills).
       if (draft.attributes.int >= 12) await this.actor.addAccurateCounting();
+    }
+
+    // "Selecting Peasant status enables a character to... An additional +2
+    // Strength... Both Conditioning and Endurance at Level 1 are also gained as
+    // background skills" (p58). The two skills of his choice raised a level
+    // are left to him, and the racial maximum on Strength to the Gamemaster.
+    if (CNS5.peasantClasses.includes(draft.socialClassKey)) {
+      await this.actor.update({
+        "system.attributes.str.value":
+          this.actor.system.attributes.str.value + CNS5.peasantBenefits.strength
+      });
+      for (const skill of CNS5.peasantBenefits.skills) {
+        await this.actor.grantSkill(skill.name, { level: skill.level });
+      }
     }
 
     // What the dice gave him: curses, talents and flaws, copied from the

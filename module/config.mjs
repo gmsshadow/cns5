@@ -3794,3 +3794,110 @@ CNS5.talentsBoughtMaximum = 3;
  * character does not possess any special talents or abilities" (p94).
  */
 CNS5.flawPointsMaximum = 25;
+
+/* -------------------------------------------- */
+/*  Step 5a: Social Class                       */
+/*  (pp.58-60)                                  */
+/* -------------------------------------------- */
+
+/**
+ * Tables - Social Class, one for each period.
+ *
+ * Two rolls: the first finds the broad class, the second where in it — from
+ * destitute to rich. "Positive numbers indicate extra points gained if a
+ * particular social class is chosen, while negative numbers are PC Points that
+ * must be spent in order to obtain a desired social class" (p60).
+ *
+ * The Early Feudal serfs print Average as 34-76 and Wealthy as 76-100, so that
+ * a roll of 76 is both. Average is read as ending at 75, the row it would have
+ * to give up for the next to begin where it says.
+ *
+ * Late and Waning Feudal share a table.
+ */
+const band = (min, max, key, pcGained) => ({ roll: [min, max], key, pcGained });
+
+CNS5.socialClasses = {
+  ef: [
+    { roll: [1, 2], key: "outsider", pcGained: 8 },
+    { roll: [3, 50], key: "serf", bands: [
+      band(1, 10, "destitute", 7), band(11, 33, "poor", 5),
+      band(34, 75, "average", 0), band(76, 100, "wealthy", -4)] },
+    { roll: [51, 85], key: "freeman", bands: [
+      band(1, 20, "destitute", 5), band(21, 40, "poor", 3),
+      band(41, 85, "average", 0), band(86, 100, "wealthy", -6)] },
+    { roll: [86, 98], key: "townsman", bands: [
+      band(1, 20, "destitute", 5), band(21, 45, "poor", 3), band(46, 93, "average", 0),
+      band(94, 98, "wealthy", -6), band(99, 100, "rich", -8)] },
+    { roll: [99, 100], key: "chivalric", bands: [
+      band(1, 5, "poor", -12), band(6, 88, "average", -18), band(89, 100, "wealthy", -25)] }
+  ],
+  hc: [
+    { roll: [1, 1], key: "outsider", pcGained: 10 },
+    { roll: [2, 35], key: "serf", bands: [
+      band(1, 8, "destitute", 6), band(9, 55, "poor", 4),
+      band(56, 90, "average", 0), band(91, 100, "wealthy", -4)] },
+    { roll: [36, 80], key: "freeman", bands: [
+      band(1, 20, "destitute", 5), band(21, 37, "poor", 3),
+      band(38, 90, "average", 0), band(91, 100, "wealthy", -6)] },
+    { roll: [81, 94], key: "townsman", bands: [
+      band(1, 20, "destitute", 5), band(21, 45, "poor", 3), band(46, 93, "average", 0),
+      band(94, 98, "wealthy", -6), band(99, 100, "rich", -8)] },
+    { roll: [95, 100], key: "chivalric", bands: [
+      band(1, 5, "poor", -12), band(6, 90, "average", -18), band(91, 100, "wealthy", -25)] }
+  ],
+  lf: [
+    { roll: [1, 2], key: "outsider", pcGained: 8 },
+    { roll: [3, 15], key: "serf", bands: [
+      band(1, 12, "destitute", 6), band(13, 40, "poor", 4),
+      band(41, 88, "average", 0), band(89, 100, "wealthy", -4)] },
+    { roll: [16, 75], key: "freeman", bands: [
+      band(1, 22, "destitute", 5), band(23, 40, "poor", 3),
+      band(41, 85, "average", 0), band(86, 100, "wealthy", -6)] },
+    { roll: [76, 94], key: "townsman", bands: [
+      band(1, 25, "destitute", 5), band(26, 42, "poor", 3), band(43, 90, "average", 0),
+      band(91, 97, "wealthy", -6), band(98, 100, "rich", -8)] },
+    { roll: [95, 100], key: "chivalric", bands: [
+      band(1, 8, "poor", -12), band(9, 90, "average", -18), band(91, 100, "wealthy", -25)] }
+  ]
+};
+CNS5.socialClasses.wf = CNS5.socialClasses.lf;
+
+/**
+ * "Choose to accept the default of Average Rural Freeman/Townsman" (p58).
+ */
+CNS5.defaultSocialClass = { key: "freeman", band: "average" };
+
+/**
+ * "Selecting Peasant status enables a character to increase two skills by one
+ * level for which they have basic knowledge. An additional +2 Strength... is
+ * also received, up to the racial maximum. Both Conditioning and Endurance at
+ * Level 1 are also gained as background skills" (p58). Serfs and free peasants
+ * alike are peasants; townsmen are not.
+ */
+CNS5.peasantClasses = ["serf", "freeman"];
+CNS5.peasantBenefits = {
+  strength: 2,
+  skillLevels: 2,
+  skills: [{ name: "Conditioning", level: 1 }, { name: "Endurance", level: 1 }]
+};
+
+/**
+ * Where a roll of the outsiders leads (p60): Jews to Table - Jews, slaves to
+ * Table - Slaves — though in the High Chivalric and Late and Waning Feudal
+ * periods only around the Mediterranean, slaves elsewhere being "treated
+ * instead as 'Destitute/Landless' Serfs" — and "Others" to whatever minority
+ * the Gamemaster has in mind.
+ */
+CNS5.outsiderKinds = ["jew", "slave", "other"];
+
+/**
+ * A social class and its band, by the two rolls.
+ * @returns {{cls: object, band: object|null, pcGained: number}}
+ */
+CNS5.socialClassFor = function (period, classRoll, bandRoll) {
+  const table = CNS5.socialClasses[period] ?? CNS5.socialClasses.hc;
+  const cls = CNS5.readRoll(table, classRoll);
+  if (!cls) return null;
+  const which = cls.bands ? CNS5.readRoll(cls.bands, bandRoll) : null;
+  return { cls, band: which, pcGained: which ? which.pcGained : cls.pcGained ?? 0 };
+};

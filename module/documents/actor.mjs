@@ -1461,6 +1461,43 @@ export class CnS5Actor extends Actor {
   /* -------------------------------------------- */
 
   /**
+   * Give the character a skill at a level, fetching it from the compendium if
+   * he has not got it.
+   *
+   * A skill granted by background or class — "the character begins with Level
+   * 0 in those skills listed for his father's vocation" (p119) — is known, and
+   * never lowered: a character who already had it higher keeps what he had.
+   *
+   * @param {string} name
+   * @param {object} [options]
+   * @returns {Promise<Item|null>} null where no such skill exists
+   */
+  async grantSkill(name, { level = 0 } = {}) {
+    const wanted = name.toLowerCase();
+    const held = this.items.find((i) => i.type === "skill" && i.name.toLowerCase() === wanted);
+    if (held) {
+      const update = {};
+      if (!held.system.known) update["system.known"] = true;
+      if ((held.system.level ?? 0) < level) update["system.level"] = level;
+      if (Object.keys(update).length) await held.update(update);
+      return held;
+    }
+
+    const pack = game.packs.get("cns5.skills");
+    const index = await pack?.getIndex();
+    const entry = index?.find((e) => e.name.toLowerCase() === wanted);
+    if (!entry) return null;
+
+    const source = (await pack.getDocument(entry._id)).toObject();
+    source.system.known = true;
+    source.system.level = Math.max(source.system.level ?? 0, level);
+    const [created] = await this.createEmbeddedDocuments("Item", [source]);
+    return created;
+  }
+
+  /* -------------------------------------------- */
+
+  /**
    * Add the nine skills every character has, skipping any already present.
    * A convenience for building characters by hand until the generated skill
    * compendium arrives.

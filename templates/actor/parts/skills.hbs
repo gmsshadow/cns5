@@ -37,6 +37,50 @@
         </div>
     </div>
 
+    <section class="cns5-mastery">
+        <div class="cns5-mastery__vocation">
+            <span class="cns5-mastery__label">{{localize "CNS5.Details.vocation"}}</span>
+            <strong>{{#if system.details.vocation}}{{system.details.vocation}}{{else}}—{{/if}}</strong>
+            {{#if editable}}
+            <button type="button" data-action="changeVocation">{{localize "CNS5.Vocation.change"}}</button>
+            {{/if}}
+        </div>
+        <label class="cns5-field cns5-field--narrow">
+            <span>{{localize "CNS5.Vocation.primaryAttribute"}}</span>
+            <select name="system.details.vocationAttributes.primary" {{#unless editable}}disabled{{/unless}}>
+                {{#each masteryAttributes.primary}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}
+            </select>
+        </label>
+        <label class="cns5-field cns5-field--narrow">
+            <span>{{localize "CNS5.Vocation.secondaryAttribute"}}</span>
+            <select name="system.details.vocationAttributes.secondary" {{#unless editable}}disabled{{/unless}}>
+                {{#each masteryAttributes.secondary}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}
+            </select>
+        </label>
+        <div class="cns5-field cns5-field--narrow">
+            <span>{{localize "CNS5.Vocation.masterySlots"}}</span>
+            <output class="{{#if (lt mastery.left 0)}}cns5-hint--bad{{/if}}"
+                    data-tooltip="{{localize 'CNS5.Vocation.masterySlotsHint'}}">{{mastery.used}} / {{mastery.slots}}</output>
+        </div>
+        {{#if mastery.known}}
+        <div class="cns5-field cns5-field--narrow">
+            <span>{{localize "CNS5.Vocation.masteryEvery"}}</span>
+            <output data-tooltip="{{localize 'CNS5.Vocation.masteryEveryValue' levels=mastery.interval total=mastery.total}}">
+                {{localize "CNS5.Vocation.masteryNext" levels=mastery.interval next=mastery.next}}
+            </output>
+        </div>
+        {{else}}
+        <p class="cns5-hint">{{localize "CNS5.Vocation.masteryUnknown"}}</p>
+        {{/if}}
+        <label class="cns5-field">
+            <span>{{localize "CNS5.Vocation.nextMastery"}}</span>
+            <select name="system.details.nextMastery" {{#unless editable}}disabled{{/unless}}>
+                <option value="" {{#unless system.details.nextMastery}}selected{{/unless}}>—</option>
+                {{#each nextMasteryOptions}}<option value="{{this}}" {{#if (eq this ../system.details.nextMastery)}}selected{{/if}}>{{this}}</option>{{/each}}
+            </select>
+        </label>
+    </section>
+
     {{#each skillGroups as |group|}}
     <section class="cns5-skills">
         <h3 class="cns5-skills__heading">{{localize group.label}}</h3>

@@ -1,0 +1,664 @@
+{
+  "source": "Chivalry & Sorcery 5th Edition core rules, Table - Jews and Table - Slaves, pp.60-65",
+  "note": "Table - Jews is transcribed, its layout defeating a reading by position; the slaves' tables are read from the page.",
+  "jews": {
+    "groups": [
+      {
+        "name": "Marginalised Fringe",
+        "roll": [
+          1,
+          5
+        ],
+        "page": 61,
+        "rows": [
+          {
+            "roll": [
+              1,
+              25
+            ],
+            "vocation": "Prostitute (Mother - Father unknown)",
+            "skills": "Streetwise, Charm +1 Thievery Skill",
+            "status": 2
+          },
+          {
+            "roll": [
+              26,
+              35
+            ],
+            "vocation": "Offal Collector/Rag-picker",
+            "skills": "Streetwise, Endurance + Begging",
+            "status": 2
+          },
+          {
+            "roll": [
+              36,
+              50
+            ],
+            "vocation": "Thief",
+            "skills": "2 Thievery Skills, Con +1 Skill",
+            "status": 3
+          },
+          {
+            "roll": [
+              51,
+              53
+            ],
+            "vocation": "Tough/Enforcer",
+            "skills": "Knife Fighting, Intimidation, 1 Thievery Skill +1 Skill",
+            "status": 4
+          },
+          {
+            "roll": [
+              54,
+              95
+            ],
+            "vocation": "Beggar",
+            "skills": "Begging, Con +1 Thievery Skill",
+            "status": 1
+          },
+          {
+            "roll": [
+              96,
+              100
+            ],
+            "vocation": "Leper",
+            "skills": "Endurance",
+            "status": null,
+            "statusNote": "see note 2",
+            "link": "leper"
+          }
+        ]
+      },
+      {
+        "name": "Poor Jews",
+        "roll": [
+          6,
+          20
+        ],
+        "page": 61,
+        "rows": [
+          {
+            "roll": [
+              1,
+              6
+            ],
+            "vocation": "Entertainer",
+            "skills": "Singing, Juggling + Dancing: Folk",
+            "status": 3
+          },
+          {
+            "roll": [
+              7,
+              28
+            ],
+            "vocation": "Peddler",
+            "skills": "Bargaining, Con +1 Skill",
+            "status": 5
+          },
+          {
+            "roll": [
+              29,
+              42
+            ],
+            "vocation": "Tinker",
+            "skills": "Bargaining, Tinkering +1 Skill",
+            "status": 5
+          },
+          {
+            "roll": [
+              43,
+              50
+            ],
+            "vocation": "Porter/Carter",
+            "skills": "Endurance, Conditioning + Lifting",
+            "status": 3
+          },
+          {
+            "roll": [
+              51,
+              56
+            ],
+            "vocation": "Hireling Plot Tender",
+            "skills": "Vegetable Crops, 1 Agricultural Skill +1 Skill",
+            "status": 5
+          },
+          {
+            "roll": [
+              57,
+              67
+            ],
+            "vocation": "Huckster/Stall-keeper",
+            "skills": "Trade Skills + Con",
+            "status": 6,
+            "link": "trades"
+          },
+          {
+            "roll": [
+              68,
+              75
+            ],
+            "vocation": "Day Labourer",
+            "skills": "Endurance, Conditioning + Lifting",
+            "status": 3
+          },
+          {
+            "roll": [
+              76,
+              90
+            ],
+            "vocation": "Worker",
+            "skills": "Trade Skills",
+            "status": 4,
+            "link": "trades"
+          },
+          {
+            "roll": [
+              91,
+              100
+            ],
+            "vocation": "Sephardim (Oriental Jew)",
+            "skills": "Writing, 1 Foreign Language, Law, Poetic Recitation +1 Skill",
+            "status": 8
+          }
+        ]
+      },
+      {
+        "name": "Small People of the Jewish Quarter",
+        "roll": [
+          21,
+          80
+        ],
+        "page": 61,
+        "rows": [
+          {
+            "roll": [
+              1,
+              5
+            ],
+            "vocation": "Kosher Butcher",
+            "skills": "Ancient Language, Knife Fighting +1 Skill",
+            "status": 6,
+            "trades": true
+          },
+          {
+            "roll": [
+              6,
+              19
+            ],
+            "vocation": "Skilled Worker",
+            "skills": "Trade Skills",
+            "status": 5,
+            "link": "trades"
+          },
+          {
+            "roll": [
+              20,
+              21
+            ],
+            "vocation": "Bath House Keeper",
+            "skills": "Lifting, Diplomacy & Politics +1 Skill",
+            "status": 10
+          },
+          {
+            "roll": [
+              22,
+              24
+            ],
+            "vocation": "School Master",
+            "skills": "Writing, Ancient Language, 2 Lore +1 Skill",
+            "status": 13
+          },
+          {
+            "roll": [
+              25,
+              27
+            ],
+            "vocation": "Hospital Assistant",
+            "skills": "Lifting, First Aid +3 Skills",
+            "status": 9
+          },
+          {
+            "roll": [
+              28,
+              44
+            ],
+            "vocation": "Petty Trader",
+            "skills": "Trade Skills + Con",
+            "status": 7,
+            "link": "trades"
+          },
+          {
+            "roll": [
+              45,
+              53
+            ],
+            "vocation": "Scribe/Clerk",
+            "skills": "Writing, Ancient Language, Calligraphy & Illumination +1 Skill",
+            "status": 13
+          },
+          {
+            "roll": [
+              54,
+              60
+            ],
+            "vocation": "Talmudic Scholar",
+            "skills": "Writing, Ancient Language, Law, 1 Lore +1 Skill",
+            "status": 15
+          },
+          {
+            "roll": [
+              61,
+              66
+            ],
+            "vocation": "Apothecary",
+            "skills": "Make Drugs, Poisons, Herbal Lore +1 Written Language +1 Skill",
+            "status": 14
+          },
+          {
+            "roll": [
+              67,
+              81
+            ],
+            "vocation": "Pawnshop Owner",
+            "skills": "Finance, Bargaining, Evaluate + Con",
+            "status": 13
+          },
+          {
+            "roll": [
+              82,
+              100
+            ],
+            "vocation": "Money Lender",
+            "skills": "Bargaining, Diplomacy & Politics +1 Skill",
+            "status": 14
+          }
+        ]
+      },
+      {
+        "name": "Wealthy Jews",
+        "roll": [
+          81,
+          90
+        ],
+        "page": 62,
+        "rows": [
+          {
+            "roll": [
+              1,
+              15
+            ],
+            "vocation": "Official Tax Collector",
+            "skills": "Writing, Accurate Counting, Evaluate + Con",
+            "status": 10
+          },
+          {
+            "roll": [
+              16,
+              75
+            ],
+            "vocation": "Banker",
+            "skills": "Writing, Bargaining, Accurate Counting, Diplomacy & Politics",
+            "status": 13
+          },
+          {
+            "roll": [
+              76,
+              100
+            ],
+            "vocation": "Mercantile Trader",
+            "skills": "Trade Skills",
+            "status": 15,
+            "link": "merchants"
+          }
+        ]
+      },
+      {
+        "name": "Cultural Elites",
+        "roll": [
+          91,
+          100
+        ],
+        "page": 62,
+        "rows": [
+          {
+            "roll": [
+              1,
+              50
+            ],
+            "vocation": "Rabbi",
+            "skills": "Writing, Ancient Language, Law, 2 Lore +1 Skill",
+            "status": 19
+          },
+          {
+            "roll": [
+              51,
+              100
+            ],
+            "vocation": "Physician",
+            "skills": "Writing, Herbal Lore, First Aid +3 Other Skills",
+            "status": 20
+          }
+        ]
+      }
+    ],
+    "grants": [
+      "Bargaining",
+      "Evaluating Goods"
+    ]
+  },
+  "slaves": {
+    "owners": {
+      "ef": [
+        {
+          "roll": [
+            1,
+            70
+          ],
+          "household": "freeman"
+        },
+        {
+          "roll": [
+            71,
+            80
+          ],
+          "household": "townsman"
+        },
+        {
+          "roll": [
+            81,
+            100
+          ],
+          "household": "noble"
+        }
+      ],
+      "mediterranean": [
+        {
+          "roll": [
+            1,
+            10
+          ],
+          "household": "freeman"
+        },
+        {
+          "roll": [
+            11,
+            80
+          ],
+          "household": "townsman"
+        },
+        {
+          "roll": [
+            81,
+            100
+          ],
+          "household": "noble"
+        }
+      ]
+    },
+    "bands": {
+      "freeman": [
+        {
+          "roll": [
+            1,
+            32
+          ],
+          "band": "average"
+        },
+        {
+          "roll": [
+            33,
+            100
+          ],
+          "band": "wealthy"
+        }
+      ],
+      "townsman": [
+        {
+          "roll": [
+            1,
+            3
+          ],
+          "band": "poor"
+        },
+        {
+          "roll": [
+            4,
+            25
+          ],
+          "band": "average"
+        },
+        {
+          "roll": [
+            26,
+            70
+          ],
+          "band": "wealthy"
+        },
+        {
+          "roll": [
+            71,
+            100
+          ],
+          "band": "rich"
+        }
+      ],
+      "noble": [
+        {
+          "roll": [
+            1,
+            8
+          ],
+          "band": "poor"
+        },
+        {
+          "roll": [
+            9,
+            50
+          ],
+          "band": "average"
+        },
+        {
+          "roll": [
+            51,
+            100
+          ],
+          "band": "wealthy"
+        }
+      ]
+    },
+    "servantStatus": {
+      "noble": 2,
+      "townsman.rich": 1
+    },
+    "ef": {
+      "page": 63,
+      "rows": [
+        {
+          "roll": [
+            1,
+            17
+          ],
+          "vocation": "Small Plot Tender",
+          "skills": "Vegetable Crops, 1 Agricultural Skill +1 Skill",
+          "status": 2
+        },
+        {
+          "roll": [
+            18,
+            45
+          ],
+          "vocation": "Labourer",
+          "skills": "Endurance, Conditioning, Lifting +1 Skill",
+          "status": 1,
+          "servant": true,
+          "labourer": true
+        },
+        {
+          "roll": [
+            46,
+            60
+          ],
+          "vocation": "Servant",
+          "skills": "Housekeeping, Hearing Rumours +1 Skill",
+          "status": 1,
+          "servant": true
+        },
+        {
+          "roll": [
+            61,
+            73
+          ],
+          "vocation": "Cook",
+          "skills": "Cooking, Knife Fighting +1 Skill",
+          "status": 2,
+          "servant": true
+        },
+        {
+          "roll": [
+            74,
+            95
+          ],
+          "vocation": "Skilled Worker",
+          "skills": "Trade Skills",
+          "status": 4,
+          "servant": true,
+          "link": "trades"
+        },
+        {
+          "roll": [
+            96,
+            97
+          ],
+          "vocation": "Entertainer",
+          "skills": "Singing, Juggling + Dancing: Folk",
+          "status": 2,
+          "servant": true
+        },
+        {
+          "roll": [
+            98,
+            99
+          ],
+          "vocation": "Musician",
+          "skills": "Musical Instrument + Singing",
+          "status": 2,
+          "servant": true
+        },
+        {
+          "roll": [
+            100,
+            100
+          ],
+          "vocation": "Storyteller",
+          "skills": "Storytelling + Acting: Performance",
+          "status": 3,
+          "servant": true
+        }
+      ]
+    },
+    "mediterranean": {
+      "page": 65,
+      "rows": [
+        {
+          "roll": [
+            1,
+            9
+          ],
+          "vocation": "Cook",
+          "skills": "Cooking, Endurance + Knife Fighting",
+          "status": 2,
+          "servant": true
+        },
+        {
+          "roll": [
+            10,
+            15
+          ],
+          "vocation": "Under Cook",
+          "skills": "Cooking, Endurance +1 Skill",
+          "status": 1,
+          "servant": true
+        },
+        {
+          "roll": [
+            16,
+            30
+          ],
+          "vocation": "Household Servant",
+          "skills": "Housekeeping, Hearing Rumours +1 Skill",
+          "status": 1,
+          "servant": true
+        },
+        {
+          "roll": [
+            31,
+            34
+          ],
+          "vocation": "Water Carrier",
+          "skills": "Endurance, Conditioning + Lifting",
+          "status": 1,
+          "servant": true
+        },
+        {
+          "roll": [
+            35,
+            41
+          ],
+          "vocation": "Porter/Carter",
+          "skills": "Endurance, Conditioning + Lifting",
+          "status": 1,
+          "servant": true
+        },
+        {
+          "roll": [
+            42,
+            66
+          ],
+          "vocation": "Skilled Textile Worker",
+          "skills": "Spinning & Weaving, Sewing, Knitting & Embroidering +1 Other Skill",
+          "status": 4,
+          "servant": true
+        },
+        {
+          "roll": [
+            67,
+            68
+          ],
+          "vocation": "Entertainer",
+          "skills": "Singing, Juggling + Dancing: Folk",
+          "status": 3
+        },
+        {
+          "roll": [
+            69,
+            70
+          ],
+          "vocation": "Musician",
+          "skills": "Musical Instrument + Singing",
+          "status": 4
+        },
+        {
+          "roll": [
+            71,
+            85
+          ],
+          "vocation": "Labourer",
+          "skills": "Endurance, Conditioning + Lifting",
+          "status": 2,
+          "servant": true,
+          "labourer": true
+        },
+        {
+          "roll": [
+            86,
+            100
+          ],
+          "vocation": "Scribe/Clerk",
+          "skills": "Writing, Accurate Counting, 1 Lore +1 Skill",
+          "status": 8,
+          "servant": true
+        }
+      ]
+    }
+  }
+}

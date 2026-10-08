@@ -33,22 +33,77 @@
         <div><dt>{{localize "CNS5.Creation.classPoints"}}</dt><dd>{{cns5Signed classPoints}}</dd></div>
     </dl>
     {{#if isPeasant}}<p class="cns5-hint">{{localize "CNS5.Creation.peasantBenefits"}}</p>{{/if}}
-    {{#if isOutsider}}<p class="cns5-hint cns5-hint--bad">{{localize "CNS5.Creation.outsiderNotice"}}</p>{{/if}}
+    {{#if isOutsider}}
+    <div class="cns5-grid cns5-grid--two">
+        <label class="cns5-field">
+            <span>{{localize "CNS5.Creation.outsiderKind"}}</span>
+            <select data-draft="outsiderKind">
+                {{#each outsiderKinds}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{localize label}}</option>{{/each}}
+            </select>
+        </label>
+        {{#if askMediterranean}}
+        <label class="cns5-checkbox">
+            <input type="checkbox" data-draft="mediterranean" {{checked draft.mediterranean}}>
+            <span>{{localize "CNS5.Creation.mediterranean"}}</span>
+        </label>
+        {{/if}}
+    </div>
+    <p class="cns5-hint">{{localize "CNS5.Creation.outsiderNotice"}}</p>
+    {{/if}}
 </section>
 
 <section class="cns5-wizard__block">
-    <h3>{{localize "CNS5.Details.fathersVocation"}}</h3>
-    <p class="cns5-hint cns5-hint--bad">{{localize "CNS5.Creation.fathersVocationNotice"}}</p>
+    <h3>{{localize "CNS5.Creation.fathersVocation"}}</h3>
+    {{#if isChivalric}}
+    <p class="cns5-hint">{{localize "CNS5.Creation.chivalricHint"}}</p>
+    <label class="cns5-checkbox">
+        <input type="checkbox" data-draft="scholarly" {{checked draft.scholarly}}>
+        <span>{{localize "CNS5.Creation.scholarly"}}</span>
+    </label>
+    {{/if}}
+    {{#if vocationTable}}
+    <p class="cns5-hint">{{localize "CNS5.Creation.fathersVocationHint"}}</p>
+    <div class="cns5-wizard__actions">
+        <button type="button" data-action="rollFathersVocation">
+            <i class="fa-solid fa-dice-d20"></i> {{localize "CNS5.Creation.rollFathersVocation"}}
+        </button>
+    </div>
+    {{else}}
+    <p class="cns5-hint cns5-hint--bad">{{localize "CNS5.Creation.noVocationTable"}}</p>
+    {{/if}}
+
     <div class="cns5-grid cns5-grid--two">
         <label class="cns5-field">
             <span>{{localize "CNS5.Details.fathersVocation"}}</span>
             <input type="text" data-draft="fathersVocation" value="{{draft.fathersVocation}}">
         </label>
         <label class="cns5-field">
-            <span>{{localize "CNS5.Details.vocation"}}</span>
-            <input type="text" data-draft="vocation" value="{{draft.vocation}}">
+            <span>{{localize "CNS5.Details.socialStatus"}}</span>
+            <input type="text" data-draft="fatherStatus" value="{{draft.fatherStatus}}">
         </label>
     </div>
+    {{#if draft.fatherRolls}}<p class="cns5-hint">{{draft.fatherRolls}}</p>{{/if}}
+    {{#if draft.fatherNote}}<p class="cns5-hint">{{localize draft.fatherNote}}</p>{{/if}}
+
+    {{#if fatherSkills}}
+    <dl class="cns5-derived">
+        {{#if fatherSkills.named.length}}
+        <div><dt>{{localize "CNS5.Creation.backgroundSkills"}}</dt>
+            <dd>{{#each fatherSkills.named}}{{name}}{{#if level}} ({{localize "CNS5.Creation.atLevel" level=level}}){{/if}}{{#unless @last}}, {{/unless}}{{/each}}</dd></div>
+        {{/if}}
+        {{#if fatherSkills.choices.length}}
+        <div><dt>{{localize "CNS5.Creation.backgroundChoices"}}</dt>
+            <dd>{{#each fatherSkills.choices}}{{label}}{{#unless @last}}; {{/unless}}{{/each}}</dd></div>
+        {{/if}}
+        {{#if fatherSkills.missing.length}}
+        <div><dt>{{localize "CNS5.Creation.backgroundMissing"}}</dt>
+            <dd>{{#each fatherSkills.missing}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}</dd></div>
+        {{/if}}
+    </dl>
+    <p class="cns5-hint">{{localize "CNS5.Creation.backgroundSkillsHint"}}</p>
+    {{/if}}
+    {{#if isTownsman}}<p class="cns5-hint">{{localize "CNS5.Creation.townsmanBenefits"}}</p>{{/if}}
+
 </section>
 
 <label class="cns5-field">

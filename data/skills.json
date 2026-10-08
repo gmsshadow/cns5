@@ -1,6 +1,6 @@
 {
   "source": "Chivalry & Sorcery 5th Edition core rules, skills list, pp.147-148",
-  "note": "Mechanical data only: name, difficulty factor, attribute pair, rulebook group and page reference. No description text is reproduced. The [TR] marker, meaning training is required before the skill can be attempted at all (p33), is read from each skill's description rather than from the list, where it does not appear. Twelve descriptions could not be located by name, because the list and the description word them differently; those twelve were read from the book by hand and are flagged trainingVerified.",
+  "note": "Mechanical data only: name, difficulty factor, attribute pair, rulebook group and page reference. No description text is reproduced. The [TR] marker, meaning training is required before the skill can be attempted at all (p33), is read from each skill's description rather than from the list, where it does not appear. Twelve descriptions could not be located by name, because the list and the description word them differently; those twelve were read from the book by hand and are flagged trainingVerified. Combat skills carry the codes their descriptions open with (pp.163-168): K for knightly, K ONLY for knights and squires alone, F for foresters.",
   "count": 248,
   "skills": [
     {
@@ -686,7 +686,8 @@
         "wis"
       ],
       "kind": "skill",
-      "trainingRequired": false
+      "trainingRequired": false,
+      "combatCodes": []
     },
     {
       "name": "Axes",
@@ -698,7 +699,11 @@
         "str"
       ],
       "kind": "skill",
-      "trainingRequired": false
+      "trainingRequired": false,
+      "combatCodes": [
+        "K",
+        "F"
+      ]
     },
     {
       "name": "Battlefield Tactics",
@@ -710,7 +715,10 @@
         "wis"
       ],
       "kind": "skill",
-      "trainingRequired": false
+      "trainingRequired": false,
+      "combatCodes": [
+        "K ONLY"
+      ]
     },
     {
       "name": "Brawling",
@@ -722,7 +730,11 @@
         "agl"
       ],
       "kind": "skill",
-      "trainingRequired": false
+      "trainingRequired": false,
+      "combatCodes": [
+        "K",
+        "F"
+      ]
     },
     {
       "name": "Cavalry Lances",
@@ -734,7 +746,10 @@
         "dis"
       ],
       "kind": "skill",
-      "trainingRequired": false
+      "trainingRequired": false,
+      "combatCodes": [
+        "K ONLY"
+      ]
     },
     {
       "name": "Chivalric Great Blow",
@@ -743,7 +758,10 @@
       "df": 5,
       "attributes": [],
       "kind": "competency",
-      "trainingRequired": true
+      "trainingRequired": true,
+      "combatCodes": [
+        "K ONLY"
+      ]
     },
     {
       "name": "Dodge",
@@ -755,7 +773,11 @@
         "wis"
       ],
       "kind": "skill",
-      "trainingRequired": false
+      "trainingRequired": false,
+      "combatCodes": [
+        "K",
+        "F"
+      ]
     },
     {
       "name": "Fighting Staves",
@@ -767,7 +789,11 @@
         "agl"
       ],
       "kind": "skill",
-      "trainingRequired": false
+      "trainingRequired": false,
+      "combatCodes": [
+        "K",
+        "F"
+      ]
     },
     {
       "name": "Flails",
@@ -779,7 +805,10 @@
         "dis"
       ],
       "kind": "skill",
-      "trainingRequired": false
+      "trainingRequired": false,
+      "combatCodes": [
+        "K ONLY"
+      ]
     },
     {
       "name": "Great Swords",
@@ -791,7 +820,10 @@
         "str"
       ],
       "kind": "skill",
-      "trainingRequired": false
+      "trainingRequired": false,
+      "combatCodes": [
+        "K"
+      ]
     },
     {
       "name": "Horse Archery",
@@ -803,7 +835,8 @@
         "agl"
       ],
       "kind": "skill",
-      "trainingRequired": false
+      "trainingRequired": false,
+      "combatCodes": []
     },
     {
       "name": "Hurling Axes",
@@ -815,7 +848,11 @@
         "agl"
       ],
       "kind": "skill",
-      "trainingRequired": true
+      "trainingRequired": true,
+      "combatCodes": [
+        "K",
+        "F"
+      ]
     },
     {
       "name": "Hurling Javelins",
@@ -827,7 +864,10 @@
         "agl"
       ],
       "kind": "skill",
-      "trainingRequired": false
+      "trainingRequired": false,
+      "combatCodes": [
+        "F"
+      ]
     },
     {
       "name": "Knife & Dagger Fighting",
@@ -839,7 +879,11 @@
         "agl"
       ],
       "kind": "skill",
-      "trainingRequired": false
+      "trainingRequired": false,
+      "combatCodes": [
+        "K",
+        "F"
+      ]
     },
     {
       "name": "Maces, Hammers & Clubs",
@@ -851,7 +895,11 @@
         "str"
       ],
       "kind": "skill",
-      "trainingRequired": false
+      "trainingRequired": false,
+      "combatCodes": [
+        "K",
+        "F"
+      ]
     },
     {
       "name": "Mounted Combat",
@@ -863,7 +911,10 @@
         "agl"
       ],
       "kind": "skill",
-      "trainingRequired": false
+      "trainingRequired": false,
+      "combatCodes": [
+        "K ONLY"
+      ]
     },
     {
       "name": "Polearms",
@@ -875,7 +926,8 @@
         "dis"
       ],
       "kind": "skill",
-      "trainingRequired": false
+      "trainingRequired": false,
+      "combatCodes": []
     },
     {
       "name": "Riding a Warhorse",
@@ -887,7 +939,10 @@
         "dis"
       ],
       "kind": "skill",
-      "trainingRequired": false
+      "trainingRequired": false,
+      "combatCodes": [
+        "K ONLY"
+      ]
     },
     {
       "name": "Shield Play Light / Heavy",
@@ -899,7 +954,10 @@
         "agl"
       ],
       "kind": "skill",
-      "trainingRequired": false
+      "trainingRequired": false,
+      "combatCodes": [
+        "K"
+      ]
     },
     {
       "name": "Short Swords",
@@ -911,7 +969,11 @@
         "agl"
       ],
       "kind": "skill",
-      "trainingRequired": true
+      "trainingRequired": true,
+      "combatCodes": [
+        "K",
+        "F"
+      ]
     },
     {
       "name": "Slashing Swords",
@@ -923,7 +985,11 @@
         "agl"
       ],
       "kind": "skill",
-      "trainingRequired": false
+      "trainingRequired": false,
+      "combatCodes": [
+        "K",
+        "F"
+      ]
     },
     {
       "name": "Slings",
@@ -935,7 +1001,10 @@
         "wis"
       ],
       "kind": "skill",
-      "trainingRequired": false
+      "trainingRequired": false,
+      "combatCodes": [
+        "F"
+      ]
     },
     {
       "name": "Spears",
@@ -947,7 +1016,11 @@
         "dis"
       ],
       "kind": "skill",
-      "trainingRequired": false
+      "trainingRequired": false,
+      "combatCodes": [
+        "K",
+        "F"
+      ]
     },
     {
       "name": "Throwing Knives & Daggers",
@@ -959,7 +1032,10 @@
         "wis"
       ],
       "kind": "skill",
-      "trainingRequired": false
+      "trainingRequired": false,
+      "combatCodes": [
+        "F"
+      ]
     },
     {
       "name": "Throwing Objects",
@@ -971,7 +1047,8 @@
         "wis"
       ],
       "kind": "skill",
-      "trainingRequired": false
+      "trainingRequired": false,
+      "combatCodes": []
     },
     {
       "name": "Two Weapon Fighting",
@@ -981,7 +1058,8 @@
       "attributes": [],
       "kind": "competency",
       "trainingRequired": false,
-      "trainingVerified": true
+      "trainingVerified": true,
+      "combatCodes": []
     },
     {
       "name": "Wearing Battle Armour",
@@ -990,7 +1068,10 @@
       "df": 5,
       "attributes": [],
       "kind": "competency",
-      "trainingRequired": false
+      "trainingRequired": false,
+      "combatCodes": [
+        "K ONLY"
+      ]
     },
     {
       "name": "Wearing Heavy Armour",
@@ -999,7 +1080,10 @@
       "df": 4,
       "attributes": [],
       "kind": "competency",
-      "trainingRequired": false
+      "trainingRequired": false,
+      "combatCodes": [
+        "K ONLY"
+      ]
     },
     {
       "name": "Wearing Light Armour",
@@ -1008,7 +1092,11 @@
       "df": 3,
       "attributes": [],
       "kind": "competency",
-      "trainingRequired": false
+      "trainingRequired": false,
+      "combatCodes": [
+        "K",
+        "F"
+      ]
     },
     {
       "name": "Brewing",

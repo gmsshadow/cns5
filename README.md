@@ -601,9 +601,250 @@ Conditioning and Endurance at level 1, added when the wizard finishes. The two
 skills of his choice raised a level are left to the player, and the racial
 maximum on Strength to the Gamemaster.
 
-Still to come in Step 5: the tables of fathers' vocations and the background
-skills they give; Table - Jews and Table - Slaves for outsiders; and the fighting
-classes' holdings.
+### Step 5b, Father's Vocation
+
+"Before skills and skill levels are selected, the character begins with Level 0
+in those skills listed for his father's vocation" (p119). The tables for the
+common classes (pp.66-76) — serfs, freemen and townsmen, each by band — are
+extracted, with the tables they send the roller on to: the trades (a group, then
+a trade within it), the merchants, the household services and the urban elites.
+A row that says only "Trade Skills" is followed there automatically, and a trade
+or a merchant's status modifier is added to the base the first table gave. A
+trader is given Bargaining and Evaluating Goods.
+
+A row's skills are printed as the book prints them — "Vegetable Crops, 1
+Agricultural Skill +1 Skill" — and read into:
+
+- **named skills**, granted when the wizard finishes, at level 0 or at the level
+  the table gives ("Endurance at level 2"); a labourer gets Endurance and
+  Conditioning at 2;
+- **choices** — "1 Agricultural Skill", "+1 Skill" of the player's choice, "Cattle
+  or Dairy Herding" — left to the player and noted on the Background tab;
+- **skills the skill chapter does not have**, reported rather than invented.
+
+The tables name many skills more briefly than the skill chapter does ("Knife
+Fighting" for Knife & Dagger Fighting), so each is looked up through a table of
+aliases in `module/helpers/background.mjs`; a test checks every alias points at
+a real skill. Ten skills the vocation tables mention have no entry in the skill
+chapter at all — Animal Handling, Digging & Excavation, Gambling, Gardening,
+Innkeeping, Instrument Making, Milling, Oil Refining, Plastering and Wood
+Carving — and are listed for the player to add by hand if the table uses them.
+
+A townsman gains +3 Agility. The skill levels peasants and townsmen may raise are
+left to the player, as are the racial maxima to the Gamemaster. What the wizard
+added for class is recorded, so running it again does not add it twice.
+
+A father fallen from better days, or a leper, was once something else, and the
+book has the roller find out what; the wizard says so and leaves it to him.
+
+Two tables print a gap the book leaves: Average Serfs have nothing on 85, the
+merchants nothing on 82. The page footer, which carries the purchaser's name,
+fell into two rows of this extraction and is now dropped a whole line at a time;
+the test that no data file carries one caught it.
+
+### Step 5b for the fighting classes
+
+A character of the chivalric class follows the book's own guide (p57), and its
+worked example is a test:
+
+1. the economic band modifies a roll for **rank** — poor −10, wealthy +20 — on
+   Table - Social Rank of Chivalric: lesser gentry, lord, titled nobility, royal
+   family. "If he had paid the points for wealthy this would have... turned his
+   80 roll into 100 which would make his character Royalty";
+2. the period's table of **esquires and knights** gives the father and a Base
+   Status — a milites, a non-knighted noble or an esquire, or a knight;
+3. **Table - Holdings** gives the size of his holding, a knight adding his +10
+   (+12 Early Feudal) and a lord, titled noble or royal +25, +40 or +50;
+4. the **fief** is found on the holdings table for his rank, whose row adds its
+   status and one to five combat skills to Basic Chivalric Training. With no
+   holding at all he is one of the **landless fighting men** instead.
+
+Part of a fief is found on the lesser gentry's table at −10 and gives half its
+status. "Roll again twice", "three times" and "1D10 times" roll that many
+holdings, ignoring those rows; each further fief is found a rank lower at a
+cumulative −10, and every two further fiefs add +1 status.
+
+Two readings where the book leaves room: the rank's modifier is added to the
+roll for the fief's *type* as well as its size, as the tables' footnotes say, but
+a knight's own +10 only to the size — the worked example rolls a knight's fief
+type without it. And a man-at-arms in another's household takes a tenth of his
+master's status, which the wizard leaves to the Gamemaster.
+
+Basic Chivalric Training is Riding, Riding a Warhorse, Mounted Combat, Cavalry
+Lance, Dagger, Slashing Swords, Wearing Light Armour and Courtly Manners; the
+Early Feudal milites have a farming skill in place of the manners. Reading his
+own language depends on Intellect, which is not rolled until step 11, so it is
+granted when the wizard finishes. A son who is not the heir may take the
+**scholarly option** instead — Riding, a lore, a noble skill, and languages by
+Intellect. A chivalric character is marked gentle, which gives +10% PSF to
+Leadership and, outside the Early Feudal period, Courtly Love.
+
+### Step 5b for outsiders
+
+A character rolled as "Jew, Slave or Other" chooses which, since the book gives
+no roll between them (p60).
+
+**A Jew** rolls on Table - Jews: first the group — the marginal fringe, poor
+Jews, the small people of the Jewish quarter, the wealthy, the cultural elites —
+then the vocation within it. "Indicated status is that within the Jewish
+community. Within the wider community Social Status is 1/2 of Jewish status
+(round up)", so both are recorded. A worker or a trader is sent on to the trades
+or the merchants as a townsman is.
+
+Table - Jews is **transcribed** rather than read from the page. Its group
+headings and their ranges stand in a column of their own, interleaved with the
+rows, and reading by position ran rows together. The extractor still reads the
+page, and where that reading is clean — nineteen of the thirty-one rows — it
+checks the transcription against it.
+
+**A slave** rolls first for the household he serves and its wealth, then his
+vocation: on the Early Feudal table, or around the Mediterranean on the table of
+mothers' vocations. "The servant of a noble has +2 Social Status; the servant of
+a rich townsman has +1" (p65). The Early Feudal table carries the same footnote
+marks but prints no notes of its own; they are read as the Mediterranean table's.
+After the Early Feudal period, slaves outside the Mediterranean "are treated
+instead as 'Destitute/Landless' Serfs", and the wizard rolls them as such.
+
+**Others** are whatever minority the Gamemaster has in mind, and have no table.
+
+The skill chapter has no Housekeeping, which two slaves' vocations give; it is
+reported to the player with the other ten.
+
+A row that sends the roller on keeps its own skills alongside the next table's:
+"Con + Trade Skills" keeps its Con. An earlier version replaced the line and lost
+it.
+
+## Vocations and starting skills
+
+The wizard's **Vocation & Skills** step (after Age) takes the character from his
+background to his first ten skills, by the rules of pp.119-120:
+
+- **Ten starting skills** at Level 1, at least six Primary and at most four
+  Secondary. Warrior vocations cap the Primary combat skills among the ten
+  ("Initial Number of Combat Skills").
+- **Background skills** at Level 0 are Secondary unless the vocation lists them
+  as Primary. They include the father's skills, the core nine and the class's.
+- **Tertiary skills** at Level 0, as many as Table – Number of Tertiary Skills
+  allows for INT + DIS.
+- **Five masteries**, in order. Each gives +1 level and +10%. A mage's own mode
+  gives +2 levels and +20% instead, and must be among them (p134). Masteries
+  cannot go on a Tertiary skill. Vocations that fix the order of the first
+  masteries (the Burglar's Picking Locks, then Stealth, then Detecting
+  Mantraps) are checked against it.
+- **Sunsign skills** from the two categories the sign favours (p53). Each gets
+  +2 levels and +10%, or a free mastery at +20% when the skill is Primary.
+- **The class's raises** go to skills already known, one level each: two for a
+  peasant, five for a townsman, seven for a rich townsman or one of the Cultural
+  Elites (pp.58, 70).
+- **The father's choices** are made here, such as "+1 Skill" or "2 Thievery
+  Skills". Choices left blank are still noted on the Background tab.
+
+The rules are **warnings, not locks**. "The Gamemaster may exclude certain
+skills" and "may allow more skills in the vocational and secondary skills"
+(pp.119, 130), so the step lists what breaks a rule and still lets the player
+finish. What the step shows as the result is what the sheet gets; a test runs
+the wizard end to end against a stand-in actor and compares the two.
+
+A skill now carries `masteryPsf`, what mastery adds: 10 normally, 20 for a
+mage's mode.
+
+### On the sheet: masteries and a change of vocation
+
+The Skills tab shows the character's vocation and his mastery slots.
+
+- **Further masteries** come every so many levels, by Table - Mastered Skills.
+  The table is read with the vocation's Primary Attribute plus its Secondary,
+  or plus Discipline where that is greater (p120). The wizard fills the two
+  attributes from the vocation's table. They can also be set by hand, which an
+  Adventurer needs, since his come from his specialities (p129).
+- **Slots** are shown as used against available. Available is the five a
+  character begins with plus one for each interval his experience level has
+  passed; Master James, every six levels, has seven at level 13. A mastery that
+  took no slot is not counted as used. That covers a vocational Sunsign skill
+  (p53) and a noble Knight's Battlefield Tactics (p125). Skills carry a
+  `masteryFree` flag for this.
+- **Next skill to master** records the one the character has said he will
+  master next: "Once a new Mastered Skill has been obtained, the character must
+  state what the next skill is that he intends to master" (p120). It offers
+  every known skill not yet mastered, except Tertiary ones.
+
+**Change vocation…** follows p130. The character gains three of the new
+vocation's Primary skills at Level 1. Skills the new vocation lists as Primary
+become Primary. Skills that were Primary only for the old vocation become
+Secondary. "Mastery Bonuses for old skills are not lost", so masteries,
+levels and Sunsign bonuses are untouched. A Tertiary skill moves only if the new
+vocation promotes it. The window shows every change before it is made, and
+warns, rather than refuses, if the three picks break the rule. The three months
+of downtime are the Gamemaster's to allow.
+
+### The vocation tables
+
+`data/character-vocations.json`, built by `tools/extract-character-vocations.py`,
+holds 27 vocations:
+
+- **Warriors:** Serviens & Liveried Horsemen, Other Mounted Warriors, Guards,
+  Foresters, Knights, and Knights in Holy Fighting Orders (A or B).
+- **Thieves:** Burglars, Beggars, Cut-Purses and Assassins, who all share the
+  basic thieves' skills.
+- **Physician and Herald.**
+- **Mages:** Conjuror, Diviner, Enchanter, Hex Master, Necromancer, Power Word,
+  Thaumaturge, and the optional Elementalist in its four kinds.
+- **Priest mages:** Druid in its four kinds, Shaman and Witch.
+- **Priests:** Friars, Monastics and Ordained Clergy.
+- **The Adventurer of the player's own design** (p129). All ten of his picks
+  are Primary, two of them specialities he must master.
+
+The tables are **transcribed**, not read by position: their two columns run
+into one another. For example, the Conjuror's "Plant Method Any background
+skills Summoning Method" is a Primary skill, a Secondary entry and half of
+another. The script checks each table against its page in both directions:
+every word transcribed must be on the page, and every word in the table on the
+page must be transcribed. It also checks that every skill, category and filter
+resolves to the skills list. Which column each entry sits in was checked by
+hand against the words' positions. Only skill names, category choices, combat
+caps and mastery order are carried. The footnotes become rules; their prose is
+not shipped.
+
+**Combat codes.** The combat skills' descriptions open with (K), (K ONLY) or
+(F) (p163). The tables choose by these codes, for example "Any K Only Combat
+Skills" and "Combat skills marked F". `tools/extract-skills.py` now reads them
+into `combatCodes` on each skill, and the skills compendium carries them.
+
+### Where the book is unclear
+
+- **Table - Mastered Skills** gives "Under 20" and then "21 - 24", so a total
+  of exactly 20 has no row. It is read with the first row, the slower rate.
+- **Foresters** have no attribute lines of their own. The heading "Foresters /
+  Warriors of the Wildlands" on p123 gives CON and AGL.
+- **"Any Underworld Lore"** is one of the thieves' basic skills, but the skills
+  list has no such skill. Reading it as the whole thievish group would make
+  every thievish skill Primary, including those the tables list as Secondary.
+  So it matches nothing and is left to the Gamemaster.
+- **"Any Resolution skills"** (Monastics) is read as Mental Fortitude.
+  **"Learned Lore"** means the four groups under that chapter heading:
+  Language, Lore Historical, Lore Scientific and Materia Medicina.
+- **"Animal Handling/Training"** (Shaman) is read as Animal Training, the only
+  skill of that kind in the list.
+- **"Riding & Mounted Combat"** (Herald, Holy Knight) counts as one skill in
+  those tables. The Herald's five ordered masteries only add up to five if it
+  is one, so it is one slot and one mastery covering both skills.
+- **Knight only skills.** A Serviens's "Any K Only Combat Skills" is limited to
+  the three its note names: Riding a Warhorse, Wearing Battle Armour and Cavalry
+  Lances. The skill chapter marks five more as K ONLY, including Wearing Heavy
+  Armour, which the worked example Aldric, a town guard, has. The codes are
+  shipped as printed, and a guard taking one is warned, not stopped.
+- **"Law (-DF 4 )"** for Druid Judges is not explained anywhere. Law is carried
+  as a Primary skill and its Difficulty Factor is left alone.
+- **A Forester's son.** The four Outdoor skills (p124) are granted when both the
+  character and his father are Foresters, since the note sits in the Forester's
+  table.
+- **Horse Archery** as a Mounted Warrior's second mastery depends on the
+  culture (note 2), so it is not enforced.
+- **One-handed weapons** (Assassin) are Axes, Flails, Knife & Dagger Fighting,
+  Maces, Short Swords, Slashing Swords and Spears.
+- **Half the Forester's masteries on Outdoor skills** is read as at least two
+  of the five.
+- **A class's raise** adds a level on top of whatever the skill starts at.
 
 ## Birth signs and curses
 
@@ -1433,6 +1674,47 @@ boxes to tick, since an item is one kind and never two. Shown together in one
 table they read alike, although they are used differently: a Focus shows what it
 adds to a casting, a Device its maker's skill and its charges, a Scroll whether it
 has been read. Each section's Add button makes an item of its own kind.
+
+### Starting spells
+
+"When creating a Mage character it is essential that they have some knowledge
+in spells to commence the game" (p295). **Buy starting spells…** on the Magick
+tab opens a window for it. The wizard opens it on its own when it finishes a
+mage, once his Methods and Magick Level are on the sheet.
+
+- **Spell Points** are his Method levels added together and multiplied by his
+  Magick Level. "Half of the Mage's Attribute Bonus for Heroic Mages or his full
+  Attribute Bonus for Super-Heroic characters" is added. The book's character
+  types are Historical, Heroic and Mythic, so Super-Heroic is read as Mythic.
+  The Attribute Bonus is his Mode of Magick skill's, and half is rounded down.
+  The Magick tab's figure now includes the bonus.
+- **Each spell costs its MR**, "1 Spell Point equals one Spell MR", at the MR
+  this mage learns it at. That is after Table - Spell Magick Resistance
+  Modifiers, within 1 and 10 (p294), since it is the MR he enchants. A
+  Diviner's MR 4 Divination spell costs him 1 point.
+- **Limits.** He may take nothing above his Magick Level + 2 (p293). By default
+  he is offered only spells of Methods he knows. Common Method Spells need any
+  Method, and the Common Elemental Control Spells any element of Basic Magick.
+- **A simple focus** may be bought for ten points.
+- **The two Common Spells**, Enchant Materials and Transfer, "which can be
+  considered to be core skills attached to each Mode of Magick" (p292), come
+  free. They stand outside the spell tables, so they are transcribed in
+  `data/common-spells.json` and the spell compendium now carries them.
+- Every spell bought arrives fully learnt. The window counts spells he already
+  has against his points, so it can be opened again to finish the purchase.
+  Breaking a rule warns rather than stops.
+
+Two related corrections:
+
+- **Spell sections nested in other chapters.** The spell tables head Portals to
+  the Shadow World, Eldritch Servants and Eldritch Missiles on their own. They
+  are sections of the Arcane chapter (pp.349-352), as Shadow Monsters is of
+  the Illusion chapter (p374), so they now take those Methods. Previously they
+  fell back to whichever Method the caster had.
+- **An Elementalist's Mode** is named for his element on his sheet, for example
+  Air Elementalist Mode of Magick. Table - Spell Magick Resistance Modifiers
+  has a column for each element, and the single skills-list name found none of
+  them.
 
 ### The bounds on a spell's Magick Resistance
 

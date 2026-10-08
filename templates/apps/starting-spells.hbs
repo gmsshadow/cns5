@@ -1,0 +1,52 @@
+<div class="cns5-wizard__step cns5-starting-spells__body">
+    {{#if noMage}}
+    <p class="cns5-hint cns5-hint--bad">{{localize "CNS5.StartingSpells.noMage"}}</p>
+    {{else}}
+    <dl class="cns5-derived">
+        <div><dt>{{localize "CNS5.StartingSpells.points"}}</dt>
+            <dd>{{localize "CNS5.StartingSpells.pointsValue" base=points.base bonus=points.bonus total=points.total}}</dd></div>
+        <div><dt>{{localize "CNS5.StartingSpells.spent"}}</dt>
+            <dd class="{{#if (lt left 0)}}cns5-hint--bad{{/if}}">{{spent}} / {{points.total}} ({{localize "CNS5.StartingSpells.left" left=left}})</dd></div>
+        <div><dt>{{localize "CNS5.StartingSpells.maxMr"}}</dt><dd>{{maxMr}}</dd></div>
+        <div><dt>{{localize "CNS5.StartingSpells.common"}}</dt><dd>{{common}}</dd></div>
+    </dl>
+    <p class="cns5-hint">{{localize "CNS5.StartingSpells.hint"}}</p>
+
+    <div class="cns5-wizard__actions">
+        <label class="cns5-checkbox">
+            <input type="checkbox" data-field="focus" {{checked focus}} {{#if focusOwned}}disabled{{/if}}>
+            <span>{{localize "CNS5.StartingSpells.focus" cost=focusCost}}{{#if focusOwned}} ({{localize "CNS5.StartingSpells.focusOwned"}}){{/if}}</span>
+        </label>
+        <label class="cns5-checkbox">
+            <input type="checkbox" data-field="onlyCastable" {{checked onlyCastable}}>
+            <span>{{localize "CNS5.StartingSpells.onlyCastable"}}</span>
+        </label>
+    </div>
+
+    {{#if problems.length}}
+    <ul class="cns5-list cns5-hint cns5-hint--bad">{{#each problems}}<li>{{this}}</li>{{/each}}</ul>
+    {{/if}}
+
+    <div class="cns5-starting-spells__list">
+        {{#each groups}}
+        <table class="cns5-wizard__table">
+            <thead><tr><th colspan="2">{{group}}</th><th>{{localize "CNS5.Spell.mrShort"}}</th><th>{{localize "CNS5.Spell.fpShort"}}</th></tr></thead>
+            <tbody>
+                {{#each spells}}
+                <tr class="{{#if picked}}is-picked{{/if}}">
+                    <td><input type="checkbox" data-action="toggleSpell" data-id="{{_id}}" {{checked picked}}></td>
+                    <th scope="row">{{name}}{{#unless castable}} <span class="cns5-tag">{{localize "CNS5.StartingSpells.noMethodTag"}}</span>{{/unless}}</th>
+                    <td data-tooltip="{{localize 'CNS5.StartingSpells.costHint' mr=mr modifier=modifier}}">{{cost}}{{#if variable}}*{{/if}}</td>
+                    <td>{{fp}}{{#if surcharge}} +{{surcharge}}{{/if}}</td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+        {{/each}}
+    </div>
+
+    <div class="cns5-wizard__actions">
+        <button type="button" data-action="apply"><i class="fa-solid fa-check"></i> {{localize "CNS5.StartingSpells.apply"}}</button>
+    </div>
+    {{/if}}
+</div>

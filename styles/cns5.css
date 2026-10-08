@@ -1596,3 +1596,132 @@
     margin: 0 0 0.2rem;
     font-size: 1rem;
 }
+
+/* The vocation step: the skills a vocation offers, a small table per group,
+   set in as many columns as the window allows. */
+.cns5-wizard__picker {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+    gap: 0.4rem 0.8rem;
+    align-items: start;
+}
+
+.cns5-wizard__pick-table {
+    margin: 0;
+}
+
+.cns5-wizard__pick-table td:first-child {
+    width: 1.6rem;
+}
+
+.cns5-wizard__pick-table tr.is-picked th {
+    font-weight: bold;
+}
+
+.cns5-wizard__pick-category {
+    font-size: 0.8em;
+    white-space: nowrap;
+    color: var(--cns-ink-soft);
+}
+
+.cns5-wizard__pick-category.is-primary { color: var(--cns-lapis); }
+.cns5-wizard__pick-category.is-tertiary { color: var(--cns-oxblood); }
+
+/* A row of selects, one per skill to be chosen. */
+.cns5-wizard__slots {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.3rem 0.5rem;
+    margin: 0.3rem 0;
+}
+
+.cns5-wizard__slots select {
+    flex: 1 1 12rem;
+    max-width: 18rem;
+}
+
+.cns5-wizard__slots-label {
+    flex: 0 0 100%;
+    font-size: 0.85em;
+    color: var(--cns-ink-soft);
+}
+
+/* The five masteries are taken in order, so each is numbered. */
+.cns5-wizard__slot {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    flex: 1 1 12rem;
+    max-width: 18rem;
+}
+
+.cns5-wizard__slot em {
+    font-style: normal;
+    font-weight: bold;
+    color: var(--cns-ink-soft);
+}
+
+.cns5-wizard__slot select {
+    flex: 1 1 auto;
+    max-width: none;
+}
+
+/* The Skills tab's mastery line: the vocation, the attributes further
+   masteries are reckoned by, slots used, and the next skill to master. */
+.cns5-mastery {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 0.4rem 0.8rem;
+    margin: 0.4rem 0 0.8rem;
+    padding: 0.4rem 0.6rem;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: 3px;
+}
+
+.cns5-mastery__vocation {
+    flex: 1 1 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.cns5-mastery__vocation button {
+    flex: 0 0 auto;
+    width: auto;
+    margin-left: auto;
+}
+
+.cns5-mastery__label {
+    font-size: 0.85em;
+    color: var(--cns-ink-soft);
+}
+
+.cns5-mastery .cns5-hint {
+    flex: 1 1 12rem;
+    margin: 0;
+}
+
+.cns5-vocation-change__body {
+    padding: 0.5rem;
+}
+
+/* Buying starting spells: the list scrolls, the totals stay in view. */
+.cns5-starting-spells__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    padding: 0.5rem;
+    height: 100%;
+}
+
+.cns5-starting-spells__list {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    min-height: 12rem;
+}
+
+.cns5-starting-spells__list tr.is-picked th {
+    font-weight: bold;
+}

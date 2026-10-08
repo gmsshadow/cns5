@@ -1,0 +1,75 @@
+<div class="cns5-wizard__step cns5-vocation-change__body">
+    <p class="cns5-hint">{{rule}}</p>
+    {{#if from}}<p>{{localize "CNS5.Vocation.changeFrom" vocation=from}}</p>{{/if}}
+
+    <div class="cns5-grid cns5-grid--two">
+        <label class="cns5-field">
+            <span>{{localize "CNS5.Vocation.changeTo"}}</span>
+            <select data-field="key">
+                <option value="" {{#unless state.key}}selected{{/unless}}>—</option>
+                {{#each vocationGroups}}
+                <optgroup label="{{localize label}}">
+                    {{#each options}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}
+                </optgroup>
+                {{/each}}
+            </select>
+        </label>
+        {{#if variants.length}}
+        <label class="cns5-field">
+            <span>{{localize "CNS5.Vocation.variant"}}</span>
+            <select data-field="variant">
+                <option value="" {{#unless voc.variant}}selected{{/unless}}>—</option>
+                {{#each variants}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}
+            </select>
+        </label>
+        {{/if}}
+    </div>
+
+    {{#if voc}}
+    <section class="cns5-wizard__block">
+        <h3>{{localize "CNS5.Vocation.changeSkills"}}</h3>
+        <div class="cns5-wizard__slots">
+            {{#each pickSlots}}
+            <select data-field="{{index}}">
+                <option value="" {{#unless value}}selected{{/unless}}>—</option>
+                {{#each options}}<option value="{{name}}" {{#if selected}}selected{{/if}}>{{name}}</option>{{/each}}
+            </select>
+            {{/each}}
+        </div>
+    </section>
+
+    <section class="cns5-wizard__block">
+        <h3>{{localize "CNS5.Vocation.changePlan"}}</h3>
+        {{#if plan.length}}
+        <table class="cns5-wizard__table">
+            <thead><tr>
+                <th>{{localize "CNS5.Vocation.skill"}}</th>
+                <th>{{localize "CNS5.Vocation.changeWas"}}</th>
+                <th>{{localize "CNS5.Vocation.changeBecomes"}}</th>
+                <th>{{localize "CNS5.Vocation.level"}}</th>
+            </tr></thead>
+            <tbody>
+                {{#each plan}}
+                <tr>
+                    <th scope="row">{{name}}</th>
+                    <td>{{localize fromLabel}}</td>
+                    <td>{{localize toLabel}}</td>
+                    <td>{{#if (eq level fromLevel)}}{{level}}{{else}}{{fromLevel}} → {{level}}{{/if}}</td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+        <p class="cns5-hint">{{localize "CNS5.Vocation.changeMasteries"}}</p>
+        {{else}}
+        <p class="cns5-hint">{{localize "CNS5.Vocation.changeNothing"}}</p>
+        {{/if}}
+        {{#if problems.length}}
+        <ul class="cns5-list cns5-hint cns5-hint--bad">{{#each problems}}<li>{{this}}</li>{{/each}}</ul>
+        {{/if}}
+    </section>
+
+    <div class="cns5-wizard__actions">
+        <button type="button" data-action="apply"><i class="fa-solid fa-check"></i> {{localize "CNS5.Vocation.changeApply"}}</button>
+    </div>
+    {{/if}}
+</div>

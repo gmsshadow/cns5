@@ -76,6 +76,24 @@ export class CnS5Skill extends foundry.abstract.TypeDataModel {
       // [TR] in the skills list: cannot be attempted without basic knowledge.
       trainingRequired: new fields.BooleanField({ required: true, initial: false }),
 
+      // The codes a combat skill's description opens with (p163): "K" for a
+      // knightly skill, "K ONLY" for one only knights and squires may learn,
+      // "F" for one foresters learn as vocational. The vocation tables choose
+      // by them — "Any K Only Combat Skills", "Combat skills marked F".
+      combatCodes: new fields.ArrayField(
+        new fields.StringField({ required: true, blank: false, choices: ["K", "K ONLY", "F"] }),
+        { required: true, initial: [] }
+      ),
+
+      // What mastery adds to PSF%. Ten for almost every skill (p120); twenty
+      // for a mage's own mode of magick, which also gains two levels instead
+      // of one (p134).
+      masteryPsf: new fields.NumberField({ required: true, integer: true, initial: 10, min: 0 }),
+
+      // Mastered without spending a mastery slot: a vocational Sunsign skill
+      // (p53), or a noble Knight's Battlefield Tactics (p125).
+      masteryFree: new fields.BooleanField({ required: true, initial: false }),
+
       otherMod: new fields.NumberField({ required: true, integer: true, initial: 0 }),
 
       // A flat Personal Skill Factor, replacing the whole derivation. The
@@ -145,7 +163,7 @@ export class CnS5Skill extends foundry.abstract.TypeDataModel {
     // skills to take — but it says which may be chosen.
     this.favouredBySign = (actorSystem.details?.favouredCategories ?? []).includes(this.group);
 
-    this.masteryBonus = (this.mastered ? 10 : 0) + (this.sunsign ? 10 : 0);
+    this.masteryBonus = (this.mastered ? (this.masteryPsf ?? 10) : 0) + (this.sunsign ? 10 : 0);
 
     // A gentle character is better at courtesy and at command (p119). Courtly
     // Love is excepted in the Early Feudal period.

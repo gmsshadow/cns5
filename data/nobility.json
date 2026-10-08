@@ -1,0 +1,633 @@
+{
+  "source": "Chivalry & Sorcery 5th Edition core rules, the fighting classes, pp.77-81",
+  "esquires": {
+    "ef": [
+      {
+        "roll": [
+          1,
+          30
+        ],
+        "vocation": "Milites (armed warrior)",
+        "knight": false,
+        "holdingBonus": 0,
+        "readingInt": 13,
+        "noCourtlyManners": true,
+        "status": 26
+      },
+      {
+        "roll": [
+          31,
+          100
+        ],
+        "vocation": "Knight",
+        "knight": true,
+        "holdingBonus": 12,
+        "readingInt": 13,
+        "noCourtlyManners": false,
+        "status": 29
+      }
+    ],
+    "hc": [
+      {
+        "roll": [
+          1,
+          25
+        ],
+        "vocation": "Non-knighted noble",
+        "knight": false,
+        "holdingBonus": 0,
+        "readingInt": 13,
+        "noCourtlyManners": false,
+        "status": 24
+      },
+      {
+        "roll": [
+          26,
+          100
+        ],
+        "vocation": "Knight",
+        "knight": true,
+        "holdingBonus": 10,
+        "readingInt": 13,
+        "noCourtlyManners": false,
+        "status": 29
+      }
+    ],
+    "lf": [
+      {
+        "roll": [
+          1,
+          70
+        ],
+        "vocation": "Esquire",
+        "knight": false,
+        "holdingBonus": 0,
+        "readingInt": 12,
+        "noCourtlyManners": false,
+        "status": 25
+      },
+      {
+        "roll": [
+          71,
+          100
+        ],
+        "vocation": "Knight",
+        "knight": true,
+        "holdingBonus": 10,
+        "readingInt": 12,
+        "noCourtlyManners": false,
+        "status": 28
+      }
+    ],
+    "wf": [
+      {
+        "roll": [
+          1,
+          70
+        ],
+        "vocation": "Esquire",
+        "knight": false,
+        "holdingBonus": 0,
+        "readingInt": 12,
+        "noCourtlyManners": false,
+        "status": 25
+      },
+      {
+        "roll": [
+          71,
+          100
+        ],
+        "vocation": "Knight",
+        "knight": true,
+        "holdingBonus": 10,
+        "readingInt": 12,
+        "noCourtlyManners": false,
+        "status": 28
+      }
+    ]
+  },
+  "holdings": [
+    {
+      "roll": [
+        1,
+        15
+      ],
+      "kind": "none"
+    },
+    {
+      "roll": [
+        16,
+        30
+      ],
+      "kind": "minimal",
+      "statusModifier": -1,
+      "acres": "40 + 2d10"
+    },
+    {
+      "roll": [
+        31,
+        50
+      ],
+      "kind": "land",
+      "statusModifier": 0,
+      "acres": "60 + 4d10"
+    },
+    {
+      "roll": [
+        51,
+        60
+      ],
+      "kind": "partFief"
+    },
+    {
+      "roll": [
+        61,
+        90
+      ],
+      "kind": "fief"
+    },
+    {
+      "roll": [
+        91,
+        95
+      ],
+      "kind": "two"
+    },
+    {
+      "roll": [
+        96,
+        98
+      ],
+      "kind": "three"
+    },
+    {
+      "roll": [
+        99,
+        100
+      ],
+      "kind": "d10"
+    }
+  ],
+  "landless": [
+    {
+      "roll": [
+        1,
+        3
+      ],
+      "vocation": "Physically Incompetent",
+      "skills": "Begging + Endurance (Endurance at level 2)",
+      "readingInt": null,
+      "statusModifier": -15
+    },
+    {
+      "roll": [
+        4,
+        9
+      ],
+      "vocation": "Branded Criminal",
+      "skills": "Basic Chivalric Training +1 Thievery Skill",
+      "readingInt": null,
+      "statusModifier": -20
+    },
+    {
+      "roll": [
+        10,
+        30
+      ],
+      "vocation": "Thug for Hire",
+      "skills": "Basic Chivalric Training + Intimidation",
+      "readingInt": null,
+      "statusModifier": -10
+    },
+    {
+      "roll": [
+        31,
+        50
+      ],
+      "vocation": "Lordless/\"Knight-Errant\"",
+      "skills": "Basic Chivalric Training + Con",
+      "readingInt": null,
+      "statusModifier": 0
+    },
+    {
+      "roll": [
+        51,
+        74
+      ],
+      "vocation": "Man-at-arms in household of Gentry",
+      "skills": "Basic Chivalric Training",
+      "readingInt": 13,
+      "household": true
+    },
+    {
+      "roll": [
+        75,
+        88
+      ],
+      "vocation": "Man-at-arms in household of Lord",
+      "skills": "Basic Chivalric Training",
+      "readingInt": 13,
+      "household": true
+    },
+    {
+      "roll": [
+        89,
+        97
+      ],
+      "vocation": "Man-at-arms in household of Nobility",
+      "skills": "Basic Chivalric Training",
+      "readingInt": 12,
+      "household": true
+    },
+    {
+      "roll": [
+        98,
+        99
+      ],
+      "vocation": "Man-at-arms in household of Royalty",
+      "skills": "Basic Chivalric Training",
+      "readingInt": 11,
+      "household": true
+    },
+    {
+      "roll": [
+        100,
+        100
+      ],
+      "vocation": "Man-at-arms in household of King",
+      "skills": "Basic Chivalric Training",
+      "readingInt": 11,
+      "household": true
+    }
+  ],
+  "fiefs": {
+    "lesserGentry": [
+      {
+        "roll": [
+          1,
+          40
+        ],
+        "fief": "SFMH1",
+        "combatSkills": 1,
+        "statusModifier": 0
+      },
+      {
+        "roll": [
+          41,
+          54
+        ],
+        "fief": "SFMH2",
+        "combatSkills": 1,
+        "statusModifier": 0
+      },
+      {
+        "roll": [
+          55,
+          66
+        ],
+        "fief": "SFMH3",
+        "combatSkills": 1,
+        "statusModifier": 1
+      },
+      {
+        "roll": [
+          67,
+          76
+        ],
+        "fief": "LFMH4",
+        "combatSkills": 2,
+        "statusModifier": 2
+      },
+      {
+        "roll": [
+          77,
+          84
+        ],
+        "fief": "LFMH5",
+        "combatSkills": 2,
+        "statusModifier": 4
+      },
+      {
+        "roll": [
+          85,
+          90
+        ],
+        "fief": "LFMH6",
+        "combatSkills": 2,
+        "statusModifier": 4
+      },
+      {
+        "roll": [
+          91,
+          94
+        ],
+        "fief": "SK7",
+        "combatSkills": 3,
+        "statusModifier": 6
+      },
+      {
+        "roll": [
+          95,
+          97
+        ],
+        "fief": "SK8",
+        "combatSkills": 3,
+        "statusModifier": 6
+      },
+      {
+        "roll": [
+          98,
+          99
+        ],
+        "fief": "SK9",
+        "combatSkills": 4,
+        "statusModifier": 7
+      },
+      {
+        "roll": [
+          100,
+          100
+        ],
+        "fief": "Castle1",
+        "combatSkills": 4,
+        "statusModifier": 8
+      }
+    ],
+    "lord": [
+      {
+        "roll": [
+          1,
+          9
+        ],
+        "fief": "LFMH4",
+        "combatSkills": 2,
+        "statusModifier": 3
+      },
+      {
+        "roll": [
+          10,
+          21
+        ],
+        "fief": "LFMH5",
+        "combatSkills": 2,
+        "statusModifier": 5
+      },
+      {
+        "roll": [
+          22,
+          36
+        ],
+        "fief": "LFMH6",
+        "combatSkills": 2,
+        "statusModifier": 6
+      },
+      {
+        "roll": [
+          37,
+          52
+        ],
+        "fief": "SK7",
+        "combatSkills": 3,
+        "statusModifier": 7
+      },
+      {
+        "roll": [
+          53,
+          70
+        ],
+        "fief": "SK8",
+        "combatSkills": 3,
+        "statusModifier": 7
+      },
+      {
+        "roll": [
+          71,
+          84
+        ],
+        "fief": "SK9",
+        "combatSkills": 4,
+        "statusModifier": 8
+      },
+      {
+        "roll": [
+          85,
+          92
+        ],
+        "fief": "Castle1",
+        "combatSkills": 4,
+        "statusModifier": 9
+      },
+      {
+        "roll": [
+          93,
+          97
+        ],
+        "fief": "Castle2",
+        "combatSkills": 4,
+        "statusModifier": 10
+      },
+      {
+        "roll": [
+          98,
+          99
+        ],
+        "fief": "Castle3",
+        "combatSkills": 4,
+        "statusModifier": 12
+      },
+      {
+        "roll": [
+          100,
+          100
+        ],
+        "fief": "Castle4",
+        "combatSkills": 4,
+        "statusModifier": 13
+      }
+    ],
+    "titled": [
+      {
+        "roll": [
+          1,
+          4
+        ],
+        "fief": "LFMH6",
+        "combatSkills": 2,
+        "statusModifier": 7
+      },
+      {
+        "roll": [
+          5,
+          11
+        ],
+        "fief": "SK7",
+        "combatSkills": 3,
+        "statusModifier": 8
+      },
+      {
+        "roll": [
+          12,
+          20
+        ],
+        "fief": "SK8",
+        "combatSkills": 3,
+        "statusModifier": 8
+      },
+      {
+        "roll": [
+          21,
+          32
+        ],
+        "fief": "SK9",
+        "combatSkills": 4,
+        "statusModifier": 9
+      },
+      {
+        "roll": [
+          33,
+          47
+        ],
+        "fief": "Castle1",
+        "combatSkills": 4,
+        "statusModifier": 10
+      },
+      {
+        "roll": [
+          48,
+          65
+        ],
+        "fief": "Castle2",
+        "combatSkills": 4,
+        "statusModifier": 11
+      },
+      {
+        "roll": [
+          66,
+          81
+        ],
+        "fief": "Castle3",
+        "combatSkills": 4,
+        "statusModifier": 13
+      },
+      {
+        "roll": [
+          82,
+          91
+        ],
+        "fief": "Castle4",
+        "combatSkills": 4,
+        "statusModifier": 14
+      },
+      {
+        "roll": [
+          92,
+          96
+        ],
+        "fief": "Castle5",
+        "combatSkills": 4,
+        "statusModifier": 16
+      },
+      {
+        "roll": [
+          97,
+          100
+        ],
+        "fief": "Castle6",
+        "combatSkills": 5,
+        "statusModifier": 17
+      }
+    ],
+    "royal": [
+      {
+        "roll": [
+          1,
+          3
+        ],
+        "fief": "SK9",
+        "combatSkills": 4,
+        "statusModifier": 10
+      },
+      {
+        "roll": [
+          4,
+          8
+        ],
+        "fief": "Castle1",
+        "combatSkills": 4,
+        "statusModifier": 11
+      },
+      {
+        "roll": [
+          9,
+          17
+        ],
+        "fief": "Castle2",
+        "combatSkills": 4,
+        "statusModifier": 12
+      },
+      {
+        "roll": [
+          18,
+          29
+        ],
+        "fief": "Castle3",
+        "combatSkills": 4,
+        "statusModifier": 14
+      },
+      {
+        "roll": [
+          30,
+          43
+        ],
+        "fief": "Castle4",
+        "combatSkills": 4,
+        "statusModifier": 15
+      },
+      {
+        "roll": [
+          44,
+          63
+        ],
+        "fief": "Castle5",
+        "combatSkills": 4,
+        "statusModifier": 17
+      },
+      {
+        "roll": [
+          64,
+          79
+        ],
+        "fief": "Castle6",
+        "combatSkills": 5,
+        "statusModifier": 18
+      },
+      {
+        "roll": [
+          80,
+          91
+        ],
+        "fief": "Castle7",
+        "combatSkills": 5,
+        "statusModifier": 19
+      },
+      {
+        "roll": [
+          92,
+          98
+        ],
+        "fief": "Castle8",
+        "combatSkills": 5,
+        "statusModifier": 21
+      },
+      {
+        "roll": [
+          99,
+          100
+        ],
+        "fief": "Castle9",
+        "combatSkills": 5,
+        "statusModifier": 30
+      }
+    ]
+  }
+}

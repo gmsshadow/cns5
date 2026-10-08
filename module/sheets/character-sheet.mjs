@@ -1,6 +1,8 @@
 import { CNS5 } from "../config.mjs";
 import { CnS5CreationWizard } from "../apps/creation-wizard.mjs";
 import { CnS5UnskilledAttempt, CnS5Miracle } from "../apps/unskilled.mjs";
+import { CnS5VocationChange } from "../apps/vocation-change.mjs";
+import { CnS5StartingSpells } from "../apps/starting-spells.mjs";
 
 const { HandlebarsApplicationMixin, DialogV2 } = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
@@ -38,6 +40,8 @@ export class CnS5CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2)
       toggleEquipped: CnS5CharacterSheet.#onToggleEquipped,
       toggleCarried: CnS5CharacterSheet.#onToggleCarried,
       openWizard: CnS5CharacterSheet.#onOpenWizard,
+      changeVocation: CnS5CharacterSheet.#onChangeVocation,
+      startingSpells: CnS5CharacterSheet.#onStartingSpells,
       attemptUnskilled: CnS5CharacterSheet.#onAttemptUnskilled,
       castFromDevice: CnS5CharacterSheet.#onCastFromDevice,
       drawBeliefPool: CnS5CharacterSheet.#onDrawBeliefPool,
@@ -129,6 +133,27 @@ export class CnS5CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2)
     }));
 
     context.skillGroups = this.#getSkillGroups();
+
+    // Masteries (p120): the attributes they are reckoned by, and the skill to
+    // be mastered next — any known skill not yet mastered, save a Tertiary.
+    const attributeKeys = Object.values(CNS5.attributeGroups).flat();
+    const attributeChoice = (selected) => [
+      { value: "", label: "—", selected: !selected },
+      ...attributeKeys.map((key) => ({
+        value: key,
+        label: game.i18n.localize(`CNS5.Attribute.${key}.long`),
+        selected: key === selected
+      }))
+    ];
+    context.masteryAttributes = {
+      primary: attributeChoice(system.details.vocationAttributes?.primary),
+      secondary: attributeChoice(system.details.vocationAttributes?.secondary)
+    };
+    context.nextMasteryOptions = this.actor.items
+      .filter((i) => i.type === "skill" && i.system.known && !i.system.mastered && i.system.category !== "tertiary")
+      .map((i) => i.name)
+      .sort((a, b) => a.localeCompare(b));
+    context.mastery = system.mastery;
     context.chattelGroups = this.#getChattelGroups();
 
     const byName = (a, b) => a.name.localeCompare(b.name);
@@ -188,7 +213,12 @@ export class CnS5CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2)
         : [])
     ];
 
-    context.spentMR = context.spells.reduce((total, s) => total + s.system.mr, 0);
+    // What the spells have cost him, at the MR he learnt each at (p295). The
+    // Common Spells come with his Mode and cost nothing.
+    const common = new Set(CNS5.commonSpells.map((n) => n.toLowerCase()));
+    context.spentMR = context.spells
+      .filter((s) => !common.has(s.name.toLowerCase()))
+      .reduce((total, s) => total + (s.system.effectiveMr ?? s.system.mr), 0);
 
     context.currency = Object.entries(CNS5.currency).map(([key, coin]) => ({
       key,
@@ -521,6 +551,16 @@ export class CnS5CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2)
   /** @this {CnS5CharacterSheet} */
   static #onOpenWizard() {
     new CnS5CreationWizard(this.actor).render({ force: true });
+  }
+
+  /** Buy a new mage's starting spells (p295). */
+  static #onStartingSpells() {
+    new CnS5StartingSpells(this.actor).render({ force: true });
+  }
+
+  /** Change vocation, by the procedure of p130. */
+  static #onChangeVocation() {
+    new CnS5VocationChange(this.actor).render({ force: true });
   }
 
   /* -------------------------------------------- */

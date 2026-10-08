@@ -1,4 +1,20 @@
 import { CNS5 } from "../config.mjs";
+import {
+  parseBackgroundSkills,
+  rollFathersVocation,
+  rollChivalricBackground,
+  rollOutsiderBackground
+} from "../helpers/background.mjs";
+import {
+  resolveVocation,
+  indexSkills,
+  classifySkills,
+  vocationalOptions,
+  startingSkills,
+  checkStartingSkills,
+  freeMasteryFor
+} from "../helpers/vocations.mjs";
+import { CnS5StartingSpells } from "./starting-spells.mjs";
 
 const { HandlebarsApplicationMixin, ApplicationV2, DialogV2 } = foundry.applications.api;
 
@@ -37,6 +53,7 @@ export class CnS5CreationWizard extends HandlebarsApplicationMixin(ApplicationV2
       rollAge: CnS5CreationWizard.#onRollAge,
       rollSign: CnS5CreationWizard.#onRollSign,
       rollSocialClass: CnS5CreationWizard.#onRollSocialClass,
+      rollFathersVocation: CnS5CreationWizard.#onRollFathersVocation,
       defaultSocialClass: CnS5CreationWizard.#onDefaultSocialClass,
       rollFamily: CnS5CreationWizard.#onRollFamily,
       defaultFamily: CnS5CreationWizard.#onDefaultFamily,
@@ -47,6 +64,8 @@ export class CnS5CreationWizard extends HandlebarsApplicationMixin(ApplicationV2
       rollFlaw: CnS5CreationWizard.#onRollFlaw,
       clearFlaws: CnS5CreationWizard.#onClearFlaws,
       defaultAge: CnS5CreationWizard.#onDefaultAge,
+      togglePick: CnS5CreationWizard.#onTogglePick,
+      clearVocation: CnS5CreationWizard.#onClearVocation,
       finish: CnS5CreationWizard.#onFinish
     }
   };
@@ -74,6 +93,7 @@ export class CnS5CreationWizard extends HandlebarsApplicationMixin(ApplicationV2
     { id: "attributes", number: "11", template: "attributes" },
     { id: "size", number: "12", template: "size" },
     { id: "age", number: "18", template: "age" },
+    { id: "vocation", number: "V", template: "vocation" },
     { id: "review", number: "13-17, 19", template: "review" }
   ];
 
@@ -104,6 +124,10 @@ export class CnS5CreationWizard extends HandlebarsApplicationMixin(ApplicationV2
    */
   static #blankDraft(actor) {
     const system = actor.system;
+    // What an earlier run of the wizard added for class — a peasant's
+    // Strength, a townsman's Agility — is taken off again, so that running it
+    // twice does not add it twice.
+    const given = actor.getFlag?.("cns5", "classBonuses") ?? {};
     return {
       name: actor.name === "New Actor" ? "" : actor.name,
       method: "random",
@@ -120,6 +144,23 @@ export class CnS5CreationWizard extends HandlebarsApplicationMixin(ApplicationV2
       socialBand: system.details.socialBand || CNS5.defaultSocialClass.band,
       socialRolls: "",
       fathersVocation: system.details.fathersVocation ?? "",
+      // Step 5b: what the father's vocation gave, kept so the skills can be
+      // granted when the wizard finishes.
+      fatherSkills: "",
+      fatherStatus: system.details.socialStatus ?? "",
+      fatherGrants: [],
+      fatherLabourer: false,
+      fatherRolls: "",
+      fatherNote: "",
+      // A chivalric father: whether his son reads, and at what Intellect, is
+      // settled when the attributes are known (p78). The scholarly option
+      // replaces Basic Chivalric Training for a son who is not the heir (p77).
+      fatherReadingInt: null,
+      scholarly: false,
+      // An outsider is a Jew, a slave or some other minority (p60); a slave
+      // of the later periods has a table only around the Mediterranean.
+      outsiderKind: "jew",
+      mediterranean: false,
       familyStatus: CNS5.familyStatus.some((f) => f.key === system.details.familyStatus)
         ? system.details.familyStatus
         : CNS5.defaultFamilyStatus,
@@ -142,12 +183,27 @@ export class CnS5CreationWizard extends HandlebarsApplicationMixin(ApplicationV2
       flawUuids: [],
       flawRoll: "",
       vocation: system.details.vocation ?? "",
+      // The vocation and the starting skills (pp.119-146). The picks, the
+      // masteries in the order chosen, and the rest are skill names as the
+      // skills list gives them.
+      vocationKey: system.details.vocationKey ?? "",
+      vocationVariant: system.details.vocationVariant ?? "",
+      picks: [],
+      masteries: [],
+      tertiary: [],
+      sunsignSkills: [],
+      raises: [],
+      // Skills the father's vocation leaves to choice — "+1 Skill", "2 Lore"
+      // — keyed by the choice's place in the row; and a Forester's son's four
+      // Outdoor skills (p124).
+      backgroundPicks: {},
+      fatherOutdoor: [],
       notes: "",
       attributes: Object.fromEntries(
-        CnS5CreationWizard.PRIMARY.map((key) => [key, system.attributes[key].value])
+        CnS5CreationWizard.PRIMARY.map((key) => [key, system.attributes[key].value - (given[key] ?? 0)])
       ),
       innate: Object.fromEntries(
-        CnS5CreationWizard.DERIVED.map((key) => [key, system.derived[key].mod])
+        CnS5CreationWizard.DERIVED.map((key) => [key, system.derived[key].mod - (given[key] ?? 0)])
       ),
       height: system.size.height,
       build: system.size.build,
@@ -278,6 +334,23 @@ export class CnS5CreationWizard extends HandlebarsApplicationMixin(ApplicationV2
     context.isPeasant = CNS5.peasantClasses.includes(draft.socialClassKey);
     context.isOutsider = draft.socialClassKey === "outsider";
 
+    // Step 5b: the father's vocation, and what it gives him.
+    const background = await CnS5CreationWizard.#backgroundData();
+    context.isChivalric = draft.socialClassKey === "chivalric";
+    context.outsiderKinds = this.#choices(
+      Object.fromEntries(CNS5.outsiderKinds.map((k) => [k, `CNS5.Outsider.${k}`])),
+      draft.outsiderKind
+    );
+    context.askMediterranean = context.isOutsider && draft.outsiderKind === "slave" && draft.period !== "ef";
+    context.vocationTable =
+      context.isChivalric ||
+      (context.isOutsider && draft.outsiderKind !== "other") ||
+      Boolean(background.vocations.classes?.[draft.socialClassKey]?.[draft.socialBand]);
+    context.fatherSkills = draft.fatherSkills
+      ? parseBackgroundSkills(draft.fatherSkills, background.resolve)
+      : null;
+    context.isTownsman = draft.socialClassKey === "townsman";
+
     // Steps 6 and 7.
     context.legitimacies = this.#choices(
       Object.fromEntries(CNS5.legitimacy.map((l) => [l.key, `CNS5.Legitimacy.${l.key}`])),
@@ -326,10 +399,361 @@ export class CnS5CreationWizard extends HandlebarsApplicationMixin(ApplicationV2
     context.buildBand = CNS5.weightModifiers.find((b) => draft.build <= b.max);
     context.summary = this.#summary();
 
+    if (this.step.id === "vocation") Object.assign(context, this.#vocationContext(background));
+
     return context;
   }
 
   /* -------------------------------------------- */
+
+  /* -------------------------------------------- */
+  /*  The vocation and its skills (pp.119-146)    */
+  /* -------------------------------------------- */
+
+  /**
+   * The groups a background choice draws from. "Lore" names no one group in
+   * the skills list; it is both kinds of lore.
+   * @param {string|null} category
+   * @returns {string[]|null}  null for any skill at all
+   */
+  static #choiceGroups(category) {
+    if (!category) return null;
+    if (category === "Lore") return ["Lore Historical", "Lore Scientific"];
+    return [category];
+  }
+
+  /**
+   * Every skill the character knows before choosing his vocational skills,
+   * and at what level: the core skills, his class's, his father's and those
+   * chosen among them. This is what the finish grants as background, read
+   * the same way, so that what the step shows is what the sheet will get.
+   *
+   * @param {object} bg   the loaded data
+   * @param {object} voc  the vocation, for a Forester's son (p124)
+   * @returns {Map<string, number>}
+   */
+  #knownBackground(bg, voc) {
+    const draft = this.draft;
+    const known = new Map();
+    const add = (name, level = 0) => {
+      const n = bg.resolve(name) ?? name;
+      if (!bg.index.has(n)) return;
+      known.set(n, Math.max(known.get(n) ?? 0, level));
+    };
+
+    if (draft.addCoreSkills) {
+      for (const name of CNS5.coreBackgroundSkills) add(name);
+      if (draft.attributes.int >= 12) add("Accurate Counting");
+    }
+    if (CNS5.peasantClasses.includes(draft.socialClassKey)) {
+      for (const skill of CNS5.peasantBenefits.skills) add(skill.name, skill.level);
+    }
+    if (draft.fatherSkills) {
+      const parsed = parseBackgroundSkills(draft.fatherSkills, bg.resolve);
+      for (const skill of parsed.named) add(skill.name, skill.level);
+      parsed.choices.forEach((choice, i) => {
+        for (const name of Object.values(draft.backgroundPicks?.[i] ?? {})) if (name) add(name);
+      });
+    }
+    for (const name of draft.fatherGrants ?? []) add(name);
+    if (draft.fatherLabourer) for (const skill of CNS5.labourerSkills) add(skill.name, skill.level);
+
+    if (draft.socialClassKey === "chivalric") {
+      const int = draft.attributes.int ?? 0;
+      if (draft.fatherReadingInt && int >= draft.fatherReadingInt) add(CNS5.readingSkill);
+      if (draft.scholarly) {
+        for (const lang of CNS5.scholarlyLanguages) if (lang.skill && int >= lang.int) add(lang.skill);
+      }
+    }
+
+    // "If the PC's father's vocation is a Forester, the character will start
+    // with background knowledge in any four Outdoor Skills" and "basic
+    // knowledge in these athletic skills" (p124).
+    if (this.#foresterSon(voc)) {
+      for (const name of voc.fatherBonus.skills) add(name);
+      for (const name of Object.values(draft.fatherOutdoor ?? {})) if (name) add(name);
+    }
+    return known;
+  }
+
+  /** Whether the vocation's father bonus applies to this character. */
+  #foresterSon(voc) {
+    const bonus = voc?.fatherBonus;
+    return Boolean(bonus) && new RegExp(bonus.father, "i").test(this.draft.fathersVocation ?? "");
+  }
+
+  /**
+   * The attributes a vocation's rules read, derived ones included.
+   * @returns {object}
+   */
+  #allAttributes() {
+    const draft = this.draft;
+    const out = { ...draft.attributes };
+    for (const key of CnS5CreationWizard.DERIVED) out[key] = this.#derivedBase(key) + (draft.innate[key] ?? 0);
+    return out;
+  }
+
+  /**
+   * The draft's vocational choices, in the shape the vocation helpers take.
+   * @param {object} bg
+   * @returns {object|null}
+   */
+  #vocationState(bg) {
+    const draft = this.draft;
+    const voc = resolveVocation(bg.callings, draft.vocationKey, draft.vocationVariant);
+    if (!voc) return null;
+    const slots = (list) => (list ?? []).filter(Boolean);
+    return {
+      voc,
+      picks: slots(draft.picks),
+      masteries: slots(draft.masteries),
+      tertiary: slots(draft.tertiary),
+      sunsign: slots(draft.sunsignSkills),
+      raises: slots(draft.raises),
+      background: this.#knownBackground(bg, voc),
+      gentle: draft.socialClassKey === "chivalric",
+      attributes: this.#allAttributes(),
+      sign: draft.sign,
+      signAspect: draft.birthOmens,
+      raiseAllowance: CNS5.classSkillRaises(draft.socialClassKey, draft.socialBand, draft.fathersVocation)
+    };
+  }
+
+  /**
+   * Everything the vocation step shows.
+   * @param {object} bg
+   * @returns {object}
+   */
+  #vocationContext(bg) {
+    const draft = this.draft;
+    const order = ["warrior", "thief", "other", "mage", "priestMage", "priest", "adventurer"];
+    const vocationGroups = order.map((group) => ({
+      label: `CNS5.Vocation.group.${group}`,
+      options: bg.callings.vocations
+        .filter((v) => v.group === group)
+        .map((v) => ({ value: v.key, label: v.name, selected: v.key === draft.vocationKey }))
+    }));
+
+    const state = this.#vocationState(bg);
+    if (!state) return { vocationGroups, voc: null };
+    const { voc } = state;
+    const ctx = { index: bg.index, filters: bg.callings.filters };
+    const background = new Set(state.background.keys());
+    const skills = startingSkills(state, ctx);
+    const byName = new Map(skills.map((s) => [s.name, s]));
+    const categoryLabel = (c) => `CNS5.SkillCategory.${c}`;
+
+    // The skills the vocation offers, by group, ticked where taken.
+    const offered = vocationalOptions(voc, { ...ctx, background });
+    const names = new Set(offered.map((o) => o.name));
+    for (const name of state.picks) {
+      if (!names.has(name) && bg.index.has(name)) {
+        offered.push({ name, group: bg.index.get(name).group, category: "tertiary" });
+      }
+    }
+    const groups = new Map();
+    for (const o of offered) {
+      const now = byName.get(o.name)?.category ?? o.category;
+      const row = {
+        name: o.name,
+        category: now,
+        categoryLabel: categoryLabel(now),
+        picked: state.picks.includes(o.name),
+        known: state.background.has(o.name),
+        level: byName.get(o.name)?.level ?? 0
+      };
+      if (!groups.has(o.group)) groups.set(o.group, []);
+      groups.get(o.group).push(row);
+    }
+    const optionGroups = [...groups.entries()]
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([group, rows]) => ({ group, rows: rows.sort((a, b) => a.name.localeCompare(b.name)) }));
+
+    const picked = state.picks.map((n) => byName.get(n)).filter(Boolean);
+    const count = (c) => picked.filter((s) => s.category === c).length;
+
+    // Slots: a select per mastery, tertiary skill, Sunsign skill and raise.
+    const slot = (path, value, options, number) => ({
+      path,
+      number,
+      value: value ?? "",
+      options: [...options].sort((a, b) => a.localeCompare(b))
+    });
+    const slots = (key, n, options) =>
+      Array.from({ length: n }, (_, i) => slot(`${key}.${i}`, draft[key]?.[i], options, i + 1));
+
+    const knownNames = new Set([...state.picks, ...background, ...state.tertiary]);
+    const allNames = [...bg.index.keys()];
+    const vocational = new Set(offered.filter((o) => o.category !== "tertiary").map((o) => o.name));
+
+    const tertiaryAllowance = CNS5.tertiarySkillsFor((draft.attributes.int ?? 0) + (draft.attributes.dis ?? 0));
+    const sign = CNS5.birthSigns[draft.sign];
+    const sunsignCount = sign ? CNS5.sunsignSkills[draft.birthOmens] ?? CNS5.sunsignSkills.neutral : 0;
+    const favoured = sign ? allNames.filter((n) => sign.categories.includes(bg.index.get(n).group)) : [];
+
+    // The father's choices, each a select per skill owed.
+    const parsed = draft.fatherSkills ? parseBackgroundSkills(draft.fatherSkills, bg.resolve) : null;
+    const backgroundChoices = (parsed?.choices ?? []).map((choice, i) => {
+      const groupsFor = CnS5CreationWizard.#choiceGroups(choice.category);
+      const options = choice.options?.length
+        ? choice.options.map((o) => bg.resolve(o) ?? o).filter((o) => bg.index.has(o))
+        : allNames.filter((n) => !groupsFor || groupsFor.includes(bg.index.get(n).group));
+      return {
+        label: choice.label,
+        slots: Array.from({ length: choice.count || 1 }, (_, j) =>
+          slot(`backgroundPicks.${i}.${j}`, draft.backgroundPicks?.[i]?.[j], options)
+        )
+      };
+    });
+    const outdoor = allNames.filter((n) => bg.index.get(n).group === "Outdoor");
+
+    const attributes = state.attributes;
+    const primaryAttr = voc.attributes.primary;
+    const secondaryAttr = voc.attributes.secondary;
+    const masteryTotal = primaryAttr && secondaryAttr
+      ? CNS5.masteryTotal({ primary: attributes[primaryAttr], secondary: attributes[secondaryAttr], dis: attributes.dis })
+      : null;
+
+    return {
+      vocationGroups,
+      voc,
+      variants: voc.variants.map((v) => ({ value: v.key, label: v.name, selected: v.key === voc.variant })),
+      attributeLabels: {
+        primary: primaryAttr ? `CNS5.Attribute.${primaryAttr}.long` : null,
+        secondary: secondaryAttr ? `CNS5.Attribute.${secondaryAttr}.long` : null
+      },
+      primaryEntries: voc.primary.map((e) => e.text).join("; "),
+      secondaryEntries: voc.secondary.map((e) => e.text).join("; "),
+      masteryOrder: voc.masteryOrder.map((step, i) => `${i + 1}. ${step.map((r) => r.text).join(" + ")}`),
+      masteryInterval: masteryTotal == null ? null : CNS5.masteryIntervalFor(masteryTotal),
+      masteryTotal,
+      freeMastery: freeMasteryFor(voc, state),
+      optionGroups,
+      pickCounts: {
+        total: state.picks.length,
+        primary: count("primary"),
+        secondary: count("secondary"),
+        want: CNS5.startingSkills.count
+      },
+      masterySlots: slots("masteries", CNS5.startingSkills.masteries, knownNames),
+      tertiarySlots: slots("tertiary", tertiaryAllowance, allNames.filter((n) => !vocational.has(n))),
+      sunsignSlots: slots("sunsignSkills", sunsignCount, favoured),
+      raiseSlots: slots("raises", state.raiseAllowance, background),
+      backgroundChoices,
+      fatherOutdoor: this.#foresterSon(voc)
+        ? Array.from({ length: voc.fatherBonus.choose.count }, (_, i) =>
+            slot(`fatherOutdoor.${i}`, draft.fatherOutdoor?.[i], outdoor)
+          )
+        : [],
+      signCategories: sign?.categories.join(", ") ?? "",
+      problems: checkStartingSkills(state, ctx).map((p) =>
+        game.i18n.format(`CNS5.Vocation.problem.${p.key}`, p.data)
+      ),
+      startingSkills: skills
+        .filter((s) => s.level > 0 || s.mastered || state.tertiary.includes(s.name))
+        .sort((a, b) => a.name.localeCompare(b.name))
+        .map((s) => ({ ...s, categoryLabel: categoryLabel(s.category) }))
+    };
+  }
+
+  /**
+   * The vocation as the sheet shows it: the table's name and kind, or what
+   * the player wrote for an Adventurer or a vocation of his own.
+   * @returns {string}
+   */
+  #vocationLabel() {
+    const draft = this.draft;
+    const bg = CnS5CreationWizard.#background;
+    const voc = bg ? resolveVocation(bg.callings, draft.vocationKey, draft.vocationVariant) : null;
+    if (!voc || voc.custom) return draft.vocation || voc?.name || "";
+    return voc.variantName ? `${voc.name} (${voc.variantName})` : voc.name;
+  }
+
+  /** Take a skill as one of the ten, or put it back. */
+  static #onTogglePick(event, target) {
+    const name = target.dataset.skill;
+    if (!name) return;
+    const picks = new Set(this.draft.picks);
+    if (picks.has(name)) picks.delete(name);
+    else picks.add(name);
+    this.draft.picks = [...picks];
+    this.render();
+  }
+
+  /** Clear every vocational choice, keeping the vocation. */
+  static #onClearVocation() {
+    Object.assign(this.draft, { picks: [], masteries: [], tertiary: [], sunsignSkills: [], raises: [] });
+    this.render();
+  }
+
+  /**
+   * The skill the character already has under this name — or, for a core
+   * skill, under the name the core skills are created with.
+   * @param {string} name  as the skills list gives it
+   * @returns {Item|undefined}
+   */
+  #skillItem(name) {
+    const core = CNS5.coreSkills.find((c) => c.listName === name)?.name;
+    const wanted = [name, core].filter(Boolean).map((n) => n.toLowerCase());
+    return this.actor.items.find((i) => i.type === "skill" && wanted.includes(i.name.toLowerCase()));
+  }
+
+  /**
+   * Write the starting skills: each at its level and category, mastered or
+   * not. Nothing is lowered, so running the wizard again on a character who
+   * has since advanced keeps his advances.
+   */
+  async #applyVocation() {
+    const bg = await CnS5CreationWizard.#backgroundData();
+    const state = this.#vocationState(bg);
+    if (!state) return;
+    const ctx = { index: bg.index, filters: bg.callings.filters };
+
+    const updates = [];
+    for (const skill of startingSkills(state, ctx)) {
+      // An Elementalist's Mode is named for his element (p295).
+      const renamed = skill.name === state.voc.mode && state.voc.modeName !== state.voc.mode
+        ? state.voc.modeName
+        : null;
+      let item = (renamed && this.#skillItem(renamed)) || this.#skillItem(skill.name);
+      const created = !item;
+      if (created) item = await this.actor.grantSkill(skill.name);
+      if (!item) continue;
+      updates.push({
+        _id: item.id,
+        ...(renamed ? { name: renamed } : {}),
+        "system.known": true,
+        "system.category": skill.category,
+        "system.level": Math.max(item.system.level ?? 0, skill.level),
+        "system.mastered": Boolean(item.system.mastered || skill.mastered),
+        "system.masteryPsf": skill.mastered ? skill.masteryPsf : item.system.masteryPsf ?? CNS5.startingMastery.psf,
+        "system.sunsign": Boolean(item.system.sunsign || skill.sunsign),
+        "system.masteryFree": Boolean(item.system.masteryFree || skill.masteryFree),
+        ...(created ? { "system.origin": skill.origin } : {})
+      });
+    }
+    if (updates.length) await this.actor.updateEmbeddedDocuments("Item", updates);
+
+    // A mage's Mode is the skill his magick is reckoned from, and his
+    // tradition which aspect bonus he takes (pp.134, 288).
+    const traditions = { mage: "mage", priestMage: "priestMage", priest: "cleric" };
+    const tradition = traditions[state.voc.group];
+    if (tradition) {
+      await this.actor.update({
+        "system.magick.tradition": tradition,
+        ...(state.voc.modeName ? { "system.magick.mode": state.voc.modeName } : {})
+      });
+    }
+
+    // The attributes further masteries are reckoned by (p120). An
+    // Adventurer's come from his specialities, which is the player's to say.
+    if (state.voc.attributes.primary && state.voc.attributes.secondary) {
+      await this.actor.update({
+        "system.details.vocationAttributes.primary": state.voc.attributes.primary,
+        "system.details.vocationAttributes.secondary": state.voc.attributes.secondary
+      });
+    }
+  }
 
   /**
    * The averaged base of a derived attribute, before its innate modifier.
@@ -579,6 +1003,175 @@ export class CnS5CreationWizard extends HandlebarsApplicationMixin(ApplicationV2
   }
 
   /** Two rolls: the class, then where in it. */
+  /**
+   * The vocation tables and the skill list, loaded once. The skill list is
+   * what a vocation's skills are matched against, so that "Knife Fighting" is
+   * granted as Knife & Dagger Fighting.
+   */
+  static async #backgroundData() {
+    if (CnS5CreationWizard.#background) return CnS5CreationWizard.#background;
+    const [vocations, skills, nobility, outsiders, callings] = await Promise.all([
+      foundry.utils.fetchJsonWithTimeout("systems/cns5/data/vocations.json"),
+      foundry.utils.fetchJsonWithTimeout("systems/cns5/data/skills.json"),
+      foundry.utils.fetchJsonWithTimeout("systems/cns5/data/nobility.json"),
+      foundry.utils.fetchJsonWithTimeout("systems/cns5/data/outsiders.json"),
+      foundry.utils.fetchJsonWithTimeout("systems/cns5/data/character-vocations.json")
+    ]);
+    const byName = new Map(skills.skills.map((sk) => [sk.name.toLowerCase(), sk.name]));
+    CnS5CreationWizard.#background = {
+      vocations,
+      nobility,
+      outsiders,
+      callings,
+      index: indexSkills(skills.skills),
+      resolve: (name) => byName.get(String(name).trim().toLowerCase()) ?? null
+    };
+    return CnS5CreationWizard.#background;
+  }
+
+  static #background = null;
+
+  /**
+   * Roll the father's vocation for the class and band chosen above, following
+   * the table where it sends the roller.
+   */
+  static async #onRollFathersVocation() {
+    const { vocations, nobility, outsiders } = await CnS5CreationWizard.#backgroundData();
+    const d100 = async () => (await new Roll("1d100").evaluate()).total;
+
+    // Jews and slaves have tables of their own (pp.60-65).
+    if (this.draft.socialClassKey === "outsider") {
+      const found = await rollOutsiderBackground(
+        outsiders,
+        vocations,
+        { kind: this.draft.outsiderKind, period: this.draft.period, mediterranean: this.draft.mediterranean },
+        d100
+      );
+      if (!found) {
+        ui.notifications.warn(game.i18n.localize("CNS5.Creation.noVocationTable"));
+        return;
+      }
+      // A slave of the later periods outside the Mediterranean is a destitute
+      // serf in all but name.
+      if (found.treatAs) {
+        const serf = await rollFathersVocation(vocations, found.treatAs.cls, found.treatAs.band, d100);
+        this.#takeFather(serf, "CNS5.Creation.slaveAsSerf");
+        return;
+      }
+      if (found.owner) {
+        found.vocation = game.i18n.format("CNS5.Creation.slaveOf", {
+          vocation: found.vocation,
+          band: game.i18n.localize(`CNS5.SocialBand.${found.owner.band}`).toLowerCase(),
+          household: game.i18n.localize(`CNS5.SlaveOwner.${found.owner.household}`)
+        });
+      }
+      this.#takeFather(found, found.link === "leper" ? "CNS5.Creation.fatherLeper" : "");
+      if (Number.isFinite(found.wider)) {
+        this.draft.fatherStatus = game.i18n.format("CNS5.Creation.jewishStatus", {
+          status: found.status,
+          wider: found.wider
+        });
+      }
+      this.render();
+      return;
+    }
+
+    // The fighting classes follow their own tables: rank, the father's
+    // vocation for the period, and his holdings (pp.77-81).
+    if (this.draft.socialClassKey === "chivalric") {
+      const dice = { d100, roll: async (formula) => (await new Roll(formula).evaluate()).total };
+      const found = await rollChivalricBackground(
+        nobility,
+        { period: this.draft.period, band: this.draft.socialBand, scholarly: this.draft.scholarly },
+        dice,
+        CNS5
+      );
+      Object.assign(this.draft, {
+        fathersVocation: CnS5CreationWizard.#chivalricLabel(found),
+        fatherSkills: found.skills,
+        fatherStatus: Number.isFinite(found.status) && !found.statusNote ? String(found.status) : "",
+        fatherGrants: [],
+        fatherLabourer: false,
+        fatherReadingInt: this.draft.scholarly ? null : found.readingInt,
+        fatherRolls: game.i18n.format("CNS5.Creation.fatherRolled", {
+          rolls: found.rolls.join(", "),
+          pages: found.pages.map((pg) => `p${pg}`).join(", ")
+        }),
+        fatherNote: found.statusNote === "household" ? "CNS5.Creation.fatherHousehold" : ""
+      });
+      this.render();
+      return;
+    }
+
+    const found = await rollFathersVocation(
+      vocations, this.draft.socialClassKey, this.draft.socialBand, d100
+    );
+    if (!found) {
+      ui.notifications.warn(game.i18n.localize("CNS5.Creation.noVocationTable"));
+      return;
+    }
+
+    Object.assign(this.draft, {
+      fathersVocation: found.vocation,
+      fatherSkills: found.skills,
+      fatherStatus: Number.isFinite(found.status) ? String(found.status) : found.statusNote ?? "",
+      fatherGrants: found.grants,
+      fatherLabourer: found.labourer,
+      fatherRolls: game.i18n.format("CNS5.Creation.fatherRolled", {
+        rolls: found.rolls.join(", "),
+        pages: found.pages.map((pg) => `p${pg}`).join(", ")
+      }),
+      // A father fallen from better days, or a leper, was once something else;
+      // the book has the roller find out what, which is left to him.
+      fatherNote: found.link === "originalClass"
+        ? "CNS5.Creation.fatherOriginalClass"
+        : found.link === "leper"
+          ? "CNS5.Creation.fatherLeper"
+          : ""
+    });
+    this.render();
+  }
+
+  /**
+   * Take a rolled father into the draft.
+   * @param {object} found  what one of the background rolls returned
+   * @param {string} note   a message to show beneath it, if any
+   */
+  #takeFather(found, note) {
+    Object.assign(this.draft, {
+      fathersVocation: found.vocation,
+      fatherSkills: found.skills,
+      fatherStatus: Number.isFinite(found.status) ? String(found.status) : found.statusNote ?? "",
+      fatherGrants: found.grants ?? [],
+      fatherLabourer: Boolean(found.labourer),
+      fatherReadingInt: null,
+      backgroundPicks: {},
+      fatherRolls: game.i18n.format("CNS5.Creation.fatherRolled", {
+        rolls: found.rolls.join(", "),
+        pages: found.pages.map((pg) => `p${pg}`).join(", ")
+      }),
+      fatherNote: note
+    });
+    this.render();
+  }
+
+  /**
+   * "Knight, of the lesser gentry: a fief (SFMH2)", for the sheet.
+   * @param {object} found  what rollChivalricBackground returned
+   */
+  static #chivalricLabel(found) {
+    const rank = game.i18n.localize(`CNS5.ChivalricRank.${found.rank}`);
+    const holdings = found.holdings.map((h) => {
+      if (h.fief) {
+        return game.i18n.format(`CNS5.Holding.${h.kind}`, { fief: h.fief.fief, share: h.share ?? "" });
+      }
+      return game.i18n.format(`CNS5.Holding.${h.kind}`, { acres: h.acres ?? "" });
+    });
+    return holdings.length
+      ? `${found.vocation}, ${rank}: ${holdings.join("; ")}`
+      : `${found.vocation}, ${rank}`;
+  }
+
   /** "Wealthy Freeman", as the sheet shows it. */
   static #classLabel(draft) {
     const cls = game.i18n.localize(`CNS5.SocialClass.${draft.socialClassKey}`);
@@ -813,11 +1406,14 @@ export class CnS5CreationWizard extends HandlebarsApplicationMixin(ApplicationV2
       "system.details.socialClassKey": draft.socialClassKey,
       "system.details.socialBand": draft.socialBand,
       "system.details.fathersVocation": draft.fathersVocation,
+      "system.details.socialStatus": draft.fatherStatus ?? "",
       "system.details.familyStatus": draft.familyStatus,
       "system.details.starSign": draft.sign ? game.i18n.localize(CNS5.birthSigns[draft.sign].label) : "",
       "system.details.legitimacy": draft.legitimacy,
       "system.details.siblingRank": Number(draft.siblingRank) || CNS5.defaultSiblingRank,
-      "system.details.vocation": draft.vocation,
+      "system.details.vocation": this.#vocationLabel(),
+      "system.details.vocationKey": draft.vocationKey ?? "",
+      "system.details.vocationVariant": draft.vocationVariant ?? "",
       "system.details.age": draft.age,
       "system.size.height": draft.height,
       "system.size.build": draft.build,
@@ -847,7 +1443,9 @@ export class CnS5CreationWizard extends HandlebarsApplicationMixin(ApplicationV2
     // Strength... Both Conditioning and Endurance at Level 1 are also gained as
     // background skills" (p58). The two skills of his choice raised a level
     // are left to him, and the racial maximum on Strength to the Gamemaster.
+    const classBonuses = {};
     if (CNS5.peasantClasses.includes(draft.socialClassKey)) {
+      classBonuses.str = CNS5.peasantBenefits.strength;
       await this.actor.update({
         "system.attributes.str.value":
           this.actor.system.attributes.str.value + CNS5.peasantBenefits.strength
@@ -856,6 +1454,84 @@ export class CnS5CreationWizard extends HandlebarsApplicationMixin(ApplicationV2
         await this.actor.grantSkill(skill.name, { level: skill.level });
       }
     }
+
+    // "The character begins with Level 0 in those skills listed for his
+    // father's vocation" (p119) — at a higher level where the table says so.
+    // Choices among skills are the player's, and are left in his notes.
+    if (draft.fatherSkills) {
+      const { resolve } = await CnS5CreationWizard.#backgroundData();
+      const parsed = parseBackgroundSkills(draft.fatherSkills, resolve);
+      // Choices the player has made in the vocation step are granted; those
+      // he has not are left in his notes.
+      const chosen = (i) => Object.values(draft.backgroundPicks?.[i] ?? {}).filter(Boolean);
+      const grant = [
+        ...parsed.named,
+        ...(draft.fatherGrants ?? []).map((name) => ({ name: resolve(name) ?? name, level: 0 })),
+        ...(draft.fatherLabourer ? CNS5.labourerSkills : []),
+        ...parsed.choices.flatMap((c, i) => chosen(i).map((name) => ({ name, level: 0 })))
+      ];
+      for (const skill of grant) await this.actor.grantSkill(skill.name, { level: skill.level });
+
+      const owed = [
+        ...parsed.choices.filter((c, i) => chosen(i).length < (c.count || 1)).map((c) => c.label),
+        ...parsed.missing.map((m) => game.i18n.format("CNS5.Creation.notInSkillList", { name: m }))
+      ];
+      // Marked, so running the wizard again replaces the note, not adds to it.
+      const earlier = (this.actor.system.details.familyNotes ?? "")
+        .replace(/<p data-cns5="background-choices">[\s\S]*?<\/p>/g, "");
+      const note = owed.length
+        ? `<p data-cns5="background-choices"><strong>${game.i18n.localize(
+            "CNS5.Creation.backgroundChoices"
+          )}</strong> ${owed.join("; ")}</p>`
+        : "";
+      await this.actor.update({ "system.details.familyNotes": `${earlier}${note}` });
+    }
+
+    // A chivalric son reads his own language if his Intellect allows (p78); a
+    // scholar may read more languages the higher it is (p77). Intellect is
+    // not known until step 11, which is why this waits for the finish.
+    if (draft.socialClassKey === "chivalric") {
+      const int = draft.attributes.int ?? 0;
+      if (draft.fatherReadingInt && int >= draft.fatherReadingInt) {
+        await this.actor.grantSkill(CNS5.readingSkill);
+      }
+      if (draft.scholarly) {
+        const owed = [];
+        for (const lang of CNS5.scholarlyLanguages) {
+          if (int < lang.int) continue;
+          if (lang.skill) await this.actor.grantSkill(lang.skill);
+          else owed.push(game.i18n.localize(lang.label));
+        }
+        // Marked, so running the wizard again replaces the note, not adds to it.
+        const notes = (this.actor.system.details.familyNotes ?? "")
+          .replace(/<p data-cns5="scholar-languages">[\s\S]*?<\/p>/g, "");
+        const note = owed.length
+          ? `<p data-cns5="scholar-languages"><strong>${game.i18n.localize(
+              "CNS5.Creation.scholarLanguages"
+            )}</strong> ${owed.join("; ")}</p>`
+          : "";
+        await this.actor.update({ "system.details.familyNotes": `${notes}${note}` });
+      }
+    }
+    // The vocation and its starting skills (pp.119-146), once every
+    // background skill is in place.
+    await this.#applyVocation();
+
+    // "All 'gentle' PC's gain +10% to PSF% to the skills of Courtly Love (not
+    // EF) and Leadership" (p77) — which the skills already apply to a
+    // character marked gentle.
+    // Set for the chivalric, never cleared: a Gamemaster may have marked
+    // someone gentle for reasons of his own.
+    if (draft.socialClassKey === "chivalric") await this.actor.update({ "system.details.gentle": true });
+
+    // Townsmen gain +3 Agility (p70); the racial maximum is the Gamemaster's.
+    if (draft.socialClassKey === "townsman") {
+      classBonuses.agl = CNS5.townsmanBenefits.agility;
+      await this.actor.update({
+        "system.derived.agl.mod": (this.actor.system.derived.agl.mod ?? 0) + CNS5.townsmanBenefits.agility
+      });
+    }
+    await this.actor.setFlag("cns5", "classBonuses", classBonuses);
 
     // What the dice gave him: curses, talents and flaws, copied from the
     // compendia so they carry their page and their roll. Anything he already
@@ -877,5 +1553,11 @@ export class CnS5CreationWizard extends HandlebarsApplicationMixin(ApplicationV2
     ui.notifications.info(game.i18n.format("CNS5.Creation.done", { name: this.actor.name }));
     await this.close();
     this.actor.sheet.render({ force: true });
+
+    // A mage goes on to buy his starting spells (p295), now that his Methods
+    // and Magick Level are on the sheet to reckon them from.
+    if (this.actor.system.magick?.mode && (this.actor.system.magick?.level ?? 0) > 0) {
+      new CnS5StartingSpells(this.actor).render({ force: true });
+    }
   }
 }

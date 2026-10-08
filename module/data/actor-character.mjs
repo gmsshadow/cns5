@@ -29,6 +29,22 @@ export class CnS5Character extends CnS5ActorBase {
       gender: new fields.StringField({ required: true, blank: true, initial: "" }),
       age: new fields.NumberField({ required: true, integer: true, initial: 18, min: 0 }),
       vocation: new fields.StringField({ required: true, blank: true, initial: "" }),
+      // The vocation as a key into data/character-vocations.json, and which
+      // of its kinds — a Druid's four, an Elementalist's four, a Holy
+      // Knight's A or B (pp.119-146). Blank for one entered by hand.
+      vocationKey: new fields.StringField({ required: true, blank: true, initial: "" }),
+      vocationVariant: new fields.StringField({ required: true, blank: true, initial: "" }),
+      // The vocation's Primary and Secondary Attributes, which set how often
+      // a further skill may be mastered (p120). The wizard fills them from the
+      // vocation's table; an Adventurer's come from his two specialities
+      // (p129), so they can be set by hand.
+      vocationAttributes: new fields.SchemaField({
+        primary: new fields.StringField({ required: true, blank: true, initial: "" }),
+        secondary: new fields.StringField({ required: true, blank: true, initial: "" })
+      }),
+      // "Once a new Mastered Skill has been obtained, the character must state
+      // what the next skill is that he intends to master" (p120).
+      nextMastery: new fields.StringField({ required: true, blank: true, initial: "" }),
       socialClass: new fields.StringField({ required: true, blank: true, initial: "" }),
       // The class and band as keys, for the tables that follow from them —
       // which father's vocations he may have come from (p66 onwards).
@@ -166,6 +182,23 @@ export class CnS5Character extends CnS5ActorBase {
     this.experience.nextLevelAt = progress.next;
     this.experience.toNextLevel = progress.needed;
 
+    // Masteries: five to begin with and one more every so many levels, by the
+    // vocation's attributes, or Discipline where greater than the Secondary
+    // (p120).
+    const chosen = this.details.vocationAttributes ?? {};
+    const value = (key) => (key ? this.attr?.[key]?.value : undefined);
+    const known = Number.isFinite(value(chosen.primary)) && Number.isFinite(value(chosen.secondary));
+    const used = (this.parent?.items ?? []).filter(
+      (i) => i.type === "skill" && i.system.mastered && !i.system.masteryFree
+    ).length;
+    this.mastery = CNS5.masteryStatus({
+      total: known
+        ? CNS5.masteryTotal({ primary: value(chosen.primary), secondary: value(chosen.secondary), dis: value("dis") })
+        : null,
+      level: this.experience.level,
+      used
+    });
+
     // A single farthing total makes comparisons and change trivial; the sheet
     // still shows and edits the four denominations separately.
     this.currency.totalFarthings = Object.entries(CNS5.currency).reduce(
@@ -232,7 +265,15 @@ export class CnS5Character extends CnS5ActorBase {
       0
     );
     this.magick.methodLevels = methodLevels;
-    this.magick.startingMR = methodLevels * this.magick.level;
+    // And the bonus a Heroic or Mythic mage adds from his Mode's Attribute
+    // Bonus (p295).
+    this.magick.startingPoints = CNS5.startingSpellPoints({
+      methodLevels,
+      ml: this.magick.level,
+      attributeBonus: mode?.system.attributeBonus ?? 0,
+      characterType: this.details.characterType
+    });
+    this.magick.startingMR = this.magick.startingPoints.total;
   }
 
   /* -------------------------------------------- */

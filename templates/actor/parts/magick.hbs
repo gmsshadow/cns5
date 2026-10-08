@@ -31,9 +31,15 @@
         <div><dt>{{localize "CNS5.Magick.aspectBonus"}}</dt><dd>{{cns5Signed system.magick.aspectBonus}}</dd></div>
         <div><dt>{{localize "CNS5.Derived.magickLevel"}}</dt><dd>{{system.magick.level}}</dd></div>
         <div><dt>{{localize "CNS5.Derived.magickResistance"}}</dt><dd>{{cns5Percent system.magick.resistance}}</dd></div>
-        <div><dt>{{localize "CNS5.Magick.startingMR"}}</dt><dd>{{system.magick.startingMR}}</dd></div>
+        <div><dt>{{localize "CNS5.Magick.startingMR"}}</dt>
+            <dd data-tooltip="{{localize 'CNS5.StartingSpells.pointsValue' base=system.magick.startingPoints.base bonus=system.magick.startingPoints.bonus total=system.magick.startingPoints.total}}">{{system.magick.startingMR}}</dd></div>
         <div><dt>{{localize "CNS5.Magick.spentMR"}}</dt><dd>{{spentMR}}</dd></div>
     </dl>
+    {{#if editable}}{{#if system.magick.mode}}
+    <div class="cns5-wizard__actions">
+        <button type="button" data-action="startingSpells">{{localize "CNS5.StartingSpells.open"}}</button>
+    </div>
+    {{/if}}{{/if}}
 
     <section class="cns5-skills">
         <h3 class="cns5-skills__heading">

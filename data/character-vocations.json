@@ -1,0 +1,3484 @@
+{
+  "source": "Chivalry & Sorcery 5th Edition core rules, vocation tables, pp.119-146",
+  "note": "Transcribed, the two-column tables defeating a reading by position, and checked word for word against the pages. Skill names, category choices, combat caps and mastery order only; no description or footnote prose.",
+  "startingSkills": 10,
+  "minimumPrimary": 6,
+  "maximumSecondary": 4,
+  "startingMasteries": 5,
+  "filters": {
+    "method": [
+      "Arcane Magick",
+      "Command Magick",
+      "Divination Magick",
+      "Illusion Magick",
+      "Plant Magick",
+      "Summoning Magick",
+      "Transcendental Magick",
+      "Transmutation Magick",
+      "Wards Magick",
+      "Basic Magick – Air",
+      "Basic Magick – Earth",
+      "Basic Magick – Fire",
+      "Basic Magick – Water"
+    ],
+    "instrument": [
+      "Bagpipes",
+      "Drums",
+      "Flutes",
+      "Horns",
+      "Strings"
+    ],
+    "dance": [
+      "Dancing: Court Dancing",
+      "Dancing: Folk Dance"
+    ],
+    "weapon": [
+      "Archery",
+      "Axes",
+      "Cavalry Lances",
+      "Fighting Staves",
+      "Flails",
+      "Great Swords",
+      "Horse Archery",
+      "Hurling Axes",
+      "Hurling Javelins",
+      "Knife & Dagger Fighting",
+      "Maces, Hammers & Clubs",
+      "Polearms",
+      "Short Swords",
+      "Slashing Swords",
+      "Slings",
+      "Spears",
+      "Throwing Knives & Daggers",
+      "Throwing Objects"
+    ],
+    "oneHanded": [
+      "Axes",
+      "Flails",
+      "Knife & Dagger Fighting",
+      "Maces, Hammers & Clubs",
+      "Short Swords",
+      "Slashing Swords",
+      "Spears"
+    ],
+    "spoken": [
+      "Ancient Language - Spoken",
+      "Beast Tongues—Spoken",
+      "Common Tongue— Spoken",
+      "Dwarven Tongue—Spoken",
+      "Elven Tongue—Spoken",
+      "Foreign Language-Spoken",
+      "Mage Speech-Spoken",
+      "Monster Tongues—Spoken",
+      "Own Language—Spoken"
+    ],
+    "written": [
+      "Ancient Language - Read / Write",
+      "Beast Tongues—Read / Write",
+      "Common Tongue Read / Write",
+      "Dwarven Tongue Read / Write",
+      "Elven Tongue—Read / Write",
+      "Foreign Language Read/Write",
+      "Mage Speech-Read / Write",
+      "Monster Tongues Read / Write",
+      "Own Language—Read/Write"
+    ],
+    "ancient": [
+      "Ancient Language - Spoken",
+      "Ancient Language - Read / Write"
+    ],
+    "foreign": [
+      "Foreign Language Read/Write",
+      "Foreign Language-Spoken"
+    ]
+  },
+  "shared": {
+    "thief": [
+      {
+        "text": "Streetwise",
+        "skill": "Streetwise"
+      },
+      {
+        "text": "Dodge",
+        "skill": "Dodge"
+      },
+      {
+        "text": "Concealing and Finding",
+        "skill": "Concealing & Finding"
+      },
+      {
+        "text": "Any Underworld Lore",
+        "missing": true
+      },
+      {
+        "text": "Detecting Thievery",
+        "skill": "Detecting Thievery"
+      }
+    ]
+  },
+  "vocations": [
+    {
+      "key": "serviens",
+      "name": "Serviens & Liveried Horsemen",
+      "group": "warrior",
+      "page": 122,
+      "table": "Table – Serviens & Liveried Horsemen",
+      "attributes": {
+        "primary": "str",
+        "secondary": "con"
+      },
+      "primary": [
+        {
+          "text": "Animal Riding",
+          "skill": "Animal Riding Horse / Pony / Mule"
+        },
+        {
+          "text": "Mounted Combat",
+          "skill": "Mounted Combat"
+        },
+        {
+          "text": "Conditioning",
+          "skill": "Conditioning"
+        },
+        {
+          "text": "Endurance",
+          "skill": "Endurance"
+        },
+        {
+          "text": "Any Combat Skills & Competencies (except K Only)",
+          "groups": [
+            "Combat"
+          ],
+          "count": null,
+          "codes": {
+            "exclude": [
+              "K ONLY"
+            ]
+          }
+        }
+      ],
+      "secondary": [
+        {
+          "text": "Any K Only Combat Skills",
+          "groups": [
+            "Combat"
+          ],
+          "count": null,
+          "codes": {
+            "include": [
+              "K ONLY"
+            ]
+          },
+          "only": [
+            "Riding a Warhorse",
+            "Wearing Battle Armour",
+            "Cavalry Lances"
+          ]
+        },
+        {
+          "text": "Weaponsmithing & Armoury",
+          "skill": "Weaponsmithing & Armoury"
+        },
+        {
+          "text": "Leadership",
+          "skill": "Leadership"
+        },
+        {
+          "text": "First Aid",
+          "skill": "First Aid"
+        },
+        {
+          "text": "Stamina",
+          "skill": "Stamina"
+        },
+        {
+          "text": "Any background skills",
+          "background": true
+        }
+      ],
+      "combat": {
+        "max": 6
+      },
+      "mastery": {
+        "order": [
+          [
+            {
+              "text": "Animal Riding",
+              "skill": "Animal Riding Horse / Pony / Mule"
+            }
+          ],
+          [
+            {
+              "text": "Mounted Combat",
+              "skill": "Mounted Combat"
+            }
+          ]
+        ]
+      }
+    },
+    {
+      "key": "mountedWarrior",
+      "name": "Other Mounted Warriors",
+      "group": "warrior",
+      "page": 122,
+      "table": "Table – Mounted Warriors",
+      "attributes": {
+        "primary": "str",
+        "secondary": "con"
+      },
+      "primary": [
+        {
+          "text": "Animal Riding",
+          "skill": "Animal Riding Horse / Pony / Mule"
+        },
+        {
+          "text": "Horse Archery",
+          "skill": "Horse Archery"
+        },
+        {
+          "text": "Mounted Combat",
+          "skill": "Mounted Combat"
+        },
+        {
+          "text": "Conditioning",
+          "skill": "Conditioning"
+        },
+        {
+          "text": "Endurance",
+          "skill": "Endurance"
+        },
+        {
+          "text": "Any Combat Skills & Competencies (except K Only)",
+          "groups": [
+            "Combat"
+          ],
+          "count": null,
+          "codes": {
+            "exclude": [
+              "K ONLY"
+            ]
+          }
+        }
+      ],
+      "secondary": [
+        {
+          "text": "Any K Only Combat Skills",
+          "groups": [
+            "Combat"
+          ],
+          "count": null,
+          "codes": {
+            "include": [
+              "K ONLY"
+            ]
+          }
+        },
+        {
+          "text": "First Aid",
+          "skill": "First Aid"
+        },
+        {
+          "text": "Stamina",
+          "skill": "Stamina"
+        },
+        {
+          "text": "Any background skills",
+          "background": true
+        }
+      ],
+      "combat": {
+        "max": 5
+      },
+      "mastery": {
+        "order": [
+          [
+            {
+              "text": "Animal Riding",
+              "skill": "Animal Riding Horse / Pony / Mule"
+            }
+          ]
+        ]
+      }
+    },
+    {
+      "key": "guard",
+      "name": "Guards, Retainers & Warriors",
+      "group": "warrior",
+      "page": 123,
+      "table": "Table – Guards, Retainers & Warriors",
+      "attributes": {
+        "primary": "str",
+        "secondary": "con"
+      },
+      "primary": [
+        {
+          "text": "Any Combat Skills & Competencies (except K Only)",
+          "groups": [
+            "Combat"
+          ],
+          "count": null,
+          "codes": {
+            "exclude": [
+              "K ONLY"
+            ]
+          }
+        },
+        {
+          "text": "Conditioning",
+          "skill": "Conditioning"
+        },
+        {
+          "text": "Endurance",
+          "skill": "Endurance"
+        },
+        {
+          "text": "Stamina",
+          "skill": "Stamina"
+        }
+      ],
+      "secondary": [
+        {
+          "text": "Any Combat Skills & Competencies (except K Only)",
+          "groups": [
+            "Combat"
+          ],
+          "count": null,
+          "codes": {
+            "exclude": [
+              "K ONLY"
+            ]
+          }
+        },
+        {
+          "text": "First Aid",
+          "skill": "First Aid"
+        },
+        {
+          "text": "Animal Riding",
+          "skill": "Animal Riding Horse / Pony / Mule"
+        },
+        {
+          "text": "Any background skills",
+          "background": true
+        }
+      ],
+      "combat": {
+        "max": 5
+      },
+      "mastery": {
+        "order": [
+          [
+            {
+              "text": "Combat",
+              "groups": [
+                "Combat"
+              ],
+              "count": null
+            },
+            {
+              "text": "Combat",
+              "groups": [
+                "Combat"
+              ],
+              "count": null
+            }
+          ]
+        ]
+      }
+    },
+    {
+      "key": "forester",
+      "name": "Foresters",
+      "group": "warrior",
+      "page": 124,
+      "table": "Table – Foresters",
+      "attributes": {
+        "primary": "con",
+        "secondary": "agl"
+      },
+      "primary": [
+        {
+          "text": "Archery or Hurling Javelins",
+          "oneOf": [
+            "Archery",
+            "Hurling Javelins"
+          ]
+        },
+        {
+          "text": "Any Outdoors Skills",
+          "groups": [
+            "Outdoor"
+          ],
+          "count": null
+        },
+        {
+          "text": "Combat skills & Competencies (marked F)",
+          "groups": [
+            "Combat"
+          ],
+          "count": null,
+          "codes": {
+            "include": [
+              "F"
+            ]
+          }
+        },
+        {
+          "text": "Bestiary Lore",
+          "skill": "Bestiary Lore"
+        },
+        {
+          "text": "Regional and National Geography",
+          "skill": "Regional & National Geography"
+        },
+        {
+          "text": "Regional and National History",
+          "skill": "Regional/National History & Legend"
+        },
+        {
+          "text": "Herbalism",
+          "skill": "Herbalism"
+        }
+      ],
+      "secondary": [
+        {
+          "text": "Any Combat Skills (except K Only)",
+          "groups": [
+            "Combat"
+          ],
+          "count": null,
+          "codes": {
+            "exclude": [
+              "K ONLY"
+            ]
+          }
+        },
+        {
+          "text": "First Aid",
+          "skill": "First Aid"
+        },
+        {
+          "text": "Conditioning",
+          "skill": "Conditioning"
+        },
+        {
+          "text": "Endurance",
+          "skill": "Endurance"
+        },
+        {
+          "text": "Stamina",
+          "skill": "Stamina"
+        },
+        {
+          "text": "Bowery & Fletching",
+          "skill": "Bowery & Fletching"
+        },
+        {
+          "text": "Any background skills",
+          "background": true
+        }
+      ],
+      "combat": {
+        "max": 4
+      },
+      "mastery": {
+        "order": [
+          [
+            {
+              "text": "Archery or Hurling Javelins",
+              "oneOf": [
+                "Archery",
+                "Hurling Javelins"
+              ]
+            }
+          ]
+        ],
+        "share": {
+          "groups": [
+            "Outdoor"
+          ],
+          "fraction": 0.5
+        }
+      },
+      "minimum": [
+        {
+          "groups": [
+            "Outdoor"
+          ],
+          "count": 3
+        }
+      ],
+      "fatherBonus": {
+        "father": "Forester",
+        "skills": [
+          "Conditioning",
+          "Endurance",
+          "Stamina"
+        ],
+        "choose": {
+          "groups": [
+            "Outdoor"
+          ],
+          "count": 4
+        }
+      }
+    },
+    {
+      "key": "knight",
+      "name": "Knights",
+      "group": "warrior",
+      "page": 125,
+      "table": "Table – Knights",
+      "attributes": {
+        "primary": "str",
+        "secondary": "con"
+      },
+      "primary": [
+        {
+          "text": "Animal Riding",
+          "skill": "Animal Riding Horse / Pony / Mule"
+        },
+        {
+          "text": "Mounted Combat",
+          "skill": "Mounted Combat"
+        },
+        {
+          "text": "Any 3 Combat skills & Competencies marked (K)",
+          "groups": [
+            "Combat"
+          ],
+          "count": 3,
+          "codes": {
+            "include": [
+              "K",
+              "K ONLY"
+            ]
+          }
+        },
+        {
+          "text": "Conditioning",
+          "skill": "Conditioning"
+        },
+        {
+          "text": "Endurance",
+          "skill": "Endurance"
+        },
+        {
+          "text": "Stamina",
+          "skill": "Stamina"
+        },
+        {
+          "text": "Battlefield Tactics",
+          "skill": "Battlefield Tactics"
+        },
+        {
+          "text": "Leadership",
+          "skill": "Leadership"
+        },
+        {
+          "text": "Any Noble skills",
+          "groups": [
+            "Noble"
+          ],
+          "count": null
+        }
+      ],
+      "secondary": [
+        {
+          "text": "Any Other Combat Skills",
+          "groups": [
+            "Combat"
+          ],
+          "count": null
+        },
+        {
+          "text": "First Aid",
+          "skill": "First Aid"
+        },
+        {
+          "text": "Any background skills",
+          "background": true
+        }
+      ],
+      "combat": {
+        "max": 7
+      },
+      "mastery": {
+        "order": [
+          [
+            {
+              "text": "Animal Riding",
+              "skill": "Animal Riding Horse / Pony / Mule"
+            },
+            {
+              "text": "Mounted Combat",
+              "skill": "Mounted Combat"
+            }
+          ],
+          [
+            {
+              "text": "Combat (K)",
+              "groups": [
+                "Combat"
+              ],
+              "count": null,
+              "codes": {
+                "include": [
+                  "K",
+                  "K ONLY"
+                ]
+              }
+            },
+            {
+              "text": "Combat (K)",
+              "groups": [
+                "Combat"
+              ],
+              "count": null,
+              "codes": {
+                "include": [
+                  "K",
+                  "K ONLY"
+                ]
+              }
+            },
+            {
+              "text": "Combat (K)",
+              "groups": [
+                "Combat"
+              ],
+              "count": null,
+              "codes": {
+                "include": [
+                  "K",
+                  "K ONLY"
+                ]
+              }
+            }
+          ]
+        ]
+      },
+      "freeMastery": {
+        "skill": "Battlefield Tactics",
+        "gentle": true,
+        "attributes": {
+          "int": 14,
+          "wis": 14
+        }
+      }
+    },
+    {
+      "key": "holyKnight",
+      "name": "Knights in Holy Fighting Orders",
+      "group": "warrior",
+      "page": 126,
+      "table": null,
+      "attributes": {
+        "primary": "str",
+        "secondary": "con"
+      },
+      "primary": [
+        {
+          "text": "Riding & Mounted Combat",
+          "skills": [
+            "Animal Riding Horse / Pony / Mule",
+            "Mounted Combat"
+          ]
+        },
+        {
+          "text": "Conditioning",
+          "skill": "Conditioning"
+        },
+        {
+          "text": "Endurance",
+          "skill": "Endurance"
+        },
+        {
+          "text": "Stamina",
+          "skill": "Stamina"
+        },
+        {
+          "text": "Battlefield Tactics",
+          "skill": "Battlefield Tactics"
+        },
+        {
+          "text": "Leadership",
+          "skill": "Leadership"
+        },
+        {
+          "text": "Any Noble skills",
+          "groups": [
+            "Noble"
+          ],
+          "count": null
+        },
+        {
+          "text": "Any Materia Medicina",
+          "groups": [
+            "Materia Medicina"
+          ],
+          "count": null
+        }
+      ],
+      "secondary": [
+        {
+          "text": "Any other Combat skills",
+          "groups": [
+            "Combat"
+          ],
+          "count": null
+        },
+        {
+          "text": "Any 2 Language Lore (Spoken)",
+          "groups": [
+            "Language"
+          ],
+          "count": 2,
+          "filter": "spoken"
+        },
+        {
+          "text": "Any2 Language Lore (Written)",
+          "groups": [
+            "Language"
+          ],
+          "count": 2,
+          "filter": "written"
+        },
+        {
+          "text": "Any Materia Theologica Skills",
+          "groups": [
+            "Materia Theologica"
+          ],
+          "count": null
+        },
+        {
+          "text": "Any2 Materia Magica Skills",
+          "groups": [
+            "Materia Magicka"
+          ],
+          "count": 2
+        },
+        {
+          "text": "Any2 Historical Lore",
+          "groups": [
+            "Lore Historical"
+          ],
+          "count": 2
+        },
+        {
+          "text": "Any Charismatic skills",
+          "groups": [
+            "Charismatic"
+          ],
+          "count": null
+        },
+        {
+          "text": "Any Background skills",
+          "background": true
+        }
+      ],
+      "mastery": {
+        "order": [
+          [
+            {
+              "text": "Riding & Mounted Combat",
+              "skills": [
+                "Animal Riding Horse / Pony / Mule",
+                "Mounted Combat"
+              ]
+            }
+          ]
+        ]
+      },
+      "freeMastery": {
+        "skill": "Battlefield Tactics",
+        "gentle": true,
+        "total": {
+          "of": [
+            "int",
+            "wis"
+          ],
+          "min": 28
+        }
+      },
+      "variants": [
+        {
+          "key": "knight",
+          "name": "A: Squire or Knight",
+          "primary": [
+            {
+              "text": "Any 4 Combat Skills",
+              "groups": [
+                "Combat"
+              ],
+              "count": 4
+            }
+          ],
+          "secondary": [
+            {
+              "text": "Faith",
+              "skill": "Faith"
+            }
+          ]
+        },
+        {
+          "key": "brother",
+          "name": "B: Brother or Chaplain",
+          "primary": [
+            {
+              "text": "Any 2 Combat Skills",
+              "groups": [
+                "Combat"
+              ],
+              "count": 2
+            },
+            {
+              "text": "Faith",
+              "skill": "Faith"
+            },
+            {
+              "text": "one Language (spoken and written) or Historical Lore",
+              "groups": [
+                "Language",
+                "Lore Historical"
+              ],
+              "count": 1
+            }
+          ],
+          "secondary": [],
+          "mastery": {
+            "order": [
+              [
+                {
+                  "text": "Riding & Mounted Combat",
+                  "skills": [
+                    "Animal Riding Horse / Pony / Mule",
+                    "Mounted Combat"
+                  ]
+                }
+              ],
+              [
+                {
+                  "text": "Faith",
+                  "skill": "Faith"
+                }
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "key": "burglar",
+      "name": "Burglars",
+      "group": "thief",
+      "page": 127,
+      "table": "Table – Burglars",
+      "attributes": {
+        "primary": "agl",
+        "secondary": "str"
+      },
+      "primary": [
+        {
+          "text": "Picking Locks",
+          "skill": "Picking Locks"
+        },
+        {
+          "text": "Stealth of Thieves & Assassins",
+          "skill": "Stealth of Thieves & Assassins"
+        },
+        {
+          "text": "Detecting Mantraps",
+          "skill": "Detecting Mantraps"
+        },
+        {
+          "text": "Setting & Disarming Mantraps",
+          "skill": "Setting & Disarming Mantraps"
+        },
+        {
+          "text": "Climbing",
+          "skill": "Climbing"
+        },
+        {
+          "text": "Evaluating Loot",
+          "skill": "Evaluating Goods"
+        },
+        {
+          "text": "Skulk in Shadows",
+          "skill": "Skulking in Shadows"
+        }
+      ],
+      "secondary": [
+        {
+          "text": "Knife & Dagger Fighting",
+          "skill": "Knife & Dagger Fighting"
+        },
+        {
+          "text": "Back-stabbing",
+          "skill": "Backstabbing"
+        },
+        {
+          "text": "Hearing Rumours",
+          "skill": "Hearing Rumours"
+        },
+        {
+          "text": "Any background skills",
+          "background": true
+        }
+      ],
+      "shared": "thief",
+      "mastery": {
+        "order": [
+          [
+            {
+              "text": "Picking Locks",
+              "skill": "Picking Locks"
+            }
+          ],
+          [
+            {
+              "text": "Stealth of Thieves & Assassins",
+              "skill": "Stealth of Thieves & Assassins"
+            }
+          ],
+          [
+            {
+              "text": "Detecting Mantraps",
+              "skill": "Detecting Mantraps"
+            }
+          ]
+        ]
+      }
+    },
+    {
+      "key": "beggar",
+      "name": "Beggars",
+      "group": "thief",
+      "page": 127,
+      "table": "Table – Beggars",
+      "attributes": {
+        "primary": "int",
+        "secondary": "bv"
+      },
+      "primary": [
+        {
+          "text": "Begging",
+          "skill": "Begging"
+        },
+        {
+          "text": "Con",
+          "skill": "Con"
+        },
+        {
+          "text": "Disguise",
+          "skill": "Disguises"
+        },
+        {
+          "text": "Hearing Rumours",
+          "skill": "Hearing Rumours"
+        },
+        {
+          "text": "Acting: Costume & Design",
+          "skill": "Acting: Costume & Makeup"
+        },
+        {
+          "text": "Sleight of Hand",
+          "skill": "Sleight of Hand"
+        },
+        {
+          "text": "Skulk in Shadows",
+          "skill": "Skulking in Shadows"
+        },
+        {
+          "text": "Picking Pockets",
+          "skill": "Picking Pockets & Cutting Purses"
+        },
+        {
+          "text": "Evaluating Loot",
+          "skill": "Evaluating Goods"
+        }
+      ],
+      "secondary": [
+        {
+          "text": "Storytelling",
+          "skill": "Storytelling"
+        },
+        {
+          "text": "Acting: Performance",
+          "skill": "Acting: Performance"
+        },
+        {
+          "text": "Knife & Dagger Fighting",
+          "skill": "Knife & Dagger Fighting"
+        },
+        {
+          "text": "Any 3 Lore",
+          "groups": [
+            "Lore Historical",
+            "Lore Scientific"
+          ],
+          "count": 3
+        },
+        {
+          "text": "Any background skills",
+          "background": true
+        }
+      ],
+      "shared": "thief",
+      "mastery": {
+        "order": [
+          [
+            {
+              "text": "Begging",
+              "skill": "Begging"
+            }
+          ],
+          [
+            {
+              "text": "Con",
+              "skill": "Con"
+            }
+          ],
+          [
+            {
+              "text": "Disguise",
+              "skill": "Disguises"
+            }
+          ]
+        ]
+      }
+    },
+    {
+      "key": "cutPurse",
+      "name": "Cut-Purses",
+      "group": "thief",
+      "page": 128,
+      "table": "Table – Cut-Purses",
+      "attributes": {
+        "primary": "agl",
+        "secondary": "str"
+      },
+      "primary": [
+        {
+          "text": "Picking Pockets",
+          "skill": "Picking Pockets & Cutting Purses"
+        },
+        {
+          "text": "Stealth of Thieves & Assassins",
+          "skill": "Stealth of Thieves & Assassins"
+        },
+        {
+          "text": "Mugging",
+          "skill": "Mugging"
+        },
+        {
+          "text": "Knife & Dagger Fighting",
+          "skill": "Knife & Dagger Fighting"
+        },
+        {
+          "text": "Sleight of Hand",
+          "skill": "Sleight of Hand"
+        },
+        {
+          "text": "Skulk in Shadows",
+          "skill": "Skulking in Shadows"
+        }
+      ],
+      "secondary": [
+        {
+          "text": "Back-stabbing",
+          "skill": "Backstabbing"
+        },
+        {
+          "text": "Maces, Hammers & Clubs",
+          "skill": "Maces, Hammers & Clubs"
+        },
+        {
+          "text": "Evaluating Loot",
+          "skill": "Evaluating Goods"
+        },
+        {
+          "text": "Garrotting",
+          "skill": "Garrotting"
+        },
+        {
+          "text": "Con",
+          "skill": "Con"
+        },
+        {
+          "text": "Any background skills",
+          "background": true
+        }
+      ],
+      "shared": "thief",
+      "mastery": {
+        "order": [
+          [
+            {
+              "text": "Picking Pockets",
+              "skill": "Picking Pockets & Cutting Purses"
+            }
+          ],
+          [
+            {
+              "text": "Stealth of Thieves & Assassins",
+              "skill": "Stealth of Thieves & Assassins"
+            }
+          ],
+          [
+            {
+              "text": "Mugging",
+              "skill": "Mugging"
+            }
+          ]
+        ]
+      }
+    },
+    {
+      "key": "assassin",
+      "name": "Assassins",
+      "group": "thief",
+      "page": 128,
+      "table": "Table – Assassins",
+      "attributes": {
+        "primary": "agl",
+        "secondary": "str"
+      },
+      "primary": [
+        {
+          "text": "Disguise",
+          "skill": "Disguises"
+        },
+        {
+          "text": "Stealth of Thieves & Assassins",
+          "skill": "Stealth of Thieves & Assassins"
+        },
+        {
+          "text": "Back-stabbing",
+          "skill": "Backstabbing"
+        },
+        {
+          "text": "Garrotting",
+          "skill": "Garrotting"
+        },
+        {
+          "text": "Skulk in Shadows",
+          "skill": "Skulking in Shadows"
+        },
+        {
+          "text": "Administer Drugs/Poisons",
+          "skill": "Administer Poisons & Drugs"
+        },
+        {
+          "text": "Knife & Dagger Fighting",
+          "skill": "Knife & Dagger Fighting"
+        },
+        {
+          "text": "Throwing Knives & Daggers",
+          "skill": "Throwing Knives & Daggers"
+        },
+        {
+          "text": "Any 1-hand Weapon Skill",
+          "groups": [
+            "Combat"
+          ],
+          "count": 1,
+          "filter": "oneHanded"
+        }
+      ],
+      "secondary": [
+        {
+          "text": "Any 2 x 1-hand Weapon Skills",
+          "groups": [
+            "Combat"
+          ],
+          "count": 2,
+          "filter": "oneHanded"
+        },
+        {
+          "text": "Sleight of Hand",
+          "skill": "Sleight of Hand"
+        },
+        {
+          "text": "Detecting Mantraps",
+          "skill": "Detecting Mantraps"
+        },
+        {
+          "text": "Setting & Disarming Mantraps",
+          "skill": "Setting & Disarming Mantraps"
+        },
+        {
+          "text": "Climbing",
+          "skill": "Climbing"
+        },
+        {
+          "text": "Pharmacology",
+          "skill": "Pharmacology & Medicine"
+        },
+        {
+          "text": "Swimming",
+          "skill": "Swimming"
+        },
+        {
+          "text": "Hearing Rumours",
+          "skill": "Hearing Rumours"
+        },
+        {
+          "text": "Any background skills",
+          "background": true
+        }
+      ],
+      "shared": "thief",
+      "mastery": {
+        "order": [
+          [
+            {
+              "text": "Disguise",
+              "skill": "Disguises"
+            }
+          ],
+          [
+            {
+              "text": "Stealth of Thieves & Assassins",
+              "skill": "Stealth of Thieves & Assassins"
+            }
+          ],
+          [
+            {
+              "text": "Back-stabbing",
+              "skill": "Backstabbing"
+            }
+          ],
+          [
+            {
+              "text": "Garrotting",
+              "skill": "Garrotting"
+            }
+          ],
+          [
+            {
+              "text": "Skulk in Shadows",
+              "skill": "Skulking in Shadows"
+            }
+          ]
+        ]
+      }
+    },
+    {
+      "key": "physician",
+      "name": "Physician",
+      "group": "other",
+      "page": 129,
+      "table": "Table – Physicians",
+      "attributes": {
+        "primary": "int",
+        "secondary": "agl"
+      },
+      "primary": [
+        {
+          "text": "Chirurgery",
+          "skill": "Chirurgery"
+        },
+        {
+          "text": "All Other Materia Medicina",
+          "groups": [
+            "Materia Medicina"
+          ],
+          "count": null
+        },
+        {
+          "text": "Administer Poisons & Drugs",
+          "skill": "Administer Poisons & Drugs"
+        },
+        {
+          "text": "Regional & National Geography",
+          "skill": "Regional & National Geography"
+        },
+        {
+          "text": "All Weapon Skills",
+          "groups": [
+            "Combat"
+          ],
+          "count": null,
+          "filter": "weapon"
+        }
+      ],
+      "secondary": [
+        {
+          "text": "All Ancient Languages",
+          "groups": [
+            "Language"
+          ],
+          "count": null,
+          "filter": "ancient"
+        },
+        {
+          "text": "All Foreign Languages",
+          "groups": [
+            "Language"
+          ],
+          "count": null,
+          "filter": "foreign"
+        },
+        {
+          "text": "Animal Riding",
+          "skill": "Animal Riding Horse / Pony / Mule"
+        },
+        {
+          "text": "Any Background Skills",
+          "background": true
+        }
+      ]
+    },
+    {
+      "key": "herald",
+      "name": "Herald",
+      "group": "other",
+      "page": 130,
+      "table": null,
+      "attributes": {
+        "primary": "cha",
+        "secondary": "int"
+      },
+      "primary": [
+        {
+          "text": "Riding & Mounted Combat",
+          "skills": [
+            "Animal Riding Horse / Pony / Mule",
+            "Mounted Combat"
+          ]
+        },
+        {
+          "text": "Heraldry",
+          "skill": "Heraldry"
+        },
+        {
+          "text": "Any 2 Combat skills marked (K)",
+          "groups": [
+            "Combat"
+          ],
+          "count": 2,
+          "codes": {
+            "include": [
+              "K",
+              "K ONLY"
+            ]
+          }
+        },
+        {
+          "text": "Diplomacy",
+          "skill": "Diplomacy & Politics"
+        },
+        {
+          "text": "Conditioning (Athletic)",
+          "skill": "Conditioning"
+        },
+        {
+          "text": "Endurance (Athletic)",
+          "skill": "Endurance"
+        },
+        {
+          "text": "Stamina (Athletic)",
+          "skill": "Stamina"
+        },
+        {
+          "text": "Battlefield Tactics",
+          "skill": "Battlefield Tactics"
+        },
+        {
+          "text": "Leadership (Charismatic)",
+          "skill": "Leadership"
+        },
+        {
+          "text": "Any 3 languages (spoken & written)",
+          "groups": [
+            "Language"
+          ],
+          "count": 3
+        },
+        {
+          "text": "Any Noble Skills",
+          "groups": [
+            "Noble"
+          ],
+          "count": null
+        }
+      ],
+      "secondary": [
+        {
+          "text": "Any other Combat skills",
+          "groups": [
+            "Combat"
+          ],
+          "count": null
+        },
+        {
+          "text": "First Aid (Materia Medicinal",
+          "skill": "First Aid"
+        },
+        {
+          "text": "Any background skills",
+          "background": true
+        }
+      ],
+      "mastery": {
+        "order": [
+          [
+            {
+              "text": "Riding & Mounted Combat",
+              "skills": [
+                "Animal Riding Horse / Pony / Mule",
+                "Mounted Combat"
+              ]
+            }
+          ],
+          [
+            {
+              "text": "Heraldry",
+              "skill": "Heraldry"
+            }
+          ],
+          [
+            {
+              "text": "Combat (K)",
+              "groups": [
+                "Combat"
+              ],
+              "count": null,
+              "codes": {
+                "include": [
+                  "K",
+                  "K ONLY"
+                ]
+              }
+            },
+            {
+              "text": "Combat (K)",
+              "groups": [
+                "Combat"
+              ],
+              "count": null,
+              "codes": {
+                "include": [
+                  "K",
+                  "K ONLY"
+                ]
+              }
+            }
+          ],
+          [
+            {
+              "text": "Diplomacy",
+              "skill": "Diplomacy & Politics"
+            }
+          ]
+        ]
+      },
+      "freeMastery": {
+        "skill": "Battlefield Tactics",
+        "gentle": true,
+        "total": {
+          "of": [
+            "int",
+            "wis"
+          ],
+          "min": 28
+        }
+      }
+    },
+    {
+      "key": "conjuror",
+      "name": "Conjuror",
+      "group": "mage",
+      "page": 134,
+      "table": "Table - Mage Conjuror",
+      "attributes": {
+        "primary": "int",
+        "secondary": "agl"
+      },
+      "primary": [
+        {
+          "text": "Conjuration Mode",
+          "skill": "Conjuration Mode of Magick",
+          "mode": true
+        },
+        {
+          "text": "Laws of Magick",
+          "skill": "Laws of Magick"
+        },
+        {
+          "text": "Lore of Correspondences",
+          "skill": "Lore of Correspondences"
+        },
+        {
+          "text": "Spell research",
+          "skill": "Spell Research"
+        },
+        {
+          "text": "Transmutation Method",
+          "skill": "Transmutation Magick"
+        },
+        {
+          "text": "Illusion Method",
+          "skill": "Illusion Magick"
+        },
+        {
+          "text": "Basic Magick - Air Method",
+          "skill": "Basic Magick – Air"
+        },
+        {
+          "text": "Divination Method",
+          "skill": "Divination Magick"
+        },
+        {
+          "text": "Plant Method",
+          "skill": "Plant Magick"
+        }
+      ],
+      "secondary": [
+        {
+          "text": "Word of Guard",
+          "skill": "Word of Guard"
+        },
+        {
+          "text": "Herbalism",
+          "skill": "Herbalism"
+        },
+        {
+          "text": "Pottery",
+          "skill": "Pottery"
+        },
+        {
+          "text": "Willpower",
+          "skill": "Willpower"
+        },
+        {
+          "text": "Basic Magick Earth Method",
+          "skill": "Basic Magick – Earth"
+        },
+        {
+          "text": "Basic Magick Fire Method",
+          "skill": "Basic Magick – Fire"
+        },
+        {
+          "text": "Basic Magick Water Method",
+          "skill": "Basic Magick – Water"
+        },
+        {
+          "text": "Wards Method",
+          "skill": "Wards Magick"
+        },
+        {
+          "text": "Any background skills",
+          "background": true
+        },
+        {
+          "text": "Summoning Method",
+          "skill": "Summoning Magick"
+        }
+      ],
+      "modeMastery": {
+        "levels": 2,
+        "psf": 20,
+        "required": true
+      }
+    },
+    {
+      "key": "diviner",
+      "name": "Diviner",
+      "group": "mage",
+      "page": 134,
+      "table": "Table - Mage Diviner",
+      "attributes": {
+        "primary": "int",
+        "secondary": "wis"
+      },
+      "primary": [
+        {
+          "text": "Divination Mode",
+          "skill": "Divination Mode of Magick",
+          "mode": true
+        },
+        {
+          "text": "Laws of Magick",
+          "skill": "Laws of Magick"
+        },
+        {
+          "text": "Lore of Correspondences",
+          "skill": "Lore of Correspondences"
+        },
+        {
+          "text": "Spell Research",
+          "skill": "Spell Research"
+        },
+        {
+          "text": "Divining the Omens",
+          "skill": "Interpret the Omens"
+        },
+        {
+          "text": "Divination Method",
+          "skill": "Divination Magick"
+        },
+        {
+          "text": "Arcane Method",
+          "skill": "Arcane Magick"
+        },
+        {
+          "text": "Summoning Method",
+          "skill": "Summoning Magick"
+        },
+        {
+          "text": "Transcendental Method",
+          "skill": "Transcendental Magick"
+        }
+      ],
+      "secondary": [
+        {
+          "text": "Command Method",
+          "skill": "Command Magick"
+        },
+        {
+          "text": "Plant Method",
+          "skill": "Plant Magick"
+        },
+        {
+          "text": "Wards Method",
+          "skill": "Wards Magick"
+        },
+        {
+          "text": "Basic Magick Air Method",
+          "skill": "Basic Magick – Air"
+        },
+        {
+          "text": "Basic Magick Fire Method",
+          "skill": "Basic Magick – Fire"
+        },
+        {
+          "text": "Basic Magick Water Method",
+          "skill": "Basic Magick – Water"
+        },
+        {
+          "text": "Oratory",
+          "skill": "Oratory"
+        },
+        {
+          "text": "Any Lore Historical",
+          "groups": [
+            "Lore Historical"
+          ],
+          "count": null
+        },
+        {
+          "text": "Read Character",
+          "skill": "Read Character"
+        },
+        {
+          "text": "Any background skills",
+          "background": true
+        }
+      ],
+      "modeMastery": {
+        "levels": 2,
+        "psf": 20,
+        "required": true
+      }
+    },
+    {
+      "key": "enchanter",
+      "name": "Enchanter",
+      "group": "mage",
+      "page": 135,
+      "table": "Table - Mage Enchanter",
+      "attributes": {
+        "primary": "int",
+        "secondary": "bv"
+      },
+      "primary": [
+        {
+          "text": "Enchantment Mode",
+          "skill": "Enchantment Mode of Magick",
+          "mode": true
+        },
+        {
+          "text": "Lore of Correspondences",
+          "skill": "Lore of Correspondences"
+        },
+        {
+          "text": "Sing",
+          "skill": "Singing"
+        },
+        {
+          "text": "Any Musical Instruments",
+          "groups": [
+            "Art & Entertainment"
+          ],
+          "count": null,
+          "filter": "instrument"
+        },
+        {
+          "text": "Poetic Recitation",
+          "skill": "Poetic Recitation"
+        },
+        {
+          "text": "Any Dance",
+          "groups": [
+            "Art & Entertainment"
+          ],
+          "count": null,
+          "filter": "dance"
+        },
+        {
+          "text": "Command Method",
+          "skill": "Command Magick"
+        },
+        {
+          "text": "Illusion Method",
+          "skill": "Illusion Magick"
+        },
+        {
+          "text": "Summoning Method",
+          "skill": "Summoning Magick"
+        },
+        {
+          "text": "Transmutation Method",
+          "skill": "Transmutation Magick"
+        },
+        {
+          "text": "Wards Method",
+          "skill": "Wards Magick"
+        },
+        {
+          "text": "Any Languages (Spoken)",
+          "groups": [
+            "Language"
+          ],
+          "count": null,
+          "filter": "spoken"
+        },
+        {
+          "text": "Any 2 Languages (Written)",
+          "groups": [
+            "Language"
+          ],
+          "count": 2,
+          "filter": "written"
+        },
+        {
+          "text": "Any 2 Charismatic skills",
+          "groups": [
+            "Charismatic"
+          ],
+          "count": 2
+        },
+        {
+          "text": "Any 3 Materia Magicka",
+          "groups": [
+            "Materia Magicka"
+          ],
+          "count": 3
+        },
+        {
+          "text": "Any 2 Lore Historical",
+          "groups": [
+            "Lore Historical"
+          ],
+          "count": 2
+        },
+        {
+          "text": "Meditation",
+          "skill": "Meditation"
+        }
+      ],
+      "secondary": [
+        {
+          "text": "Spell Research",
+          "skill": "Spell Research"
+        },
+        {
+          "text": "Basic Magick Air Method",
+          "skill": "Basic Magick – Air"
+        },
+        {
+          "text": "Basic Magick Fire Method",
+          "skill": "Basic Magick – Fire"
+        },
+        {
+          "text": "Basic Magick Water Method",
+          "skill": "Basic Magick – Water"
+        },
+        {
+          "text": "Arcane Method",
+          "skill": "Arcane Magick"
+        },
+        {
+          "text": "Transcendental Method",
+          "skill": "Transcendental Magick"
+        },
+        {
+          "text": "Any Charismatic skills",
+          "groups": [
+            "Charismatic"
+          ],
+          "count": null
+        },
+        {
+          "text": "Any Material Magicka",
+          "groups": [
+            "Materia Magicka"
+          ],
+          "count": null
+        },
+        {
+          "text": "Any Arts & Entertainment skills",
+          "groups": [
+            "Art & Entertainment"
+          ],
+          "count": null
+        },
+        {
+          "text": "Any Lore Historical",
+          "groups": [
+            "Lore Historical"
+          ],
+          "count": null
+        },
+        {
+          "text": "any 2 Languages (Written)",
+          "groups": [
+            "Language"
+          ],
+          "count": 2,
+          "filter": "written"
+        },
+        {
+          "text": "Any background skills",
+          "background": true
+        }
+      ],
+      "modeMastery": {
+        "levels": 2,
+        "psf": 20,
+        "required": true
+      }
+    },
+    {
+      "key": "hexMaster",
+      "name": "Hex Master",
+      "group": "mage",
+      "page": 135,
+      "table": "Table - Mage Hex Master",
+      "attributes": {
+        "primary": "int",
+        "secondary": "dis"
+      },
+      "primary": [
+        {
+          "text": "Magecraft Mode",
+          "skill": "Hex Master Mode of Magick",
+          "mode": true
+        },
+        {
+          "text": "Laws of Magick",
+          "skill": "Laws of Magick"
+        },
+        {
+          "text": "Lore of Correspondences",
+          "skill": "Lore of Correspondences"
+        },
+        {
+          "text": "Any 3 Lore Historical",
+          "groups": [
+            "Lore Historical"
+          ],
+          "count": 3
+        },
+        {
+          "text": "Any 7 Methods of Magick",
+          "groups": [
+            "Materia Magicka"
+          ],
+          "count": 7,
+          "filter": "method"
+        },
+        {
+          "text": "Any 3 Materia Magicka skills",
+          "groups": [
+            "Materia Magicka"
+          ],
+          "count": 3
+        },
+        {
+          "text": "Any 3 Languages (Written)",
+          "groups": [
+            "Language"
+          ],
+          "count": 3,
+          "filter": "written"
+        },
+        {
+          "text": "Any 3 Languages (Spoken)",
+          "groups": [
+            "Language"
+          ],
+          "count": 3,
+          "filter": "spoken"
+        }
+      ],
+      "secondary": [
+        {
+          "text": "Any Methods of Magick",
+          "groups": [
+            "Materia Magicka"
+          ],
+          "count": null,
+          "filter": "method"
+        },
+        {
+          "text": "Any Lore Historical",
+          "groups": [
+            "Lore Historical"
+          ],
+          "count": null
+        },
+        {
+          "text": "Any Languages (Written)",
+          "groups": [
+            "Language"
+          ],
+          "count": null,
+          "filter": "written"
+        },
+        {
+          "text": "Any Languages (Spoken)",
+          "groups": [
+            "Language"
+          ],
+          "count": null,
+          "filter": "spoken"
+        },
+        {
+          "text": "Any Material Magicka",
+          "groups": [
+            "Materia Magicka"
+          ],
+          "count": null
+        },
+        {
+          "text": "Any background skills",
+          "background": true
+        }
+      ],
+      "modeMastery": {
+        "levels": 2,
+        "psf": 20,
+        "required": true
+      }
+    },
+    {
+      "key": "necromancer",
+      "name": "Necromancer",
+      "group": "mage",
+      "page": 136,
+      "table": "Table - Mage Necromancer",
+      "attributes": {
+        "primary": "int",
+        "secondary": "wis"
+      },
+      "primary": [
+        {
+          "text": "Necromancy Mode",
+          "skill": "Necromantic Mode of Magick",
+          "mode": true
+        },
+        {
+          "text": "Lore of the Dead",
+          "skill": "Lore of the Dead"
+        },
+        {
+          "text": "Lore of Correspondences",
+          "skill": "Lore of Correspondences"
+        },
+        {
+          "text": "Laws of Magick",
+          "skill": "Laws of Magick"
+        },
+        {
+          "text": "Any 2 Materia Magicka",
+          "groups": [
+            "Materia Magicka"
+          ],
+          "count": 2
+        },
+        {
+          "text": "Any 2 Languages (Spoken)",
+          "groups": [
+            "Language"
+          ],
+          "count": 2,
+          "filter": "spoken"
+        },
+        {
+          "text": "Any 2 Languages (Written)",
+          "groups": [
+            "Language"
+          ],
+          "count": 2,
+          "filter": "written"
+        },
+        {
+          "text": "Any 2 Lore Historical",
+          "groups": [
+            "Lore Historical"
+          ],
+          "count": 2
+        },
+        {
+          "text": "Command Method",
+          "skill": "Command Magick"
+        },
+        {
+          "text": "Summoning Method",
+          "skill": "Summoning Magick"
+        },
+        {
+          "text": "Divination Method",
+          "skill": "Divination Magick"
+        },
+        {
+          "text": "Arcane Method",
+          "skill": "Arcane Magick"
+        },
+        {
+          "text": "Illusion Method",
+          "skill": "Illusion Magick"
+        },
+        {
+          "text": "Wards Method",
+          "skill": "Wards Magick"
+        }
+      ],
+      "secondary": [
+        {
+          "text": "Spell Research",
+          "skill": "Spell Research"
+        },
+        {
+          "text": "Any Materia Magicka",
+          "groups": [
+            "Materia Magicka"
+          ],
+          "count": null
+        },
+        {
+          "text": "Any Languages (Spoken)",
+          "groups": [
+            "Language"
+          ],
+          "count": null,
+          "filter": "spoken"
+        },
+        {
+          "text": "Any Languages (Written)",
+          "groups": [
+            "Language"
+          ],
+          "count": null,
+          "filter": "written"
+        },
+        {
+          "text": "Any 3 Lore Historical",
+          "groups": [
+            "Lore Historical"
+          ],
+          "count": 3
+        },
+        {
+          "text": "Transcendental Method",
+          "skill": "Transcendental Magick"
+        },
+        {
+          "text": "Transmutation Method",
+          "skill": "Transmutation Magick"
+        }
+      ],
+      "modeMastery": {
+        "levels": 2,
+        "psf": 20,
+        "required": true
+      }
+    },
+    {
+      "key": "powerWord",
+      "name": "Power Word Mage",
+      "group": "mage",
+      "page": 137,
+      "table": "Table - Mage Power Word",
+      "attributes": {
+        "primary": "int",
+        "secondary": "bv"
+      },
+      "primary": [
+        {
+          "text": "Power Word Mode",
+          "skill": "Power Word Mode of Magick",
+          "mode": true
+        },
+        {
+          "text": "Word of Guard",
+          "skill": "Word of Guard"
+        },
+        {
+          "text": "Laws of Magick",
+          "skill": "Laws of Magick"
+        },
+        {
+          "text": "Lore of Correspondences",
+          "skill": "Lore of Correspondences"
+        },
+        {
+          "text": "Command Method",
+          "skill": "Command Magick"
+        },
+        {
+          "text": "Summoning Method",
+          "skill": "Summoning Magick"
+        },
+        {
+          "text": "Wards Method",
+          "skill": "Wards Magick"
+        },
+        {
+          "text": "Basic Magick - Air Method",
+          "skill": "Basic Magick – Air"
+        },
+        {
+          "text": "Illusion Method",
+          "skill": "Illusion Magick"
+        },
+        {
+          "text": "Any Languages (Spoken)",
+          "groups": [
+            "Language"
+          ],
+          "count": null,
+          "filter": "spoken"
+        },
+        {
+          "text": "Any Languages (Written)",
+          "groups": [
+            "Language"
+          ],
+          "count": null,
+          "filter": "written"
+        },
+        {
+          "text": "Any 2 Materia Magicka",
+          "groups": [
+            "Materia Magicka"
+          ],
+          "count": 2
+        },
+        {
+          "text": "Any 2 Lore skills",
+          "groups": [
+            "Lore Historical",
+            "Lore Scientific"
+          ],
+          "count": 2
+        },
+        {
+          "text": "Any 2 Charismatic skills",
+          "groups": [
+            "Charismatic"
+          ],
+          "count": 2
+        }
+      ],
+      "secondary": [
+        {
+          "text": "Basic Magick Fire Method",
+          "skill": "Basic Magick – Fire"
+        },
+        {
+          "text": "Basic Magick Water Method",
+          "skill": "Basic Magick – Water"
+        },
+        {
+          "text": "Arcane Method",
+          "skill": "Arcane Magick"
+        },
+        {
+          "text": "Transcendental Method",
+          "skill": "Transcendental Magick"
+        },
+        {
+          "text": "Transmutation Method",
+          "skill": "Transmutation Magick"
+        },
+        {
+          "text": "Storytelling",
+          "skill": "Storytelling"
+        },
+        {
+          "text": "Any Charismatic skills",
+          "groups": [
+            "Charismatic"
+          ],
+          "count": null
+        },
+        {
+          "text": "Any background skills",
+          "background": true
+        }
+      ],
+      "modeMastery": {
+        "levels": 2,
+        "psf": 20,
+        "required": true
+      }
+    },
+    {
+      "key": "thaumaturge",
+      "name": "Thaumaturge",
+      "group": "mage",
+      "page": 137,
+      "table": "Table - Mage Thaumaturge",
+      "attributes": {
+        "primary": "int",
+        "secondary": "agl"
+      },
+      "primary": [
+        {
+          "text": "Thaumaturge Mode",
+          "skill": "Thaumaturgy Mode of Magick",
+          "mode": true
+        },
+        {
+          "text": "Oratory",
+          "skill": "Oratory"
+        },
+        {
+          "text": "Con",
+          "skill": "Con"
+        },
+        {
+          "text": "Any 2 Materia Magicka",
+          "groups": [
+            "Materia Magicka"
+          ],
+          "count": 2
+        },
+        {
+          "text": "Any 2 Languages (Spoken)",
+          "groups": [
+            "Language"
+          ],
+          "count": 2,
+          "filter": "spoken"
+        },
+        {
+          "text": "Any 2 Languages (Written)",
+          "groups": [
+            "Language"
+          ],
+          "count": 2,
+          "filter": "written"
+        },
+        {
+          "text": "Any 1 Lore Historical",
+          "groups": [
+            "Lore Historical"
+          ],
+          "count": 1
+        },
+        {
+          "text": "Sleight of Hand",
+          "skill": "Sleight of Hand"
+        },
+        {
+          "text": "Illusion Method",
+          "skill": "Illusion Magick"
+        },
+        {
+          "text": "Command Method",
+          "skill": "Command Magick"
+        },
+        {
+          "text": "Transmutation Method",
+          "skill": "Transmutation Magick"
+        },
+        {
+          "text": "Wards Method",
+          "skill": "Wards Magick"
+        }
+      ],
+      "secondary": [
+        {
+          "text": "Any 2 Thievery skills",
+          "groups": [
+            "Thievish"
+          ],
+          "count": 2
+        },
+        {
+          "text": "Any Languages",
+          "groups": [
+            "Language"
+          ],
+          "count": null
+        },
+        {
+          "text": "Any Arts & Entertainment skills",
+          "groups": [
+            "Art & Entertainment"
+          ],
+          "count": null
+        },
+        {
+          "text": "Any Materia Magicka",
+          "groups": [
+            "Materia Magicka"
+          ],
+          "count": null
+        },
+        {
+          "text": "Basic Magick Air Method",
+          "skill": "Basic Magick – Air"
+        },
+        {
+          "text": "Basic Magick Fire Method",
+          "skill": "Basic Magick – Fire"
+        },
+        {
+          "text": "Arcane Method",
+          "skill": "Arcane Magick"
+        },
+        {
+          "text": "Divination Method",
+          "skill": "Divination Magick"
+        },
+        {
+          "text": "Plant Method",
+          "skill": "Plant Magick"
+        },
+        {
+          "text": "Summoning Method",
+          "skill": "Summoning Magick"
+        },
+        {
+          "text": "Transcendental Method",
+          "skill": "Transcendental Magick"
+        },
+        {
+          "text": "Any background skills",
+          "background": true
+        }
+      ],
+      "modeMastery": {
+        "levels": 2,
+        "psf": 20,
+        "required": true
+      }
+    },
+    {
+      "key": "elementalist",
+      "name": "Elementalist",
+      "group": "mage",
+      "page": 138,
+      "table": "Table - Mage Elementalist Common Skills",
+      "attributes": {
+        "primary": "int",
+        "secondary": "con"
+      },
+      "primary": [
+        {
+          "text": "Law of Magick",
+          "skill": "Laws of Magick"
+        },
+        {
+          "text": "Law of Correspondences",
+          "skill": "Lore of Correspondences"
+        },
+        {
+          "text": "Any Materia Magicka",
+          "groups": [
+            "Materia Magicka"
+          ],
+          "count": null
+        }
+      ],
+      "secondary": [
+        {
+          "text": "Spell Research",
+          "skill": "Spell Research"
+        },
+        {
+          "text": "Spell Enhancement",
+          "skill": "Spell Enhancement"
+        },
+        {
+          "text": "Any Languages",
+          "groups": [
+            "Language"
+          ],
+          "count": null
+        },
+        {
+          "text": "Word of Guard",
+          "skill": "Word of Guard"
+        },
+        {
+          "text": "Any background skills",
+          "background": true
+        }
+      ],
+      "optional": true,
+      "variants": [
+        {
+          "key": "air",
+          "name": "Air Elementalist",
+          "page": 139,
+          "table": "Table - Mage Air Elementalists",
+          "primary": [
+            {
+              "text": "Air Elementalist Mode",
+              "skill": "Elementalist Magus Mode of Magick",
+              "mode": true
+            },
+            {
+              "text": "Basic Magick Air Method",
+              "skill": "Basic Magick – Air"
+            },
+            {
+              "text": "Basic Magick Fire Method",
+              "skill": "Basic Magick – Fire"
+            },
+            {
+              "text": "Basic Magick Water Method",
+              "skill": "Basic Magick – Water"
+            },
+            {
+              "text": "Command Method",
+              "skill": "Command Magick"
+            },
+            {
+              "text": "Divination Method",
+              "skill": "Divination Magick"
+            },
+            {
+              "text": "Wards Method",
+              "skill": "Wards Magick"
+            }
+          ],
+          "secondary": [
+            {
+              "text": "Interpret Omens (Aeromancy)",
+              "skill": "Interpret the Omens"
+            },
+            {
+              "text": "Basic Magick Earth Method",
+              "skill": "Basic Magick – Earth"
+            },
+            {
+              "text": "Arcane Method",
+              "skill": "Arcane Magick"
+            },
+            {
+              "text": "Summoning Method",
+              "skill": "Summoning Magick"
+            }
+          ]
+        },
+        {
+          "key": "earth",
+          "name": "Earth Elementalist",
+          "page": 139,
+          "table": "Table - Mage Earth Elementalists",
+          "primary": [
+            {
+              "text": "Earth Elementalist Mode",
+              "skill": "Elementalist Magus Mode of Magick",
+              "mode": true
+            },
+            {
+              "text": "Basic Magick Earth Method",
+              "skill": "Basic Magick – Earth"
+            },
+            {
+              "text": "Basic Magick Fire Method",
+              "skill": "Basic Magick – Fire"
+            },
+            {
+              "text": "Basic Magick Water Method",
+              "skill": "Basic Magick – Water"
+            },
+            {
+              "text": "Command Method",
+              "skill": "Command Magick"
+            },
+            {
+              "text": "Wards Method",
+              "skill": "Wards Magick"
+            },
+            {
+              "text": "Summoning Method",
+              "skill": "Summoning Magick"
+            },
+            {
+              "text": "Word of Guard",
+              "skill": "Word of Guard"
+            }
+          ],
+          "secondary": [
+            {
+              "text": "Masonry & Stone cutting",
+              "skill": "Masonry & Stone Cutting"
+            },
+            {
+              "text": "Gem Cutting",
+              "skill": "Lapidary (Gemcutting)"
+            },
+            {
+              "text": "Basic Magick - Air Method",
+              "skill": "Basic Magick – Air"
+            },
+            {
+              "text": "Arcane Method",
+              "skill": "Arcane Magick"
+            },
+            {
+              "text": "Divination Method",
+              "skill": "Divination Magick"
+            },
+            {
+              "text": "Plant Method",
+              "skill": "Plant Magick"
+            }
+          ]
+        },
+        {
+          "key": "fire",
+          "name": "Fire Elementalist",
+          "page": 139,
+          "table": "Table - Mage Fire Elementalists",
+          "primary": [
+            {
+              "text": "Fire Elementalist Mode",
+              "skill": "Elementalist Magus Mode of Magick",
+              "mode": true
+            },
+            {
+              "text": "Basic Magick Fire Method",
+              "skill": "Basic Magick – Fire"
+            },
+            {
+              "text": "Basic Magick Air Method",
+              "skill": "Basic Magick – Air"
+            },
+            {
+              "text": "Basic Magick Earth Method",
+              "skill": "Basic Magick – Earth"
+            },
+            {
+              "text": "Command Method",
+              "skill": "Command Magick"
+            },
+            {
+              "text": "Divination Method",
+              "skill": "Divination Magick"
+            },
+            {
+              "text": "Wards Method",
+              "skill": "Wards Magick"
+            }
+          ],
+          "secondary": [
+            {
+              "text": "Interpret Omens (Pyromancy)",
+              "skill": "Interpret the Omens"
+            },
+            {
+              "text": "Basic Magick Water Method",
+              "skill": "Basic Magick – Water"
+            },
+            {
+              "text": "Arcane Method",
+              "skill": "Arcane Magick"
+            },
+            {
+              "text": "Summoning Method",
+              "skill": "Summoning Magick"
+            },
+            {
+              "text": "Word of Guard",
+              "skill": "Word of Guard"
+            }
+          ]
+        },
+        {
+          "key": "water",
+          "name": "Water Elementalist",
+          "page": 139,
+          "table": "Table - Mage Water Elementalists",
+          "primary": [
+            {
+              "text": "Water Elementalist Mode",
+              "skill": "Elementalist Magus Mode of Magick",
+              "mode": true
+            },
+            {
+              "text": "Basic Magick Water Method",
+              "skill": "Basic Magick – Water"
+            },
+            {
+              "text": "Basic Magick Air Method",
+              "skill": "Basic Magick – Air"
+            },
+            {
+              "text": "Basic Magick Earth Method",
+              "skill": "Basic Magick – Earth"
+            },
+            {
+              "text": "Divination Method",
+              "skill": "Divination Magick"
+            },
+            {
+              "text": "Wards Method",
+              "skill": "Wards Magick"
+            }
+          ],
+          "secondary": [
+            {
+              "text": "Interpret Omens (Hydromancy)",
+              "skill": "Interpret the Omens"
+            },
+            {
+              "text": "Basic Magick Fire Method",
+              "skill": "Basic Magick – Fire"
+            },
+            {
+              "text": "Command Method",
+              "skill": "Command Magick"
+            },
+            {
+              "text": "Illusion Method",
+              "skill": "Illusion Magick"
+            },
+            {
+              "text": "Plant Method",
+              "skill": "Plant Magick"
+            },
+            {
+              "text": "Summoning Method",
+              "skill": "Summoning Magick"
+            }
+          ]
+        }
+      ],
+      "modeMastery": {
+        "levels": 2,
+        "psf": 20,
+        "required": true
+      }
+    },
+    {
+      "key": "druid",
+      "name": "Druid",
+      "group": "priestMage",
+      "page": 139,
+      "table": "Table - Priest Mage Druid",
+      "attributes": {
+        "primary": null,
+        "secondary": "spr"
+      },
+      "primary": [
+        {
+          "text": "Druid Mode",
+          "skill": "Druidic Priest Mode",
+          "mode": true
+        },
+        {
+          "text": "Divination Method",
+          "skill": "Divination Magick"
+        },
+        {
+          "text": "Transcendental Method",
+          "skill": "Transcendental Magick"
+        },
+        {
+          "text": "Transmutation Method",
+          "skill": "Transmutation Magick"
+        },
+        {
+          "text": "Wards Method",
+          "skill": "Wards Magick"
+        },
+        {
+          "text": "Faith",
+          "skill": "Faith"
+        },
+        {
+          "text": "Interpret Omens",
+          "skill": "Interpret the Omens"
+        },
+        {
+          "text": "Artefact Lore",
+          "skill": "Artefact Lore"
+        },
+        {
+          "text": "Faerie Lore",
+          "skill": "Faerie Lore"
+        },
+        {
+          "text": "Spell Enhancement",
+          "skill": "Spell Enhancement"
+        },
+        {
+          "text": "Spell Research",
+          "skill": "Spell Research"
+        },
+        {
+          "text": "Read Character",
+          "skill": "Read Character"
+        },
+        {
+          "text": "Concentration",
+          "skill": "Concentration"
+        },
+        {
+          "text": "Theology",
+          "skill": "Theology of (“Religion”)"
+        }
+      ],
+      "secondary": [
+        {
+          "text": "Any Lore Scientific",
+          "groups": [
+            "Lore Scientific"
+          ],
+          "count": null
+        },
+        {
+          "text": "Any Lore Historical",
+          "groups": [
+            "Lore Historical"
+          ],
+          "count": null
+        },
+        {
+          "text": "Any Local History & Legends",
+          "skill": "Local History & Legend"
+        },
+        {
+          "text": "Command Method",
+          "skill": "Command Magick"
+        },
+        {
+          "text": "Summoning Method",
+          "skill": "Summoning Magick"
+        },
+        {
+          "text": "Poetic Recitation",
+          "skill": "Poetic Recitation"
+        },
+        {
+          "text": "Oratory",
+          "skill": "Oratory"
+        },
+        {
+          "text": "Poetic Composition",
+          "skill": "Poetic Composition"
+        },
+        {
+          "text": "Storytelling",
+          "skill": "Storytelling"
+        },
+        {
+          "text": "Materia Medicina",
+          "groups": [
+            "Materia Medicina"
+          ],
+          "count": 1
+        },
+        {
+          "text": "Riddling",
+          "skill": "Riddling"
+        },
+        {
+          "text": "Meditation",
+          "skill": "Meditation"
+        },
+        {
+          "text": "Law",
+          "skill": "Law"
+        },
+        {
+          "text": "Any background skills",
+          "background": true
+        }
+      ],
+      "variants": [
+        {
+          "key": "judge",
+          "name": "Judges (Brithem)",
+          "attributes": {
+            "primary": "wis"
+          },
+          "primary": [
+            {
+              "text": "Law (-DF 4 )",
+              "skill": "Law"
+            },
+            {
+              "text": "Any Lore Historical",
+              "groups": [
+                "Lore Historical"
+              ],
+              "count": null
+            },
+            {
+              "text": "Diplomacy & Politics",
+              "skill": "Diplomacy & Politics"
+            },
+            {
+              "text": "Detect Lie",
+              "skill": "Detect Lie"
+            }
+          ],
+          "secondary": []
+        },
+        {
+          "key": "teacher",
+          "name": "Teachers",
+          "attributes": {
+            "primary": "int"
+          },
+          "primary": [
+            {
+              "text": "Any Lore Historical",
+              "groups": [
+                "Lore Historical"
+              ],
+              "count": null
+            },
+            {
+              "text": "Any Lore Scientific",
+              "groups": [
+                "Lore Scientific"
+              ],
+              "count": null
+            },
+            {
+              "text": "Theology",
+              "skill": "Theology of (“Religion”)"
+            }
+          ],
+          "secondary": []
+        },
+        {
+          "key": "physician",
+          "name": "Physicians",
+          "attributes": {
+            "primary": "int"
+          },
+          "primary": [
+            {
+              "text": "Materia Medicina",
+              "groups": [
+                "Materia Medicina"
+              ],
+              "count": 1
+            },
+            {
+              "text": "Vegetable Crops",
+              "skill": "Vegetable Crops"
+            },
+            {
+              "text": "Brewing",
+              "skill": "Brewing"
+            }
+          ],
+          "secondary": []
+        },
+        {
+          "key": "poet",
+          "name": "Poets",
+          "attributes": {
+            "primary": "bv"
+          },
+          "primary": [
+            {
+              "text": "Riddling",
+              "skill": "Riddling"
+            },
+            {
+              "text": "Oratory",
+              "skill": "Oratory"
+            },
+            {
+              "text": "Poetic Recitation",
+              "skill": "Poetic Recitation"
+            },
+            {
+              "text": "Poetic Composition",
+              "skill": "Poetic Composition"
+            },
+            {
+              "text": "Storytelling",
+              "skill": "Storytelling"
+            }
+          ],
+          "secondary": []
+        }
+      ]
+    },
+    {
+      "key": "shaman",
+      "name": "Shaman",
+      "group": "priestMage",
+      "page": 141,
+      "table": "Table- Priest Mage Shaman",
+      "attributes": {
+        "primary": "con",
+        "secondary": "spr"
+      },
+      "primary": [
+        {
+          "text": "Shamanic Mode",
+          "skill": "Shamanic Priest Mode",
+          "mode": true
+        },
+        {
+          "text": "Faith",
+          "skill": "Faith"
+        },
+        {
+          "text": "Laws of Magick",
+          "skill": "Laws of Magick"
+        },
+        {
+          "text": "Herbalism",
+          "skill": "Herbalism"
+        },
+        {
+          "text": "Any 2 Materia Medicina",
+          "groups": [
+            "Materia Medicina"
+          ],
+          "count": 2
+        },
+        {
+          "text": "Any 2 Materia Magicka",
+          "groups": [
+            "Materia Magicka"
+          ],
+          "count": 2
+        },
+        {
+          "text": "Transcendental Method",
+          "skill": "Transcendental Magick"
+        },
+        {
+          "text": "Divination Method",
+          "skill": "Divination Magick"
+        },
+        {
+          "text": "Plant Method",
+          "skill": "Plant Magick"
+        },
+        {
+          "text": "Summoning Method",
+          "skill": "Summoning Magick"
+        },
+        {
+          "text": "Transmutation Method",
+          "skill": "Transmutation Magick"
+        }
+      ],
+      "secondary": [
+        {
+          "text": "Any 1 Materia Magicka",
+          "groups": [
+            "Materia Magicka"
+          ],
+          "count": 1
+        },
+        {
+          "text": "Any 3 Outdoor skills",
+          "groups": [
+            "Outdoor"
+          ],
+          "count": 3
+        },
+        {
+          "text": "Any 1 Animal skill",
+          "groups": [
+            "Animal"
+          ],
+          "count": 1
+        },
+        {
+          "text": "Any Animal Handling/Training",
+          "groups": [
+            "Animal"
+          ],
+          "count": null,
+          "only": [
+            "Animal Training"
+          ]
+        },
+        {
+          "text": "Any 1 Agricultural skill",
+          "groups": [
+            "Agricultural"
+          ],
+          "count": 1
+        },
+        {
+          "text": "Illusion Method",
+          "skill": "Illusion Magick"
+        },
+        {
+          "text": "Arcane Method",
+          "skill": "Arcane Magick"
+        },
+        {
+          "text": "Command Method",
+          "skill": "Command Magick"
+        },
+        {
+          "text": "Wards Method",
+          "skill": "Wards Magick"
+        },
+        {
+          "text": "Any background skills",
+          "background": true
+        }
+      ]
+    },
+    {
+      "key": "witch",
+      "name": "Witch",
+      "group": "priestMage",
+      "page": 142,
+      "table": "Table - Priest Mage Witch",
+      "attributes": {
+        "primary": "int",
+        "secondary": "spr"
+      },
+      "primary": [
+        {
+          "text": "Witchcraft Mode",
+          "skill": "Witchcraft Priest Mode",
+          "mode": true
+        },
+        {
+          "text": "Faith",
+          "skill": "Faith"
+        },
+        {
+          "text": "Laws of Magick",
+          "skill": "Laws of Magick"
+        },
+        {
+          "text": "Lore of Correspondences",
+          "skill": "Lore of Correspondences"
+        },
+        {
+          "text": "Herbalism",
+          "skill": "Herbalism"
+        },
+        {
+          "text": "Any 1 Materia Medicina",
+          "groups": [
+            "Materia Medicina"
+          ],
+          "count": 1
+        },
+        {
+          "text": "Any 3 Materia Magicka",
+          "groups": [
+            "Materia Magicka"
+          ],
+          "count": 3
+        },
+        {
+          "text": "Command Method",
+          "skill": "Command Magick"
+        },
+        {
+          "text": "Divination Method",
+          "skill": "Divination Magick"
+        },
+        {
+          "text": "Plant Method",
+          "skill": "Plant Magick"
+        },
+        {
+          "text": "Transmutation Method",
+          "skill": "Transmutation Magick"
+        },
+        {
+          "text": "Wards Method",
+          "skill": "Wards Magick"
+        }
+      ],
+      "secondary": [
+        {
+          "text": "Any 1 Materia Magicka",
+          "groups": [
+            "Materia Magicka"
+          ],
+          "count": 1
+        },
+        {
+          "text": "Any 1 Outdoor skill",
+          "groups": [
+            "Outdoor"
+          ],
+          "count": 1
+        },
+        {
+          "text": "Any 1 Animal skill",
+          "groups": [
+            "Animal"
+          ],
+          "count": 1
+        },
+        {
+          "text": "Any Materia Medicina",
+          "groups": [
+            "Materia Medicina"
+          ],
+          "count": null
+        },
+        {
+          "text": "Vegetable Crops",
+          "skill": "Vegetable Crops"
+        },
+        {
+          "text": "Any 1 Agricultural skill",
+          "groups": [
+            "Agricultural"
+          ],
+          "count": 1
+        },
+        {
+          "text": "Illusion Method",
+          "skill": "Illusion Magick"
+        },
+        {
+          "text": "Transcendental Method",
+          "skill": "Transcendental Magick"
+        },
+        {
+          "text": "Any background skills",
+          "background": true
+        }
+      ]
+    },
+    {
+      "key": "friar",
+      "name": "Friars",
+      "group": "priest",
+      "page": 142,
+      "table": "able - Priest Mage Friar",
+      "attributes": {
+        "primary": "spr",
+        "secondary": "wis"
+      },
+      "primary": [
+        {
+          "text": "Faith",
+          "skill": "Faith"
+        },
+        {
+          "text": "Calligraphy & Illumination",
+          "skill": "Calligraphy & Illumination"
+        },
+        {
+          "text": "Oratory",
+          "skill": "Oratory"
+        },
+        {
+          "text": "Any 2 Languages (Written)",
+          "groups": [
+            "Language"
+          ],
+          "count": 2,
+          "filter": "written"
+        },
+        {
+          "text": "Any 2 Languages (Spoken)",
+          "groups": [
+            "Language"
+          ],
+          "count": 2,
+          "filter": "spoken"
+        },
+        {
+          "text": "Any Materia Medicina",
+          "groups": [
+            "Materia Medicina"
+          ],
+          "count": null
+        },
+        {
+          "text": "Any Materia Theologica",
+          "groups": [
+            "Materia Theologica"
+          ],
+          "count": null
+        }
+      ],
+      "secondary": [
+        {
+          "text": "Poetic Composition",
+          "skill": "Poetic Composition"
+        },
+        {
+          "text": "Storytelling",
+          "skill": "Storytelling"
+        },
+        {
+          "text": "Any 1 Agricultural skill",
+          "groups": [
+            "Agricultural"
+          ],
+          "count": 1
+        },
+        {
+          "text": "Singing",
+          "skill": "Singing"
+        },
+        {
+          "text": "Brewing",
+          "skill": "Brewing"
+        },
+        {
+          "text": "Paper & Ink Making",
+          "skill": "Paper & Ink Making"
+        },
+        {
+          "text": "Any Lore Historical",
+          "groups": [
+            "Lore Historical"
+          ],
+          "count": null
+        },
+        {
+          "text": "Any background skills",
+          "background": true
+        }
+      ]
+    },
+    {
+      "key": "monastic",
+      "name": "Monastics",
+      "group": "priest",
+      "page": 143,
+      "table": "Table - Priest Mage Monastic",
+      "attributes": {
+        "primary": "spr",
+        "secondary": "dis"
+      },
+      "primary": [
+        {
+          "text": "Faith",
+          "skill": "Faith"
+        },
+        {
+          "text": "Any 2 Agricultural skills",
+          "groups": [
+            "Agricultural"
+          ],
+          "count": 2
+        },
+        {
+          "text": "Calligraphy & Illumination",
+          "skill": "Calligraphy & Illumination"
+        },
+        {
+          "text": "Any Languages (Spoken)",
+          "groups": [
+            "Language"
+          ],
+          "count": null,
+          "filter": "spoken"
+        },
+        {
+          "text": "Any Languages (Written)",
+          "groups": [
+            "Language"
+          ],
+          "count": null,
+          "filter": "written"
+        },
+        {
+          "text": "Any 2 Materia Medicina",
+          "groups": [
+            "Materia Medicina"
+          ],
+          "count": 2
+        },
+        {
+          "text": "Any Materia Theologica",
+          "groups": [
+            "Materia Theologica"
+          ],
+          "count": null
+        },
+        {
+          "text": "Singing (Monastic Chants)",
+          "skill": "Singing"
+        }
+      ],
+      "secondary": [
+        {
+          "text": "Any 1 Skill Lore Scientific",
+          "groups": [
+            "Lore Scientific"
+          ],
+          "count": 1
+        },
+        {
+          "text": "Any Resolution skills",
+          "groups": [
+            "Mental Fortitude"
+          ],
+          "count": null
+        },
+        {
+          "text": "Paper & Ink Making",
+          "skill": "Paper & Ink Making"
+        },
+        {
+          "text": "Any 5 Learned Lore",
+          "groups": [
+            "Language",
+            "Lore Historical",
+            "Lore Scientific",
+            "Materia Medicina"
+          ],
+          "count": 5
+        },
+        {
+          "text": "Any background skills",
+          "background": true
+        }
+      ]
+    },
+    {
+      "key": "clergy",
+      "name": "Ordained Clergy",
+      "group": "priest",
+      "page": 143,
+      "table": "Table - Priest Mage Ordained Clergy",
+      "attributes": {
+        "primary": "spr",
+        "secondary": "int"
+      },
+      "primary": [
+        {
+          "text": "Faith",
+          "skill": "Faith"
+        },
+        {
+          "text": "Any Languages (Written)",
+          "groups": [
+            "Language"
+          ],
+          "count": null,
+          "filter": "written"
+        },
+        {
+          "text": "Any Languages (Spoken)",
+          "groups": [
+            "Language"
+          ],
+          "count": null,
+          "filter": "spoken"
+        },
+        {
+          "text": "Any 1 Charismatic skill",
+          "groups": [
+            "Charismatic"
+          ],
+          "count": 1
+        },
+        {
+          "text": "Any Materia Theologica",
+          "groups": [
+            "Materia Theologica"
+          ],
+          "count": null
+        },
+        {
+          "text": "Any 3 Learned Lore",
+          "groups": [
+            "Language",
+            "Lore Historical",
+            "Lore Scientific",
+            "Materia Medicina"
+          ],
+          "count": 3
+        },
+        {
+          "text": "Materia Medicina",
+          "groups": [
+            "Materia Medicina"
+          ],
+          "count": 1
+        }
+      ],
+      "secondary": [
+        {
+          "text": "Any 1 Perception skill",
+          "groups": [
+            "Perception"
+          ],
+          "count": 1
+        },
+        {
+          "text": "Any 3 Learned Lore",
+          "groups": [
+            "Language",
+            "Lore Historical",
+            "Lore Scientific",
+            "Materia Medicina"
+          ],
+          "count": 3
+        },
+        {
+          "text": "Calligraphy & Illumination",
+          "skill": "Calligraphy & Illumination"
+        },
+        {
+          "text": "Any background skills",
+          "background": true
+        }
+      ]
+    },
+    {
+      "key": "adventurer",
+      "name": "Adventurer",
+      "group": "adventurer",
+      "page": 129,
+      "attributes": {
+        "primary": null,
+        "secondary": null
+      },
+      "primary": [],
+      "secondary": [
+        {
+          "text": "Any background skills",
+          "background": true
+        }
+      ],
+      "custom": {
+        "specialities": 2,
+        "primary": 8
+      }
+    }
+  ]
+}

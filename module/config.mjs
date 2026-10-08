@@ -163,15 +163,15 @@ CNS5.gentleSkills = [
  * compendium lands in phase 3, which will supersede it.
  */
 CNS5.coreSkills = [
-  { name: "Language (Own) — Spoken", df: 1, attributes: ["int", "bv"] },
-  { name: "Alertness: Sight", df: 7, attributes: [] },
-  { name: "Alertness: Sound", df: 7, attributes: [] },
-  { name: "Local Geography & History", df: 1, attributes: ["int", "int"] },
-  { name: "Dodge", df: 3, attributes: ["agl", "wis"] },
-  { name: "Brawling", df: 3, attributes: ["str", "agl"] },
-  { name: "Stamina", df: 3, attributes: ["str", "con"] },
-  { name: "Willpower", df: 3, attributes: ["dis", "wis"] },
-  { name: "Faith", df: 5, attributes: ["spr", "spr"] }
+  { name: "Language (Own) — Spoken", listName: "Own Language—Spoken", df: 1, attributes: ["int", "bv"] },
+  { name: "Alertness: Sight", listName: "Alertness: Sight", df: 7, attributes: [] },
+  { name: "Alertness: Sound", listName: "Alertness Sound", df: 7, attributes: [] },
+  { name: "Local Geography & History", listName: "Local Geography", df: 1, attributes: ["int", "int"] },
+  { name: "Dodge", listName: "Dodge", df: 3, attributes: ["agl", "wis"] },
+  { name: "Brawling", listName: "Brawling", df: 3, attributes: ["str", "agl"] },
+  { name: "Stamina", listName: "Stamina", df: 3, attributes: ["str", "con"] },
+  { name: "Willpower", listName: "Willpower", df: 3, attributes: ["dis", "wis"] },
+  { name: "Faith", listName: "Faith", df: 5, attributes: ["spr", "spr"] }
 ];
 
 /* -------------------------------------------- */
@@ -995,6 +995,12 @@ CNS5.weaponSkill = function (weapon) {
  */
 CNS5.spellGroupModes = {
   "Arcane Magick": "Arcane Magick",
+  // Sections of the Arcane chapter (pp.349-352), and of the Illusion one
+  // (p374), which the spell tables head on their own.
+  "Portals to the Shadow World": "Arcane Magick",
+  "Eldritch Servants": "Arcane Magick",
+  "Eldritch Missiles": "Arcane Magick",
+  "Shadow Monsters": "Illusion Magick",
   "Basic Magick Air": "Basic Magick – Air",
   "Basic Magick Earth": "Basic Magick – Earth",
   "Basic Magick Fire": "Basic Magick – Fire",
@@ -3901,3 +3907,267 @@ CNS5.socialClassFor = function (period, classRoll, bandRoll) {
   const which = cls.bands ? CNS5.readRoll(cls.bands, bandRoll) : null;
   return { cls, band: which, pcGained: which ? which.pcGained : cls.pcGained ?? 0 };
 };
+
+/* -------------------------------------------- */
+/*  Step 5b: the father's vocation              */
+/*  (pp.66-76)                                  */
+/* -------------------------------------------- */
+
+/**
+ * "Labourers receive Endurance and Conditioning at Level 2 as standard"
+ * (pp.66, 68).
+ */
+CNS5.labourerSkills = [{ name: "Endurance", level: 2 }, { name: "Conditioning", level: 2 }];
+
+/**
+ * "Townsmen and Tradesmen/Guildsmen gain +3 to their Agility Attribute up to
+ * the racial maximum... in addition they can increase five skills in which they
+ * have basic knowledge by +1 level" (p70). "Rich Townsmen and members of the
+ * Cultural Elites can increase seven skills" (p72). The Agility is given; which
+ * skills to raise is the player's.
+ */
+CNS5.townsmanBenefits = { agility: 3, skillLevels: 5, richSkillLevels: 7 };
+
+/* -------------------------------------------- */
+/*  Step 5b: the fighting classes               */
+/*  (pp.57, 77-81)                              */
+/* -------------------------------------------- */
+
+/**
+ * Table - Social Rank of Chivalric (p77), rolled with the modifier Table -
+ * Economic Factors Influencing Chivalric gives for the character's band. The
+ * book's own example: an 80 is an Esquire, but "if he had paid the points for
+ * wealthy this would have given a +20% bonus and would have turned his 80 roll
+ * into 100 which would make his character Royalty" (p57).
+ */
+CNS5.chivalricEconomicModifier = { poor: -10, average: 0, wealthy: 20 };
+
+CNS5.chivalricRanks = [
+  { roll: [1, 85], key: "lesserGentry", holdingBonus: 0, fiefTable: "lesserGentry" },
+  { roll: [86, 94], key: "lord", holdingBonus: 25, fiefTable: "lord" },
+  { roll: [95, 98], key: "titled", holdingBonus: 40, fiefTable: "titled" },
+  { roll: [99, Infinity], key: "royal", holdingBonus: 50, fiefTable: "royal" }
+];
+
+/** The ranks from lowest to highest, for a second fief held of a lower one. */
+CNS5.chivalricRankOrder = ["lesserGentry", "lord", "titled", "royal"];
+
+/**
+ * "This includes the skills Riding, Riding a Warhorse, Mounted Combat, Cavalry
+ * Lance, Dagger and Slashing Swords, Wearing Light Armour, Courtly Manners. If
+ * INT requirement is met, they will also have reading own language" (p77).
+ * Written as the vocation tables write skills, so the same reader takes it.
+ */
+CNS5.basicChivalricTraining =
+  "Riding, Riding a Warhorse, Mounted Combat, Cavalry Lance, Dagger, Slashing Swords, " +
+  "Wearing Light Armour, Courtly Manners";
+
+/** "Courtly Manners is replaced by 1 Agricultural skill" for the milites (p78). */
+CNS5.militeTraining = CNS5.basicChivalricTraining.replace("Courtly Manners", "1 Agricultural Skill");
+
+/**
+ * "The offspring of Nobility all have the option of turning away from a
+ * Chivalric occupation if they are not heirs" (p77): Riding, his own written
+ * language at INT 9, a foreign one at 10, an ancient one at 13, a lore and a
+ * noble skill, in place of Basic Chivalric Training.
+ */
+CNS5.scholarlyTraining = "Riding, 1 Lore, 1 Noble Skill";
+CNS5.scholarlyLanguages = [
+  { int: 9, label: "CNS5.Creation.scholarOwnLanguage", skill: "Common Tongue Read / Write" },
+  { int: 10, label: "CNS5.Creation.scholarForeignLanguage" },
+  { int: 13, label: "CNS5.Creation.scholarAncientLanguage" }
+];
+
+/** "Reading" in these tables is reading one's own language. */
+CNS5.readingSkill = "Common Tongue Read / Write";
+
+/**
+ * Part of a fief is found on Table - Lesser Gentry Holdings "with a -10%
+ * modifier", and the father's status gains half its modifier (p78).
+ */
+CNS5.partFiefModifier = -10;
+
+/**
+ * A second fief is found on the table one rank lower, a third two ranks lower,
+ * "with a cumulative -10% modifier" (p78).
+ */
+CNS5.additionalFiefModifier = -10;
+
+/* -------------------------------------------- */
+/*  Vocations and starting skills               */
+/*  (pp.119-146)                                */
+/* -------------------------------------------- */
+
+/**
+ * "All characters begin play with ten skills and / or competencies listed for
+ * their vocation and at least six of these must be from those listed as
+ * Primary (Vocational)... A PC can select a maximum of four Secondary Skills
+ * when choosing their starting skills" (pp.119-120), and "Each character
+ * begins play with five Mastered Skills" (p120).
+ */
+CNS5.startingSkills = { count: 10, minimumPrimary: 6, maximumSecondary: 4, masteries: 5 };
+
+/**
+ * "In addition to these background skills, all characters begin play with the
+ * following skills that can also be regarded as Background skills unless
+ * listed under the vocation as Primary Skills" (p119), named as the skills
+ * list names them.
+ */
+CNS5.coreBackgroundSkills = CNS5.coreSkills.map((s) => s.listName);
+
+/**
+ * Table – Number of Tertiary Skills (p120), by INT + DIS: the upper bound of
+ * each band and the number it allows.
+ */
+CNS5.tertiarySkills = [
+  { max: 19, count: 1 },
+  { max: 29, count: 2 },
+  { max: 35, count: 3 },
+  { max: 39, count: 4 },
+  { max: Infinity, count: 6 }
+];
+
+/** @param {number} total  INT + DIS */
+CNS5.tertiarySkillsFor = function (total) {
+  return CNS5.tertiarySkills.find((row) => (Number(total) || 0) <= row.max).count;
+};
+
+/**
+ * Table - Mastered Skills (p120): every how many levels a further skill may be
+ * mastered, by the vocation's Primary Attribute plus its Secondary, or plus
+ * Discipline where that is greater.
+ *
+ * The table's first two rows are "Under 20" and "21 - 24", leaving a total of
+ * exactly 20 unassigned. It is taken with the first row, the slower rate.
+ */
+CNS5.masteryIntervals = [
+  { max: 20, levels: 10 },
+  { max: 24, levels: 9 },
+  { max: 28, levels: 8 },
+  { max: 31, levels: 7 },
+  { max: 34, levels: 6 },
+  { max: 36, levels: 5 },
+  { max: 38, levels: 4 },
+  { max: 39, levels: 3 },
+  { max: Infinity, levels: 2 }
+];
+
+/**
+ * The attribute total Table - Mastered Skills is read with.
+ * @param {{primary: number, secondary: number, dis: number}} values
+ * @returns {number}
+ */
+CNS5.masteryTotal = function ({ primary = 0, secondary = 0, dis = 0 } = {}) {
+  return (Number(primary) || 0) + Math.max(Number(secondary) || 0, Number(dis) || 0);
+};
+
+/** @param {number} total  from CNS5.masteryTotal */
+CNS5.masteryIntervalFor = function (total) {
+  return CNS5.masteryIntervals.find((row) => (Number(total) || 0) <= row.max).levels;
+};
+
+/**
+ * The experience levels at which further masteries come: "Every 6 levels he
+ * will be able to consider one additional skill to be mastered, so at levels
+ * 6, 12, 18, 24 etc." (p120).
+ *
+ * @param {number} interval
+ * @param {number} level  the character's experience level
+ * @returns {{earned: number, next: number}}
+ */
+CNS5.masteriesByLevel = function (interval, level) {
+  const every = Math.max(1, Number(interval) || 1);
+  const at = Math.max(0, Number(level) || 0);
+  return { earned: Math.floor(at / every), next: (Math.floor(at / every) + 1) * every };
+};
+
+/**
+ * What a starting mastery adds: one level and ten per cent (p120); for a
+ * mage's own mode, two levels and twenty (p134).
+ */
+CNS5.startingMastery = { levels: 1, psf: 10 };
+
+/**
+ * A class's gift of levels to skills already known (pp.58, 70): two for a
+ * peasant, five for a townsman, seven for a rich townsman or one of the
+ * Cultural Elites.
+ */
+CNS5.classSkillRaises = function (classKey, band, fathersVocation = "") {
+  if (CNS5.peasantClasses.includes(classKey)) return CNS5.peasantBenefits.skillLevels;
+  if (classKey !== "townsman") return 0;
+  if (band === "rich" || /cultur\w* elite/i.test(fathersVocation)) return CNS5.townsmanBenefits.richSkillLevels;
+  return CNS5.townsmanBenefits.skillLevels;
+};
+
+/**
+ * Where a character stands with his masteries: the five he began with, one
+ * more every so many levels (p120), and how many he has used. Masteries that
+ * cost no slot — a vocational Sunsign skill (p53), a noble Knight's
+ * Battlefield Tactics (p125) — are not counted as used.
+ *
+ * @param {object} args
+ * @param {number|null} args.total  from CNS5.masteryTotal, or null if unknown
+ * @param {number} args.level       the character's experience level
+ * @param {number} args.used        masteries that took a slot
+ * @returns {object}
+ */
+CNS5.masteryStatus = function ({ total = null, level = 1, used = 0 } = {}) {
+  const starting = CNS5.startingSkills.masteries;
+  if (total == null) return { known: false, used, slots: starting, left: starting - used };
+  const interval = CNS5.masteryIntervalFor(total);
+  const { earned, next } = CNS5.masteriesByLevel(interval, level);
+  const slots = starting + earned;
+  return { known: true, total, interval, earned, next, used, slots, left: slots - used };
+};
+
+/**
+ * "The procedure would involve the character spending three months in
+ * downtime assuming the mantle of the new vocation. After this period, they
+ * will acquire 3 vocational skills at level 1 selected from their new
+ * vocation" (p130).
+ */
+CNS5.vocationChange = { months: 3, skills: 3, level: 1 };
+
+/* -------------------------------------------- */
+/*  Starting spells                             */
+/*  (pp.292, 295)                               */
+/* -------------------------------------------- */
+
+/**
+ * "Add together the total number of levels the Mage possess in the various
+ * Methods of Magick, and multiply the total by the Mage's ML. Add Half of the
+ * Mage's Attribute Bonus for Heroic Mages or his full Attribute Bonus for
+ * Super-Heroic characters. Historical characters receive no additional bonus"
+ * (p295). The book's three character types are Historical, Heroic and Mythic,
+ * so Super-Heroic is read as Mythic.
+ */
+CNS5.startingSpellBonusShare = { historical: 0, heroic: 0.5, mythic: 1 };
+
+/** "A Mage can use 10 Spell Points to purchase a simple focus" (p295). */
+CNS5.simpleFocusSpellPoints = 10;
+
+/**
+ * Spell Points to buy starting spells with, at "1 Spell Point equals one
+ * Spell MR" (p295). The Attribute Bonus is that of the Mode of Magick skill,
+ * the mage's own, and half of it is rounded down.
+ *
+ * @param {object} args
+ * @param {number} args.methodLevels    levels in all Methods of Magick
+ * @param {number} args.ml              Magick Level
+ * @param {number} args.attributeBonus  the Mode of Magick's Attribute Bonus
+ * @param {string} args.characterType
+ * @returns {{base: number, bonus: number, total: number}}
+ */
+CNS5.startingSpellPoints = function ({ methodLevels = 0, ml = 0, attributeBonus = 0, characterType = "historical" } = {}) {
+  const base = (Number(methodLevels) || 0) * (Number(ml) || 0);
+  const share = CNS5.startingSpellBonusShare[characterType] ?? 0;
+  const bonus = Math.max(0, Math.floor((Number(attributeBonus) || 0) * share));
+  return { base, bonus, total: base + bonus };
+};
+
+/**
+ * "Every Mage has access to two spells, which can be considered to be core
+ * skills attached to each Mode of Magick" (p292): Enchant Materials and
+ * Transfer. They are granted free with the starting spells.
+ */
+CNS5.commonSpells = ["Enchant Materials", "Transfer"];

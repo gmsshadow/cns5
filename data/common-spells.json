@@ -1,0 +1,34 @@
+{
+  "source": "Chivalry & Sorcery 5th Edition core rules, Common Spells, pp.292-293",
+  "note": "The two spells every mage has with his Mode of Magick. Transcribed by hand, since they stand outside the spell tables of pp.309-314. Mechanical data only; no description text.",
+  "spells": [
+    {
+      "name": "Enchant Materials",
+      "section": "Common Spells",
+      "parent": null,
+      "incomplete": false,
+      "mr": "2",
+      "fatigue": "3",
+      "casting": "Ritual (30 minutes)",
+      "range": "1 foot per ML",
+      "duration": "Permanent",
+      "reference": 292,
+      "prerequisite": null,
+      "page": 292
+    },
+    {
+      "name": "Transfer",
+      "section": "Common Spells",
+      "parent": null,
+      "incomplete": false,
+      "mr": "3",
+      "fatigue": "5",
+      "casting": "Hex",
+      "range": "Sight - 1 person or Item",
+      "duration": "Until Triggered",
+      "reference": 293,
+      "prerequisite": null,
+      "page": 293
+    }
+  ]
+}

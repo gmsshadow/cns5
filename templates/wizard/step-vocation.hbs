@@ -1,0 +1,171 @@
+<h2>{{localize "CNS5.Creation.step.vocation"}}</h2>
+
+<section class="cns5-wizard__block">
+    <div class="cns5-grid cns5-grid--two">
+        <label class="cns5-field">
+            <span>{{localize "CNS5.Details.vocation"}}</span>
+            <select data-draft="vocationKey">
+                <option value="" {{#unless draft.vocationKey}}selected{{/unless}}>—</option>
+                {{#each vocationGroups}}
+                <optgroup label="{{localize label}}">
+                    {{#each options}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}
+                </optgroup>
+                {{/each}}
+            </select>
+        </label>
+        {{#if variants.length}}
+        <label class="cns5-field">
+            <span>{{localize "CNS5.Vocation.variant"}}</span>
+            <select data-draft="vocationVariant">
+                <option value="" {{#unless voc.variant}}selected{{/unless}}>—</option>
+                {{#each variants}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}
+            </select>
+        </label>
+        {{/if}}
+    </div>
+    {{#if voc.custom}}
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Vocation.customName"}}</span>
+        <input type="text" data-draft="vocation" value="{{draft.vocation}}">
+    </label>
+    <p class="cns5-hint">{{localize "CNS5.Vocation.adventurerHint"}}</p>
+    {{/if}}
+    {{#unless voc}}
+    <p class="cns5-hint">{{localize "CNS5.Vocation.chooseHint"}}</p>
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Vocation.handName"}}</span>
+        <input type="text" data-draft="vocation" value="{{draft.vocation}}">
+    </label>
+    {{/unless}}
+</section>
+
+{{#if voc}}
+<section class="cns5-wizard__block">
+    <dl class="cns5-derived">
+        {{#if attributeLabels.primary}}
+        <div><dt>{{localize "CNS5.Vocation.attributes"}}</dt>
+            <dd>{{localize attributeLabels.primary}} / {{localize attributeLabels.secondary}}</dd></div>
+        {{/if}}
+        {{#if masteryInterval}}
+        <div><dt>{{localize "CNS5.Vocation.masteryEvery"}}</dt>
+            <dd>{{localize "CNS5.Vocation.masteryEveryValue" levels=masteryInterval total=masteryTotal}}</dd></div>
+        {{/if}}
+        {{#if voc.combat}}
+        <div><dt>{{localize "CNS5.Vocation.combatCap"}}</dt><dd>{{voc.combat.max}}</dd></div>
+        {{/if}}
+        {{#if primaryEntries}}<div><dt>{{localize "CNS5.SkillCategory.primary"}}</dt><dd>{{primaryEntries}}</dd></div>{{/if}}
+        {{#if secondaryEntries}}<div><dt>{{localize "CNS5.SkillCategory.secondary"}}</dt><dd>{{secondaryEntries}}</dd></div>{{/if}}
+        {{#if masteryOrder.length}}
+        <div><dt>{{localize "CNS5.Vocation.masteryOrder"}}</dt>
+            <dd>{{#each masteryOrder}}{{this}}{{#unless @last}}; {{/unless}}{{/each}}</dd></div>
+        {{/if}}
+        {{#if voc.modeMastery}}
+        <div><dt>{{localize "CNS5.Vocation.mode"}}</dt>
+            <dd>{{localize "CNS5.Vocation.modeValue" mode=voc.mode levels=voc.modeMastery.levels psf=voc.modeMastery.psf}}</dd></div>
+        {{/if}}
+        {{#if freeMastery}}
+        <div><dt>{{localize "CNS5.Vocation.freeMastery"}}</dt><dd>{{freeMastery}}</dd></div>
+        {{/if}}
+    </dl>
+</section>
+
+{{#if backgroundChoices.length}}
+<section class="cns5-wizard__block">
+    <h3>{{localize "CNS5.Vocation.backgroundChoices"}}</h3>
+    <p class="cns5-hint">{{localize "CNS5.Vocation.backgroundChoicesHint"}}</p>
+    {{#each backgroundChoices}}
+    <div class="cns5-wizard__slots">
+        <span class="cns5-wizard__slots-label">{{label}}</span>
+        {{#each slots}}<select data-draft="{{path}}"><option value="" {{#unless value}}selected{{/unless}}>—</option>{{#each options}}<option value="{{this}}" {{#if (eq this ../value)}}selected{{/if}}>{{this}}</option>{{/each}}</select>{{/each}}
+    </div>
+    {{/each}}
+</section>
+{{/if}}
+
+{{#if fatherOutdoor.length}}
+<section class="cns5-wizard__block">
+    <h3>{{localize "CNS5.Vocation.foresterSon"}}</h3>
+    <div class="cns5-wizard__slots">{{#each fatherOutdoor}}<select data-draft="{{path}}"><option value="" {{#unless value}}selected{{/unless}}>—</option>{{#each options}}<option value="{{this}}" {{#if (eq this ../value)}}selected{{/if}}>{{this}}</option>{{/each}}</select>{{/each}}</div>
+</section>
+{{/if}}
+
+<section class="cns5-wizard__block">
+    <h3>{{localize "CNS5.Vocation.startingSkills"}}</h3>
+    <p class="cns5-hint">{{localize "CNS5.Vocation.startingSkillsHint" total=pickCounts.total want=pickCounts.want primary=pickCounts.primary secondary=pickCounts.secondary}}</p>
+    <div class="cns5-wizard__picker">
+        {{#each optionGroups}}
+        <table class="cns5-wizard__table cns5-wizard__pick-table">
+            <thead><tr><th colspan="3">{{group}}</th></tr></thead>
+            <tbody>
+                {{#each rows}}
+                <tr class="{{#if picked}}is-picked{{/if}}">
+                    <td><input type="checkbox" data-action="togglePick" data-skill="{{name}}" {{checked picked}}></td>
+                    <th scope="row">{{name}}{{#if known}} <span class="cns5-tag">{{localize "CNS5.Vocation.known"}}</span>{{/if}}</th>
+                    <td class="cns5-wizard__pick-category is-{{category}}">{{localize categoryLabel}}</td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+        {{/each}}
+    </div>
+</section>
+
+<section class="cns5-wizard__block">
+    <h3>{{localize "CNS5.Vocation.masteries"}}</h3>
+    <p class="cns5-hint">{{localize "CNS5.Vocation.masteriesHint"}}</p>
+    <div class="cns5-wizard__slots">{{#each masterySlots}}<label class="cns5-wizard__slot"><em>{{number}}</em><select data-draft="{{path}}"><option value="" {{#unless value}}selected{{/unless}}>—</option>{{#each options}}<option value="{{this}}" {{#if (eq this ../value)}}selected{{/if}}>{{this}}</option>{{/each}}</select></label>{{/each}}</div>
+</section>
+
+<section class="cns5-wizard__block">
+    <h3>{{localize "CNS5.Vocation.tertiary"}}</h3>
+    <p class="cns5-hint">{{localize "CNS5.Vocation.tertiaryHint" count=tertiarySlots.length}}</p>
+    <div class="cns5-wizard__slots">{{#each tertiarySlots}}<select data-draft="{{path}}"><option value="" {{#unless value}}selected{{/unless}}>—</option>{{#each options}}<option value="{{this}}" {{#if (eq this ../value)}}selected{{/if}}>{{this}}</option>{{/each}}</select>{{/each}}</div>
+</section>
+
+{{#if sunsignSlots.length}}
+<section class="cns5-wizard__block">
+    <h3>{{localize "CNS5.Vocation.sunsign"}}</h3>
+    <p class="cns5-hint">{{localize "CNS5.Vocation.sunsignHint" categories=signCategories}}</p>
+    <div class="cns5-wizard__slots">{{#each sunsignSlots}}<select data-draft="{{path}}"><option value="" {{#unless value}}selected{{/unless}}>—</option>{{#each options}}<option value="{{this}}" {{#if (eq this ../value)}}selected{{/if}}>{{this}}</option>{{/each}}</select>{{/each}}</div>
+</section>
+{{/if}}
+
+{{#if raiseSlots.length}}
+<section class="cns5-wizard__block">
+    <h3>{{localize "CNS5.Vocation.raises"}}</h3>
+    <p class="cns5-hint">{{localize "CNS5.Vocation.raisesHint" count=raiseSlots.length}}</p>
+    <div class="cns5-wizard__slots">{{#each raiseSlots}}<select data-draft="{{path}}"><option value="" {{#unless value}}selected{{/unless}}>—</option>{{#each options}}<option value="{{this}}" {{#if (eq this ../value)}}selected{{/if}}>{{this}}</option>{{/each}}</select>{{/each}}</div>
+</section>
+{{/if}}
+
+<section class="cns5-wizard__block">
+    <h3>{{localize "CNS5.Vocation.result"}}</h3>
+    {{#if problems.length}}
+    <ul class="cns5-list cns5-hint cns5-hint--bad">{{#each problems}}<li>{{this}}</li>{{/each}}</ul>
+    <p class="cns5-hint">{{localize "CNS5.Vocation.problemsHint"}}</p>
+    {{else}}
+    <p class="cns5-hint">{{localize "CNS5.Vocation.noProblems"}}</p>
+    {{/if}}
+    <table class="cns5-wizard__table">
+        <thead><tr>
+            <th>{{localize "CNS5.Vocation.skill"}}</th>
+            <th>{{localize "CNS5.Skill.category"}}</th>
+            <th>{{localize "CNS5.Vocation.level"}}</th>
+            <th>{{localize "CNS5.Vocation.mastered"}}</th>
+        </tr></thead>
+        <tbody>
+            {{#each startingSkills}}
+            <tr>
+                <th scope="row">{{name}}</th>
+                <td>{{localize categoryLabel}}</td>
+                <td>{{level}}</td>
+                <td>{{#if mastered}}✓{{#if sunsign}} ☉{{/if}}{{else}}{{#if sunsign}}☉{{/if}}{{/if}}</td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+    <div class="cns5-wizard__actions">
+        <button type="button" data-action="clearVocation">{{localize "CNS5.Creation.clear"}}</button>
+    </div>
+</section>
+{{/if}}

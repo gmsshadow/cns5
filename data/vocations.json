@@ -1,0 +1,2206 @@
+{
+  "source": "Chivalry & Sorcery 5th Edition core rules, Tables - Father's Vocation, pp.66-76",
+  "note": "Vocations, the skills text as printed, and Base Status. The skills text is a list of skill names and choices, and is parsed by the system when a vocation is taken.",
+  "classes": {
+    "serf": {
+      "destitute": {
+        "title": "Destitute Landless Bondsmen",
+        "page": 66,
+        "rows": [
+          {
+            "roll": [
+              1,
+              10
+            ],
+            "vocation": "Physically Incompetent",
+            "skills": "Begging + Endurance (Endurance at level 2)",
+            "status": 1
+          },
+          {
+            "roll": [
+              11,
+              50
+            ],
+            "vocation": "Plot Tender",
+            "skills": "Vegetable Crops, 1 Agricultural Skill +1 Skill",
+            "status": 4
+          },
+          {
+            "roll": [
+              51,
+              85
+            ],
+            "vocation": "Labourer",
+            "skills": "Endurance, Conditioning, Lifting +1 Skill",
+            "status": 3,
+            "labourer": true
+          },
+          {
+            "roll": [
+              86,
+              100
+            ],
+            "vocation": "Wood Cutter",
+            "skills": "Axes + Finding One’s Location",
+            "status": 3
+          }
+        ]
+      },
+      "poor": {
+        "title": "Poor Unfree of the Countryside",
+        "page": 66,
+        "rows": [
+          {
+            "roll": [
+              1,
+              5
+            ],
+            "vocation": "Cowherd",
+            "skills": "Cattle or Dairy Herding, 1 Agricultural Skill +1 Skill",
+            "status": 5
+          },
+          {
+            "roll": [
+              6,
+              14
+            ],
+            "vocation": "Swineherd",
+            "skills": "Pig Raising, 1 Agricultural Skill +1 Skill",
+            "status": 4
+          },
+          {
+            "roll": [
+              15,
+              25
+            ],
+            "vocation": "Shepherd",
+            "skills": "Sheep Herding, 1 Agricultural Skill +1 Skill",
+            "status": 3
+          },
+          {
+            "roll": [
+              26,
+              28
+            ],
+            "vocation": "Horse Handler",
+            "skills": "Riding, Animal Handling +1 Skill",
+            "status": 5
+          },
+          {
+            "roll": [
+              29,
+              33
+            ],
+            "vocation": "Stable Hand",
+            "skills": "Animal Handling, Knife Fighting +1 Skill",
+            "status": 3
+          },
+          {
+            "roll": [
+              34,
+              42
+            ],
+            "vocation": "Cook",
+            "skills": "Cooking, Knife Fighting +1 Skill",
+            "status": 5
+          },
+          {
+            "roll": [
+              43,
+              74
+            ],
+            "vocation": "Poor Serf/Bondsman",
+            "skills": "2 Agricultural Skills +1 Skill",
+            "status": 5
+          },
+          {
+            "roll": [
+              75,
+              89
+            ],
+            "vocation": "Forester",
+            "skills": "Archery, Spears +2 Outdoor Skills",
+            "status": 10
+          },
+          {
+            "roll": [
+              90,
+              100
+            ],
+            "vocation": "Fisherman",
+            "skills": "Fishing, Fisherman, Small Boats + Spears",
+            "status": 10
+          }
+        ]
+      },
+      "average": {
+        "title": "Average Serfs",
+        "page": 66,
+        "rows": [
+          {
+            "roll": [
+              1,
+              74
+            ],
+            "vocation": "Serf Farmer",
+            "skills": "2 Agricultural Skills +1 Skill",
+            "status": 7
+          },
+          {
+            "roll": [
+              75,
+              80
+            ],
+            "vocation": "Rural Mason",
+            "skills": "Masonry, Architecture + Knife Fighting",
+            "status": 10
+          },
+          {
+            "roll": [
+              81,
+              83
+            ],
+            "vocation": "Potter",
+            "skills": "Pottery, Lifting +1 Skill",
+            "status": 10
+          },
+          {
+            "roll": [
+              84,
+              84
+            ],
+            "vocation": "Slater / Thatcher",
+            "skills": "Masonry (Thatching for thatchers) + Lifting (level 2)",
+            "status": 9
+          },
+          {
+            "roll": [
+              86,
+              95
+            ],
+            "vocation": "Village Blacksmith",
+            "skills": "Blacksmithing, Mace Combat +1 Skill",
+            "status": 12
+          },
+          {
+            "roll": [
+              96,
+              100
+            ],
+            "vocation": "Rural Carpenter",
+            "skills": "Carpentry, 1 Specialist Woodworking Skill +1 Skill",
+            "status": 10
+          }
+        ]
+      },
+      "wealthy": {
+        "title": "Wealthy Bondsmen",
+        "page": 66,
+        "rows": [
+          {
+            "roll": [
+              1,
+              75
+            ],
+            "vocation": "Well-to-do Serf",
+            "skills": "2 Agricultural Skills, Knife Fighting +1 Skill",
+            "status": 12
+          },
+          {
+            "roll": [
+              76,
+              90
+            ],
+            "vocation": "Wealthy Stockman",
+            "skills": "2 Animal Skills, Knife Fighting +1 Skill",
+            "status": 11
+          },
+          {
+            "roll": [
+              91,
+              100
+            ],
+            "vocation": "Miller",
+            "skills": "Milling, Sail Making & Rigging, Carpentry +1 Skill",
+            "status": 12
+          }
+        ]
+      }
+    },
+    "freeman": {
+      "destitute": {
+        "title": "Destitute & Landless Poor",
+        "page": 67,
+        "rows": [
+          {
+            "roll": [
+              1,
+              3
+            ],
+            "vocation": "Physically Incompetent",
+            "skills": "Begging + Endurance (at level 2)",
+            "status": 1
+          },
+          {
+            "roll": [
+              4,
+              7
+            ],
+            "vocation": "Branded Vagrant",
+            "skills": "Intimidation, Begging + Con",
+            "status": 0,
+            "link": "originalClass"
+          },
+          {
+            "roll": [
+              8,
+              12
+            ],
+            "vocation": "Branded Criminal",
+            "skills": "Intimidation, Begging + Con",
+            "status": 0,
+            "link": "originalClass"
+          },
+          {
+            "roll": [
+              13,
+              32
+            ],
+            "vocation": "Labourer",
+            "skills": "Endurance, Conditioning, Lifting +1 Skill",
+            "status": 3,
+            "labourer": true
+          },
+          {
+            "roll": [
+              33,
+              43
+            ],
+            "vocation": "Porter / Carter",
+            "skills": "Endurance, Conditioning + Lifting",
+            "status": 3
+          },
+          {
+            "roll": [
+              44,
+              67
+            ],
+            "vocation": "Hireling Plot Tender",
+            "skills": "Vegetable Crops, 1 Agricultural Skill +1 Skill",
+            "status": 4
+          },
+          {
+            "roll": [
+              68,
+              81
+            ],
+            "vocation": "Wood Cutter",
+            "skills": "Axes + Finding One’s Location",
+            "status": 4
+          },
+          {
+            "roll": [
+              82,
+              84
+            ],
+            "vocation": "Leper",
+            "skills": "Endurance",
+            "status": null,
+            "statusNote": "see note 4",
+            "link": "leper"
+          },
+          {
+            "roll": [
+              85,
+              94
+            ],
+            "vocation": "Beggar",
+            "skills": "Begging, Con +1 Thievery Skill",
+            "status": 1
+          },
+          {
+            "roll": [
+              95,
+              98
+            ],
+            "vocation": "Rustler",
+            "skills": "Animal Handling, Knife Fighting +1 Thievery Skill",
+            "status": 2
+          },
+          {
+            "roll": [
+              99,
+              100
+            ],
+            "vocation": "Itinerant Storyteller",
+            "skills": "Storytelling + Acting: Performance",
+            "status": 3
+          }
+        ]
+      },
+      "poor": {
+        "title": "Poor Free of the Countryside",
+        "page": 67,
+        "rows": [
+          {
+            "roll": [
+              1,
+              4
+            ],
+            "vocation": "Cowherd",
+            "skills": "Cattle or Dairy Herding, 1 Agricultural Skill +1 Skill",
+            "status": 5
+          },
+          {
+            "roll": [
+              5,
+              11
+            ],
+            "vocation": "Swineherd",
+            "skills": "Pig Raising, 1 Agricultural Skill +1 Skill",
+            "status": 4
+          },
+          {
+            "roll": [
+              12,
+              19
+            ],
+            "vocation": "Shepherd",
+            "skills": "Sheep Herding, 1 Agricultural Skill +1 Skill",
+            "status": 3
+          },
+          {
+            "roll": [
+              20,
+              22
+            ],
+            "vocation": "Horse Handler",
+            "skills": "Riding, Animal Handling +1 Skill",
+            "status": 5
+          },
+          {
+            "roll": [
+              23,
+              24
+            ],
+            "vocation": "Stable Hand",
+            "skills": "Animal Handling, Knife Fighting +1 Skill",
+            "status": 3
+          },
+          {
+            "roll": [
+              25,
+              26
+            ],
+            "vocation": "Itinerant Blacksmith",
+            "skills": "Blacksmithing, Tinkering +1 Skill",
+            "status": 9
+          },
+          {
+            "roll": [
+              27,
+              30
+            ],
+            "vocation": "Tinker",
+            "skills": "Bargaining, Tinkering +1 Skill",
+            "status": 8
+          },
+          {
+            "roll": [
+              31,
+              35
+            ],
+            "vocation": "Peddler",
+            "skills": "Bargaining, Con +1 Skill",
+            "status": 8
+          },
+          {
+            "roll": [
+              36,
+              42
+            ],
+            "vocation": "Castle Servant",
+            "skills": "Hearing Rumours +1 Skill",
+            "status": 3
+          },
+          {
+            "roll": [
+              43,
+              45
+            ],
+            "vocation": "Liveried Guard (L)",
+            "skills": "2 Combat Skills, Gambling +1 Skill",
+            "status": 10
+          },
+          {
+            "roll": [
+              46,
+              49
+            ],
+            "vocation": "Liveried Archer (L)",
+            "skills": "Archery, Knife Fighting +2 Skills",
+            "status": 10
+          },
+          {
+            "roll": [
+              50,
+              51
+            ],
+            "vocation": "Under Cook",
+            "skills": "Cooking, Knife Fighting +1 Skill",
+            "status": 5
+          },
+          {
+            "roll": [
+              52,
+              78
+            ],
+            "vocation": "Poor Freeman",
+            "skills": "2 Agricultural Skills +1 Skill",
+            "status": 6
+          },
+          {
+            "roll": [
+              79,
+              91
+            ],
+            "vocation": "Forester",
+            "skills": "Archery, Axes +2 Outdoor Skills",
+            "status": 10
+          },
+          {
+            "roll": [
+              92,
+              100
+            ],
+            "vocation": "Fisherman",
+            "skills": "Fishing or Fisherman, Small Boats + Spears",
+            "status": 10
+          }
+        ]
+      },
+      "average": {
+        "title": "Average Freemen",
+        "page": 67,
+        "rows": [
+          {
+            "roll": [
+              1,
+              33
+            ],
+            "vocation": "Farmer",
+            "skills": "2 Agricultural Skills +1 Skill",
+            "status": 8
+          },
+          {
+            "roll": [
+              34,
+              47
+            ],
+            "vocation": "Stockman",
+            "skills": "2 Animal Skills, Knife Fighting +1 Skill",
+            "status": 11
+          },
+          {
+            "roll": [
+              48,
+              53
+            ],
+            "vocation": "Rural Mason",
+            "skills": "Masonry, Digging & Excavation + Lifting",
+            "status": 10
+          },
+          {
+            "roll": [
+              54,
+              56
+            ],
+            "vocation": "Potter",
+            "skills": "Pottery, Lifting + 1 Skill 1",
+            "status": 10
+          },
+          {
+            "roll": [
+              57,
+              65
+            ],
+            "vocation": "Village Blacksmith",
+            "skills": "Blacksmithing, Mace Combat +1 Skill",
+            "status": 12
+          },
+          {
+            "roll": [
+              66,
+              69
+            ],
+            "vocation": "Charcoal Burner",
+            "skills": "Charcoal Burning + Finding One’s Location",
+            "status": 8
+          },
+          {
+            "roll": [
+              70,
+              71
+            ],
+            "vocation": "Slater / Thatcher",
+            "skills": "Masonry (Thatching for thatchers) + Lifting (level 2)",
+            "status": 9
+          },
+          {
+            "roll": [
+              72,
+              76
+            ],
+            "vocation": "Liveried Forester (L)",
+            "skills": "Archery, Spears +2 Outdoor Skills",
+            "status": 12
+          },
+          {
+            "roll": [
+              77,
+              84
+            ],
+            "vocation": "Petty Trader",
+            "skills": "Con + Trade Skills",
+            "status": 11,
+            "link": "trades"
+          },
+          {
+            "roll": [
+              85,
+              91
+            ],
+            "vocation": "Rural Carpenter",
+            "skills": "Carpentry, Wood Carving + Knife Fighting",
+            "status": 10
+          },
+          {
+            "roll": [
+              92,
+              95
+            ],
+            "vocation": "Cartwright",
+            "skills": "Carpentry, Cartwright + Knife Fighting",
+            "status": 11
+          },
+          {
+            "roll": [
+              96,
+              98
+            ],
+            "vocation": "Castle Cook (L)",
+            "skills": "Cooking, Knife Fighting +1 Skill",
+            "status": 10
+          },
+          {
+            "roll": [
+              99,
+              100
+            ],
+            "vocation": "Falconer (L)",
+            "skills": "Animal Training, Knife Fighting +1 Skill",
+            "status": 10
+          }
+        ]
+      },
+      "wealthy": {
+        "title": "Wealthy Freemen",
+        "page": 68,
+        "rows": [
+          {
+            "roll": [
+              1,
+              29
+            ],
+            "vocation": "Well-to-do Farmer",
+            "skills": "2 Agricultural Skills, Knife Fighting +1 Skill",
+            "status": 13
+          },
+          {
+            "roll": [
+              30,
+              43
+            ],
+            "vocation": "Wealthy Stockman",
+            "skills": "2 Animal Skills, Knife Fighting +1 Skill",
+            "status": 14
+          },
+          {
+            "roll": [
+              44,
+              54
+            ],
+            "vocation": "Rural Inn Keeper",
+            "skills": "Innkeeping, Brewing + Intimidation",
+            "status": 14
+          },
+          {
+            "roll": [
+              55,
+              57
+            ],
+            "vocation": "Castle Blacksmith (L)",
+            "skills": "Blacksmithing, Mace Combat +1 Skill",
+            "status": 10
+          },
+          {
+            "roll": [
+              58,
+              58
+            ],
+            "vocation": "Master of Hounds (L)",
+            "skills": "Animal Training, Knife Fighting, Javelin, Throw Javelin +1 Skill",
+            "status": 10
+          },
+          {
+            "roll": [
+              59,
+              60
+            ],
+            "vocation": "Head Forester/ Archery Master (L)",
+            "skills": "Archery, Spears +3 Outdoor Skills",
+            "status": 15
+          },
+          {
+            "roll": [
+              61,
+              63
+            ],
+            "vocation": "Liveried Horse Trainer (L)",
+            "skills": "Riding, Animal Training +1 Skill",
+            "status": 10
+          },
+          {
+            "roll": [
+              64,
+              71
+            ],
+            "vocation": "Liveried Horseman (L)",
+            "skills": "Riding, Mounted Combat +2 Combat Skills",
+            "status": 16
+          },
+          {
+            "roll": [
+              72,
+              74
+            ],
+            "vocation": "Livery Commander (L)",
+            "skills": "Riding, Mounted Combat +2 Combat Skills",
+            "status": 20
+          },
+          {
+            "roll": [
+              75,
+              76
+            ],
+            "vocation": "Castle Armourer (L)",
+            "skills": "Blacksmithing, Weaponsmith +2 Combat Skills",
+            "status": 15
+          },
+          {
+            "roll": [
+              77,
+              83
+            ],
+            "vocation": "Serviens",
+            "skills": "Combat Skill",
+            "status": 18
+          },
+          {
+            "roll": [
+              84,
+              84
+            ],
+            "vocation": "Castle Chamberlain/ Castellan 8(L)",
+            "skills": "Write (Own Language), Accurate Counting, Diplomacy & Politics +1 Skill",
+            "status": 20
+          },
+          {
+            "roll": [
+              85,
+              86
+            ],
+            "vocation": "Scribe Secretary/ Clavaires (L)",
+            "skills": "Write (Own Language), Accurate Counting, Calligraphy & Illumination +1 Skill",
+            "status": 18
+          },
+          {
+            "roll": [
+              87,
+              95
+            ],
+            "vocation": "Miller",
+            "skills": "Milling, Sail Making & Rigging, Carpentry +1 Skill",
+            "status": 14
+          },
+          {
+            "roll": [
+              96,
+              100
+            ],
+            "vocation": "Wheelwright",
+            "skills": "Carpentry, Wheelwright + Blacksmithing",
+            "status": 13
+          }
+        ]
+      }
+    },
+    "townsman": {
+      "destitute": {
+        "title": "Destitute Poor",
+        "page": 69,
+        "rows": [
+          {
+            "roll": [
+              1,
+              3
+            ],
+            "vocation": "Physically Incompetent",
+            "skills": "Begging + Endurance (Endurance at level 2)",
+            "status": 1
+          },
+          {
+            "roll": [
+              4,
+              8
+            ],
+            "vocation": "Branded Vagrant",
+            "skills": "Intimidation, Begging + Con",
+            "status": 0
+          },
+          {
+            "roll": [
+              9,
+              14
+            ],
+            "vocation": "Branded Criminal",
+            "skills": "Intimidation, Begging + Con",
+            "status": 0,
+            "link": "originalClass"
+          },
+          {
+            "roll": [
+              15,
+              18
+            ],
+            "vocation": "Leper",
+            "skills": "Endurance",
+            "status": null,
+            "statusNote": "See note 3",
+            "link": "leper"
+          },
+          {
+            "roll": [
+              19,
+              38
+            ],
+            "vocation": "Beggar",
+            "skills": "Begging, Con + Streetwise",
+            "status": 1
+          },
+          {
+            "roll": [
+              39,
+              50
+            ],
+            "vocation": "Prostitute (mother)",
+            "skills": "Streetwise, Charm +1 Thievery Skill",
+            "status": 2
+          },
+          {
+            "roll": [
+              51,
+              53
+            ],
+            "vocation": "Pimp",
+            "skills": "Intimidation, Con, 1 Thievery Skill +1 Skill",
+            "status": 4
+          },
+          {
+            "roll": [
+              54,
+              63
+            ],
+            "vocation": "Thief / Cutpurse",
+            "skills": "Cutting Purses, Stealth, Streetwise +1 Skill",
+            "status": 7
+          },
+          {
+            "roll": [
+              64,
+              71
+            ],
+            "vocation": "Tough / Enforcer / Footpad",
+            "skills": "Knife Fighting, Intimidation, 1 Thievery Skill +1 Skill",
+            "status": 8
+          },
+          {
+            "roll": [
+              72,
+              85
+            ],
+            "vocation": "Offal Collector/ Rag-picker",
+            "skills": "Streetwise, Endurance + Begging",
+            "status": 3
+          },
+          {
+            "roll": [
+              86,
+              100
+            ],
+            "vocation": "‘Worthy’ Poor",
+            "skills": "Con + Trade Skills",
+            "status": 5,
+            "link": "originalClass"
+          }
+        ]
+      },
+      "poor": {
+        "title": "Poor People of the Town",
+        "page": 69,
+        "rows": [
+          {
+            "roll": [
+              1,
+              1
+            ],
+            "vocation": "Night-wanderer/Gambler",
+            "skills": "Streetwise, Gambling + Con",
+            "status": 5,
+            "link": "originalClass"
+          },
+          {
+            "roll": [
+              2,
+              3
+            ],
+            "vocation": "Street Singer",
+            "skills": "Streetwise + Singing +1 Thievery Skill",
+            "status": 3
+          },
+          {
+            "roll": [
+              4,
+              5
+            ],
+            "vocation": "Entertainer",
+            "skills": "Singing, Juggling + Dancing: Folk",
+            "status": 4
+          },
+          {
+            "roll": [
+              6,
+              7
+            ],
+            "vocation": "Musician",
+            "skills": "Musical Instrument + Singing",
+            "status": 5
+          },
+          {
+            "roll": [
+              8,
+              8
+            ],
+            "vocation": "Storyteller",
+            "skills": "Storytelling + Acting: Performance",
+            "status": 4
+          },
+          {
+            "roll": [
+              9,
+              10
+            ],
+            "vocation": "Burglar/Shoplifter",
+            "skills": "Concealing Objects, Skulking + Stealth",
+            "status": 1
+          },
+          {
+            "roll": [
+              11,
+              13
+            ],
+            "vocation": "Loafer/Dosser",
+            "skills": "Streetwise, Knife Fighting +1 Athletic Skill",
+            "status": 2
+          },
+          {
+            "roll": [
+              14,
+              15
+            ],
+            "vocation": "Serjeant/Executioner or Gaoler",
+            "skills": "2 Combat Skills, Intimidation +1 Skill",
+            "status": 10
+          },
+          {
+            "roll": [
+              16,
+              18
+            ],
+            "vocation": "Soldier",
+            "skills": "2 Combat Skills, Gambling +1 Skill",
+            "status": 8
+          },
+          {
+            "roll": [
+              19,
+              23
+            ],
+            "vocation": "Peddler",
+            "skills": "Bargaining, Con +1 Skill",
+            "status": 8
+          },
+          {
+            "roll": [
+              24,
+              27
+            ],
+            "vocation": "Tinker",
+            "skills": "Bargaining, Tinkering +1 Skill",
+            "status": 8
+          },
+          {
+            "roll": [
+              28,
+              68
+            ],
+            "vocation": "Domestic",
+            "skills": "Domestic & Service Skills",
+            "status": null,
+            "statusNote": "See note 4",
+            "link": "domestic"
+          },
+          {
+            "roll": [
+              69,
+              73
+            ],
+            "vocation": "Small Plot Tender",
+            "skills": "Vegetable Crops, 1 Agricultural Skill +1 Skill",
+            "status": 8
+          },
+          {
+            "roll": [
+              74,
+              80
+            ],
+            "vocation": "Huckster/Stall-keeper",
+            "skills": "Con + Trade Skills",
+            "status": 10,
+            "link": "trades"
+          },
+          {
+            "roll": [
+              81,
+              91
+            ],
+            "vocation": "Day Labourer",
+            "skills": "Endurance, Conditioning + Lifting",
+            "status": 5
+          },
+          {
+            "roll": [
+              92,
+              96
+            ],
+            "vocation": "Master-less Worker (Vagrant)",
+            "skills": "Trade Skills",
+            "status": 7,
+            "link": "trades"
+          },
+          {
+            "roll": [
+              97,
+              100
+            ],
+            "vocation": "Struggling Journeyman",
+            "skills": "Trade Skills",
+            "status": 9,
+            "link": "trades"
+          }
+        ]
+      },
+      "average": {
+        "title": "Average Townsman",
+        "page": 69,
+        "rows": [
+          {
+            "roll": [
+              1,
+              28
+            ],
+            "vocation": "Employed Labourer",
+            "skills": "Trade Skills",
+            "status": 7,
+            "link": "trades"
+          },
+          {
+            "roll": [
+              29,
+              60
+            ],
+            "vocation": "Skilled Worker/Journeyman",
+            "skills": "Trade Skills",
+            "status": 11,
+            "link": "trades"
+          },
+          {
+            "roll": [
+              61,
+              77
+            ],
+            "vocation": "Petty Trader",
+            "skills": "Con + Trade Skills",
+            "status": 12,
+            "link": "trades"
+          },
+          {
+            "roll": [
+              78,
+              97
+            ],
+            "vocation": "Shopkeeper",
+            "skills": "Trade Skills",
+            "status": 13,
+            "link": "trades"
+          },
+          {
+            "roll": [
+              98,
+              99
+            ],
+            "vocation": "Brothel Keeper",
+            "skills": "Intimidation, Con + Knife Fighting",
+            "status": 11
+          },
+          {
+            "roll": [
+              100,
+              100
+            ],
+            "vocation": "Pawnshop Owner",
+            "skills": "Finance, Accurate Counting, Bargaining + Con",
+            "status": 14
+          }
+        ]
+      },
+      "wealthy": {
+        "title": "Wealthy Townsmen",
+        "page": 70,
+        "rows": [
+          {
+            "roll": [
+              1,
+              8
+            ],
+            "vocation": "Ship’s Officer",
+            "skills": "Mariner, Leadership",
+            "status": 14
+          },
+          {
+            "roll": [
+              9,
+              12
+            ],
+            "vocation": "Money Lender",
+            "skills": "Bargaining , Diplomacy & Politics + Intimidation",
+            "status": 16
+          },
+          {
+            "roll": [
+              13,
+              32
+            ],
+            "vocation": "Well-to-do Worker/ Journeyman",
+            "skills": "Trade Skills",
+            "status": 14,
+            "link": "trades"
+          },
+          {
+            "roll": [
+              33,
+              44
+            ],
+            "vocation": "Trader/Merchant",
+            "skills": "Trade Skills",
+            "status": 16,
+            "link": "merchants"
+          },
+          {
+            "roll": [
+              45,
+              100
+            ],
+            "vocation": "Master Trades/Guildsman",
+            "skills": "Trade Skills",
+            "status": 17,
+            "link": "trades"
+          }
+        ]
+      },
+      "rich": {
+        "title": "Rich & Other Elite Groups",
+        "page": 70,
+        "rows": [
+          {
+            "roll": [
+              1,
+              31
+            ],
+            "vocation": "Wealthy Merchant",
+            "skills": "Trade Skills",
+            "status": 19,
+            "link": "merchants"
+          },
+          {
+            "roll": [
+              32,
+              67
+            ],
+            "vocation": "Rich Master Trades/ Guildsman",
+            "skills": "Trade Skills",
+            "status": 20,
+            "link": "trades"
+          },
+          {
+            "roll": [
+              68,
+              68
+            ],
+            "vocation": "Banker",
+            "skills": "Finance, Accurate Counting, Bargaining + Diplomacy & Politics",
+            "status": 19
+          },
+          {
+            "roll": [
+              69,
+              87
+            ],
+            "vocation": "Culturally Elite Townsman",
+            "skills": "Elite Skills",
+            "status": null,
+            "statusNote": "see note 12",
+            "link": "urbanElites"
+          },
+          {
+            "roll": [
+              88,
+              100
+            ],
+            "vocation": "Patrician",
+            "skills": "Bargaining, Diplomacy & Politics, 1 Combat Skill,",
+            "status": 25
+          }
+        ]
+      }
+    }
+  },
+  "trades": {
+    "groups": [
+      {
+        "name": "Victuallers",
+        "roll": [
+          1,
+          26
+        ],
+        "page": 73,
+        "rows": [
+          {
+            "roll": [
+              1,
+              11
+            ],
+            "vocation": "Brewer",
+            "skills": "Brewing, Cooking +1 Skill",
+            "statusModifier": 0
+          },
+          {
+            "roll": [
+              12,
+              28
+            ],
+            "vocation": "BUTCHER",
+            "skills": "Axe Combat + Knife Fighting",
+            "statusModifier": 2
+          },
+          {
+            "roll": [
+              29,
+              47
+            ],
+            "vocation": "BAKER",
+            "skills": "Cooking +1 Skill",
+            "statusModifier": 1
+          },
+          {
+            "roll": [
+              48,
+              60
+            ],
+            "vocation": "FISHMONGER",
+            "skills": "Knife Fighting +1 Skill",
+            "statusModifier": 0
+          },
+          {
+            "roll": [
+              61,
+              74
+            ],
+            "vocation": "Greengrocer",
+            "skills": "Finance",
+            "statusModifier": 0
+          },
+          {
+            "roll": [
+              75,
+              81
+            ],
+            "vocation": "Miller",
+            "skills": "Milling, Carpentry +1 Skill",
+            "statusModifier": 2
+          },
+          {
+            "roll": [
+              82,
+              89
+            ],
+            "vocation": "Egg/Milk/Cheese Seller",
+            "skills": "Finance",
+            "statusModifier": 0
+          },
+          {
+            "roll": [
+              90,
+              93
+            ],
+            "vocation": "Vintner/Wine Seller",
+            "skills": "Wine Making +1 Skill",
+            "statusModifier": 4
+          },
+          {
+            "roll": [
+              94,
+              95
+            ],
+            "vocation": "Oil Seller",
+            "skills": "Oil Refining +1 Skill 1",
+            "statusModifier": 1
+          },
+          {
+            "roll": [
+              96,
+              100
+            ],
+            "vocation": "Innkeeper",
+            "skills": "Finance, Brewing + Intimidation",
+            "statusModifier": 2
+          }
+        ]
+      },
+      {
+        "name": "Textile Trades",
+        "roll": [
+          27,
+          55
+        ],
+        "page": 73,
+        "rows": [
+          {
+            "roll": [
+              1,
+              4
+            ],
+            "vocation": "Yarn Maker",
+            "skills": "Spinning & Weaving, Knitting & Embroidering + Sewing",
+            "statusModifier": 0
+          },
+          {
+            "roll": [
+              5,
+              12
+            ],
+            "vocation": "Hosiery Maker",
+            "skills": "Sewing, Knitting & Embroidering",
+            "statusModifier": -1
+          },
+          {
+            "roll": [
+              13,
+              28
+            ],
+            "vocation": "TAILOR",
+            "skills": "Sewing, Knitting & Embroidering +1 Skill",
+            "statusModifier": 1
+          },
+          {
+            "roll": [
+              29,
+              35
+            ],
+            "vocation": "Capper/Hatter",
+            "skills": "Sewing, Knitting & Embroidering",
+            "statusModifier": 1
+          },
+          {
+            "roll": [
+              36,
+              47
+            ],
+            "vocation": "Cloth Piecegoods",
+            "skills": "Spinning & Weaving + Sewing, Knitting & Embroidering",
+            "statusModifier": -1
+          },
+          {
+            "roll": [
+              48,
+              56
+            ],
+            "vocation": "Embroiderer",
+            "skills": "Sewing, Knitting & Embroidering",
+            "statusModifier": 0
+          },
+          {
+            "roll": [
+              57,
+              71
+            ],
+            "vocation": "WEAVER",
+            "skills": "Spinning & Weaving +2 Skills",
+            "statusModifier": 0
+          },
+          {
+            "roll": [
+              72,
+              85
+            ],
+            "vocation": "DYER/Litster",
+            "skills": "Dyeing, Lifting +1 Skill",
+            "statusModifier": 0
+          },
+          {
+            "roll": [
+              86,
+              93
+            ],
+            "vocation": "FULLER",
+            "skills": "Lifting, Spinning & Weaving +1 Skill",
+            "statusModifier": 0
+          },
+          {
+            "roll": [
+              94,
+              100
+            ],
+            "vocation": "Draper",
+            "skills": "Sewing, Knitting & Embroidering +2 Skills",
+            "statusModifier": 1
+          }
+        ]
+      },
+      {
+        "name": "Leather Trades",
+        "roll": [
+          56,
+          65
+        ],
+        "page": 73,
+        "rows": [
+          {
+            "roll": [
+              1,
+              21
+            ],
+            "vocation": "TANNER/Currier/ Tawer/Whitawer",
+            "skills": "Tanning, Leather-working + Knife Fighting",
+            "statusModifier": -1
+          },
+          {
+            "roll": [
+              22,
+              38
+            ],
+            "vocation": "Harnessmaker",
+            "skills": "Leather-working, Knife Fighting +1 Skill",
+            "statusModifier": 1
+          },
+          {
+            "roll": [
+              39,
+              52
+            ],
+            "vocation": "Saddler",
+            "skills": "Leather-working, Carpentry + Knife Fighting",
+            "statusModifier": 3
+          },
+          {
+            "roll": [
+              53,
+              78
+            ],
+            "vocation": "Cordwainer/Cobbler",
+            "skills": "Leather-working + Knife Fighting",
+            "statusModifier": 2
+          },
+          {
+            "roll": [
+              79,
+              100
+            ],
+            "vocation": "Horner",
+            "skills": "Horn and Ivory Work +1 Skill",
+            "statusModifier": 0
+          }
+        ]
+      },
+      {
+        "name": "Metal Trades",
+        "roll": [
+          66,
+          74
+        ],
+        "page": 74,
+        "rows": [
+          {
+            "roll": [
+              1,
+              4
+            ],
+            "vocation": "Miner",
+            "skills": "Mining, Geological Lore +1 Skill",
+            "statusModifier": 0
+          },
+          {
+            "roll": [
+              5,
+              22
+            ],
+            "vocation": "Blacksmith",
+            "skills": "Blacksmithing, Mace Combat +1 Skill",
+            "statusModifier": 3
+          },
+          {
+            "roll": [
+              23,
+              42
+            ],
+            "vocation": "Tin/Coppersmith",
+            "skills": "Smelting +2 Skills",
+            "statusModifier": 2
+          },
+          {
+            "roll": [
+              43,
+              65
+            ],
+            "vocation": "PEWTERER/Plumber",
+            "skills": "Smelting +2 Skills",
+            "statusModifier": 1
+          },
+          {
+            "roll": [
+              66,
+              68
+            ],
+            "vocation": "Foundryman",
+            "skills": "Smelting, Endurance +1 Skill",
+            "statusModifier": 0
+          },
+          {
+            "roll": [
+              69,
+              72
+            ],
+            "vocation": "Bell-founder/Brazier",
+            "skills": "Smelting, Endurance + Engraving",
+            "statusModifier": 2
+          },
+          {
+            "roll": [
+              73,
+              76
+            ],
+            "vocation": "Armourer",
+            "skills": "Blacksmithing, 1 Combat Skill +1 Skill",
+            "statusModifier": 4
+          },
+          {
+            "roll": [
+              77,
+              82
+            ],
+            "vocation": "Cutler/Bladesmith",
+            "skills": "Weaponsmithing, Knife Fighting +1 Skill",
+            "statusModifier": 3
+          },
+          {
+            "roll": [
+              83,
+              88
+            ],
+            "vocation": "Engraver",
+            "skills": "Gold/Silversmithing, Engraving +1 Skill",
+            "statusModifier": 2
+          },
+          {
+            "roll": [
+              89,
+              95
+            ],
+            "vocation": "GOLDSMITH/ Silversmith",
+            "skills": "Gold/Silversmithing or Lapidary +2 Skill",
+            "statusModifier": 4
+          },
+          {
+            "roll": [
+              96,
+              100
+            ],
+            "vocation": "Ironworker",
+            "skills": "Blacksmithing, Mace Combat +1 Skill",
+            "statusModifier": 2
+          }
+        ]
+      },
+      {
+        "name": "Building Trades",
+        "roll": [
+          75,
+          86
+        ],
+        "page": 74,
+        "rows": [
+          {
+            "roll": [
+              1,
+              8
+            ],
+            "vocation": "Potter",
+            "skills": "Pottery +1 Skill",
+            "statusModifier": 0
+          },
+          {
+            "roll": [
+              9,
+              13
+            ],
+            "vocation": "Basketworker",
+            "skills": "Basketwork +1 Skill",
+            "statusModifier": -2
+          },
+          {
+            "roll": [
+              14,
+              19
+            ],
+            "vocation": "Tiler/Roof Tile Maker",
+            "skills": "Pottery, Lifting +1 Skill",
+            "statusModifier": 0
+          },
+          {
+            "roll": [
+              20,
+              30
+            ],
+            "vocation": "Woodworker",
+            "skills": "Carpentry + Wood Carving",
+            "statusModifier": -1
+          },
+          {
+            "roll": [
+              31,
+              41
+            ],
+            "vocation": "MASON",
+            "skills": "Masonry, Architecture + Sculpting",
+            "statusModifier": 2
+          },
+          {
+            "roll": [
+              42,
+              53
+            ],
+            "vocation": "Builder",
+            "skills": "Masonry, Lifting +1 Skill",
+            "statusModifier": 1
+          },
+          {
+            "roll": [
+              54,
+              63
+            ],
+            "vocation": "Plasterer",
+            "skills": "Plastering, Lifting +1 Skill",
+            "statusModifier": -1
+          },
+          {
+            "roll": [
+              64,
+              67
+            ],
+            "vocation": "Dyker/Earthwaller",
+            "skills": "Digging & Excavation, Endurance + Lifting",
+            "statusModifier": -2
+          },
+          {
+            "roll": [
+              68,
+              79
+            ],
+            "vocation": "CARPENTER",
+            "skills": "Carpentry, 1 Specialised Woodworking Skill +1 Other Skill",
+            "statusModifier": 0
+          },
+          {
+            "roll": [
+              80,
+              85
+            ],
+            "vocation": "Cabinetmaker",
+            "skills": "Carpentry, Wood Carving +1 Skill",
+            "statusModifier": 1
+          },
+          {
+            "roll": [
+              86,
+              89
+            ],
+            "vocation": "Cartwright",
+            "skills": "Carpentry, Cartwright + Wood Carving",
+            "statusModifier": 0
+          },
+          {
+            "roll": [
+              90,
+              93
+            ],
+            "vocation": "WHEELWRIGHT",
+            "skills": "Carpentry, Wheelwright + Blacksmithing",
+            "statusModifier": 1
+          },
+          {
+            "roll": [
+              94,
+              96
+            ],
+            "vocation": "Shipwright",
+            "skills": "Ship‘s Carpentry, Marine Architecture +1 Sea Skill",
+            "statusModifier": 3
+          },
+          {
+            "roll": [
+              97,
+              97
+            ],
+            "vocation": "Glass blower/Glazier",
+            "skills": "Glass blowing & Glazing +2 Skills",
+            "statusModifier": 2
+          },
+          {
+            "roll": [
+              98,
+              98
+            ],
+            "vocation": "Artist",
+            "skills": "Painting +3 Skills",
+            "statusModifier": 1
+          },
+          {
+            "roll": [
+              99,
+              100
+            ],
+            "vocation": "Sculptor/Carver",
+            "skills": "Sculpture +3 Skills",
+            "statusModifier": 2
+          }
+        ]
+      },
+      {
+        "name": "Other Trades",
+        "roll": [
+          87,
+          94
+        ],
+        "page": 75,
+        "rows": [
+          {
+            "roll": [
+              1,
+              17
+            ],
+            "vocation": "Barber",
+            "skills": "First Aid, Knife Fighting +1 Skill",
+            "statusModifier": 0
+          },
+          {
+            "roll": [
+              18,
+              35
+            ],
+            "vocation": "Ostler",
+            "skills": "Riding, Veterinary +1 Combat Skill",
+            "statusModifier": 2
+          },
+          {
+            "roll": [
+              36,
+              42
+            ],
+            "vocation": "Animal Trainer",
+            "skills": "Animal Training: (specific animal), Animal Handling + Veterinary",
+            "statusModifier": -2
+          },
+          {
+            "roll": [
+              43,
+              44
+            ],
+            "vocation": "Pilot",
+            "skills": "Piloting, Small Boats +1 Sea Skill",
+            "statusModifier": 3
+          },
+          {
+            "roll": [
+              45,
+              53
+            ],
+            "vocation": "Boatman/Sailor",
+            "skills": "Fisherman or Mariner, Small Boats, Knife Fighting + Fishing or 1 Sea Skill",
+            "statusModifier": -2
+          },
+          {
+            "roll": [
+              54,
+              57
+            ],
+            "vocation": "Net Maker",
+            "skills": "Sail & Cordage Maker, Fisherman +1 Skill",
+            "statusModifier": -1
+          },
+          {
+            "roll": [
+              58,
+              69
+            ],
+            "vocation": "Roper/Corder",
+            "skills": "Sail & Cordage Maker, Knife Fighting +1 Other Skill",
+            "statusModifier": 0
+          },
+          {
+            "roll": [
+              70,
+              74
+            ],
+            "vocation": "Musical Instrument Maker",
+            "skills": "Instrument Making + Bone, Horn & Ivory Work",
+            "statusModifier": 0
+          },
+          {
+            "roll": [
+              75,
+              88
+            ],
+            "vocation": "Cooper/Barrelwright",
+            "skills": "Carpentry, Cooper +1 Skill",
+            "statusModifier": 0
+          },
+          {
+            "roll": [
+              89,
+              94
+            ],
+            "vocation": "Bowyer/Fletcher",
+            "skills": "Bowyer & Fletcher, Horn and Ivory Work+1 Other Skill",
+            "statusModifier": 1
+          },
+          {
+            "roll": [
+              95,
+              98
+            ],
+            "vocation": "Chandler/Candle Maker",
+            "skills": "Chandler, Painting +1 Skill",
+            "statusModifier": 0
+          },
+          {
+            "roll": [
+              99,
+              100
+            ],
+            "vocation": "Incense/Perfume Maker",
+            "skills": "Perfumery +2 Skills",
+            "statusModifier": 2
+          }
+        ]
+      },
+      {
+        "name": "Local Specialist Trades & 'Other'",
+        "roll": [
+          95,
+          100
+        ],
+        "page": 75,
+        "rows": [
+          {
+            "roll": [
+              1,
+              70
+            ],
+            "vocation": "Local Specialty",
+            "skills": "Varied Trade Skills",
+            "statusModifier": null,
+            "statusNote": "See Note 2"
+          },
+          {
+            "roll": [
+              71,
+              100
+            ],
+            "vocation": "Other",
+            "skills": "Varies",
+            "statusModifier": null,
+            "statusNote": "See Note 2"
+          }
+        ]
+      }
+    ],
+    "grants": [
+      "Bargaining",
+      "Evaluating Goods"
+    ]
+  },
+  "domestic": {
+    "page": 71,
+    "rows": [
+      {
+        "roll": [
+          1,
+          4
+        ],
+        "vocation": "Stable Hand",
+        "skills": "Animal Handling + Knife Fighting",
+        "status": 6
+      },
+      {
+        "roll": [
+          5,
+          10
+        ],
+        "vocation": "Water Carrier",
+        "skills": "Endurance, Conditioning + Lifting",
+        "status": 4
+      },
+      {
+        "roll": [
+          11,
+          20
+        ],
+        "vocation": "Porter/Hauler",
+        "skills": "Endurance, Conditioning + Lifting",
+        "status": 5
+      },
+      {
+        "roll": [
+          21,
+          26
+        ],
+        "vocation": "Carter",
+        "skills": "Endurance, Conditioning + Lifting",
+        "status": 6
+      },
+      {
+        "roll": [
+          27,
+          38
+        ],
+        "vocation": "Valet/Body Servant",
+        "skills": "Blending into Surroundings, Con Hearing Rumours +1 Skill",
+        "status": 9
+      },
+      {
+        "roll": [
+          39,
+          70
+        ],
+        "vocation": "General Servant",
+        "skills": "Blending into Surroundings, Hearing Rumours +1 Skill",
+        "status": 4
+      },
+      {
+        "roll": [
+          71,
+          82
+        ],
+        "vocation": "Cook",
+        "skills": "Cooking, Knife Fighting +1 Skill",
+        "status": 8
+      },
+      {
+        "roll": [
+          83,
+          89
+        ],
+        "vocation": "Under Cook",
+        "skills": "Cooking, Knife Fighting +1 Skill",
+        "status": 7
+      },
+      {
+        "roll": [
+          90,
+          92
+        ],
+        "vocation": "Swineherd",
+        "skills": "Pig Raising, Bargaining +1 Skill",
+        "status": 6
+      },
+      {
+        "roll": [
+          93,
+          100
+        ],
+        "vocation": "Gardener",
+        "skills": "Gardening +2 Skills",
+        "status": 8
+      }
+    ]
+  },
+  "merchants": {
+    "page": 71,
+    "rows": [
+      {
+        "roll": [
+          1,
+          2
+        ],
+        "vocation": "Export Merchant",
+        "skills": "Finance + Accurate Counting",
+        "statusModifier": 1
+      },
+      {
+        "roll": [
+          3,
+          4
+        ],
+        "vocation": "Mercantile Shipper",
+        "skills": "Finance + Accurate Counting",
+        "statusModifier": 1
+      },
+      {
+        "roll": [
+          5,
+          7
+        ],
+        "vocation": "Overland Trader",
+        "skills": "Finding One’s Location + Diplomacy & Politics",
+        "statusModifier": 0
+      },
+      {
+        "roll": [
+          8,
+          11
+        ],
+        "vocation": "Maritime Trader",
+        "skills": "Mariner, Piloting + Diplomacy & Politics",
+        "statusModifier": 2
+      },
+      {
+        "roll": [
+          12,
+          16
+        ],
+        "vocation": "Iron Merchant",
+        "skills": "Finance + Accurate Counting",
+        "statusModifier": 0
+      },
+      {
+        "roll": [
+          17,
+          22
+        ],
+        "vocation": "Tin/Copper Merchant",
+        "skills": "Finance + Accurate Counting",
+        "statusModifier": 1
+      },
+      {
+        "roll": [
+          23,
+          31
+        ],
+        "vocation": "Timber Merchant",
+        "skills": "Finance + Accurate Counting",
+        "statusModifier": 0
+      },
+      {
+        "roll": [
+          32,
+          37
+        ],
+        "vocation": "Charcoal Merchant",
+        "skills": "Finance + Accurate Counting",
+        "statusModifier": -2
+      },
+      {
+        "roll": [
+          38,
+          45
+        ],
+        "vocation": "Livestock Merchant",
+        "skills": "Finance + Accurate Counting",
+        "statusModifier": 2
+      },
+      {
+        "roll": [
+          46,
+          54
+        ],
+        "vocation": "Leather Merchant",
+        "skills": "Finance + Accurate Counting",
+        "statusModifier": -1
+      },
+      {
+        "roll": [
+          55,
+          65
+        ],
+        "vocation": "Fur/Hide Merchant",
+        "skills": "Finance + Accurate Counting",
+        "statusModifier": 2
+      },
+      {
+        "roll": [
+          66,
+          81
+        ],
+        "vocation": "Brogger/Wool Merchant",
+        "skills": "Finance + Accurate Counting",
+        "statusModifier": 2
+      },
+      {
+        "roll": [
+          83,
+          91
+        ],
+        "vocation": "Salt Fish Merchant",
+        "skills": "Finance + Accurate Counting",
+        "statusModifier": -1
+      },
+      {
+        "roll": [
+          92,
+          93
+        ],
+        "vocation": "Salt Merchant",
+        "skills": "Finance + Accurate Counting",
+        "statusModifier": 1
+      },
+      {
+        "roll": [
+          94,
+          99
+        ],
+        "vocation": "Wine Merchant",
+        "skills": "Finance + Accurate Counting",
+        "statusModifier": 4
+      },
+      {
+        "roll": [
+          100,
+          100
+        ],
+        "vocation": "Spice Merchant",
+        "skills": "Finance + Accurate Counting",
+        "statusModifier": 4
+      }
+    ],
+    "grants": [
+      "Bargaining",
+      "Evaluating Goods"
+    ]
+  },
+  "urbanElites": {
+    "page": 76,
+    "rows": [
+      {
+        "roll": [
+          1,
+          10
+        ],
+        "vocation": "Physician",
+        "skills": "Writing, Herbalism, First Aid +3 Other Skills",
+        "status": 24
+      },
+      {
+        "roll": [
+          11,
+          20
+        ],
+        "vocation": "Surgeon",
+        "skills": "Writing, Pharmacology & Medicine, Astronomical Lore, Herbalism +1 Other Skills",
+        "status": 25
+      },
+      {
+        "roll": [
+          21,
+          35
+        ],
+        "vocation": "Barber-Surgeon",
+        "skills": "First Aid, Chirurgery, Knife Fighting +1 Other Skills",
+        "status": 19
+      },
+      {
+        "roll": [
+          36,
+          45
+        ],
+        "vocation": "Apothecary",
+        "skills": "Make Drugs, Poisons, Herbalism, 1 Written Language +1 Other Skills",
+        "status": 22
+      },
+      {
+        "roll": [
+          46,
+          55
+        ],
+        "vocation": "Mire (non graduate physician)",
+        "skills": "Writing, Pharmacology & Medicine, Herbalism +2 Other Skills",
+        "status": 21
+      },
+      {
+        "roll": [
+          56,
+          70
+        ],
+        "vocation": "Graduate in Law",
+        "skills": "Writing, Law, Con, 3 Lore +1 Other Skills",
+        "status": 23
+      },
+      {
+        "roll": [
+          71,
+          80
+        ],
+        "vocation": "Notary",
+        "skills": "Writing, Law, Diplomacy & Politics, 3 Lore +1 Other Skills",
+        "status": 24
+      },
+      {
+        "roll": [
+          81,
+          95
+        ],
+        "vocation": "Scribe/Clerk",
+        "skills": "Writing, Paper Making, Calligraphy & Illumination +1 Other Skills",
+        "status": 19
+      },
+      {
+        "roll": [
+          96,
+          100
+        ],
+        "vocation": "School-teacher",
+        "skills": "Writing, Paper Making, 2 Lore +1 Other Skills",
+        "status": 21
+      }
+    ]
+  }
+}

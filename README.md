@@ -359,6 +359,12 @@ book against itself had turned up.
 
 ## Fixed after first run in Foundry
 
+- **The vocation step would not open** ("The partial
+  systems/cns5/templates/wizard/step-vocation.hbs could not be found"). The
+  wizard renders each step as a partial, which must be preloaded at start-up,
+  and the new step was not added to the list. It is now, and a test checks
+  that every wizard step and every named partial is preloaded.
+
 - **The whole language file failed to load.** `CNS5.Creation.method` held a
   string while `CNS5.Creation.method.random` needed it to be an object. Foundry
   expands dotted keys into a nested tree before use, so the collision aborted

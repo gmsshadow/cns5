@@ -1419,5 +1419,18 @@
   "CNS5.StartingSpells.noMage": "Set the Mode of Magick on the Magick tab, and give him a Magick Level, before buying spells.",
   "CNS5.StartingSpells.problem.overspent": "{spent} Spell Points spent of {points}.",
   "CNS5.StartingSpells.problem.tooHigh": "{name} is MR {mr} to him; he can learn up to MR {max}.",
-  "CNS5.StartingSpells.problem.noMethod": "{name} needs {method}, which he does not know."
+  "CNS5.StartingSpells.problem.noMethod": "{name} needs {method}, which he does not know.",
+  "CNS5.Faith.addActs": "Add Acts within reach",
+  "CNS5.Faith.addActsHint": "Add every Act of Faith the {column} column of the table lists (pp.145-146) that his standing and PFF now allow (p404). Acts are not learnt; they come with faith.",
+  "CNS5.Faith.actsAdded": "{count} Acts of Faith added: {names}.",
+  "CNS5.Faith.noNewActs": "No new Acts of Faith are within his reach yet.",
+  "CNS5.Specialisation.liturgy": "Liturgy",
+  "CNS5.Specialisation.scripture": "Scripture",
+  "CNS5.Specialisation.belief": "to believers' rolls in his rites",
+  "CNS5.Specialisation.costHint": "Each Theology level now costs {extra} Exp more (p230).",
+  "CNS5.Vocation.priestly": "A priest's faith",
+  "CNS5.Vocation.priestlyHint": "Acts of Faith are not chosen. He may call upon every Act the {column} column lists once his PFF reaches it (pp.145-146, 404). He stands as {standing}, which opens the Acts marked † or ‡. Those within reach are added when the wizard finishes.",
+  "CNS5.Vocation.specialisation": "Priestly specialisation",
+  "CNS5.Vocation.specialisationHint": "Optional (p230). It costs {cost} Exp now and {perLevel} Exp more per Theology level after. Liturgy adds +1% per Theology level to believers' rolls in rites he leads, and +1 to the Crit Die. Scripture adds +1 to the Crit Die when quoting scripture in debate.",
+  "CNS5.Vocation.specialisationNoTheology": "A specialisation is in Theology, which he does not have."
 }

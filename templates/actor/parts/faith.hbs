@@ -61,7 +61,22 @@
     <dl class="cns5-derived">
         <div><dt>{{localize "CNS5.Derived.faithFactor"}}</dt><dd>{{system.faith.pff}}</dd></div>
         <div><dt>{{localize "CNS5.Vitals.spirit"}}</dt><dd>{{system.spirit.value}} / {{system.attr.spr.value}}</dd></div>
+        {{#if system.faith.specialisation}}
+        <div><dt>{{localize system.faith.specialisation.label}}</dt>
+            <dd data-tooltip="{{localize 'CNS5.Specialisation.costHint' extra=system.faith.specialisation.extraPerLevel}}">
+                {{#if system.faith.specialisation.beliefBonus}}+{{system.faith.specialisation.beliefBonus}}% {{localize "CNS5.Specialisation.belief"}}, {{/if}}+{{system.faith.specialisation.critDie}} {{localize "CNS5.Roll.critDie"}}
+            </dd></div>
+        {{/if}}
     </dl>
+    {{#if system.faith.specialisation.theologyMissing}}
+    <p class="cns5-hint cns5-hint--bad">{{localize "CNS5.Vocation.specialisationNoTheology"}}</p>
+    {{/if}}
+    <label class="cns5-field cns5-field--narrow">
+        <span>{{localize "CNS5.Vocation.specialisation"}}</span>
+        <select name="system.details.priestlySpecialisation" {{#unless editable}}disabled{{/unless}}>
+            {{#each specialisations}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}
+        </select>
+    </label>
 
     <section class="cns5-skills">
         <h3 class="cns5-skills__heading">
@@ -115,6 +130,12 @@
             <button type="button" class="cns5-add" data-action="createItem" data-type="actOfFaith">
                 {{localize "CNS5.Item.addAct"}}
             </button>
+            {{#if editable}}{{#if system.faith.vocationColumn}}
+            <button type="button" class="cns5-add" data-action="addActsWithinReach"
+                    data-tooltip="{{localize 'CNS5.Faith.addActsHint' column=system.faith.vocationColumn}}">
+                {{localize "CNS5.Faith.addActs"}}
+            </button>
+            {{/if}}{{/if}}
         </h3>
         {{#if acts.length}}
         <table class="cns5-skills__table">

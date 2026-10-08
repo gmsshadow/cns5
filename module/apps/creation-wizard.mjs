@@ -14,6 +14,7 @@ import {
   checkStartingSkills,
   freeMasteryFor
 } from "../helpers/vocations.mjs";
+import { higherStanding } from "../helpers/faith.mjs";
 import { CnS5StartingSpells } from "./starting-spells.mjs";
 
 const { HandlebarsApplicationMixin, ApplicationV2, DialogV2 } = foundry.applications.api;
@@ -198,6 +199,8 @@ export class CnS5CreationWizard extends HandlebarsApplicationMixin(ApplicationV2
       // Outdoor skills (p124).
       backgroundPicks: {},
       fatherOutdoor: [],
+      // A priest's Liturgy or Scripture (p230).
+      priestlySpecialisation: system.details.priestlySpecialisation ?? "",
       notes: "",
       attributes: Object.fromEntries(
         CnS5CreationWizard.PRIMARY.map((key) => [key, system.attributes[key].value - (given[key] ?? 0)])
@@ -646,6 +649,25 @@ export class CnS5CreationWizard extends HandlebarsApplicationMixin(ApplicationV2
           )
         : [],
       signCategories: sign?.categories.join(", ") ?? "",
+      // A priestly vocation: what it reads of the Acts of Faith table, and the
+      // specialisation it may buy (pp.145-146, 230).
+      priestly: CNS5.vocationFaith[voc.key]
+        ? {
+            column: CNS5.vocationFaith[voc.key].column,
+            standing: `CNS5.Standing.${CNS5.vocationFaith[voc.key].standing}`,
+            specialisations: [
+              { value: "", label: "—", selected: !draft.priestlySpecialisation },
+              ...Object.entries(CNS5.priestlySpecialisations).map(([key, sp]) => ({
+                value: key,
+                label: game.i18n.localize(sp.label),
+                selected: key === draft.priestlySpecialisation
+              }))
+            ],
+            cost: CNS5.priestlySpecialisationCost.initial,
+            perLevel: CNS5.priestlySpecialisationCost.perTheologyLevel,
+            noTheology: Boolean(draft.priestlySpecialisation) && !knownNames.has(CNS5.theologySkill)
+          }
+        : null,
       problems: checkStartingSkills(state, ctx).map((p) =>
         game.i18n.format(`CNS5.Vocation.problem.${p.key}`, p.data)
       ),
@@ -742,6 +764,25 @@ export class CnS5CreationWizard extends HandlebarsApplicationMixin(ApplicationV2
       await this.actor.update({
         "system.magick.tradition": tradition,
         ...(state.voc.modeName ? { "system.magick.mode": state.voc.modeName } : {})
+      });
+    }
+
+    // A priest's standing, for the Acts marked † and ‡ (p404) — raised to his
+    // vocation's, never lowered — and his specialisation, which costs 500
+    // experience when first bought (p230).
+    const faith = CNS5.vocationFaith[state.voc.key];
+    if (faith) {
+      const details = this.actor.system.details;
+      const had = details.priestlySpecialisation ?? "";
+      const wants = this.draft.priestlySpecialisation ?? "";
+      const cost = CNS5.priestlySpecialisationCost.initial;
+      const spent = this.actor.system.experience?.spent ?? 0;
+      await this.actor.update({
+        "system.details.holyStanding": higherStanding(details.holyStanding ?? "lay", faith.standing),
+        "system.details.priestlySpecialisation": wants,
+        ...(had === wants || (had && wants)
+          ? {}
+          : { "system.experience.spent": Math.max(0, spent + (wants ? cost : -cost)) })
       });
     }
 
@@ -1549,6 +1590,10 @@ export class CnS5CreationWizard extends HandlebarsApplicationMixin(ApplicationV2
       }
       if (items.length) await this.actor.createEmbeddedDocuments("Item", items);
     }
+
+    // A priest's Acts of Faith are his by vocation, standing and PFF (p404),
+    // and are put on his sheet now that the last of those is known.
+    await this.actor.addActsWithinReach?.();
 
     ui.notifications.info(game.i18n.format("CNS5.Creation.done", { name: this.actor.name }));
     await this.close();

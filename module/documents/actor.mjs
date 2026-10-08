@@ -14,7 +14,7 @@ import {
 } from "../helpers/defence-prompt.mjs";
 import { armourAt } from "../helpers/defence.mjs";
 import { parseMagnitude } from "../helpers/magnitude.mjs";
-import { parseFaithChance, parseFaithCost, faithChanceFor } from "../helpers/faith.mjs";
+import { parseFaithChance, parseFaithCost, faithChanceFor, actsWithinReach } from "../helpers/faith.mjs";
 import {
   promptShot,
   promptThrow,
@@ -1472,6 +1472,38 @@ export class CnS5Actor extends Actor {
    * @param {object} [options]
    * @returns {Promise<Item|null>} null where no such skill exists
    */
+  /**
+   * Add every Act of Faith his priestly vocation lets him call upon now: those
+   * its column of the table lists (pp.145-146), his standing admits (p404) and
+   * his Personal Faith Factor reaches. "Acts of Faith are not learnt like other
+   * skills", so there is nothing to choose. Acts he already has are left alone.
+   *
+   * @returns {Promise<Item[]>} the Acts added
+   */
+  async addActsWithinReach() {
+    const column = this.system.faith?.vocationColumn;
+    if (!column) return [];
+    const pack = game.packs.get("cns5.acts-of-faith");
+    if (!pack) return [];
+    const index = await pack.getIndex({
+      fields: ["system.vocations", "system.pffMinimum", "system.ordainedOnly", "system.monasticOnly"]
+    });
+    const reach = actsWithinReach(
+      [...index].map((e) => ({ _id: e._id, name: e.name, ...(e.system ?? {}) })),
+      { column, pff: this.system.faith.pff ?? 0, standing: this.system.details.holyStanding }
+    );
+    const held = new Set(this.items.filter((i) => i.type === "actOfFaith").map((i) => i.name.toLowerCase()));
+    const sources = [];
+    for (const act of reach) {
+      if (held.has(act.name.toLowerCase())) continue;
+      const doc = await pack.getDocument(act._id);
+      if (doc) sources.push(doc.toObject());
+    }
+    return sources.length ? this.createEmbeddedDocuments("Item", sources) : [];
+  }
+
+  /* -------------------------------------------- */
+
   async grantSkill(name, { level = 0 } = {}) {
     const wanted = name.toLowerCase();
     const held = this.items.find((i) => i.type === "skill" && i.name.toLowerCase() === wanted);

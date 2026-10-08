@@ -754,6 +754,39 @@ the wizard end to end against a stand-in actor and compares the two.
 A skill now carries `masteryPsf`, what mastery adds: 10 normally, 20 for a
 mage's mode.
 
+### A priest's Acts of Faith
+
+A priest does not choose his Acts of Faith. "Acts of Faith are not learnt like
+other skills... The PFF at the beginning of any AoF refers to the point at
+which one may call upon that AoF" (p404). So the wizard does three things for a
+priestly vocation:
+
+- **His standing.** Ordained Clergy stand as ordained; Friars, Monastics and
+  Knights of a Holy Fighting Order as monastic. Druids, Shamans and Witches
+  stand as ordained: they are the priests of their own religions (p139), and
+  the table gives them Acts marked †. A standing is raised to the vocation's,
+  never lowered, so one the Gamemaster granted is kept. A change of vocation
+  does the same.
+- **His Acts.** When the wizard finishes he is given every Act that meets three
+  conditions: his vocation's column of Table - Priestly Mages Available Acts
+  of Faith (pp.145-146) lists it, his standing admits it, and his starting PFF
+  reaches it. On the Faith tab, **Add Acts within reach** adds those that open
+  as his PFF grows. A Holy Knight reads the Monk column. Penance prints no
+  marks in the table but is marked † and so goes with the Ordained column.
+- **Liturgy or Scripture** (p230), optional. A priest may "further specialise by
+  initially spending an additional 500 Exp... and then an extra 100 Exp per
+  level in Theology skill gained thereafter". The 500 is added to experience
+  spent when first bought, nothing more when switching between the two, and it
+  is given back if the specialisation is dropped. The Faith tab shows what it
+  is worth: Liturgy gives +1% per Theology level to believers' rolls in his
+  rites and +1 to the Crit Die; Scripture gives +1 to the Crit Die when quoting
+  scripture in debate. A warning shows if he has no Theology. The extra 100
+  per level waits on experience spending.
+
+Lay characters "may invoke any of the unmarked Acts of Faith once they have
+acquired them" (p230). The book does not say how, so a lay character's Acts are
+still added by hand.
+
 ### On the sheet: masteries and a change of vocation
 
 The Skills tab shows the character's vocation and his mastery slots.

@@ -69,6 +69,21 @@
     </dl>
 </section>
 
+{{#if priestly}}
+<section class="cns5-wizard__block">
+    <h3>{{localize "CNS5.Vocation.priestly"}}</h3>
+    <p class="cns5-hint">{{localize "CNS5.Vocation.priestlyHint" column=priestly.column standing=(localize priestly.standing)}}</p>
+    <label class="cns5-field">
+        <span>{{localize "CNS5.Vocation.specialisation"}}</span>
+        <select data-draft="priestlySpecialisation">
+            {{#each priestly.specialisations}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}
+        </select>
+    </label>
+    <p class="cns5-hint">{{localize "CNS5.Vocation.specialisationHint" cost=priestly.cost perLevel=priestly.perLevel}}</p>
+    {{#if priestly.noTheology}}<p class="cns5-hint cns5-hint--bad">{{localize "CNS5.Vocation.specialisationNoTheology"}}</p>{{/if}}
+</section>
+{{/if}}
+
 {{#if backgroundChoices.length}}
 <section class="cns5-wizard__block">
     <h3>{{localize "CNS5.Vocation.backgroundChoices"}}</h3>

@@ -42,6 +42,7 @@ export class CnS5CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2)
       openWizard: CnS5CharacterSheet.#onOpenWizard,
       changeVocation: CnS5CharacterSheet.#onChangeVocation,
       startingSpells: CnS5CharacterSheet.#onStartingSpells,
+      addActsWithinReach: CnS5CharacterSheet.#onAddActsWithinReach,
       attemptUnskilled: CnS5CharacterSheet.#onAttemptUnskilled,
       castFromDevice: CnS5CharacterSheet.#onCastFromDevice,
       drawBeliefPool: CnS5CharacterSheet.#onDrawBeliefPool,
@@ -154,6 +155,14 @@ export class CnS5CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2)
       .map((i) => i.name)
       .sort((a, b) => a.localeCompare(b));
     context.mastery = system.mastery;
+    context.specialisations = [
+      { value: "", label: "—", selected: !system.details.priestlySpecialisation },
+      ...Object.entries(CNS5.priestlySpecialisations).map(([key, sp]) => ({
+        value: key,
+        label: game.i18n.localize(sp.label),
+        selected: key === system.details.priestlySpecialisation
+      }))
+    ];
     context.chattelGroups = this.#getChattelGroups();
 
     const byName = (a, b) => a.name.localeCompare(b.name);
@@ -551,6 +560,16 @@ export class CnS5CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2)
   /** @this {CnS5CharacterSheet} */
   static #onOpenWizard() {
     new CnS5CreationWizard(this.actor).render({ force: true });
+  }
+
+  /** Add the Acts of Faith his vocation, standing and PFF now allow (p404). */
+  static async #onAddActsWithinReach() {
+    const added = await this.actor.addActsWithinReach();
+    ui.notifications.info(
+      added.length
+        ? game.i18n.format("CNS5.Faith.actsAdded", { count: added.length, names: added.map((a) => a.name).join(", ") })
+        : game.i18n.localize("CNS5.Faith.noNewActs")
+    );
   }
 
   /** Buy a new mage's starting spells (p295). */

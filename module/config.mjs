@@ -4171,3 +4171,54 @@ CNS5.startingSpellPoints = function ({ methodLevels = 0, ml = 0, attributeBonus 
  * Transfer. They are granted free with the starting spells.
  */
 CNS5.commonSpells = ["Enchant Materials", "Transfer"];
+
+/* -------------------------------------------- */
+/*  A priest's vocation and his Acts of Faith   */
+/*  (pp.139-146, 230, 404)                      */
+/* -------------------------------------------- */
+
+/**
+ * What a priestly vocation makes of a character's faith: which column of
+ * Table - Priestly Mages Available Acts of Faith (pp.145-146) he reads, and
+ * his standing for the Acts marked † and ‡ (p404).
+ *
+ * "Ordained Acts of Faith marked † are reserved to ordained priests only.
+ * Acts of Faith marked ‡ are reserved for ordained priests, monastics and
+ * members of Holy Fighting Orders only." Druids, Shamans and Witches are the
+ * priests of their own religions (p139), and the table gives them Acts marked
+ * †, so they stand as ordained. Knights of a Holy Fighting Order "are classed
+ * as monastics or priests" (p125) and read the Monk column; one ordained as
+ * a chaplain can be raised to ordained on the Faith tab.
+ */
+CNS5.vocationFaith = {
+  druid: { column: "Druid", standing: "ordained" },
+  shaman: { column: "Shaman", standing: "ordained" },
+  witch: { column: "Witch", standing: "ordained" },
+  friar: { column: "Friar", standing: "monastic" },
+  monastic: { column: "Monk", standing: "monastic" },
+  clergy: { column: "Ordained", standing: "ordained" },
+  holyKnight: { column: "Monk", standing: "monastic" }
+};
+
+/** Holy standing from least to most, for "never lower it". */
+CNS5.holyStandingOrder = ["lay", "monastic", "ordained"];
+
+/**
+ * "A character choosing a priestly vocation also has the option to further
+ * specialise by initially spending an additional 500 Exp on any one of the
+ * following and then an extra 100 Exp per level in Theology skill gained
+ * thereafter" (p230).
+ *
+ * Liturgy: "+1% per level in Theology to belief rolls of Believers
+ * participating in such rites presided over by the character. He also gains
+ * +1 to the Crit Die." Scripture: "+1 to the Crit Die when quoting scripture
+ * in debate."
+ */
+CNS5.priestlySpecialisations = {
+  liturgy: { label: "CNS5.Specialisation.liturgy", beliefPerTheologyLevel: 1, critDie: 1 },
+  scripture: { label: "CNS5.Specialisation.scripture", beliefPerTheologyLevel: 0, critDie: 1 }
+};
+CNS5.priestlySpecialisationCost = { initial: 500, perTheologyLevel: 100 };
+
+/** The Theology skill, as the skills list names it. */
+CNS5.theologySkill = "Theology of (“Religion”)";

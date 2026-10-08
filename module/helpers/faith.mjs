@@ -200,3 +200,60 @@ export function faithChanceFor(step, { performer, recipient }) {
   const chance = [step, ...(step.added ?? [])].reduce((total, clause) => total + value(clause), 0);
   return { chance, parts };
 }
+
+/* -------------------------------------------- */
+/*  Which Acts a priest may call upon (p404)    */
+/* -------------------------------------------- */
+
+/**
+ * Whether a character's standing admits an Act. "Ordained Acts of Faith marked
+ * † are reserved to ordained priests only. Acts of Faith marked ‡ are reserved
+ * for ordained priests, monastics and members of Holy Fighting Orders only."
+ *
+ * @param {{ordainedOnly?: boolean, monasticOnly?: boolean}} act
+ * @param {string} standing  lay, monastic or ordained
+ * @returns {boolean}
+ */
+export function standingAdmits(act, standing) {
+  if (act.ordainedOnly) return standing === "ordained";
+  if (act.monasticOnly) return standing === "ordained" || standing === "monastic";
+  return true;
+}
+
+/**
+ * The Acts of Faith a priest may call upon now.
+ *
+ * "Acts of Faith are not learnt like other skills... The PFF at the beginning
+ * of any AoF refers to the point at which one may call upon that AoF" (p404).
+ * So nothing is chosen: an Act is his once his vocation's column of the table
+ * lists it (pp.145-146), his standing admits it and his Personal Faith Factor
+ * reaches its minimum.
+ *
+ * @param {Array<{name: string, vocations: string[], pffMinimum: number,
+ *                ordainedOnly?: boolean, monasticOnly?: boolean}>} acts
+ * @param {{column: string, pff: number, standing: string}} priest
+ * @returns {Array<object>} the acts, in order of PFF then name
+ */
+export function actsWithinReach(acts, { column, pff = 0, standing = "lay" } = {}) {
+  if (!column) return [];
+  // Penance prints no marks in the table at all, but is marked † — an Act for
+  // ordained priests — so the Ordained column is taken as its own.
+  const columns = (a) => (a.vocations?.length ? a.vocations : a.ordainedOnly ? ["Ordained"] : []);
+  return acts
+    .filter((a) => columns(a).includes(column))
+    .filter((a) => (Number(a.pffMinimum) || 0) <= pff)
+    .filter((a) => standingAdmits(a, standing))
+    .sort((a, b) => (a.pffMinimum ?? 0) - (b.pffMinimum ?? 0) || a.name.localeCompare(b.name));
+}
+
+/**
+ * The higher of two holy standings, so a vocation never lowers what the
+ * Gamemaster has granted.
+ * @param {string} a
+ * @param {string} b
+ * @returns {string}
+ */
+export function higherStanding(a, b) {
+  const order = CNS5.holyStandingOrder;
+  return order.indexOf(a) >= order.indexOf(b) ? a : b;
+}

@@ -45,6 +45,11 @@ export class CnS5Character extends CnS5ActorBase {
       // "Once a new Mastered Skill has been obtained, the character must state
       // what the next skill is that he intends to master" (p120).
       nextMastery: new fields.StringField({ required: true, blank: true, initial: "" }),
+      // A priest's specialisation in Liturgy or Scripture, bought with
+      // experience at creation (p230).
+      priestlySpecialisation: new fields.StringField({
+        required: true, blank: true, initial: "", choices: ["", ...Object.keys(CNS5.priestlySpecialisations)]
+      }),
       socialClass: new fields.StringField({ required: true, blank: true, initial: "" }),
       // The class and band as keys, for the tables that follow from them —
       // which father's vocations he may have come from (p66 onwards).
@@ -303,6 +308,28 @@ export class CnS5Character extends CnS5ActorBase {
     // An entitlement he may take, not a gain applied for him — and only in the
     // religion the skill was learnt in.
     this.faith.spiritFromSkill = skill ? CNS5.spiritFromFaith(skill.system.psf) : 0;
+
+    // Which column of Table - Priestly Mages Available Acts of Faith his
+    // vocation reads (pp.145-146), if it is a priestly one.
+    this.faith.vocationColumn = CNS5.vocationFaith[this.details.vocationKey]?.column ?? "";
+
+    // Liturgy or Scripture (p230), and what it is worth at his Theology.
+    const special = CNS5.priestlySpecialisations[this.details.priestlySpecialisation];
+    const theology = this.parent.items.find(
+      (i) => i.type === "skill" && i.name.toLowerCase() === CNS5.theologySkill.toLowerCase()
+    );
+    const theologyLevel = theology?.system.level ?? 0;
+    this.faith.specialisation = special
+      ? {
+          key: this.details.priestlySpecialisation,
+          label: special.label,
+          theologyLevel,
+          beliefBonus: special.beliefPerTheologyLevel * theologyLevel,
+          critDie: special.critDie,
+          extraPerLevel: CNS5.priestlySpecialisationCost.perTheologyLevel,
+          theologyMissing: !theology
+        }
+      : null;
 
     // How many he may pray for besides himself (p403). Office counts for far
     // more than belief, which is the point of ordination.

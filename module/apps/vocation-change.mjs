@@ -6,6 +6,7 @@ import {
   planVocationChange,
   checkVocationChange
 } from "../helpers/vocations.mjs";
+import { higherStanding } from "../helpers/faith.mjs";
 
 const { HandlebarsApplicationMixin, ApplicationV2 } = foundry.applications.api;
 
@@ -185,8 +186,19 @@ export class CnS5VocationChange extends HandlebarsApplicationMixin(ApplicationV2
       "system.details.vocationKey": voc.key,
       "system.details.vocationVariant": voc.variant,
       "system.details.vocationAttributes.primary": voc.attributes.primary ?? "",
-      "system.details.vocationAttributes.secondary": voc.attributes.secondary ?? ""
+      "system.details.vocationAttributes.secondary": voc.attributes.secondary ?? "",
+      // Entering Holy Orders brings their standing (p404); leaving them does
+      // not take an ordination away.
+      ...(CNS5.vocationFaith[voc.key]
+        ? {
+            "system.details.holyStanding": higherStanding(
+              this.actor.system.details.holyStanding ?? "lay",
+              CNS5.vocationFaith[voc.key].standing
+            )
+          }
+        : {})
     });
+    await this.actor.addActsWithinReach?.();
     ui.notifications.info(game.i18n.format("CNS5.Vocation.changed", { name: this.actor.name, vocation: name }));
     await this.close();
   }
